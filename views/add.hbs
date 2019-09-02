@@ -1,0 +1,35 @@
+<h1>Добавить новый ПКИ</h1>
+
+<form action="/add" method="POST">
+  <div class="input-field">
+    <input id="type_pki" name="type_pki" type="text" class="validate" required>
+    <label for="type_pki">Тип ПКИ</label>
+    <span class="helper-text" data-error="Введите тип"></span>
+  </div>
+
+  <div class="input-field">
+    <input id="vendor" name="vendor" type="text" class="validate" required min="1">
+    <label for="vendor">Производитель</label>
+    <span class="helper-text" data-error="Введите производителя"></span>
+  </div>
+
+  <div class="input-field">
+    <input id="model" name="model" type="text" class="validate" required min="1">
+    <label for="model">Модель</label>
+    <span class="helper-text" data-error="Введите модель"></span>
+  </div>
+
+  <div class="input-field">
+    <input id="serial-number" name="serial-number" type="text" class="validate">
+    <label for="serial-number">Серийный номер</label>
+    <span class="helper-text" data-error="Введите серийный номер"></span>
+  </div>
+
+  <div class="input-field">
+    <input id="img" name="img" type="text" class="validate" required>
+    <label for="img">URL картинки</label>
+    <span class="helper-text" data-error="Введите url картинки"></span>
+  </div>
+
+  <button class="btn btn-primary">Добавить ПКИ</button>
+</form>
