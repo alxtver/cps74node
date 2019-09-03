@@ -1,20 +1,18 @@
 <h1>Добавить новый ПКИ</h1>
 
+<div class="wrapper fadeInDown">
+  <div id="formContent">
 
-
-<form action="/add" method="POST" class="needs-validation" novalidate>
+    <form action="/add" method="POST" class="needs-validation" novalidate>
 
   <div class="input-field">
-    {{!-- <label for="type_pki">Тип ПКИ</label> --}}
     <input id="type_pki" name="type_pki" type="text" class="form-control" aria-describedby="pkilHelp" placeholder="Тип ПКИ" required>
-    {{!-- <small id="pkilHelp" class="form-text text-muted">Введите тип ПКИ</small>     --}}
     <div class="invalid-feedback">
       Введите тип ПКИ!
     </div>
   </div>
 
   <div class="input-field">
-    {{!-- <label for="vendor">Производитель</label> --}}
     <input id="vendor" name="vendor" type="text" class="form-control" aria-describedby="vendorHelp" placeholder="Производитель" required>
     <div class="invalid-feedback">
       Введите Производителя!
@@ -22,7 +20,6 @@
   </div>
 
   <div class="input-field">
-    {{!-- <label for="model">Модель</label> --}}
     <input id="model" name="model" type="text" class="form-control" aria-describedby="modelHelp" placeholder="Модель" required>
     <div class="invalid-feedback">
       Введите Модель!
@@ -57,26 +54,16 @@
     </label>
   </div>
 
-  <button class="btn btn-primary">Добавить ПКИ</button>
+  <button type="submit" onclick="return addSession();" class="btn btn-primary">Добавить ПКИ</button>
 </form>
 
-<script>
-// Example starter JavaScript for disabling form submissions if there are invalid fields
-(function() {
-  'use strict';
-  window.addEventListener('load', function() {
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    var forms = document.getElementsByClassName('needs-validation');
-    // Loop over them and prevent submission
-    var validation = Array.prototype.filter.call(forms, function(form) {
-      form.addEventListener('submit', function(event) {
-        if (form.checkValidity() === false) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-        form.classList.add('was-validated');
-      }, false);
-    });
-  }, false);
-})();
+  </div>
+</div>
+
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    loadSession()
+  });
 </script>
+

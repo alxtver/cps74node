@@ -1,6 +1,10 @@
-<h1>Редактировать {{pki.vendor}}</h1>
+<h1>Редактировать {{pki.vendor}}  {{pki.model}}</h1>
 
-<form action="/pkis/edit" method="POST" class="needs-validation pki-form" novalidate>
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+    <!-- Tabs Titles -->
+
+  <form action="/pkis/edit" method="POST" class="needs-validation pki-form" novalidate>
   
   <div class="input-field">
     <input id="type_pki" name="type_pki" type="text" class="form-control" aria-describedby="pkilHelp" value="{{pki.type_pki}}" required>
@@ -69,6 +73,12 @@
   <input type="hidden" name="_id" id="_id" value="{{pki.id}}">
   <button type="submit" type="button" class="btn btn-danger"> Удалить </button>
 </form>
+
+  </div>
+</div>
+
+
+
 
 <script>
 // Example starter JavaScript for disabling form submissions if there are invalid fields

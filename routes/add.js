@@ -21,6 +21,7 @@ router.post('/', async (req, res) => {
     model: req.body.model,
     serial_number: req.body.serial_number,
     part: req.body.part,
+    country: req.body.country,
     in_case: in_case
   })
 
