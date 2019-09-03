@@ -25,10 +25,16 @@ const pki = new Schema({
     type: String,
     required: true
   },
+  created: {
+    type: Date,
+    default: Date.now
+  },
   in_case: {
     type: Boolean,
     required: true
   }
+
 })
+
 
 module.exports = model('Pki', pki)

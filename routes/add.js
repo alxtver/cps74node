@@ -27,7 +27,7 @@ router.post('/', async (req, res) => {
 
   try {
     await pki.save()
-    res.redirect('/pkis')
+    res.redirect('/add')
   } catch (e) {
     console.log(e)   
   }  
