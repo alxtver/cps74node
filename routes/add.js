@@ -10,17 +10,23 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', async (req, res) => {
+  if (req.body.in_case == 'true') {
+    var in_case = req.body.in_case
+  } else {
+    var in_case = 'false'
+  }
   const pki = new Pki({
     type_pki: req.body.type_pki,
     vendor: req.body.vendor,
     model: req.body.model,
     serial_number: req.body.serial_number,
-    img: req.body.img
+    part: req.body.part,
+    in_case: in_case
   })
 
   try {
     await pki.save()
-    res.redirect('/pki')
+    res.redirect('/pkis')
   } catch (e) {
     console.log(e)   
   }  

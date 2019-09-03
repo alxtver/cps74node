@@ -14,10 +14,21 @@ const pki = new Schema({
     required: true
   },
   serial_number: {
-    type: String    
+    type: String,
+    required: true
   },
-  img: String
-
+  part: {
+    type: String,
+    required: true
+  },
+  country: {
+    type: String,
+    required: true
+  },
+  in_case: {
+    type: Boolean,
+    required: true
+  }
 })
 
 module.exports = model('Pki', pki)

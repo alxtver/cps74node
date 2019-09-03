@@ -1,13 +1,13 @@
 const {Router} = require('express')
-const Course = require('../models/pki')
+const Pki = require('../models/pki')
 const router = Router()
 
 router.get('/', async (req, res) => {
-  const courses = await Course.getAll()
-  res.render('courses', {
+  const pkis = await Pki.find()  
+  res.render('pkis', {
     title: 'ПКИ',
-    isCourses: true,
-    courses
+    isPkis: true,
+    pkis
   })
 })
 
@@ -16,25 +16,42 @@ router.get('/:id/edit', async (req, res) => {
     return res.redirect('/')
   }
 
-  const course = await Course.getById(req.params.id)
+  const pki = await Pki.findById(req.params.id)
 
-  res.render('course-edit', {
-    title: `Редактировать ${course.title}`,
-    course
+  res.render('pki-edit', {
+    title: `Редактировать ${pki.type_pki}`,
+    pki
   })
 })
 
+router.post('/del', async(req, res) => {
+  try {
+    await Pki.deleteOne({_id: req.body._id})    
+    res.redirect('/pkis')
+  } catch (e) {
+    console.log(e)
+  }  
+})
+
+router.get('/:id/del', async (req, res) => {
+  if (!req.query.allow) {
+    return res.redirect('/')
+  }
+  const pki = await Pki.deleteOne({_id: req.params.id})
+  res.redirect('/pkis')
+})
+
 router.post('/edit', async (req, res) => {
-  await Course.update(req.body)
-  res.redirect('/courses')
+  await Pki.findByIdAndUpdate(req.body._id, req.body)
+  res.redirect('/pkis')
 })
 
 router.get('/:id', async (req, res) => {
-  const course = await Course.getById(req.params.id)
-  res.render('course', {
+  const pki = await Pki.findById(req.params.id)
+  res.render('pki', {
     layout: 'empty',
-    title: `Курс ${course.title}`,
-    course
+    type_pki: `ПКИ ${pki.type_pki}`,
+    pki
   })
 })
 

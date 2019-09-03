@@ -31,3 +31,35 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.table td, .table th {
+  padding: .1rem;
+}
+
+.input-field {
+  padding: .5rem;
+}
+
+/* Style buttons */
+.btn_f {
+  background-color: #343a40; /* Blue background */
+  border: none; /* Remove borders */
+  color: white; /* White text */
+  padding: 3px 8px; /* Some padding */
+  font-size: 14px; /* Set a font size */
+  cursor: pointer; /* Mouse pointer on hover */
+}
+
+/* Darker background on mouse-over */
+.btn_f:hover {
+  background-color: RoyalBlue;
+}
+
+.td_btn {
+  align-items: center;
+  
+}
+
+.pki-form {
+  margin-bottom: 2rem;
+}

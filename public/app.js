@@ -1,43 +1,49 @@
-const toCurrency = price => {
-  return new Intl.NumberFormat('ru-RU', {
-    currency: 'rub',
-    style: 'currency'
-  }).format(price)
+
+function addSession() {
+  let field_name_type = document.getElementById("id_name_type").value;
+  let field_part_name = document.getElementById("id_part_name").value;
+  let field_name = document.getElementById("id_name").value;
+  let field_country = document.getElementById("id_country").value;
+  sessionStorage.setItem("id_name_type", field_name_type);
+  sessionStorage.setItem("id_part_name", field_part_name);
+  sessionStorage.setItem("id_name", field_name);
+  sessionStorage.setItem("id_country", field_country);
 }
+function insSession() {
+  let field_name_type = document.getElementById("id_name_type");
+  let field_part_name = document.getElementById("id_part_name");
+  let field_name = document.getElementById("id_name");
+  let field_country = document.getElementById("id_country");
+  if (sessionStorage.getItem("id_name_type")) {
+      field_name_type.value = sessionStorage.getItem("id_name_type")
+  }
+  if (sessionStorage.getItem("id_part_name")) {
+      field_part_name.value = sessionStorage.getItem("id_part_name")
+  }
+  if (sessionStorage.getItem("id_name")) {
+      field_name.value = sessionStorage.getItem("id_name")
+  }
+  if (sessionStorage.getItem("id_country")) {
+      field_country.value = sessionStorage.getItem("id_country")
+  }
 
-document.querySelectorAll('.price').forEach(node => {
-  node.textContent = toCurrency(node.textContent)
-})
-
-const $card = document.querySelector('#card')
-if ($card) {
-  $card.addEventListener('click', event => {
-    if (event.target.classList.contains('js-remove')) {
-      const id = event.target.dataset.id
-      
-      fetch('/card/remove/' + id, {
-        method: 'delete'
-      }).then(res => res.json())
-        .then(card => {
-          if (card.courses.length) {
-            const html = card.courses.map(c => {
-              return `
-              <tr>
-                <td>${c.title}</td>
-                <td>${c.count}</td>
-                <td>
-                  <button class="btn btm-small js-remove" data-id="${c.id}">Удалить</button>
-                </td>
-              </tr>
-              `
-            }).join('')
-            $card.querySelector('tbody').innerHTML = html
-            $card.querySelector('.price').textContent = toCurrency(card.price)
-          } else {
-            $card.innerHTML = '<p>Корзина пуста</p>'
-          }
-        })
-    }
-    
-  })
-} 
+}
+function loadSession() {
+let field_name_type = document.getElementById("id_name_type");
+let field_part_name = document.getElementById("id_part_name");
+let field_name = document.getElementById("id_name");
+let field_country = document.getElementById("id_country");
+if (sessionStorage.getItem("id_name_type")) {
+    field_name_type.value = sessionStorage.getItem("id_name_type")
+}
+if (sessionStorage.getItem("id_part_name")) {
+    field_part_name.value = sessionStorage.getItem("id_part_name")
+}
+if (sessionStorage.getItem("id_name")) {
+    field_name.value = sessionStorage.getItem("id_name")
+}
+if (sessionStorage.getItem("id_country")) {
+    field_country.value = sessionStorage.getItem("id_country")
+}
+document.getElementById("id_serial_number").focus();
+}

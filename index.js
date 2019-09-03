@@ -5,7 +5,7 @@ const exphbs = require('express-handlebars')
 const homeRoutes = require('./routes/home')
 const cardRoutes = require('./routes/card')
 const addRoutes = require('./routes/add')
-const coursesRoutes = require('./routes/pkis')
+const pkiRoutes = require('./routes/pkis')
 
 const app = express()
 
@@ -23,7 +23,7 @@ app.use(express.urlencoded({extended: true}))
 
 app.use('/', homeRoutes)
 app.use('/add', addRoutes)
-app.use('/pkis', coursesRoutes)
+app.use('/pkis', pkiRoutes)
 app.use('/card', cardRoutes)
 
 const PORT = process.env.PORT || 3000
@@ -31,7 +31,10 @@ const PORT = process.env.PORT || 3000
 async function start() {
   try {
     const url = 'mongodb+srv://admin:ccz1rpm8t!@cluster0-rqbxt.mongodb.net/cps74'
-    await mongoose.connect(url, {useNewUrlParser: true})
+    await mongoose.connect(url, {
+      useNewUrlParser: true,
+      useFindAndModify: false  
+    })
     app.listen(PORT, () => {
       console.log(`Сервер запущен на ${PORT} порту`)
   })    
