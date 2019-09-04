@@ -1,5 +1,6 @@
 const {Router} = require('express')
 const Pki = require('../models/pki')
+const Country = require('../models/country')
 const router = Router()
 
 router.get('/', (req, res) => {
@@ -25,7 +26,19 @@ router.post('/', async (req, res) => {
     in_case: in_case
   })
 
-  try {
+  const countr = await Country.findOne({country: req.body.country})
+  // console.log(await Country.findOne({country: req.body.country}))
+
+  if (countr == null) {
+    const country = new Country({country: req.body.country})
+    try {
+      await country.save()
+    } catch (error) {
+      console.log(error)      
+    }
+  }  
+
+  try {    
     await pki.save()
     res.redirect('/add')
   } catch (e) {

@@ -1,10 +1,10 @@
 const {Schema, model} = require('mongoose')
 
-const country = new Schema({
+const part = new Schema({
     country: {
         type: String,
         required: true
     }
 })
 
-module.exports = model('Country', country)
+module.exports = model('Part', part)
