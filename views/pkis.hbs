@@ -1,8 +1,15 @@
 <h1>ПКИ</h1>
 <button class="btn btn-dark" style="margin-bottom: 1rem" onclick="location.href='/add';">Добавить ПКИ</button>
 
-
-
+<form action="/pkis" method="post">
+  <div class="form-row align-items-center">
+    <div class="col-auto">      
+      <div class="input-group mb-2">
+        <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Поиск...">
+      </div>
+    </div>
+  </div>
+</form>
 
 {{#if pkis.length}}
 <table class="table  table-bordered table-hover">
@@ -14,7 +21,7 @@
         <th>Серийный номер</th>
         <th>Страна производства</th>
         <th>Партия</th>
-        <th>В составе системного блока</th>
+        <th>В СБ</th>
         <th></th>
     </tr>
   </thead>
@@ -30,7 +37,7 @@
     <td>{{in_case}}</td>
     <td class="td_btn">
         <button class="btn_f" onclick="location.href='/pkis/{{id}}/edit?allow=true';"><i class="fa fa-pencil"></i></button>
-        <button class="btn_f" onclick="location.href='/pkis/{{id}}/del?allow=true';"><i class="fa fa-trash"></i></button>
+        <button class="btn_d" onclick="location.href='/pkis/{{id}}/del?allow=true';"><i class="fa fa-trash"></i></button>
     </td>
   </tr>
 {{/each}}

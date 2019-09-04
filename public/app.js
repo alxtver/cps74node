@@ -12,9 +12,6 @@ function addSession() {
   let field_country = document.getElementById("country").value;
   sessionStorage.setItem("country", field_country);
   
-  // let field_serial_number = document.getElementById("serial_number").value;
-  // sessionStorage.setItem("serial_number", field_serial_number);
-
   let field_part = document.getElementById("part").value;
   sessionStorage.setItem("part", field_part);
 
@@ -42,17 +39,12 @@ function loadSession() {
     let field_model = document.getElementById("model");
     if (sessionStorage.getItem("model")) {
       field_model.value = sessionStorage.getItem("model");
-  }
+    }
 
     let field_country = document.getElementById("country");      
     if (sessionStorage.getItem("country")) {
         field_country.value = sessionStorage.getItem("country")
     }
-    
-    // let field_serial_number = document.getElementById("serial_number");      
-    // if (sessionStorage.getItem("serial_number")) {
-    //     field_serial_number.value = sessionStorage.getItem("serial_number")
-    // }
     
     let field_part = document.getElementById("part");      
     if (sessionStorage.getItem("part")) {
@@ -63,8 +55,11 @@ function loadSession() {
       document.getElementById("in_case").checked = true;
     }
     
-
-    document.getElementById("serial_number").focus();
+    if (sessionStorage.getItem("type_pki")) {
+      document.getElementById("serial_number").focus();      
+    } else {
+      document.getElementById("type_pki").focus();
+    }   
     }
 
 

@@ -3,13 +3,34 @@ const Pki = require('../models/pki')
 const router = Router()
 
 router.get('/', async (req, res) => {
-  const pkis = await Pki.find()  
+  const pkis = await Pki.find()
   res.render('pkis', {
     title: 'ПКИ',
     isPkis: true,
     pkis
   })
 })
+
+router.post('/', async (req, res) => {
+  const query = { $or:[
+          {type_pki: new RegExp(req.body.search+'.*', "i")},
+          {vendor: new RegExp(req.body.search+'.*', "i")},
+          {country: new RegExp(req.body.search+'.*', "i")},
+          {model: new RegExp(req.body.search+'.*', "i")},
+          {part: new RegExp(req.body.search+'.*', "i")},
+          {serial_number: new RegExp(req.body.search+'.*', "i")}
+  ]
+  }
+
+  const pkis = await Pki.find(query)  
+  res.render('pkis', {
+    title: 'Поиск',
+    isPkis: true,
+    pkis
+  })
+})
+
+
 
 router.get('/:id/edit', async (req, res) => {
   if (!req.query.allow) {
@@ -47,8 +68,7 @@ router.post('/edit', async (req, res) => {
     req.body.in_case = 'false'
     await Pki.findByIdAndUpdate(req.body._id, req.body)
   }
-  
-  console.log(req.body)
+
   res.redirect('/pkis')
 })
 

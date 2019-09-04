@@ -41,18 +41,24 @@
 }
 
 /* Style buttons */
-.btn_f {
+.btn_f, .btn_d {
   background-color: #343a40; /* Blue background */
   border: none; /* Remove borders */
   color: white; /* White text */
   padding: 3px 8px; /* Some padding */
   font-size: 14px; /* Set a font size */
   cursor: pointer; /* Mouse pointer on hover */
+  width: 27px;
+  height: 27px;
 }
 
 /* Darker background on mouse-over */
 .btn_f:hover {
   background-color: RoyalBlue;
+}
+
+.btn_d:hover {
+  background-color: #da1e59;
 }
 
 .td_btn {
