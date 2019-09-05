@@ -77,35 +77,44 @@ router.post('/edit', async (req, res) => {
   res.redirect('/pkis')
 })
 
-router.get('/:id', async (req, res) => {
-  const pki = await Pki.findById(req.params.id)
-  res.render('pki', {
-    layout: 'empty',
-    type_pki: `ПКИ ${pki.type_pki}`,
-    pki
-  })
-})
+// router.get('/:id', async (req, res) => {
+//   const pki = await Pki.findById(req.params.id)
+//   res.render('pki', {
+//     layout: 'empty',
+//     type_pki: `ПКИ ${pki.type_pki}`,
+//     pki
+//   })
+// })
 
 
 const jsonParser = express.json();
 router.post("/user", jsonParser, async function (req, res) {
-  const query = { $or:[
-    {type_pki: new RegExp(req.body.search+'.*', "i")},
-    {vendor: new RegExp(req.body.search+'.*', "i")},
-    {country: new RegExp(req.body.search+'.*', "i")},
-    {model: new RegExp(req.body.search+'.*', "i")},
-    {part: new RegExp(req.body.search+'.*', "i")},
-    {serial_number: new RegExp(req.body.search+'.*', "i")},
-    {number_machine: new RegExp(req.body.search+'.*', "i")}
-]
-}
-const pkis = await Pki.find(query)  
-
-
-  console.log(req.body.search);
-  if(!req.body) return res.sendStatus(400);
+  if (!req.body.q) {
+    pkis = await Pki.find()  
+  } else {
+    const query = { $or:[
+      {type_pki: new RegExp(req.body.q+'.*', "i")},
+      {vendor: new RegExp(req.body.q+'.*', "i")},
+      {country: new RegExp(req.body.q+'.*', "i")},
+      {model: new RegExp(req.body.q+'.*', "i")},
+      {part: new RegExp(req.body.q+'.*', "i")},
+      {serial_number: new RegExp(req.body.q+'.*', "i")},
+      {number_machine: new RegExp(req.body.q+'.*', "i")}
+    ]}
+    pkis = await Pki.find(query)  
+  }
   
-  res.send(req.body); // отправляем пришедший ответ обратно
+  
+
+
+  // console.log(req.body);
+  if(!req.body) return res.sendStatus(400);
+ 
+  res.send(JSON.stringify(pkis)); // отправляем пришедший ответ обратно
 });
+
+router.post('/testajax', function (req,res, next) {
+  res.send('Проверка')
+})
 
 module.exports = router
