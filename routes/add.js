@@ -26,10 +26,7 @@ router.post('/', async (req, res) => {
     in_case: in_case
   })
 
-  const countr = await Country.findOne({country: req.body.country})
-  // console.log(await Country.findOne({country: req.body.country}))
-
-  if (countr == null) {
+  if (!(await Country.findOne({country: req.body.country}))) {
     const country = new Country({country: req.body.country})
     try {
       await country.save()

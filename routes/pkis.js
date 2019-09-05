@@ -1,6 +1,9 @@
 const {Router} = require('express')
 const Pki = require('../models/pki')
 const router = Router()
+const express = require("express");
+  
+const app = express();
 
 router.get('/', async (req, res) => {
   const pkis = await Pki.find()
@@ -18,17 +21,19 @@ router.post('/', async (req, res) => {
           {country: new RegExp(req.body.search+'.*', "i")},
           {model: new RegExp(req.body.search+'.*', "i")},
           {part: new RegExp(req.body.search+'.*', "i")},
-          {serial_number: new RegExp(req.body.search+'.*', "i")}
+          {serial_number: new RegExp(req.body.search+'.*', "i")},
+          {number_machine: new RegExp(req.body.search+'.*', "i")}
   ]
   }
 
   const pkis = await Pki.find(query)  
   res.render('pkis', {
-    title: 'Поиск',
+    title: 'ПКИ',
     isPkis: true,
     pkis
   })
 })
+
 
 
 
@@ -80,5 +85,27 @@ router.get('/:id', async (req, res) => {
     pki
   })
 })
+
+
+const jsonParser = express.json();
+router.post("/user", jsonParser, async function (req, res) {
+  const query = { $or:[
+    {type_pki: new RegExp(req.body.search+'.*', "i")},
+    {vendor: new RegExp(req.body.search+'.*', "i")},
+    {country: new RegExp(req.body.search+'.*', "i")},
+    {model: new RegExp(req.body.search+'.*', "i")},
+    {part: new RegExp(req.body.search+'.*', "i")},
+    {serial_number: new RegExp(req.body.search+'.*', "i")},
+    {number_machine: new RegExp(req.body.search+'.*', "i")}
+]
+}
+const pkis = await Pki.find(query)  
+
+
+  console.log(req.body.search);
+  if(!req.body) return res.sendStatus(400);
+  
+  res.send(req.body); // отправляем пришедший ответ обратно
+});
 
 module.exports = router
