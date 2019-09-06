@@ -35,7 +35,7 @@ class Card {
         }
       })
     })
-  } 
+  }
 
   static async remove(id) {
     const card = await Card.fetch()

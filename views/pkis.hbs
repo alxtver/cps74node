@@ -1,7 +1,7 @@
 <h1>ПКИ</h1>
 <button class="btn btn-dark" style="margin-bottom: 1rem" onclick="location.href='/add';">Добавить ПКИ</button>
 
-<form name="search_form" action="/pkis" method="post">
+{{!-- <form name="search_form" action="/pkis" method="post"> --}}
   <div class="form-row align-items-center">
     <div class="col-auto">      
       <div class="input-group mb-2">
@@ -9,9 +9,9 @@
       </div>
     </div>
   </div>
-</form>
+{{!-- </form> --}}
 
-{{#if pkis.length}}
+{{!-- {{#if pkis.length}}
 
 <table class="table table-sm table-bordered table-hover">
   <thead class="thead-dark">
@@ -49,7 +49,7 @@
 
 {{else}}
 <p>Нет ни одного ПКИ</p>
-{{/if}}
+{{/if}} --}}
 <div id="showData"></div>
 
 <input hidden="true" id="temp" value="0"></input>

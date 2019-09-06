@@ -1,4 +1,7 @@
-const {Schema, model} = require('mongoose')
+const {
+    Schema,
+    model
+} = require('mongoose')
 
 const part = new Schema({
     country: {

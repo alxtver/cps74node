@@ -26,21 +26,25 @@ router.post('/', async (req, res) => {
     in_case: in_case
   })
 
-  if (!(await Country.findOne({country: req.body.country}))) {
-    const country = new Country({country: req.body.country})
+  if (!(await Country.findOne({
+      country: req.body.country
+    }))) {
+    const country = new Country({
+      country: req.body.country
+    })
     try {
       await country.save()
     } catch (error) {
-      console.log(error)      
+      console.log(error)
     }
-  }  
+  }
 
-  try {    
+  try {
     await pki.save()
     res.redirect('/add')
   } catch (e) {
-    console.log(e)   
-  }  
+    console.log(e)
+  }
 })
 
 module.exports = router
