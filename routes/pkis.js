@@ -68,12 +68,10 @@ router.get('/:id/del', async (req, res) => {
 router.post('/edit', async (req, res) => {
   if (req.body.in_case) {
     req.body.in_case = 'true'
-    await Pki.findByIdAndUpdate(req.body._id, req.body)
   } else {
     req.body.in_case = 'false'
-    await Pki.findByIdAndUpdate(req.body._id, req.body)
   }
-
+  await Pki.findByIdAndUpdate(req.body._id, req.body)
   res.redirect('/pkis')
 })
 
@@ -103,18 +101,11 @@ router.post("/user", jsonParser, async function (req, res) {
     ]}
     pkis = await Pki.find(query)  
   }
-  
-  
-
-
   // console.log(req.body);
   if(!req.body) return res.sendStatus(400);
  
   res.send(JSON.stringify(pkis)); // отправляем пришедший ответ обратно
 });
 
-router.post('/testajax', function (req,res, next) {
-  res.send('Проверка')
-})
 
 module.exports = router
