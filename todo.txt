@@ -1,2 +1,2 @@
 Countries model
-search
+user auth

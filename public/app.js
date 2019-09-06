@@ -122,7 +122,6 @@ function CreateTableFromJSON(data) {
 
   // ADD JSON DATA TO THE TABLE AS ROWS.
   for (let i = 0; i < data.length; i++) {
-    console.log(data[i])
     tr = table.insertRow(-1)
 
     let typeCell = tr.insertCell(-1)
@@ -144,10 +143,22 @@ function CreateTableFromJSON(data) {
     partCell.innerHTML = data[i].part
 
     let number_machineCell = tr.insertCell(-1)
-    number_machineCell.innerHTML = data[i].number_machine
+    if (data[i].number_machine) {
+      number_machineCell.innerHTML = data[i].number_machine  
+    } else {
+      number_machineCell.innerHTML = ''
+    }
+    
 
     let in_caseCell = tr.insertCell(-1)
     in_caseCell.innerHTML = data[i].in_case
+
+    let buttonCell = tr.insertCell(-1)
+    let id = data[i]._id
+    buttonCell.innerHTML = (
+      "<button class=\"btn_f\" onclick=\"location.href='/pkis/" + id + "/edit?allow=true';\"><i class=\"fa fa-pencil\"></i></button>" +
+      "<button class=\"btn_d\" onclick=\"location.href='/pkis/" + id + "/del?allow=true';\"><i class=\"fa fa-trash\"></i></button>"
+    )
 
 
   }
@@ -161,13 +172,10 @@ function CreateTableFromJSON(data) {
   //             tabCell.innerHTML = ''
   //           }
   //         console.log(data[i].in_case)
-  //         if (!col[j]) {
-  //           let id = data[i]._id
-  //           tabCell.innerHTML = (
-  //             "<button class=\"btn_f\" onclick=\"location.href='/pkis/"+id+"/edit?allow=true';\"><i class=\"fa fa-pencil\"></i></button>"+
-  //             "<button class=\"btn_d\" onclick=\"location.href='/pkis/"+id+"/del?allow=true';\"><i class=\"fa fa-trash\"></i></button>"
-  //           )
-  //         }
+  // if (!col[j]) {
+  //   let id = data[i]._id
+
+  // }
   //         }
 
   // }
