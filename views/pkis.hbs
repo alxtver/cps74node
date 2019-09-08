@@ -53,7 +53,8 @@
 <div id="showData"></div>
 
 <input hidden="true" id="temp" value="0"></input>
-
+<div id="app"></div>
+<h1>Hello \{{name}}</h1>
 <script>
     $(document).ready(function() {
     load_data();
@@ -73,6 +74,13 @@
       }
     });
   });
+
+  new Vue({
+    el: '#app',
+    data: {
+      name: 'ALX'
+    }
+  })
 </script>
 
 

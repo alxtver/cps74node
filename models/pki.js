@@ -1,7 +1,4 @@
-const {
-  Schema,
-  model
-} = require('mongoose')
+const {Schema, model} = require('mongoose')
 
 const pki = new Schema({
   type_pki: {
@@ -45,6 +42,7 @@ const pki = new Schema({
     type: Boolean,
     required: true
   }
+
 
 })
 
