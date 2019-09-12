@@ -73,12 +73,41 @@
       }
     });
 
-    $(document).on('blur', '.model', function() {
+  $(document).on('blur', '.type', function() {
+    let id = $(this).data("id");
+    let type = $(this).text();
+    edit_type(id, type);
+  });
+  
+  $(document).on('blur', '.model', function() {
     let id = $(this).data("id");
     let model = $(this).text();
-    edit_data(id, model, "model");
+    edit_model(id, model);
   });
 
+  $(document).on('blur', '.serial_number', function() {
+    let id = $(this).data("id");
+    let serial_number = $(this).text();
+    edit_serial_number(id, serial_number);
+  });
+
+  $(document).on('blur', '.vendor', function() {
+    let id = $(this).data("id");
+    let vendor = $(this).text();
+    edit_vendor(id, vendor);
+  });
+
+  $(document).on('blur', '.country', function() {
+    let id = $(this).data("id");
+    let country = $(this).text();
+    edit_country(id, country);
+  });
+
+  $(document).on('blur', '.part', function() {
+    let id = $(this).data("id");
+    let part = $(this).text();
+    edit_part(id, part);
+  });
 
 
     

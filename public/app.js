@@ -97,16 +97,75 @@ function load_data(q) {
   });
 };
 
-// Редактирование названия и цены
-function edit_data(id, model) {
+// Редактирование ячеек таблицы ПКИ
+function edit_type(id, type) {
   $.ajax({
     url: "/pkis/edit_ajax",
     type: "POST",
     data: {
       id: id,
-      model: model,
-      part: 'part'
-    },
+      type: type
+    },    
+    dataType: "text",
+  });
+}
+
+function edit_vendor(id, vendor) {
+  $.ajax({
+    url: "/pkis/edit_ajax",
+    type: "POST",
+    data: {
+      id: id,
+      vendor: vendor
+    },    
+    dataType: "text",
+  });
+}
+
+function edit_model(id, model) {
+  $.ajax({
+    url: "/pkis/edit_ajax",
+    type: "POST",
+    data: {
+      id: id,
+      model: model
+    },    
+    dataType: "text",
+  });
+}
+
+function edit_serial_number(id, serial_number) {
+  $.ajax({
+    url: "/pkis/edit_ajax",
+    type: "POST",
+    data: {
+      id: id,
+      serial_number: serial_number
+    },    
+    dataType: "text",
+  });
+}
+
+function edit_country(id, country) {
+  $.ajax({
+    url: "/pkis/edit_ajax",
+    type: "POST",
+    data: {
+      id: id,
+      country: country
+    },    
+    dataType: "text",
+  });
+}
+
+function edit_part(id, part) {
+  $.ajax({
+    url: "/pkis/edit_ajax",
+    type: "POST",
+    data: {
+      id: id,
+      part: part
+    },    
     dataType: "text",
   });
 }
@@ -134,17 +193,24 @@ function CreateTableFromJSON(data) {
     thead.appendChild(tr)
   }
 
-  // ADD JSON DATA TO THE TABLE AS ROWS.
+  // Заполнение таблицы
+
   for (let i = 0; i < data.length; i++) {
     tr = table.insertRow(-1)
 
     let typeCell = tr.insertCell(-1)
     typeCell.innerHTML = data[i].type_pki
-    
-    // console.log(data[i]._id)
-
+    typeCell.dataset.id = data[i]._id
+    typeCell.className = "type"
+    typeCell.id = "type"
+    typeCell.contentEditable = "true"
+  
     let vendorCell = tr.insertCell(-1)
     vendorCell.innerHTML = data[i].vendor
+    vendorCell.dataset.id = data[i]._id
+    vendorCell.className = "vendor"
+    vendorCell.id = "vendor"
+    vendorCell.contentEditable = "true"
 
     let modelCell = tr.insertCell(-1)
     modelCell.innerHTML = data[i].model
@@ -155,12 +221,24 @@ function CreateTableFromJSON(data) {
 
     let serial_numberCell = tr.insertCell(-1)
     serial_numberCell.innerHTML = data[i].serial_number
+    serial_numberCell.dataset.id = data[i]._id
+    serial_numberCell.className = "serial_number"
+    serial_numberCell.id = "serial_number"
+    serial_numberCell.contentEditable = "true"
 
     let countryCell = tr.insertCell(-1)
     countryCell.innerHTML = data[i].country
+    countryCell.dataset.id = data[i]._id
+    countryCell.className = "country"
+    countryCell.id = "country"
+    countryCell.contentEditable = "true"
 
     let partCell = tr.insertCell(-1)
     partCell.innerHTML = data[i].part
+    partCell.dataset.id = data[i]._id
+    partCell.className = "part"
+    partCell.id = "part"
+    partCell.contentEditable = "true"
 
     let number_machineCell = tr.insertCell(-1)
     if (data[i].number_machine) {
@@ -183,24 +261,7 @@ function CreateTableFromJSON(data) {
 
   }
 
-  //     for (let j = 0; j < col.length; j++) {
-  //         let tabCell = tr.insertCell(-1)
-
-  //         if (data[i][col[j]]) {
-  //           tabCell.innerHTML = data[i][col[j]]
-  //           } else {
-  //             tabCell.innerHTML = ''
-  //           }
-  //         console.log(data[i].in_case)
-  // if (!col[j]) {
-  //   let id = data[i]._id
-
-  // }
-  //         }
-
-  // }
-
-  // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+ 
   const divContainer = document.getElementById("showData");
   divContainer.innerHTML = "";
   divContainer.appendChild(table);
