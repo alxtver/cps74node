@@ -94,6 +94,18 @@ router.post('/edit', async (req, res) => {
   res.redirect('/pkis')
 })
 
+router.post('/edit_ajax', async (req, res) => {
+  try {
+    console.log('starting update...' + req.body.id)
+    await Pki.findByIdAndUpdate(req.body.id, req.body)
+    res.sendStatus(200)
+    console.log('done!')
+    if (!req.body) return res.sendStatus(400);
+  } catch (error) {
+    console.log(error)    
+  }  
+})
+
 // router.get('/:id', async (req, res) => {
 //   const pki = await Pki.findById(req.params.id)
 //   res.render('pki', {
@@ -105,7 +117,7 @@ router.post('/edit', async (req, res) => {
 
 
 const jsonParser = express.json();
-router.post("/user", jsonParser, async function (req, res) {
+router.post("/search", jsonParser, async function (req, res) {
   if (!req.body.q) {
     pkis = await Pki.find()
   } else {

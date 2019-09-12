@@ -83,7 +83,7 @@ function loadSession() {
 
 function load_data(q) {
   $.ajax({
-    url: "/pkis/user",
+    url: "/pkis/search",
     method: "POST",
     data: {
       q: q
@@ -96,6 +96,20 @@ function load_data(q) {
     }
   });
 };
+
+// Редактирование названия и цены
+function edit_data(id, model) {
+  $.ajax({
+    url: "/pkis/edit_ajax",
+    type: "POST",
+    data: {
+      id: id,
+      model: model,
+      part: 'part'
+    },
+    dataType: "text",
+  });
+}
 
 function CreateTableFromJSON(data) {
   // EXTRACT VALUE FOR HTML HEADER. 
@@ -126,12 +140,18 @@ function CreateTableFromJSON(data) {
 
     let typeCell = tr.insertCell(-1)
     typeCell.innerHTML = data[i].type_pki
+    
+    // console.log(data[i]._id)
 
     let vendorCell = tr.insertCell(-1)
     vendorCell.innerHTML = data[i].vendor
 
     let modelCell = tr.insertCell(-1)
     modelCell.innerHTML = data[i].model
+    modelCell.dataset.id = data[i]._id
+    modelCell.className = "model"
+    modelCell.id = "model"
+    modelCell.contentEditable = "true"
 
     let serial_numberCell = tr.insertCell(-1)
     serial_numberCell.innerHTML = data[i].serial_number
@@ -185,3 +205,5 @@ function CreateTableFromJSON(data) {
   divContainer.innerHTML = "";
   divContainer.appendChild(table);
 }
+
+

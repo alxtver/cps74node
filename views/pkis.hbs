@@ -53,8 +53,7 @@
 <div id="showData"></div>
 
 <input hidden="true" id="temp" value="0"></input>
-<div id="app"></div>
-<h1>Hello \{{name}}</h1>
+
 <script>
     $(document).ready(function() {
     load_data();
@@ -73,14 +72,22 @@
         load_data();
       }
     });
+
+    $(document).on('blur', '.model', function() {
+    let id = $(this).data("id");
+    let model = $(this).text();
+    edit_data(id, model, "model");
   });
 
-  new Vue({
-    el: '#app',
-    data: {
-      name: 'ALX'
-    }
-  })
+
+
+    
+  });
+  //$('#model').keyup(function() {
+  //    console.log('hj,bn')
+  //    edit_data(id, model, "model");
+  //  });
+
 </script>
 
 
