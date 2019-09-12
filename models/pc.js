@@ -17,15 +17,20 @@ const pc = new Schema({
         type: String,
         required: true
     },
-    pc_unit : [{
-        type : String,
-        name : String,
+    pc_unit: [{
+        fdsi: String,
+        type: String,
+        name: String,
         serial_number: String,
         notes: String
-         },
-        {
-
-        }]
-    
+    }],
+    system_case_unit: [{
+        fdsi: String,
+        type: String,
+        name: String,
+        serial_number: String,
+        notes: String
+    }],
+})
 
 module.exports = model('Pc', pc)
