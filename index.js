@@ -6,6 +6,8 @@ const homeRoutes = require('./routes/home')
 const cardRoutes = require('./routes/card')
 const addRoutes = require('./routes/add')
 const pkiRoutes = require('./routes/pkis')
+const pcRoutes = require('./routes/pc')
+const favicon = require('express-favicon');
 
 const app = express()
 
@@ -20,11 +22,13 @@ app.set('views', 'views')
 
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.urlencoded({extended: true}))
+app.use(favicon(__dirname + '/public/favicon.ico'));
 
 app.use('/', homeRoutes)
 app.use('/add', addRoutes)
 app.use('/pkis', pkiRoutes)
 app.use('/card', cardRoutes)
+app.use('/pc', pcRoutes)
 
 const PORT = process.env.PORT || 3000
 

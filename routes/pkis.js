@@ -1,6 +1,4 @@
-const {
-  Router
-} = require('express')
+const {Router} = require('express')
 const Pki = require('../models/pki')
 const router = Router()
 const express = require("express");

@@ -1,0 +1,46 @@
+<script src="/pc.js"></script>
+<h1>Добавить ПЭВМ</h1>
+
+<form class="form-inline" action="/action_page.php">
+  <input type="text" id="part" name="part" class="form-control mb-2 " placeholder="Проект">  
+  <input type="text" id="fdsi" name="fdsi" class="form-control mb-2 " placeholder="ФДШИ">
+  <input type="text" id="serial_number" name="serial_number" class="form-control mb-2 " placeholder="Серийный номер">
+  <input type="text" id="execution" name="execution" class="form-control mb-2 " placeholder="Исполнение">
+  <table class="table table-sm table-bordered table-hover">
+      <thead class="thead-dark">
+          <th></th>
+          <th>Обозначение изделия</th>
+          <th>Наименование изделия</th>
+          <th>Характеристика</th>
+          <th>Количество</th>
+          <th>Заводской номер</th>
+          <th>Примечания</th>
+      </thead>
+      <tbody>
+          
+      </tbody>
+  </table>
+  
+  <input type="button" class="add-row" value="Добавить строку">
+  <input type="button" class="delete-row" value="Удалить строку">
+  
+
+
+  <div id="showData"></div>
+  <button type="submit" class="btn btn-primary mb-2">Submit</button>
+</form>
+
+
+
+
+
+   
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        CreateTablePC();               
+
+
+    });    
+</script>
