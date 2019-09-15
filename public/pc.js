@@ -25,11 +25,41 @@ function CreateTablePC() {
         $(".add-row").click(function(){
             tr = tbody.insertRow(-1)
             
-            let typeCell = tr.insertCell(-1)
-            typeCell.innerHTML = "<input type='checkbox' name='record'>"
-            typeCell.className = "record"
+            let chCell = tr.insertCell(-1)
+            chCell.innerHTML = "<input type='checkbox' name='record'>"
+            chCell.className = "record"
+            chCell.id = "ch"
+            
+            let fdsiCell = tr.insertCell(-1)            
+            fdsiCell.className = "fdsi"
+            fdsiCell.id = "fdsi"
+            fdsiCell.contentEditable = "true"
+
+            let typeCell = tr.insertCell(-1)            
+            typeCell.className = "type"
             typeCell.id = "type"
             typeCell.contentEditable = "true"
+
+            let nameCell = tr.insertCell(-1)
+            nameCell.className = "name"
+            nameCell.id = "name"
+            nameCell.contentEditable = "true"
+
+            let quantityCell = tr.insertCell(-1)
+            quantityCell.innerHTML = "1"
+            quantityCell.className = "quantity"
+            quantityCell.id = "quantity"
+            quantityCell.contentEditable = "true"
+
+            let serial_numberCell = tr.insertCell(-1)
+            serial_numberCell.className = "serial_number"
+            serial_numberCell.id = "serial_number"
+            serial_numberCell.contentEditable = "true"
+
+            let notesCell = tr.insertCell(-1)
+            notesCell.className = "notes"
+            notesCell.id = "notes"
+            notesCell.contentEditable = "true"
            // var markup = "<tr><td><input type='checkbox' name='record'></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
            // $("table tbody").append(markup);
 
