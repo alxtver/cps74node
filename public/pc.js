@@ -3,6 +3,8 @@ function CreateTablePC() {
         
         let table = document.createElement("table");
         table.className = "table table-sm table-bordered table-hover"
+        table.id = "pc_unit"
+        
         
 
         // Заголовок таблицы
@@ -75,3 +77,57 @@ function CreateTablePC() {
         
         });
 }
+
+
+$(document).ready(function(){
+    CreateTablePC();
+});
+
+$('form').submit(function(){
+// get table html
+let part = $('#part').val()
+let fdsi = $('#fdsi').val()
+let serial_number = $('#serial_number').val()
+let arm = $('#arm').val()
+let execution = $('#execution').val()
+
+let table = {html: $('#pc_unit').html()};
+let pc_unit = [];
+$('#pc_unit tr').each(function(i) {
+  if (i == 0) {
+      return true
+  }
+  let fdsi = $(this).find(".fdsi").html();
+  let type = $(this).find(".type").html();
+  let name = $(this).find(".name").html();
+  let quantity = $(this).find(".quantity").html();
+  let serial_number = $(this).find(".serial_number").html();
+  let notes = $(this).find(".notes").html();
+  
+    
+  pc_unit.push({
+      i: i,
+      fdsi: fdsi,
+      type: type,
+      name: name,
+      quantity: quantity,
+      serial_number: serial_number,
+      notes: notes
+  });
+});
+
+
+// POST the data
+//  alert(data[1].html())
+$.ajax({
+    url: "/pc/add",
+    type: "POST",
+    data: {
+        part: part,
+        fdsi: fdsi,
+        serial_number: serial_number,
+        arm: arm,
+        execution: execution,
+        pc_unit: JSON.stringify(pc_unit)}
+});
+});    

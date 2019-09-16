@@ -1,27 +1,94 @@
 <script src="/pc.js"></script>
 <h1>Добавить ПЭВМ</h1>
+<form>
 
-  
-  <input type="button" class="add-row" value="Добавить строку">
-  <input type="button" class="delete-row" value="Удалить строку">
-  
+    <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Проект</span>
+        </div>
+        <input type="text" id="part" name="part" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">ФДШИ</span>
+        </div>
+        <input type="text" id="fdsi" name="fdsi" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Заводской номер</span>
+        </div>
+        <input type="text" id="serial_number" name="serial_number" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">АРМ</span>
+        </div>
+        <input type="text" id="arm" name="arm" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Исполнение</span>
+        </div>
+        <input type="text" id="execution" name="execution" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+    </div>
 
 
-  <div id="showData"></div>
-  <button type="submit" class="btn btn-primary mb-2">Submit</button>
-</form>
-
-
-
-
-
-   
+    
+    <div id="showData"></div>
+    <input type="button" class="add-row" value="Добавить строку">
+    <input type="button" class="delete-row" value="Удалить строку">
+    <button type="submit" class="btn btn-primary mb-2">Submit</button>
+</form>   
 
 
 <script type="text/javascript">
     $(document).ready(function(){
-        CreateTablePC();               
+        CreateTablePC();
+    });
+
+    $('form').submit(function(){
+  // get table html
+  let part = $('#part').val()
+  let fdsi = $('#fdsi').val()
+  let serial_number = $('#serial_number').val()
+  let arm = $('#arm').val()
+  let execution = $('#execution').val()
+
+  let table = {html: $('#pc_unit').html()};
+  let pc_unit = [];
+  $('#pc_unit tr').each(function(i) {
+      if (i == 0) {
+          return true
+      }
+      let fdsi = $(this).find(".fdsi").html();
+      let type = $(this).find(".type").html();
+      let name = $(this).find(".name").html();
+      let quantity = $(this).find(".quantity").html();
+      let serial_number = $(this).find(".serial_number").html();
+      let notes = $(this).find(".notes").html();
+      
+        
+      pc_unit.push({
+          i: i,
+          fdsi: fdsi,
+          type: type,
+          name: name,
+          quantity: quantity,
+          serial_number: serial_number,
+          notes: notes
+      });
+    });
 
 
-    });    
+  // POST the data
+  //  alert(data[1].html())
+    $.ajax({
+        url: "/pc/add",
+        type: "POST",
+        data: {
+            part: part,
+            fdsi: fdsi,
+            serial_number: serial_number,
+            arm: arm,
+            execution: execution,
+            pc_unit: JSON.stringify(pc_unit)}
+    });
+});    
 </script>
