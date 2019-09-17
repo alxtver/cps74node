@@ -95,12 +95,13 @@ function CreateTableFromJSON(data) {
 
     // CREATE DYNAMIC TABLE.
     let table = document.createElement("table");
-    table.className = "table table-sm table-bordered table-hover"
+    table.className = "table table-sm table-bordered table-hover table-striped"
 
     // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
 
-    let tr = table.insertRow(-1) // TABLE ROW.
+    // TABLE ROW.
     let thead = table.createTHead()
+    let tr = thead.insertRow(-1) 
     thead.className = "thead-dark"
     for (let i = 0; i < col.length; i++) {
         let th = document.createElement("th") // TABLE HEADER.
@@ -111,9 +112,9 @@ function CreateTableFromJSON(data) {
     }
 
     // Заполнение таблицы
-
+    let tbody = table.createTBody()
     for (let i = 0; i < data.length; i++) {
-        tr = table.insertRow(-1)
+        tr = tbody.insertRow(-1)
 
         let typeCell = tr.insertCell(-1)
         typeCell.innerHTML = data[i].type_pki
@@ -177,7 +178,8 @@ function CreateTableFromJSON(data) {
 
     }
 
-    const divContainer = document.getElementById("showData");
-    divContainer.innerHTML = "";
-    divContainer.appendChild(table);
+    const divContainer = document.getElementById("showData")
+    divContainer.innerHTML = ""
+    divContainer.className = "tableContent"
+    divContainer.appendChild(table)
 }

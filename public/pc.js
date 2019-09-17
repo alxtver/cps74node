@@ -66,9 +66,6 @@ function CreateTablePC() {
             notesCell.className = "notes"
             notesCell.id = "notes"
             notesCell.contentEditable = "true"
-           // var markup = "<tr><td><input type='checkbox' name='record'></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
-           // $("table tbody").append(markup);
-
 
         $(".delete-row-pc").click(function(){
             $("#pc_unit").find('input[name="record"]').each(function(){
@@ -178,10 +175,6 @@ function load_data(q) {
 };
 
 function CreateTableFromJSON(data) {
-
-    
-    
-    
     // CREATE DYNAMIC TABLE.
 
 
@@ -196,9 +189,11 @@ function CreateTableFromJSON(data) {
             "Примечания"
         ]
 
-        // таблица
+        // таблица ПЭВМ
         let table = document.createElement("table");
-        table.className = "table table-sm table-bordered table-hover"
+        
+        table.className = "table table-sm table-bordered table-hover pctable"
+        table.id = data[i]._id
         let col_up = [
             'ФДШИ.' + data[i].fdsi,
             data[i].serial_number,
@@ -206,40 +201,96 @@ function CreateTableFromJSON(data) {
             data[i].execution,
             "",
             ""
-        ]
+        ]        
         
+        let tr = table.insertRow(-1) // TABLE ROW.        
         
-        let tr_up = table.insertRow(-1) // TABLE ROW.        
-        let thead_up = table.createTHead()
-        thead_up.className = "thead-up"        
-        for (let i = 0; i < col_up.length; i++) {
-            let td = document.createElement("td") // TABLE HEADER.
-            td.innerHTML = col_up[i];
-            tr_up.appendChild(td);
-            thead_up.appendChild(tr_up)
-        }
+        let td = document.createElement("td")        
+        td.innerHTML = 'ФДШИ.' + data[i].fdsi
+        td.className = "up"
+        tr.appendChild(td)
+
+        td = document.createElement("td")
+        td.innerHTML = data[i].serial_number
+        td.className = "serial up"
+        tr.appendChild(td)
+
+        td = document.createElement("td")
+        td.innerHTML = data[i].arm
+        td.className = "up"
+        tr.appendChild(td)
+
+        td = document.createElement("td")
+        td.innerHTML = data[i].execution
+        td.className = "up"
+        tr.appendChild(td)
+
+        td = document.createElement("td")
+        tr.appendChild(td)
+        td = document.createElement("td")
+        tr.appendChild(td)
+
+        tr = table.insertRow(-1) // TABLE ROW.        
+        
+        td = document.createElement("td")        
+        td.innerHTML = 'Обозначение изделия'
+        td.className = "header"
+        tr.appendChild(td)
+
+        td = document.createElement("td")
+        td.innerHTML = 'Наименование изделия'
+        td.className = "header"
+        tr.appendChild(td)
+
+        td = document.createElement("td")
+        td.innerHTML = 'Характеристика'
+        td.className = "header"
+        tr.appendChild(td)
+
+        td = document.createElement("td")
+        td.innerHTML = 'Количество'
+        td.className = "header"
+        tr.appendChild(td)
+
+        td = document.createElement("td")
+        td.innerHTML = 'Заводской номер'
+        td.className = "header"
+        tr.appendChild(td)
+
+        td = document.createElement("td")
+        td.innerHTML = 'Примечания'
+        td.className = "header"
+        tr.appendChild(td)
+
+        
+               
+        // for (let i = 0; i < col_up.length; i++) {
+        //     let td = document.createElement("td") // TABLE HEADER.
+        //     td.innerHTML = col_up[i];
+        //     tr.appendChild(td);
+        //     thead.appendChild(tr)
+        // }
         // console.log(data[i])
 
-
-
         // Заголовок таблицы
-        let tr = table.insertRow(-1) // TABLE ROW.        
-        let thead = table.createTHead()
-        thead.className = "thead-dark"        
-        for (let i = 0; i < col_rus.length; i++) {
-            let th = document.createElement("th") // TABLE HEADER.
-            th.innerHTML = col_rus[i];
-            tr.appendChild(th);
-            thead.appendChild(tr)
-        }
+        // tr = table.insertRow(-1) // TABLE ROW.        
+        // thead = table.createTHead()
+        // thead.className = "thead-dark"        
+        // for (let i = 0; i < col_rus.length; i++) {
+        //     let th = document.createElement("th") // TABLE HEADER.
+        //     th.innerHTML = col_rus[i];
+        //     tr.appendChild(th);
+        //     thead.appendChild(tr)
+        // }
         
         arr_pc_unit = data[i].pc_unit
         
         for (let j = 0; j < arr_pc_unit.length; j++) {
             tr = table.insertRow(-1)
 
-            let fdsiCell = tr.insertCell(-1)
+            let fdsiCell = tr.insertCell(-1)            
             fdsiCell.innerHTML = arr_pc_unit[j].fdsi
+            
 
             let typeCell = tr.insertCell(-1)
             typeCell.innerHTML = arr_pc_unit[j].type
@@ -259,13 +310,92 @@ function CreateTableFromJSON(data) {
         }
 
         let divContainer = document.getElementById("PC");
-        let divCont = document.createElement("div")        
-
+        let divCont = document.createElement("div")
         divCont.id = data[i]._id
+        divCont.className = "tableContent"
         divContainer.appendChild(divCont);
-        
         divCont.innerHTML = ""
         divCont.appendChild(table)
+
+
+        tr = table.insertRow(-1) // TABLE ROW.        
+        
+        td = document.createElement("td")        
+        td.innerHTML = 'Обозначение изделия'
+        td.className = "header"
+        tr.appendChild(td)
+
+        td = document.createElement("td")
+        td.innerHTML = 'Наименование изделия'
+        td.className = "header"
+        tr.appendChild(td)
+
+        td = document.createElement("td")
+        td.innerHTML = 'Характеристика'
+        td.className = "header"
+        tr.appendChild(td)
+
+        td = document.createElement("td")
+        td.innerHTML = 'Количество'
+        td.className = "header"
+        tr.appendChild(td)
+
+        td = document.createElement("td")
+        td.innerHTML = 'Заводской номер'
+        td.className = "header"
+        tr.appendChild(td)
+
+        td = document.createElement("td")
+        td.innerHTML = 'Примечания'
+        td.className = "header"
+        tr.appendChild(td)
+
+
+        // таблица системного блока
+
+        
+
+        // tr = table.insertRow(-1) // TABLE ROW.        
+        // thead = table.createTHead()
+        // thead.className = "thead-dark"        
+        // for (let i = 0; i < col_rus.length; i++) {
+        //     let th = document.createElement("th") // TABLE HEADER.
+        //     th.innerHTML = col_rus[i];
+        //     tr.appendChild(th);
+        //     thead.appendChild(tr)
+        // }
+
+        arr_system_case_unit = data[i].system_case_unit
+        
+        for (let j = 0; j < arr_system_case_unit.length; j++) {
+            tr = table.insertRow(-1)
+
+            let fdsiCell = tr.insertCell(-1)
+            fdsiCell.innerHTML = arr_system_case_unit[j].fdsi
+
+            let typeCell = tr.insertCell(-1)
+            typeCell.innerHTML = arr_system_case_unit[j].type
+
+            let nameCell = tr.insertCell(-1)
+            nameCell.innerHTML = arr_system_case_unit[j].name
+
+            let quantityCell = tr.insertCell(-1)
+            quantityCell.innerHTML = arr_system_case_unit[j].quantity
+
+            let serial_numberCell = tr.insertCell(-1)
+            serial_numberCell.innerHTML = arr_system_case_unit[j].serial_number
+
+            let notesCell = tr.insertCell(-1)
+            notesCell.innerHTML = arr_system_case_unit[j].notes
+
+        }
+
+        divCont.appendChild(table)
+        
+
+
+
+        
     }
 
     
