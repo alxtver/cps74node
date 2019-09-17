@@ -1,39 +1,42 @@
 <script src="/pc.js"></script>
 <h1>Добавить ПЭВМ</h1>
-<form>
+<form action="/pc">
 
     <div class="input-group input-group-sm mb-3">
         <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-sm">Проект</span>
         </div>
-        <input type="text" id="part" name="part" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+        <input type="text" id="part" name="part" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required>
 
         <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-sm">ФДШИ</span>
         </div>
-        <input type="text" id="fdsi" name="fdsi" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+        <input type="text" id="fdsi" name="fdsi" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required>
 
         <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-sm">Заводской номер</span>
         </div>
-        <input type="text" id="serial_number" name="serial_number" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+        <input type="text" id="serial_number" name="serial_number" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required>
 
         <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-sm">АРМ</span>
         </div>
-        <input type="text" id="arm" name="arm" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+        <input type="text" id="arm" name="arm" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required>
 
         <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-sm">Исполнение</span>
         </div>
-        <input type="text" id="execution" name="execution" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+        <input type="text" id="execution" name="execution" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" required>
     </div>
 
 
     
-    <div id="showData"></div>
-    <input type="button" class="add-row" value="Добавить строку">
-    <input type="button" class="delete-row" value="Удалить строку">
+    <div id="pc_unit_table"></div>
+    <input type="button" class="add-row-pc" value="Добавить строку">
+    <input type="button" class="delete-row-pc" value="Удалить строку">
+    <div id="system_case_unit_table"></div>
+    <input type="button" class="add-row-system" value="Добавить строку">
+    <input type="button" class="delete-row-system" value="Удалить строку">
     <button type="submit" class="btn btn-primary mb-2">Submit</button>
 </form>   
 
@@ -41,6 +44,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
         CreateTablePC();
+        CreateTableSystemCase();
     });
 
     $('form').submit(function(){
@@ -52,6 +56,8 @@
   let execution = $('#execution').val()
 
   let table = {html: $('#pc_unit').html()};
+  
+  // формирование POST запроса для таблицы ПЭВМ
   let pc_unit = [];
   $('#pc_unit tr').each(function(i) {
       if (i == 0) {
@@ -63,10 +69,31 @@
       let quantity = $(this).find(".quantity").html();
       let serial_number = $(this).find(".serial_number").html();
       let notes = $(this).find(".notes").html();
-      
         
       pc_unit.push({
-          i: i,
+          fdsi: fdsi,
+          type: type,
+          name: name,
+          quantity: quantity,
+          serial_number: serial_number,
+          notes: notes
+      });
+    });
+
+    // формирование POST запроса для таблицы системный блок
+    let system_case_unit = [];
+    $('#system_case_unit tr').each(function(i) {
+      if (i == 0) {
+          return true
+      }
+      let fdsi = $(this).find(".fdsi").html();
+      let type = $(this).find(".type").html();
+      let name = $(this).find(".name").html();
+      let quantity = $(this).find(".quantity").html();
+      let serial_number = $(this).find(".serial_number").html();
+      let notes = $(this).find(".notes").html();      
+
+      system_case_unit.push({
           fdsi: fdsi,
           type: type,
           name: name,
@@ -88,7 +115,8 @@
             serial_number: serial_number,
             arm: arm,
             execution: execution,
-            pc_unit: JSON.stringify(pc_unit)}
+            pc_unit: JSON.stringify(pc_unit),
+            system_case_unit: JSON.stringify(system_case_unit)}
     });
 });    
 </script>

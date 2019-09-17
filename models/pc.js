@@ -22,21 +22,12 @@ const pc = new Schema({
         type: String,
         required: true
     },
-    pc_unit: [{
-        fdsi: String,
-        type: String,
-        name: String,
-        serial_number: String,
-        notes: String,
-        quantity: String
-    }],
-    system_case_unit: [{
-        fdsi: String,
-        type: String,
-        name: String,
-        serial_number: String,
-        notes: String
-    }],
+    pc_unit: Array,
+    system_case_unit: Array,
+    created: {
+        type: Date,
+        default: () => Date.now() + 3*60*60*1000 //время МСК
+      },
 })
 
 module.exports = model('Pc', pc)
