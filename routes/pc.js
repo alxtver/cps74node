@@ -85,38 +85,16 @@ router.post("/part", async function (req, res) {
 
 router.post('/insert_serial', async (req, res) => {
   try {
+  //  console.log(req.body)
+    //Жесть пипец!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     
-    // await Pki.findByIdAndUpdate(req.body.id, req.body)  
-    let a = await PC.findById(req.body.id)
-    // console.log(req.body)
-    // console.log(req.body.serial_number)
-   
-    // console.log(a)
-    // a.pc_unit[req.body.obj].serial_number = req.body.serial_number
-    // console.log(a)
-    // a.save()
-
-    // PC.findByIdAndUpdate(req.body.id, { $set: {pc_unit[req.body.obj].serial_number: req.body.serial_number}})
-    pc = new PC({
-      serial_number: a.serial_number+Date.now(),
-      execution: a.execution,
-      fdsi: a.fdsi,
-      part: a.part,
-      arm: a.arm,
-      pc_unit: a.pc_unit
-    })
-
-    pc.save()
-
-    PC.findById(req.body.id, function (err, doc) {      
-      doc.pc_unit[req.body.obj].serial_number = 'jason bourne';
-      doc.save();
-    });
-
-    
-
-
-
+    let a = await PC.findById(req.body.id);                         //ищем комп который собираемся редактировать
+    a.pc_unit[req.body.obj].serial_number = req.body.serial_number  //ищем серийный номер который хотим поменять и меняем его
+                                                                    // a.save() - нихрена не работает, хотя должно
+    let arr_pc_unit = a.pc_unit                                     // присваеваем гребаной переменной массив с компанентами                                                                    
+    let b = await PC.findById(req.body.id)                          // открываем еще один экземпляр
+    b.pc_unit = arr_pc_unit                                                 // присваеваем
+    b.save();                                                       // и СУКА работает...
 
     res.sendStatus(200)
 
