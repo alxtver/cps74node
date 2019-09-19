@@ -4,9 +4,10 @@ const {
 } = require('mongoose')
 
 const part = new Schema({
-    country: {
+    part: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     }
 })
 

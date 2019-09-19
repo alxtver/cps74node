@@ -21,7 +21,7 @@ function edit_type(id, type) {
         type: "POST",
         data: {
             id: id,
-            type: type
+            type_pki: type
         },
         dataType: "text",
     });

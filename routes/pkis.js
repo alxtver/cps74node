@@ -64,11 +64,11 @@ router.post('/edit', async (req, res) => {
 
 router.post('/edit_ajax', async (req, res) => {
   try {
-    // console.log('starting update...' + req.body.id)
+    
     // console.log(req.body)
     await Pki.findByIdAndUpdate(req.body.id, req.body)
     res.sendStatus(200)
-    // console.log('done!')
+
     if (!req.body) return res.sendStatus(400);
   } catch (error) {
     console.log(error)

@@ -1,5 +1,6 @@
 const {Router} = require('express')
 const PC = require('../models/pc')
+const Part = require('../models/part')
 const router = Router()
 const express = require("express");
 
@@ -21,13 +22,22 @@ router.get('/add', (req, res) => {
 
 router.post('/add', async (req, res) => {
 
+  const part = new Part({
+    part: req.body.part
+  })
+
+  try {
+    await part.save()
+  } catch (e) {
+    console.log(e)
+  }
+
   const pc = new PC({
     serial_number: req.body.serial_number,
     execution: req.body.execution,
     fdsi: req.body.fdsi,
     part: req.body.part,
     arm: req.body.arm,
-
   })
 
   // добавление объектов в массив pc_unit
@@ -35,15 +45,13 @@ router.post('/add', async (req, res) => {
   json_pc = JSON.parse(pc_unit)
   for(let i = 0; i < json_pc.length; i++) {    
     pc.pc_unit.push(json_pc[i]);
-    //console.log(obj);
   }
 
   // добавление объектов в массив system_case_unit
   const system_case_unit = req.body.system_case_unit
   json_system = JSON.parse(system_case_unit)
   for(let i = 0; i < json_system.length; i++) {    
-    pc.system_case_unit.push(json_system[i]);
-    //console.log(obj);
+    pc.system_case_unit.push(json_system[i])
   }
 
   try {
@@ -55,38 +63,67 @@ router.post('/add', async (req, res) => {
 })
 
 router.post("/search", async function (req, res) {
+  
   if (!req.body.q) {
-    pcs = await PC.find()
-  } else {
-    const query = {
-      $or: [{
-          type_pki: new RegExp(req.body.q + '.*', "i")
-        },
-        {
-          vendor: new RegExp(req.body.q + '.*', "i")
-        },
-        {
-          country: new RegExp(req.body.q + '.*', "i")
-        },
-        {
-          model: new RegExp(req.body.q + '.*', "i")
-        },
-        {
-          part: new RegExp(req.body.q + '.*', "i")
-        },
-        {
-          serial_number: new RegExp(req.body.q + '.*', "i")
-        },
-        {
-          number_machine: new RegExp(req.body.q + '.*', "i")
-        }
-      ]
-    }
-    pcs = await PC.find(query)
+    pcs = await PC.find({part: req.body.q})
+  } else {  
+    pcs = await PC.find({part: req.body.q})
   }
   if (!req.body) return res.sendStatus(400);
-
+  // console.log(pcs)
   res.send(JSON.stringify(pcs)); // отправляем пришедший ответ обратно
 });
+
+router.post("/part", async function (req, res) {
+  parts = await Part.find()
+  
+  if (!req.body) return res.sendStatus(400);
+
+  res.send(JSON.stringify(parts)); // отправляем пришедший ответ обратно
+})
+
+
+router.post('/insert_serial', async (req, res) => {
+  try {
+    
+    // await Pki.findByIdAndUpdate(req.body.id, req.body)  
+    let a = await PC.findById(req.body.id)
+    // console.log(req.body)
+    // console.log(req.body.serial_number)
+   
+    // console.log(a)
+    // a.pc_unit[req.body.obj].serial_number = req.body.serial_number
+    // console.log(a)
+    // a.save()
+
+    // PC.findByIdAndUpdate(req.body.id, { $set: {pc_unit[req.body.obj].serial_number: req.body.serial_number}})
+    pc = new PC({
+      serial_number: a.serial_number+Date.now(),
+      execution: a.execution,
+      fdsi: a.fdsi,
+      part: a.part,
+      arm: a.arm,
+      pc_unit: a.pc_unit
+    })
+
+    pc.save()
+
+    PC.findById(req.body.id, function (err, doc) {      
+      doc.pc_unit[req.body.obj].serial_number = 'jason bourne';
+      doc.save();
+    });
+
+    
+
+
+
+
+    res.sendStatus(200)
+
+    if (!req.body) return res.sendStatus(400);
+  } catch (error) {
+    console.log(error)
+  }  
+})
 
 module.exports = router

@@ -6,7 +6,8 @@ const {
 const country = new Schema({
     country: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     }
 })
 

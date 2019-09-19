@@ -159,6 +159,7 @@ function CreateTableSystemCase() {
 }
 
 function load_data(q) {
+    
     $.ajax({
         url: "/pc/search",
         method: "POST",
@@ -174,21 +175,28 @@ function load_data(q) {
     });
 };
 
+function load_part() {
+    $.ajax({
+        url: "/pc/part",
+        method: "POST",
+        success: function (data) {
+
+            //$('#quote').html(data);
+            CreateSelect(JSON.parse(data))
+
+        }
+    });
+};
+
 function CreateTableFromJSON(data) {
     // CREATE DYNAMIC TABLE.
 
+    
+    let divContainer = document.getElementById("PC")
+        divContainer.innerHTML = ""
 
     for (let i = 0; i < data.length; i++) {
-
-        let col_rus = [
-            "Обозначение изделия",
-            "Наименование изделия",
-            "Характеристика",
-            "Количество",
-            "Заводской номер",
-            "Примечания"
-        ]
-
+        
         // таблица ПЭВМ
         let table = document.createElement("table");
         
@@ -230,6 +238,7 @@ function CreateTableFromJSON(data) {
         td = document.createElement("td")
         tr.appendChild(td)
 
+        
         tr = table.insertRow(-1) // TABLE ROW.        
         
         td = document.createElement("td")        
@@ -261,27 +270,6 @@ function CreateTableFromJSON(data) {
         td.innerHTML = 'Примечания'
         td.className = "header"
         tr.appendChild(td)
-
-        
-               
-        // for (let i = 0; i < col_up.length; i++) {
-        //     let td = document.createElement("td") // TABLE HEADER.
-        //     td.innerHTML = col_up[i];
-        //     tr.appendChild(td);
-        //     thead.appendChild(tr)
-        // }
-        // console.log(data[i])
-
-        // Заголовок таблицы
-        // tr = table.insertRow(-1) // TABLE ROW.        
-        // thead = table.createTHead()
-        // thead.className = "thead-dark"        
-        // for (let i = 0; i < col_rus.length; i++) {
-        //     let th = document.createElement("th") // TABLE HEADER.
-        //     th.innerHTML = col_rus[i];
-        //     tr.appendChild(th);
-        //     thead.appendChild(tr)
-        // }
         
         arr_pc_unit = data[i].pc_unit
         
@@ -290,33 +278,37 @@ function CreateTableFromJSON(data) {
 
             let fdsiCell = tr.insertCell(-1)            
             fdsiCell.innerHTML = arr_pc_unit[j].fdsi
-            
+            fdsiCell.dataset.id = data[i]._id
 
             let typeCell = tr.insertCell(-1)
             typeCell.innerHTML = arr_pc_unit[j].type
+            typeCell.dataset.id = data[i]._id
+            typeCell.className = 'type'
 
             let nameCell = tr.insertCell(-1)
             nameCell.innerHTML = arr_pc_unit[j].name
+            nameCell.dataset.id = data[i]._id
+            nameCell.className = 'name'
 
             let quantityCell = tr.insertCell(-1)
             quantityCell.innerHTML = arr_pc_unit[j].quantity
+            quantityCell.dataset.id = data[i]._id
 
             let serial_numberCell = tr.insertCell(-1)
             serial_numberCell.innerHTML = arr_pc_unit[j].serial_number
+            serial_numberCell.dataset.id = data[i]._id
+            serial_numberCell.dataset.obj = j
+            serial_numberCell.dataset.unit = 'pc_unit'
+            serial_numberCell.className = 'serial_number'
+            serial_numberCell.contentEditable = "true"
 
             let notesCell = tr.insertCell(-1)
             notesCell.innerHTML = arr_pc_unit[j].notes
+            notesCell.innerHTML = arr_pc_unit[j].notes
+            fdsiCell.dataset.id = data[i]._id
 
         }
-
-        let divContainer = document.getElementById("PC");
-        let divCont = document.createElement("div")
-        divCont.id = data[i]._id
-        divCont.className = "tableContent"
-        divContainer.appendChild(divCont);
-        divCont.innerHTML = ""
-        divCont.appendChild(table)
-
+        
 
         tr = table.insertRow(-1) // TABLE ROW.        
         
@@ -350,21 +342,6 @@ function CreateTableFromJSON(data) {
         td.className = "header"
         tr.appendChild(td)
 
-
-        // таблица системного блока
-
-        
-
-        // tr = table.insertRow(-1) // TABLE ROW.        
-        // thead = table.createTHead()
-        // thead.className = "thead-dark"        
-        // for (let i = 0; i < col_rus.length; i++) {
-        //     let th = document.createElement("th") // TABLE HEADER.
-        //     th.innerHTML = col_rus[i];
-        //     tr.appendChild(th);
-        //     thead.appendChild(tr)
-        // }
-
         arr_system_case_unit = data[i].system_case_unit
         
         for (let j = 0; j < arr_system_case_unit.length; j++) {
@@ -372,31 +349,61 @@ function CreateTableFromJSON(data) {
 
             let fdsiCell = tr.insertCell(-1)
             fdsiCell.innerHTML = arr_system_case_unit[j].fdsi
+            fdsiCell.dataset.id = data[i]._id
 
             let typeCell = tr.insertCell(-1)
             typeCell.innerHTML = arr_system_case_unit[j].type
+            typeCell.dataset.id = data[i]._id
 
             let nameCell = tr.insertCell(-1)
             nameCell.innerHTML = arr_system_case_unit[j].name
+            nameCell.dataset.id = data[i]._id
 
             let quantityCell = tr.insertCell(-1)
             quantityCell.innerHTML = arr_system_case_unit[j].quantity
+            quantityCell.dataset.id = data[i]._id
 
             let serial_numberCell = tr.insertCell(-1)
             serial_numberCell.innerHTML = arr_system_case_unit[j].serial_number
+            serial_numberCell.dataset.id = data[i]._id
+            serial_numberCell.dataset.obj = j
+            serial_numberCell.dataset.unit = 'system_case_unit'
+            serial_numberCell.className = 'serial_number'
+            serial_numberCell.contentEditable = "true"
 
             let notesCell = tr.insertCell(-1)
             notesCell.innerHTML = arr_system_case_unit[j].notes
+            notesCell.dataset.id = data[i]._id
 
         }
-
+        let divContainer = document.getElementById("PC");
+        let divCont = document.createElement("div")
+        divCont.id = data[i]._id
+        divCont.className = "tableContent"
+        divContainer.appendChild(divCont);
+        divCont.innerHTML = ""
         divCont.appendChild(table)
         
-
-
-
-        
     }
+}
 
-    
+function CreateSelect(data) {
+    $("#part_select").append( $('<option value="">...</option>'));
+    for (let i = 0; i < data.length; i++) {
+        $('#part_select').append('<option value="' + data[i]._id + '">' + data[i].part + '</option>');
+    }
+}
+
+function edit_serial_number(id, obj, unit, serial_number) {
+    $.ajax({
+        url: "/pc/insert_serial",
+        type: "POST",
+        data: {
+            id: id,
+            obj: obj,
+            unit: unit,
+            serial_number: serial_number
+        },
+        dataType: "text",
+    });
 }

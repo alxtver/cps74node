@@ -2,13 +2,39 @@
 <h1>Машины</h1>
 <button class="btn btn-dark mb-2" onclick="location.href='pc/add';">Добавить ПЭВМ</button>
 
+<form>
+
+  <div class="form-group">
+    <label for="part_select">Партия</label>
+    <select class="form-control" id="part_select">
+
+    </select>
+  </div>
+
+</form>
+
 <div id="PC"></div>
 
 
 
 
 <script>
-    $(document).ready(function() {
-    load_data();
+  $(document).ready(function() {
+    load_data()
+    load_part()
     });
+    $(document).on('change', '#part_select', function() {      
+      load_data($("#part_select :selected").text())
+  })
+
+  $(document).on('blur', '.serial_number', function() {
+    let id = $(this).data("id")
+    let obj = $(this).data("obj")
+    let unit = $(this).data("unit")
+    let serial_number = $(this).text()
+    edit_serial_number(id, obj, unit, serial_number)
+  });
+
+
+  
 </script>
