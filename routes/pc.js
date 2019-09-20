@@ -1,5 +1,6 @@
 const {Router} = require('express')
 const PC = require('../models/pc')
+const PKI = require('../models/pki')
 const Part = require('../models/part')
 const router = Router()
 const express = require("express");
@@ -85,18 +86,45 @@ router.post("/part", async function (req, res) {
 
 router.post('/insert_serial', async (req, res) => {
   try {
-  //  console.log(req.body)
-    //Жесть пипец!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    
-    let a = await PC.findById(req.body.id);                         //ищем комп который собираемся редактировать
-    a.pc_unit[req.body.obj].serial_number = req.body.serial_number  //ищем серийный номер который хотим поменять и меняем его
-                                                                    // a.save() - нихрена не работает, хотя должно
-    let arr_pc_unit = a.pc_unit                                     // присваеваем гребаной переменной массив с компанентами                                                                    
-    let b = await PC.findById(req.body.id)                          // открываем еще один экземпляр
-    b.pc_unit = arr_pc_unit                                                 // присваеваем
-    b.save();                                                       // и СУКА работает...
 
-    res.sendStatus(200)
+    //Жесть пипец!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    let a = await PC.findById(req.body.id)                            //ищем комп который собираемся редактировать
+    if (req.body.unit == 'pc_unit') {
+      a.pc_unit[req.body.obj].serial_number = req.body.serial_number  //ищем серийный номер который хотим поменять и меняем его
+    } else {
+      a.system_case_unit[req.body.obj].serial_number = req.body.serial_number  //ищем серийный номер который хотим поменять и меняем его
+    }                         
+                                                                    // a.save() - нихрена не работает, хотя должно
+    let arr_pc_unit = a.pc_unit
+    let arr_system_case_unit = a.system_case_unit                   // присваеваем гребаной переменной массив с компанентами
+    let b = await PC.findById(req.body.id)                          // открываем еще один экземпляр
+    b.pc_unit = arr_pc_unit
+    b.system_case_unit = arr_system_case_unit                       // присваеваем
+    
+    await b.save()                                                  // и СУКА работает...
+    
+
+    try {
+      let pki = await PKI.findOne({
+        part: a.part,
+        serial_number: req.body.serial_number
+        
+      })
+      console.log(pki)
+      if (pki) {
+        pki.number_machine = a.serial_number
+        pki.save()
+        res.send(JSON.stringify(pki))
+      } else {
+        res.sendStatus(400)
+      }
+      
+    } catch (error) {
+      console.log(error)
+    }
+    
+    
+    // res.send(JSON.stringify(arr_pc_unit[req.body.obj]))
 
     if (!req.body) return res.sendStatus(400);
   } catch (error) {

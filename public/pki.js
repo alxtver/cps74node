@@ -7,7 +7,7 @@ function load_data(q) {
         },
         success: function (data) {
 
-            //$('#quote').html(data);
+            
             CreateTableFromJSON(JSON.parse(data));
 
         }

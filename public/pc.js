@@ -168,7 +168,6 @@ function load_data(q) {
         },
         success: function (data) {
 
-            //$('#quote').html(data);
             CreateTableFromJSON(JSON.parse(data));
 
         }
@@ -404,6 +403,13 @@ function edit_serial_number(id, obj, unit, serial_number) {
             unit: unit,
             serial_number: serial_number
         },
-        dataType: "text",
+        success: function (pki) {
+            UpdateCells(JSON.parse(pki))
+        }
     });
+}
+
+function UpdateCells(pki) {
+    let e = document.getElementsByClassName('serial_number')
+    console.log(e)
 }
