@@ -14,6 +14,9 @@
 </form>
 
 <div id="PC"></div>
+<input type="hidden" id="hidd_id" value="0">
+<input type="hidden" id="hidd_obj" value="0">
+<input type="hidden" id="hidd_unit" value="0">
 
 
 {{!-- <script src="https://code.responsivevoice.org/responsivevoice.js?key=UtsRdv1X"></script> --}}
@@ -35,8 +38,39 @@
     let obj = $(this).data("obj")
     let unit = $(this).data("unit")
     let serial_number = $(this).text()
-    edit_serial_number(id, obj, unit, serial_number)
-  });
+    let data_hidd = $(this).data("data")
+    $("#hidd_id").val(data_hidd)
+
+    edit_serial_number(id, obj, unit, serial_number)   
+
+    setTimeout(function(){
+      current_id =  $("#hidd_id").val()
+      console.log(current_id) 
+      $('.serial_number[data-data="5d80e9f69eaf4c3b5ffcc9ee;6;system_case_unit"]').focus()
+      
+    },1000)
+    
+    
+  })
+
+  $(document).on('keypress',function(e) {
+    let id = $(this).data("obj")
+    if(e.which == 13) {
+      
+      //console.log(id)
+      //$("#hidd").val(id)
+      alert('Enter!!!!!!!!!')
+      // let a = $("#hidd").val()
+      //console.log(id)
+      current_obj =  $("#hidd_obj").val()
+      current_id =  $("#hidd_id").val()
+      alert(current_obj)
+      //$("td").find(`[data-obj='${current_obj}']`, `[data-id='${current_id}']`).focus
+      // $("td[data-obj='" + current_obj +"', data-id='" + current_id +"']").focus()
+
+      
+    }
+})
 
 
   

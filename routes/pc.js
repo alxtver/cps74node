@@ -85,48 +85,44 @@ router.post("/part", async function (req, res) {
 
 
 router.post('/insert_serial', async (req, res) => {
+
   try {
 
     //Жесть пипец!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    let a = await PC.findById(req.body.id)                            //ищем комп который собираемся редактировать
-    if (req.body.unit == 'pc_unit') {
-      a.pc_unit[req.body.obj].serial_number = req.body.serial_number  //ищем серийный номер который хотим поменять и меняем его
-    } else {
-      a.system_case_unit[req.body.obj].serial_number = req.body.serial_number  //ищем серийный номер который хотим поменять и меняем его
-    }                         
-                                                                    // a.save() - нихрена не работает, хотя должно
-    let arr_pc_unit = a.pc_unit
-    let arr_system_case_unit = a.system_case_unit                   // присваеваем гребаной переменной массив с компанентами
-    let b = await PC.findById(req.body.id)                          // открываем еще один экземпляр
-    b.pc_unit = arr_pc_unit
-    b.system_case_unit = arr_system_case_unit                       // присваеваем
-    
-    await b.save()                                                  // и СУКА работает...
-    
-
-    try {
-      let pki = await PKI.findOne({
-        part: a.part,
-        serial_number: req.body.serial_number
-        
-      })
-      console.log(pki)
-      if (pki) {
-        pki.number_machine = a.serial_number
-        pki.save()
-        res.send(JSON.stringify(pki))
+    let pc = await PC.findById(req.body.id)                            //ищем комп который собираемся редактировать
+    let pki = await PKI.findOne({
+      part: pc.part,
+      serial_number: req.body.serial_number      
+    })
+    if (pki) {
+      pki.number_machine = pc.serial_number
+      if (req.body.unit == 'pc_unit') {
+        pc.pc_unit[req.body.obj].serial_number = req.body.serial_number  //ищем серийный номер который хотим поменять и меняем его
+        pc.pc_unit[req.body.obj].name = pki.vendor + " " + pki.model
+        pc.pc_unit[req.body.obj].type = pki.type_pki
+        console.log(pki)
+        // a.pc_unit[req.body.obj].name = pki.name
+  
       } else {
-        res.sendStatus(400)
-      }
+        pc.system_case_unit[req.body.obj].serial_number = req.body.serial_number  //ищем серийный номер который хотим поменять и меняем его
+        pc.system_case_unit[req.body.obj].name = pki.vendor + " " + pki.model
+        pc.system_case_unit[req.body.obj].type = pki.type_pki
+        console.log(pki)
+      }                         
+                                                                      // a.save() - нихрена не работает, хотя должно
+      let arr_pc_unit = pc.pc_unit
+      let arr_system_case_unit = pc.system_case_unit                   // присваеваем гребаной переменной массив с компанентами
+      let pc_copy = await PC.findById(req.body.id)                          // открываем еще один экземпляр
+      pc_copy.pc_unit = arr_pc_unit
+      pc_copy.system_case_unit = arr_system_case_unit                       // присваеваем
       
-    } catch (error) {
-      console.log(error)
-    }
-    
-    
-    // res.send(JSON.stringify(arr_pc_unit[req.body.obj]))
-
-    if (!req.body) return res.sendStatus(400);
+      await pc_copy.save()                                                  // и СУКА работает...
+      await  pki.save()
+      await res.send(JSON.stringify(pc_copy))
+    } else {
+      res.sendStatus(400)
+    } 
+  
   } catch (error) {
     console.log(error)
   }  

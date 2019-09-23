@@ -77,7 +77,7 @@ router.post('/edit_ajax', async (req, res) => {
 
 router.post("/search", async function (req, res) {
   if (!req.body.q) {
-    pkis = await Pki.find()
+    pkis = await Pki.find().sort([['created', -1]]).limit(100)
   } else {
     const query = {
       $or: [{
@@ -103,7 +103,7 @@ router.post("/search", async function (req, res) {
         }
       ]
     }
-    pkis = await Pki.find(query)
+    pkis = await Pki.find(query).sort([['created', -1]])
   }
   if (!req.body) return res.sendStatus(400);
 
