@@ -1,15 +1,13 @@
-function load_data(q) {
+function load_data(q, selected) {
     $.ajax({
         url: "/pkis/search",
         method: "POST",
         data: {
-            q: q
+            q: q,
+            selected: selected
         },
         success: function (data) {
-
-            
             CreateTableFromJSON(JSON.parse(data));
-
         }
     });
 };
@@ -182,4 +180,24 @@ function CreateTableFromJSON(data) {
     divContainer.innerHTML = ""
     divContainer.className = "tableContent"
     divContainer.appendChild(table)
+}
+
+function load_part() {
+    $.ajax({
+        url: "/pkis/part",
+        method: "POST",
+        success: function (data) {
+
+            //$('#quote').html(data);
+            CreateSelect(JSON.parse(data))
+
+        }
+    })
+}
+
+function CreateSelect(data) {
+    $("#part_select").append( $('<option value="">...</option>'));
+    for (let i = 0; i < data.length; i++) {
+        $('#part_select').append('<option value="' + data[i]._id + '">' + data[i].part + '</option>');
+    }
 }

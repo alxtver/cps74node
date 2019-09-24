@@ -1,5 +1,6 @@
 const {Router} = require('express')
 const Pki = require('../models/pki')
+const Part = require('../models/part')
 const router = Router()
 const express = require("express");
 
@@ -76,11 +77,46 @@ router.post('/edit_ajax', async (req, res) => {
 })
 
 router.post("/search", async function (req, res) {
+  console.log(req.body)
+  let selected = ''
+  if (req.body.selected != '...') {
+    selected = req.body.selected
+  }
+  console.log(selected)
   if (!req.body.q) {
     pkis = await Pki.find().sort([['created', -1]]).limit(100)
-  } else {
-    const query = {
+  } else if (req.body.q == 'null') {
+    pkis = await Pki.find({'part': selected}).sort([['created', -1]])
+  }else if(selected == ''){
+    let query = {
       $or: [{
+        type_pki: new RegExp(req.body.q + '.*', "i")
+      },
+      {
+        vendor: new RegExp(req.body.q + '.*', "i")
+      },
+      {
+        country: new RegExp(req.body.q + '.*', "i")
+      },
+      {
+        model: new RegExp(req.body.q + '.*', "i")
+      },
+      {
+        part: new RegExp(req.body.q + '.*', "i")
+      },
+      {
+        serial_number: new RegExp(req.body.q + '.*', "i")
+      },
+      {
+        number_machine: new RegExp(req.body.q + '.*', "i")
+      }
+    ]}
+  pkis = await Pki.find(query).sort([['created', -1]])
+    
+  } else {
+    query = {
+      $and:[
+        {$or: [{
           type_pki: new RegExp(req.body.q + '.*', "i")
         },
         {
@@ -101,14 +137,24 @@ router.post("/search", async function (req, res) {
         {
           number_machine: new RegExp(req.body.q + '.*', "i")
         }
+      ]},
+        {part: selected}
       ]
+      
     }
     pkis = await Pki.find(query).sort([['created', -1]])
-  }
-  if (!req.body) return res.sendStatus(400);
+  } 
 
   res.send(JSON.stringify(pkis)); // отправляем пришедший ответ обратно
-});
+})
+
+router.post("/part", async function (req, res) {
+  parts = await Part.find()
+  
+  if (!req.body) return res.sendStatus(400);
+
+  res.send(JSON.stringify(parts)); // отправляем пришедший ответ обратно
+})
 
 
 module.exports = router

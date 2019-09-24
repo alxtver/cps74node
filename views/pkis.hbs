@@ -1,14 +1,14 @@
 <script src="/pki.js"></script>
 <h1>ПКИ</h1>
 <button class="btn btn-dark" style="margin-bottom: 1rem" onclick="location.href='/add';">Добавить ПКИ</button>
+<div class="form-group">
+    <label for="part_select">Партия</label>
+      <select class="form-control mb-2" id="part_select">
 
-  <div class="form-row align-items-center">
-    <div class="col-auto">      
-      <div class="input-group mb-2">
-        <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Поиск...">
-      </div>
-    </div>
+    </select>
+    <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Поиск...">
   </div>
+
 
 <div id="showData"></div>
 
@@ -16,20 +16,29 @@
 
 <script>
     $(document).ready(function() {
-    load_data();
+    load_data()
+    load_part()
+    
+    $(document).on('change', '#part_select', function() {
+      let search = $('#search').val()
+      if (search == ''){
+        search = 'null'
+      }
+      load_data(search, $("#part_select :selected").text())
+  })
   
-    var timeoutID = null;
+    
   
     $('#search').keyup(function() {
-      
-      $('#temp').val('0');
-      clearTimeout(timeoutID);
-      var search = $(this).val();
-      
+
+      let search = $(this).val()
+      let blank_req = 'null'
+      let selected = $("#part_select :selected").text()
+      load_data(search, selected)
       if (search) {
-        load_data(search);
+        load_data(search, selected)
       } else {
-        load_data();
+        load_data(blank_req, selected)
       }
     });
 

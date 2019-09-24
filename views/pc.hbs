@@ -41,30 +41,46 @@
     let data_hidd = $(this).data("data")
     $("#hidd_id").val(data_hidd)
 
-    edit_serial_number(id, obj, unit, serial_number)   
+   // edit_serial_number(id, obj, unit, serial_number)
+    
 
-    setTimeout(function(){
-      current_id =  $("#hidd_id").val()
-      console.log(current_id) 
-      $('.serial_number[data-data="5d80e9f69eaf4c3b5ffcc9ee;6;system_case_unit"]').focus()
-      
-    },1000)
+  //  setTimeout(function(){
+  //   let current_id =  $("#hidd_id").val()
+  //   console.log(current_id) 
+  //    $(".serial_number[data-data='" + current_id + "']").focus()
+  //    
+  //  },600)
     
     
   })
 
-  $(document).on('keypress',function(e) {
+  $(document).on('keypress', '.serial_number', function(e) {
     let id = $(this).data("obj")
     if(e.which == 13) {
       
       //console.log(id)
       //$("#hidd").val(id)
-      alert('Enter!!!!!!!!!')
+      //alert('Enter!!!!!!!!!')
       // let a = $("#hidd").val()
       //console.log(id)
-      current_obj =  $("#hidd_obj").val()
-      current_id =  $("#hidd_id").val()
-      alert(current_obj)
+      let id = $(this).data("id")
+      let obj = $(this).data("obj")
+      let unit = $(this).data("unit")
+      let serial_number = $(this).text()
+      let data_hidd = $(this).data("data")
+      $("#hidd_id").val(data_hidd)
+      edit_serial_number(id, obj, unit, serial_number)
+      let current_id =  $("#hidd_id").val()
+      console.log(current_id)
+      let next_id = current_id.split(";")
+      next_id[1] = Number(next_id[1]) + 1 + ''
+      console.log(next_id.join(';'))
+      $(".serial_number[data-data='" + next_id.join(';') + "']").focus()
+      setTimeout(function(){
+        $(".serial_number[data-data='" + next_id.join(';') + "']").focus()
+      }, 1000)
+      
+      //alert(current_obj)
       //$("td").find(`[data-obj='${current_obj}']`, `[data-id='${current_id}']`).focus
       // $("td[data-obj='" + current_obj +"', data-id='" + current_id +"']").focus()
 

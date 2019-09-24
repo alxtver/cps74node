@@ -128,4 +128,17 @@ router.post('/insert_serial', async (req, res) => {
   }  
 })
 
+router.get('/:id/edit', async (req, res) => {
+  if (!req.query.allow) {
+    return res.redirect('/')
+  }
+  const pc = await PC.findById(req.params.id)
+  console.log(pc)
+  res.render('pc-edit', {
+    title: `Редактирование ${pc.serial_number}`,
+    pc
+  })
+
+})
+
 module.exports = router
