@@ -1,165 +1,163 @@
 function CreateTablePC() {
     let col_rus = ["", "Обозначение изделия", "Наименование изделия", "Характеристика", "Количество", "Заводской номер", "Примечания"]
-        
-        let table = document.createElement("table");
-        table.className = "table table-sm table-bordered table-hover"
-        table.id = "pc_unit"  
-        
 
-        // Заголовок таблицы
-        let tr = table.insertRow(-1) 
-        let thead = table.createTHead()
-        thead.className = "thead-dark"
-        for (let i = 0; i < col_rus.length; i++) {
-            let th = document.createElement("th") 
-            // th.className = "thead-dark"
-            th.innerHTML = col_rus[i];
-            tr.appendChild(th);
-            thead.appendChild(tr)
-        }
-        let tbody = table.createTBody()
-        tbody.className = "pc_unit_tbody"
+    let table = document.createElement("table");
+    table.className = "table table-sm table-bordered table-hover"
+    table.id = "pc_unit"
 
-        const divContainer = document.getElementById("pc_unit_table");
-        divContainer.innerHTML = "";
-        divContainer.appendChild(table);
 
-        $(".add-row-pc").click(function(){
-            // var tbody = document.getElementById("pc_unit_tbody");
-            let tableRef = document.getElementById('pc_unit').getElementsByTagName('tbody')[0];
-           
+    // Заголовок таблицы
+    let tr = table.insertRow(-1)
+    let thead = table.createTHead()
+    thead.className = "thead-dark"
+    for (let i = 0; i < col_rus.length; i++) {
+        let th = document.createElement("th")
+        // th.className = "thead-dark"
+        th.innerHTML = col_rus[i];
+        tr.appendChild(th);
+        thead.appendChild(tr)
+    }
+    let tbody = table.createTBody()
+    tbody.className = "pc_unit_tbody"
 
-            tr = tableRef.insertRow(-1)
-            
-            let chCell = tr.insertCell(-1)
-            chCell.innerHTML = "<input type='checkbox' name='record'>"
-            chCell.className = "record"
-            chCell.id = "ch"
-            
-            let fdsiCell = tr.insertCell(-1)            
-            fdsiCell.className = "fdsi"
-            fdsiCell.id = "fdsi"
-            fdsiCell.contentEditable = "true"
+    const divContainer = document.getElementById("pc_unit_table");
+    divContainer.innerHTML = "";
+    divContainer.appendChild(table);
 
-            let typeCell = tr.insertCell(-1)            
-            typeCell.className = "type"
-            typeCell.id = "type"
-            typeCell.contentEditable = "true"
+    $(".add-row-pc").click(function () {
+        let tableRef = document.getElementById('pc_unit').getElementsByTagName('tbody')[0]
 
-            let nameCell = tr.insertCell(-1)
-            nameCell.className = "name"
-            nameCell.id = "name"
-            nameCell.contentEditable = "true"
+        tr = tableRef.insertRow(-1)
 
-            let quantityCell = tr.insertCell(-1)
-            quantityCell.innerHTML = "1"
-            quantityCell.className = "quantity"
-            quantityCell.id = "quantity"
-            quantityCell.contentEditable = "true"
+        let chCell = tr.insertCell(-1)
+        chCell.innerHTML = "<input type='checkbox' name='record'>"
+        chCell.className = "record"
+        chCell.id = "ch"
 
-            let serial_numberCell = tr.insertCell(-1)
-            serial_numberCell.className = "serial_number"
-            serial_numberCell.id = "serial_number"
-            serial_numberCell.contentEditable = "true"
+        let fdsiCell = tr.insertCell(-1)
+        fdsiCell.className = "fdsi"
+        fdsiCell.id = "fdsi"
+        fdsiCell.contentEditable = "true"
 
-            let notesCell = tr.insertCell(-1)
-            notesCell.className = "notes"
-            notesCell.id = "notes"
-            notesCell.contentEditable = "true"
+        let typeCell = tr.insertCell(-1)
+        typeCell.className = "type"
+        typeCell.id = "type"
+        typeCell.contentEditable = "true"
 
-        $(".delete-row-pc").click(function(){
-            $("#pc_unit").find('input[name="record"]').each(function(){
-                if($(this).is(":checked")){
+        let nameCell = tr.insertCell(-1)
+        nameCell.className = "name"
+        nameCell.id = "name"
+        nameCell.contentEditable = "true"
+
+        let quantityCell = tr.insertCell(-1)
+        quantityCell.innerHTML = "1"
+        quantityCell.className = "quantity"
+        quantityCell.id = "quantity"
+        quantityCell.contentEditable = "true"
+
+        let serial_numberCell = tr.insertCell(-1)
+        serial_numberCell.className = "serial_number"
+        serial_numberCell.id = "serial_number"
+        serial_numberCell.contentEditable = "true"
+
+        let notesCell = tr.insertCell(-1)
+        notesCell.className = "notes"
+        notesCell.id = "notes"
+        notesCell.contentEditable = "true"
+
+        $(".delete-row-pc").click(function () {
+            $("#pc_unit").find('input[name="record"]').each(function () {
+                if ($(this).is(":checked")) {
                     $(this).parents("tr").remove();
                 }
             });
         });
-        
-        
-        });
+
+
+    });
 }
 
 function CreateTableSystemCase() {
     let col_rus = ["", "Обозначение изделия", "Наименование изделия", "Характеристика", "Количество", "Заводской номер", "Примечания"]
-        
-        let table = document.createElement("table");
-        table.className = "table table-sm table-bordered table-hover"
-        table.id = "system_case_unit"  
-        
 
-        // Заголовок таблицы
-        let tr = table.insertRow(-1) 
-        let thead = table.createTHead()
-        thead.className = "thead-dark"
-        for (let i = 0; i < col_rus.length; i++) {
-            let th = document.createElement("th") 
-            // th.className = "thead-dark"
-            th.innerHTML = col_rus[i];
-            tr.appendChild(th);
-            thead.appendChild(tr)
-        }
-        let tbody = table.createTBody()   
-
-        const divContainer = document.getElementById("system_case_unit_table");
-        divContainer.innerHTML = "";
-        divContainer.appendChild(table);
-
-        $(".add-row-system").click(function(){
-            tr = tbody.insertRow(-1)
-            
-            let chCell = tr.insertCell(-1)
-            chCell.innerHTML = "<input type='checkbox' name='record'>"
-            chCell.className = "record"
-            chCell.id = "ch"
-            
-            let fdsiCell = tr.insertCell(-1)            
-            fdsiCell.className = "fdsi"
-            fdsiCell.id = "fdsi"
-            fdsiCell.contentEditable = "true"
-
-            let typeCell = tr.insertCell(-1)            
-            typeCell.className = "type"
-            typeCell.id = "type"
-            typeCell.contentEditable = "true"
-
-            let nameCell = tr.insertCell(-1)
-            nameCell.className = "name"
-            nameCell.id = "name"
-            nameCell.contentEditable = "true"
-
-            let quantityCell = tr.insertCell(-1)
-            quantityCell.innerHTML = "1"
-            quantityCell.className = "quantity"
-            quantityCell.id = "quantity"
-            quantityCell.contentEditable = "true"
-
-            let serial_numberCell = tr.insertCell(-1)
-            serial_numberCell.className = "serial_number"
-            serial_numberCell.id = "serial_number"
-            serial_numberCell.contentEditable = "true"
-
-            let notesCell = tr.insertCell(-1)
-            notesCell.className = "notes"
-            notesCell.id = "notes"
-            notesCell.contentEditable = "true"
-           // var markup = "<tr><td><input type='checkbox' name='record'></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
-           // $("table tbody").append(markup);
+    let table = document.createElement("table");
+    table.className = "table table-sm table-bordered table-hover"
+    table.id = "system_case_unit"
 
 
-        $(".delete-row-system").click(function(){
-            $("#system_case_unit").find('input[name="record"]').each(function(){
-                if($(this).is(":checked")){
+    // Заголовок таблицы
+    let tr = table.insertRow(-1)
+    let thead = table.createTHead()
+    thead.className = "thead-dark"
+    for (let i = 0; i < col_rus.length; i++) {
+        let th = document.createElement("th")
+        // th.className = "thead-dark"
+        th.innerHTML = col_rus[i];
+        tr.appendChild(th);
+        thead.appendChild(tr)
+    }
+    let tbody = table.createTBody()
+
+    const divContainer = document.getElementById("system_case_unit_table");
+    divContainer.innerHTML = "";
+    divContainer.appendChild(table);
+
+    $(".add-row-system").click(function () {
+        tr = tbody.insertRow(-1)
+
+        let chCell = tr.insertCell(-1)
+        chCell.innerHTML = "<input type='checkbox' name='record'>"
+        chCell.className = "record"
+        chCell.id = "ch"
+
+        let fdsiCell = tr.insertCell(-1)
+        fdsiCell.className = "fdsi"
+        fdsiCell.id = "fdsi"
+        fdsiCell.contentEditable = "true"
+
+        let typeCell = tr.insertCell(-1)
+        typeCell.className = "type"
+        typeCell.id = "type"
+        typeCell.contentEditable = "true"
+
+        let nameCell = tr.insertCell(-1)
+        nameCell.className = "name"
+        nameCell.id = "name"
+        nameCell.contentEditable = "true"
+
+        let quantityCell = tr.insertCell(-1)
+        quantityCell.innerHTML = "1"
+        quantityCell.className = "quantity"
+        quantityCell.id = "quantity"
+        quantityCell.contentEditable = "true"
+
+        let serial_numberCell = tr.insertCell(-1)
+        serial_numberCell.className = "serial_number"
+        serial_numberCell.id = "serial_number"
+        serial_numberCell.contentEditable = "true"
+
+        let notesCell = tr.insertCell(-1)
+        notesCell.className = "notes"
+        notesCell.id = "notes"
+        notesCell.contentEditable = "true"
+        // var markup = "<tr><td><input type='checkbox' name='record'></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
+        // $("table tbody").append(markup);
+
+
+        $(".delete-row-system").click(function () {
+            $("#system_case_unit").find('input[name="record"]').each(function () {
+                if ($(this).is(":checked")) {
                     $(this).parents("tr").remove();
                 }
             });
         });
-        
-        
-        });
+
+
+    });
 }
 
 function load_data(q) {
-    
+
     $.ajax({
         url: "/pc/search",
         method: "POST",
@@ -190,14 +188,14 @@ function load_part() {
 function TablePc(pc) {
     // таблица ПЭВМ
     let table = document.createElement("table");
-        
+
     table.className = "table table-sm table-bordered table-hover pctable"
     table.id = pc._id
-        
-    
+
+
     let tr = table.insertRow(-1) // TABLE ROW.        
-    
-    let td = document.createElement("td")        
+
+    let td = document.createElement("td")
     td.innerHTML = 'ФДШИ.' + pc.fdsi
     td.className = "up"
     tr.appendChild(td)
@@ -222,10 +220,10 @@ function TablePc(pc) {
     td = document.createElement("td")
     tr.appendChild(td)
 
-    
+
     tr = table.insertRow(-1) // TABLE ROW.        
-    
-    td = document.createElement("td")        
+
+    td = document.createElement("td")
     td.innerHTML = 'Обозначение изделия'
     td.className = "header"
     tr.appendChild(td)
@@ -254,13 +252,13 @@ function TablePc(pc) {
     td.innerHTML = 'Примечания'
     td.className = "header"
     tr.appendChild(td)
-    
+
     arr_pc_unit = pc.pc_unit
-    
+
     for (let j = 0; j < arr_pc_unit.length; j++) {
         tr = table.insertRow(-1)
 
-        let fdsiCell = tr.insertCell(-1)            
+        let fdsiCell = tr.insertCell(-1)
         fdsiCell.innerHTML = arr_pc_unit[j].fdsi
         fdsiCell.dataset.id = pc._id
 
@@ -293,11 +291,11 @@ function TablePc(pc) {
         fdsiCell.dataset.id = pc._id
 
     }
-    
+
 
     tr = table.insertRow(-1) // TABLE ROW.        
-    
-    td = document.createElement("td")        
+
+    td = document.createElement("td")
     td.innerHTML = 'Обозначение изделия'
     td.className = "header"
     tr.appendChild(td)
@@ -328,7 +326,7 @@ function TablePc(pc) {
     tr.appendChild(td)
 
     arr_system_case_unit = pc.system_case_unit
-    
+
     for (let j = 0; j < arr_system_case_unit.length; j++) {
         tr = table.insertRow(-1)
 
@@ -363,19 +361,19 @@ function TablePc(pc) {
 
     }
     return table
-    
-    
+
+
 }
 
 function CreateTableFromJSON(data) {
     // CREATE DYNAMIC TABLE.
 
-    
+
     let divContainer = document.getElementById("PC")
-        divContainer.innerHTML = ""
+    divContainer.innerHTML = ""
 
     for (let i = 0; i < data.length; i++) {
-        
+
         table = TablePc(data[i])
         let divContainer = document.getElementById("PC");
         let divCont = document.createElement("div")
@@ -391,8 +389,6 @@ function CreateTableFromJSON(data) {
         button_copy.value = 'Копировать'
         button_copy.dataset.id = data[i]._id
         button_copy.setAttribute("onclick", "location.href='/pc/" + data[i]._id + "/edit?allow=true'")
-        // button_copy.onclick = "location.href=/pkis/" + data[i]._id + "/edit?allow=true"
-        // button_copy.onclick = data[i]._id
         divCont.appendChild(button_copy)
 
         let button_edit = document.createElement('input')
@@ -402,12 +398,12 @@ function CreateTableFromJSON(data) {
         button_edit.setAttribute("onclick", "location.href='/pc/" + data[i]._id + "/edit?allow=true'")
         button_edit.dataset.id = data[i]._id
         divCont.appendChild(button_edit)
-        
+
     }
 }
 
 function CreateSelect(data) {
-    $("#part_select").append( $('<option value="">...</option>'));
+    $("#part_select").append($('<option value="">...</option>'));
     for (let i = 0; i < data.length; i++) {
         $('#part_select').append('<option value="' + data[i]._id + '">' + data[i].part + '</option>');
     }
@@ -433,7 +429,7 @@ function UpdateCells(pc) {
     let divContainer = document.getElementById(pc._id)
     divContainer.innerHTML = ""
     table = TablePc(pc)
-    
+
     let divCont = document.createElement("div")
     divCont.id = pc._id
     divCont.className = "tableContent"
@@ -443,7 +439,7 @@ function UpdateCells(pc) {
 }
 
 function focusOn() {
-    current_id =  $("#hidd_id").val()
-      console.log(current_id) 
-      $(".serial_number[data-data='" + current_id + "']").focus()
+    current_id = $("#hidd_id").val()
+    console.log(current_id)
+    $(".serial_number[data-data='" + current_id + "']").focus()
 }

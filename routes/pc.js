@@ -1,4 +1,6 @@
-const {Router} = require('express')
+const {
+  Router
+} = require('express')
 const PC = require('../models/pc')
 const PKI = require('../models/pki')
 const Part = require('../models/part')
@@ -7,19 +9,19 @@ const express = require("express");
 
 const app = express();
 
-router.get('/', async (req, res) => {  
+router.get('/', async (req, res) => {
   res.render('pc', {
     title: 'Машины',
-    isPC: true,    
+    isPC: true,
   })
 })
 
 router.get('/add', (req, res) => {
-    res.render('add_pc', {
-      title: 'Добавить ПЭВМ',
-      isAdd: true
-    })
+  res.render('add_pc', {
+    title: 'Добавить ПЭВМ',
+    isAdd: true
   })
+})
 
 router.post('/add', async (req, res) => {
 
@@ -44,14 +46,14 @@ router.post('/add', async (req, res) => {
   // добавление объектов в массив pc_unit
   const pc_unit = req.body.pc_unit
   json_pc = JSON.parse(pc_unit)
-  for(let i = 0; i < json_pc.length; i++) {    
+  for (let i = 0; i < json_pc.length; i++) {
     pc.pc_unit.push(json_pc[i]);
   }
 
   // добавление объектов в массив system_case_unit
   const system_case_unit = req.body.system_case_unit
   json_system = JSON.parse(system_case_unit)
-  for(let i = 0; i < json_system.length; i++) {    
+  for (let i = 0; i < json_system.length; i++) {
     pc.system_case_unit.push(json_system[i])
   }
 
@@ -64,11 +66,15 @@ router.post('/add', async (req, res) => {
 })
 
 router.post("/search", async function (req, res) {
-  
+
   if (!req.body.q) {
-    pcs = await PC.find({part: req.body.q})
-  } else {  
-    pcs = await PC.find({part: req.body.q})
+    pcs = await PC.find({
+      part: req.body.q
+    })
+  } else {
+    pcs = await PC.find({
+      part: req.body.q
+    })
   }
   if (!req.body) return res.sendStatus(400);
   // console.log(pcs)
@@ -77,7 +83,7 @@ router.post("/search", async function (req, res) {
 
 router.post("/part", async function (req, res) {
   parts = await Part.find()
-  
+
   if (!req.body) return res.sendStatus(400);
 
   res.send(JSON.stringify(parts)); // отправляем пришедший ответ обратно
@@ -89,43 +95,43 @@ router.post('/insert_serial', async (req, res) => {
   try {
 
     //Жесть пипец!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    let pc = await PC.findById(req.body.id)                            //ищем комп который собираемся редактировать
+    let pc = await PC.findById(req.body.id) //ищем комп который собираемся редактировать
     let pki = await PKI.findOne({
       part: pc.part,
-      serial_number: req.body.serial_number      
+      serial_number: req.body.serial_number
     })
     if (pki) {
       pki.number_machine = pc.serial_number
       if (req.body.unit == 'pc_unit') {
-        pc.pc_unit[req.body.obj].serial_number = req.body.serial_number  //ищем серийный номер который хотим поменять и меняем его
+        pc.pc_unit[req.body.obj].serial_number = req.body.serial_number //ищем серийный номер который хотим поменять и меняем его
         pc.pc_unit[req.body.obj].name = pki.vendor + " " + pki.model
         pc.pc_unit[req.body.obj].type = pki.type_pki
         console.log(pki)
         // a.pc_unit[req.body.obj].name = pki.name
-  
+
       } else {
-        pc.system_case_unit[req.body.obj].serial_number = req.body.serial_number  //ищем серийный номер который хотим поменять и меняем его
+        pc.system_case_unit[req.body.obj].serial_number = req.body.serial_number //ищем серийный номер который хотим поменять и меняем его
         pc.system_case_unit[req.body.obj].name = pki.vendor + " " + pki.model
         pc.system_case_unit[req.body.obj].type = pki.type_pki
         console.log(pki)
-      }                         
-                                                                      // a.save() - нихрена не работает, хотя должно
+      }
+      // a.save() - нихрена не работает, хотя должно
       let arr_pc_unit = pc.pc_unit
-      let arr_system_case_unit = pc.system_case_unit                   // присваеваем гребаной переменной массив с компанентами
-      let pc_copy = await PC.findById(req.body.id)                          // открываем еще один экземпляр
+      let arr_system_case_unit = pc.system_case_unit // присваеваем гребаной переменной массив с компанентами
+      let pc_copy = await PC.findById(req.body.id) // открываем еще один экземпляр
       pc_copy.pc_unit = arr_pc_unit
-      pc_copy.system_case_unit = arr_system_case_unit                       // присваеваем
-      
-      await pc_copy.save()                                                  // и СУКА работает...
-      await  pki.save()
-      await res.send(JSON.stringify(pc_copy))
+      pc_copy.system_case_unit = arr_system_case_unit // присваеваем
+
+      await pc_copy.save() // и СУКА работает...
+      await pki.save()
+      res.send(JSON.stringify(pc_copy))
     } else {
       res.sendStatus(400)
-    } 
-  
+    }
+
   } catch (error) {
     console.log(error)
-  }  
+  }
 })
 
 router.get('/:id/edit', async (req, res) => {

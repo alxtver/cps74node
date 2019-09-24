@@ -147,7 +147,7 @@ h2.active {
 
 /* FORM TYPOGRAPHY*/
 
-input[type=button],
+/* input[type=button],
 input[type=submit],
 input[type=reset] {
   background-color: #56baed;
@@ -185,7 +185,7 @@ input[type=reset]:active {
   -o-transform: scale(0.95);
   -ms-transform: scale(0.95);
   transform: scale(0.95);
-}
+} */
 
 input[type=text] {
   /* background-color: #f6f6f6; */
