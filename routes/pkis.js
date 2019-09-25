@@ -1,12 +1,13 @@
 const {Router} = require('express')
 const Pki = require('../models/pki')
 const Part = require('../models/part')
+const auth = require('../middleware/auth')
 const router = Router()
 const express = require("express");
 
 const app = express();
 
-router.get('/', async (req, res) => {  
+router.get('/', auth, async (req, res) => {  
   res.render('pkis', {
     title: 'ПКИ',
     isPkis: true,
@@ -14,14 +15,14 @@ router.get('/', async (req, res) => {
   })
 })
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   res.render('pkis', {
     title: 'ПКИ',
     isPkis: true
   })
 })
 
-router.get('/:id/edit', async (req, res) => {
+router.get('/:id/edit', auth, async (req, res) => {
   if (!req.query.allow) {
     return res.redirect('/')
   }
@@ -32,7 +33,7 @@ router.get('/:id/edit', async (req, res) => {
   })
 })
 
-router.post('/del', async (req, res) => {
+router.post('/del', auth, async (req, res) => {
   try {
     await Pki.deleteOne({
       _id: req.body._id
@@ -43,7 +44,7 @@ router.post('/del', async (req, res) => {
   }
 })
 
-router.get('/:id/del', async (req, res) => {
+router.get('/:id/del', auth, async (req, res) => {
   if (!req.query.allow) {
     return res.redirect('/')
   }
@@ -53,7 +54,7 @@ router.get('/:id/del', async (req, res) => {
   res.redirect('/pkis')
 })
 
-router.post('/edit', async (req, res) => {
+router.post('/edit', auth, async (req, res) => {
   if (req.body.in_case) {
     req.body.in_case = 'true'
   } else {
@@ -63,10 +64,9 @@ router.post('/edit', async (req, res) => {
   res.redirect('/pkis')
 })
 
-router.post('/edit_ajax', async (req, res) => {
+router.post('/edit_ajax', auth, async (req, res) => {
   try {
     
-    // console.log(req.body)
     await Pki.findByIdAndUpdate(req.body.id, req.body)
     res.sendStatus(200)
 
@@ -76,13 +76,11 @@ router.post('/edit_ajax', async (req, res) => {
   }  
 })
 
-router.post("/search", async function (req, res) {
-  console.log(req.body)
+router.post("/search", auth, async function (req, res) {
   let selected = ''
   if (req.body.selected != '...') {
     selected = req.body.selected
   }
-  console.log(selected)
   if (!req.body.q) {
     pkis = await Pki.find().sort([['created', -1]]).limit(100)
   } else if (req.body.q == 'null') {
@@ -148,7 +146,7 @@ router.post("/search", async function (req, res) {
   res.send(JSON.stringify(pkis)); // отправляем пришедший ответ обратно
 })
 
-router.post("/part", async function (req, res) {
+router.post("/part", auth, async function (req, res) {
   parts = await Part.find()
   
   if (!req.body) return res.sendStatus(400);

@@ -1,16 +1,17 @@
 const {Router} = require('express')
 const Pki = require('../models/pki')
 const Country = require('../models/country')
+const auth = require('../middleware/auth')
 const router = Router()
 
-router.get('/', (req, res) => {
+router.get('/', auth, (req, res) => {
   res.render('add', {
     title: 'Добавить ПКИ',
     isAdd: true
   })
 })
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   if (req.body.in_case == 'true') {
     var in_case = req.body.in_case
   } else {

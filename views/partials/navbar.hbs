@@ -12,23 +12,36 @@
         <li class="nav-item"><a class="nav-link" href="/">Главная</a></li>
       {{/if}}
 
-      {{#if isPkis}}
-        <li class="nav-item active"><a class="nav-link" href="/pkis">ПКИ</a></li>
+      {{#if isAuth}}
+        {{#if isPkis}}
+          <li class="nav-item active"><a class="nav-link" href="/pkis">ПКИ</a></li>
+        {{else}}
+          <li class="nav-item"><a class="nav-link" href="/pkis">ПКИ</a></li>
+        {{/if}}
+
+        {{#if isPC}}
+          <li class="nav-item active"><a class="nav-link" href="/pc">Производство</a></li>
+        {{else}}
+          <li class="nav-item"><a class="nav-link" href="/pc">Производство</a></li>
+        {{/if}}
+
+        {{#if isProjects}}
+          <li class="nav-item active"><a class="nav-link" href="/projects">Проекты</a></li>
+        {{else}}
+          <li class="nav-item"><a class="nav-link" href="/projects">Проекты</a></li>
+        {{/if}}
+          <li class="nav-item"><a class="nav-link" href="/auth/logout">Выйти</a></li>
       {{else}}
-        <li class="nav-item"><a class="nav-link" href="/pkis">ПКИ</a></li>
+        {{#if isLogin}}
+          <li class="nav-item active"><a class="nav-link" href="/auth/login">Войти</a></li>
+        {{else}}
+          <li class="nav-item"><a class="nav-link" href="/auth/login">Войти</a></li>
+        {{/if}} 
       {{/if}}
 
-      {{#if isPC}}
-        <li class="nav-item active"><a class="nav-link" href="/pc">Производство</a></li>
-      {{else}}
-        <li class="nav-item"><a class="nav-link" href="/pc">Производство</a></li>
-      {{/if}}
+      
 
-      {{#if isProjects}}
-        <li class="nav-item active"><a class="nav-link" href="/pc">Проекты</a></li>
-      {{else}}
-        <li class="nav-item"><a class="nav-link" href="/projects">Проекты</a></li>
-      {{/if}} 
+      
       
       {{!-- {{#if isAdd}}
         <li class="nav-item active"><a class="nav-link" href="/card">Корзина</a></li>

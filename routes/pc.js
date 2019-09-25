@@ -1,29 +1,28 @@
-const {
-  Router
-} = require('express')
+const {Router} = require('express')
 const PC = require('../models/pc')
 const PKI = require('../models/pki')
 const Part = require('../models/part')
+const auth = require('../middleware/auth')
 const router = Router()
 const express = require("express");
 
 const app = express();
 
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   res.render('pc', {
     title: 'Машины',
     isPC: true,
   })
 })
 
-router.get('/add', (req, res) => {
+router.get('/add', auth, (req, res) => {
   res.render('add_pc', {
     title: 'Добавить ПЭВМ',
     isAdd: true
   })
 })
 
-router.post('/add', async (req, res) => {
+router.post('/add', auth, async (req, res) => {
 
   const part = new Part({
     part: req.body.part
@@ -65,7 +64,7 @@ router.post('/add', async (req, res) => {
   }
 })
 
-router.post("/search", async function (req, res) {
+router.post("/search", auth, async function (req, res) {
 
   if (!req.body.q) {
     pcs = await PC.find({
@@ -80,7 +79,7 @@ router.post("/search", async function (req, res) {
   res.send(JSON.stringify(pcs)); // отправляем пришедший ответ обратно
 });
 
-router.post("/part", async function (req, res) {
+router.post("/part", auth, async function (req, res) {
   parts = await Part.find()
 
   if (!req.body) return res.sendStatus(400);
@@ -89,7 +88,7 @@ router.post("/part", async function (req, res) {
 })
 
 
-router.post('/insert_serial', async (req, res) => {
+router.post('/insert_serial', auth, async (req, res) => {
 
   try {
 
@@ -131,7 +130,7 @@ router.post('/insert_serial', async (req, res) => {
   }
 })
 
-router.get('/:id/edit', async (req, res) => {
+router.get('/:id/edit', auth, async (req, res) => {
   if (!req.query.allow) {
     return res.redirect('/')
   }
