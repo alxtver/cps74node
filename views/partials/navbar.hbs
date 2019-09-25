@@ -19,9 +19,15 @@
       {{/if}}
 
       {{#if isPC}}
-        <li class="nav-item active"><a class="nav-link" href="/pc">Сборка</a></li>
+        <li class="nav-item active"><a class="nav-link" href="/pc">Производство</a></li>
       {{else}}
-        <li class="nav-item"><a class="nav-link" href="/pc">Сборка</a></li>
+        <li class="nav-item"><a class="nav-link" href="/pc">Производство</a></li>
+      {{/if}}
+
+      {{#if isProjects}}
+        <li class="nav-item active"><a class="nav-link" href="/pc">Проекты</a></li>
+      {{else}}
+        <li class="nav-item"><a class="nav-link" href="/projects">Проекты</a></li>
       {{/if}} 
       
       {{!-- {{#if isAdd}}

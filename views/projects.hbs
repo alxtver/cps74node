@@ -1,0 +1,31 @@
+<script src="/projects.js"></script>
+<h1>Производство</h1>
+
+
+<form>
+
+    <div class="form-group">
+        <label for="part_select">Партия</label>
+        <select class="form-control" id="part_select">
+
+        </select>
+    </div>
+
+</form>
+
+<div id="PC"></div>
+<input type="hidden" id="hidd_id" value="0">
+<input type="hidden" id="hidd_obj" value="0">
+<input type="hidden" id="hidd_unit" value="0">
+
+
+<script>
+    $(document).ready(function () {
+        load_data()
+        load_part()
+    })
+    
+    $(document).on('change', '#part_select', function () {
+    load_data($("#part_select :selected").text())
+  })
+</script>

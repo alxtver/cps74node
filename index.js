@@ -8,6 +8,7 @@ const cardRoutes = require('./routes/card')
 const addRoutes = require('./routes/add')
 const pkiRoutes = require('./routes/pkis')
 const pcRoutes = require('./routes/pc')
+const projectsRoutes = require('./routes/projects')
 const favicon = require('express-favicon');
 
 const app = express()
@@ -30,13 +31,14 @@ app.use('/add', addRoutes)
 app.use('/pkis', pkiRoutes)
 app.use('/card', cardRoutes)
 app.use('/pc', pcRoutes)
+app.use('/projects', projectsRoutes)
 
 const PORT = process.env.PORT || 3000
 
 async function start() {
   try {
-    const url = 'mongodb+srv://admin:ccz1rpm8t!@cluster0-rqbxt.mongodb.net/cps74'
-    await mongoose.connect(url, {
+    var config = require('./config.js')
+    await mongoose.connect(config.url, {
       useNewUrlParser: true,
       useFindAndModify: false  
     })

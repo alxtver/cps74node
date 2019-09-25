@@ -77,7 +77,6 @@ router.post("/search", async function (req, res) {
     })
   }
   if (!req.body) return res.sendStatus(400);
-  // console.log(pcs)
   res.send(JSON.stringify(pcs)); // отправляем пришедший ответ обратно
 });
 
@@ -106,14 +105,12 @@ router.post('/insert_serial', async (req, res) => {
         pc.pc_unit[req.body.obj].serial_number = req.body.serial_number //ищем серийный номер который хотим поменять и меняем его
         pc.pc_unit[req.body.obj].name = pki.vendor + " " + pki.model
         pc.pc_unit[req.body.obj].type = pki.type_pki
-        console.log(pki)
         // a.pc_unit[req.body.obj].name = pki.name
 
       } else {
         pc.system_case_unit[req.body.obj].serial_number = req.body.serial_number //ищем серийный номер который хотим поменять и меняем его
         pc.system_case_unit[req.body.obj].name = pki.vendor + " " + pki.model
         pc.system_case_unit[req.body.obj].type = pki.type_pki
-        console.log(pki)
       }
       // a.save() - нихрена не работает, хотя должно
       let arr_pc_unit = pc.pc_unit
@@ -139,7 +136,7 @@ router.get('/:id/edit', async (req, res) => {
     return res.redirect('/')
   }
   const pc = await PC.findById(req.params.id)
-  console.log(pc)
+  
   res.render('pc-edit', {
     title: `Редактирование ${pc.serial_number}`,
     pc
