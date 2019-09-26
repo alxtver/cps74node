@@ -225,21 +225,7 @@ function CreateTableFromJSON(data) {
         divCont.innerHTML = ""
         divCont.appendChild(table)
 
-        let button_copy = document.createElement('input')
-        button_copy.type = "button"
-        button_copy.className = 'btn btn-dark mr-2 mb-1'
-        button_copy.value = 'Копировать'
-        button_copy.dataset.id = data[i]._id
-        button_copy.setAttribute("onclick", "location.href='/pc/" + data[i]._id + "/edit?allow=true'")
-        divCont.appendChild(button_copy)
-
-        let button_edit = document.createElement('input')
-        button_edit.type = 'button'
-        button_edit.className = 'btn btn-dark mr-2 mb-1'
-        button_edit.value = 'Редактировать'
-        button_edit.setAttribute("onclick", "location.href='/pc/" + data[i]._id + "/edit?allow=true'")
-        button_edit.dataset.id = data[i]._id
-        divCont.appendChild(button_edit)
+        
 
     }
 }
