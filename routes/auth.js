@@ -39,7 +39,6 @@ router.post('/login', async (req, res) =>{
         } else {
             res.redirect('/auth/login')
         }
-
     } catch (error) {
         console.log(error)
     }
