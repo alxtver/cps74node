@@ -5,8 +5,10 @@ function load_data(q) {
     $.ajax({
         url: "/pc/search",
         method: "POST",
+        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
         data: {
-            q: q
+            q: q,
+            csrf: $('meta[name="csrf"]').attr('content')
         },
         success: function (data) {
 
@@ -20,6 +22,7 @@ function load_part() {
     $.ajax({
         url: "/pc/part",
         method: "POST",
+        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
         success: function (data) {
 
             //$('#quote').html(data);
@@ -214,19 +217,15 @@ function CreateTableFromJSON(data) {
     let divContainer = document.getElementById("PC")
     divContainer.innerHTML = ""
 
-    for (let i = 0; i < data.length; i++) {
-
-        table = TablePc(data[i])
+    for (let elem of data) {
+        table = TablePc(elem)
         let divContainer = document.getElementById("PC");
         let divCont = document.createElement("div")
-        divCont.id = data[i]._id
+        divCont.id = elem._id
         divCont.className = "tableContent mb-3"
         divContainer.appendChild(divCont);
         divCont.innerHTML = ""
-        divCont.appendChild(table)
-
-        
-
+        divCont.appendChild(table)    
     }
 }
 

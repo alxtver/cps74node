@@ -5,7 +5,7 @@ const router = Router()
 router.get('/', auth, (req, res) => {
   res.render('projects', {
     title: 'Проекты',
-    isProjects: true
+    isProjects: true,    
   })
 })
 

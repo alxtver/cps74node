@@ -2,6 +2,7 @@ function load_data(q, selected) {
     $.ajax({
         url: "/pkis/search",
         method: "POST",
+        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
         data: {
             q: q,
             selected: selected
@@ -17,6 +18,7 @@ function edit_type(id, type) {
     $.ajax({
         url: "/pkis/edit_ajax",
         type: "POST",
+        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
         data: {
             id: id,
             type_pki: type
@@ -29,6 +31,7 @@ function edit_vendor(id, vendor) {
     $.ajax({
         url: "/pkis/edit_ajax",
         type: "POST",
+        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
         data: {
             id: id,
             vendor: vendor
@@ -41,6 +44,7 @@ function edit_model(id, model) {
     $.ajax({
         url: "/pkis/edit_ajax",
         type: "POST",
+        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
         data: {
             id: id,
             model: model
@@ -53,6 +57,7 @@ function edit_serial_number(id, serial_number) {
     $.ajax({
         url: "/pkis/edit_ajax",
         type: "POST",
+        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
         data: {
             id: id,
             serial_number: serial_number
@@ -65,6 +70,7 @@ function edit_country(id, country) {
     $.ajax({
         url: "/pkis/edit_ajax",
         type: "POST",
+        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
         data: {
             id: id,
             country: country
@@ -77,6 +83,7 @@ function edit_part(id, part) {
     $.ajax({
         url: "/pkis/edit_ajax",
         type: "POST",
+        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
         data: {
             id: id,
             part: part
@@ -186,6 +193,7 @@ function load_part() {
     $.ajax({
         url: "/pkis/part",
         method: "POST",
+        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
         success: function (data) {
 
             //$('#quote').html(data);

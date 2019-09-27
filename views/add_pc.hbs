@@ -42,6 +42,7 @@
     <div id="system_case_unit_table"></div>
     <input type="button" class="add-row-system btn btn-dark" value="Добавить строку">
     <input type="button" class="delete-row-system btn btn-dark" value="Удалить строку">
+    <input type="hidden" name="_csrf" value="{{csrf}}">
     <div class="col-sm mt-5"><button type="submit" class="btn btn-dark mb-2">Добавить</button></div>
 
 </form>
@@ -119,6 +120,7 @@
         $.ajax({
             url: "/pc/add",
             type: "POST",
+            headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
             data: {
                 part: part,
                 fdsi: fdsi,

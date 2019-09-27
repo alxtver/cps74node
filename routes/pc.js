@@ -23,15 +23,17 @@ router.get('/add', auth, (req, res) => {
 })
 
 router.post('/add', auth, async (req, res) => {
-
-  const part = new Part({
-    part: req.body.part
-  })
-
-  try {
-    await part.save()
-  } catch (e) {
-    console.log(e)
+// если нет такого проекта, то сохраняем
+  const part = await Part.findOne({part: req.body.part})  
+  if (!part) {
+    const part_add = new Part({
+      part: req.body.part
+    })
+    try {
+      await part_add.save()
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const pc = new PC({

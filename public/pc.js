@@ -160,6 +160,7 @@ function load_data(q) {
 
     $.ajax({
         url: "/pc/search",
+        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
         method: "POST",
         data: {
             q: q
@@ -176,6 +177,7 @@ function load_part() {
     $.ajax({
         url: "/pc/part",
         method: "POST",
+        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
         success: function (data) {
 
             //$('#quote').html(data);
@@ -413,6 +415,7 @@ function edit_serial_number(id, obj, unit, serial_number) {
     $.ajax({
         url: "/pc/insert_serial",
         type: "POST",
+        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
         data: {
             id: id,
             obj: obj,
