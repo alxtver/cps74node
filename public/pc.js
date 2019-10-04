@@ -13,8 +13,8 @@ function CreateTablePC() {
     for (let i = 0; i < col_rus.length; i++) {
         let th = document.createElement("th")
         // th.className = "thead-dark"
-        th.innerHTML = col_rus[i];
-        tr.appendChild(th);
+        th.innerHTML = col_rus[i]
+        tr.appendChild(th)
         thead.appendChild(tr)
     }
     let tbody = table.createTBody()

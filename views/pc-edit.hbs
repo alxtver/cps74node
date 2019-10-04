@@ -2,10 +2,68 @@
 
 <h1>Редактирование {{pc.serial_number}}</h1>
 
-<div>{{pc}}</div>
+<div>{{pc.serial_number}}</div>
+<div>{{pc.part}}</div>
+<table class="table table-sm table-bordered table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th></th>
+            <th>Обозначение изделия</th>
+            <th>Наименование изделия</th>
+            <th>Характеристика</th>
+            <th>Количество</th>
+            <th>Заводской номер</th>
+            <th>Примечания</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each pc.pc_unit}}
+            <tr>
+                <td></td>
+                <td>{{fdsi}}</td>
+                <td>{{type}}</td>
+                <td>{{name}}</td>
+                <td>{{quantity}}</td>
+                <td>{{serial_number}}</td>
+                <td>{{notes}}</td>
+            </tr>
+        {{/each}}
+    </tbody>
+
+    <thead class="thead-dark">
+        <tr>
+            <th></th>
+            <th>Обозначение изделия</th>
+            <th>Наименование изделия</th>
+            <th>Характеристика</th>
+            <th>Количество</th>
+            <th>Заводской номер</th>
+            <th>Примечания</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each pc.system_case_unit}}
+            <tr>
+                <td></td>
+                <td>{{fdsi}}</td>
+                <td>{{type}}</td>
+                <td>{{name}}</td>
+                <td>{{quantity}}</td>
+                <td>{{serial_number}}</td>
+                <td>{{notes}}</td>
+            </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+
 
 <script>
     $(document).ready(function() {
+        let pc = `{{pc}}`
+        let arr = pc.split('&#x27;').join('')
+        let jso = JSON.stringify(arr)
+        console.log(jso)
         
     })
 </script>
