@@ -143,7 +143,6 @@ function CreateTableSystemCase() {
         // var markup = "<tr><td><input type='checkbox' name='record'></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
         // $("table tbody").append(markup);
 
-
         $(".delete-row-system").click(function () {
             $("#system_case_unit").find('input[name="record"]').each(function () {
                 if ($(this).is(":checked")) {
@@ -387,10 +386,14 @@ function CreateTableFromJSON(data) {
 
         let button_copy = document.createElement('input')
         button_copy.type = "button"
-        button_copy.className = 'btn btn-dark mr-2 mb-1'
+        button_copy.className = 'btn btn-dark mr-2 mb-1 copyBtn'
+        
         button_copy.value = 'Копировать'
         button_copy.dataset.id = data[i]._id
-        button_copy.setAttribute("onclick", "location.href='/pc/" + data[i]._id + "/edit?allow=true'")
+        button_copy.dataset.serial_number = data[i].serial_number
+        button_copy.dataset.toggle = 'modal'
+        button_copy.dataset.target = '#exampleModal'
+
         divCont.appendChild(button_copy)
 
         let button_edit = document.createElement('input')
@@ -443,6 +446,5 @@ function UpdateCells(pc) {
 
 function focusOn() {
     current_id = $("#hidd_id").val()
-    console.log(current_id)
     $(".serial_number[data-data='" + current_id + "']").focus()
 }

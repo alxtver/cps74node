@@ -3,7 +3,6 @@
 <button class="btn btn-dark mb-2" onclick="location.href='pc/add';">Добавить ПЭВМ</button>
 
 <form>
-
   <div class="form-group">
     <label for="part_select">Партия</label>
     <select class="form-control" id="part_select">
@@ -18,7 +17,28 @@
 <input type="hidden" id="hidd_obj" value="0">
 <input type="hidden" id="hidd_unit" value="0">
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Серийный номер</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input id="inputCopy" type="text" value="" class="form-control">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
 
+<input type="hidden" id="hidInputCopy">
 {{!-- <script src="https://code.responsivevoice.org/responsivevoice.js?key=UtsRdv1X"></script> --}}
 
 {{!-- <input onclick="responsiveVoice.speak('SFP-модуль', 'Russian Female');" type='button' value='🔊 Play' /> --}}
@@ -27,10 +47,16 @@
   $(document).ready(function () {
     load_data()
     load_part()
-
   })
+
   $(document).on('change', '#part_select', function () {
     load_data($("#part_select :selected").text())
+  })
+
+
+  $("body").on('click','.copyBtn',function () {
+    $('#hidInputCopy').val($(this).data("id"))
+    $('#inputCopy').val($(this).data("serial_number"))
   })
 
   $(document).on('blur', '.serial_number', function () {
@@ -40,29 +66,11 @@
     let serial_number = $(this).text()
     let data_hidd = $(this).data("data")
     $("#hidd_id").val(data_hidd)
-
-    // edit_serial_number(id, obj, unit, serial_number)
-
-
-    //  setTimeout(function(){
-    //   let current_id =  $("#hidd_id").val()
-    //   console.log(current_id) 
-    //    $(".serial_number[data-data='" + current_id + "']").focus()
-    //    
-    //  },600)
-
-
   })
 
   $(document).on('keypress', '.serial_number', function (e) {
     let id = $(this).data("obj")
     if (e.which == 13) {
-
-      //console.log(id)
-      //$("#hidd").val(id)
-      //alert('Enter!!!!!!!!!')
-      // let a = $("#hidd").val()
-      //console.log(id)
       let id = $(this).data("id")
       let obj = $(this).data("obj")
       let unit = $(this).data("unit")
@@ -71,20 +79,14 @@
       $("#hidd_id").val(data_hidd)
       edit_serial_number(id, obj, unit, serial_number)
       let current_id = $("#hidd_id").val()
-      console.log(current_id)
+ 
       let next_id = current_id.split(";")
       next_id[1] = Number(next_id[1]) + 1 + ''
-      console.log(next_id.join(';'))
+      
       $(".serial_number[data-data='" + next_id.join(';') + "']").focus()
       setTimeout(function () {
         $(".serial_number[data-data='" + next_id.join(';') + "']").focus()
       }, 1000)
-
-      //alert(current_obj)
-      //$("td").find(`[data-obj='${current_obj}']`, `[data-id='${current_id}']`).focus
-      // $("td[data-obj='" + current_obj +"', data-id='" + current_id +"']").focus()
-
-
     }
   })
 </script>
