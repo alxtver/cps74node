@@ -11,6 +11,7 @@ const app = express();
 router.get('/', auth, async (req, res) => {
   res.render('pc', {
     title: 'Машины',
+
     isPC: true,
   })
 })

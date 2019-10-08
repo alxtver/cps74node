@@ -6,48 +6,45 @@
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav">
 
-      {{#if isHome}}
-        <li class="nav-item active"><a class="nav-link" href="/">Главная</a></li>
-      {{else}}
-        <li class="nav-item"><a class="nav-link" href="/">Главная</a></li>
-      {{/if}}
 
-      {{#if isAuth}}
-        {{#if isPkis}}
-          <li class="nav-item active"><a class="nav-link" href="/pkis">ПКИ</a></li>
-        {{else}}
-          <li class="nav-item"><a class="nav-link" href="/pkis">ПКИ</a></li>
-        {{/if}}
+{{#if isHome}}
+  <li class="nav-item active"><a class="nav-link" href="/">Главная</a></li>
+{{else}}
+  <li class="nav-item"><a class="nav-link" href="/">Главная</a></li>
+{{/if}}
 
-        {{#if isPC}}
-          <li class="nav-item active"><a class="nav-link" href="/pc">Производство</a></li>
-        {{else}}
-          <li class="nav-item"><a class="nav-link" href="/pc">Производство</a></li>
-        {{/if}}
+{{#if group}}
+  {{#if isAuth}}
+    {{#if isPkis}}
+       <li class="nav-item active"><a class="nav-link" href="/pkis">ПКИ</a></li>
+    {{else}}
+       <li class="nav-item"><a class="nav-link" href="/pkis">ПКИ</a></li>
+    {{/if}} 
 
-        {{#if isProjects}}
-          <li class="nav-item active"><a class="nav-link" href="/projects">Проекты</a></li>
-        {{else}}
-          <li class="nav-item"><a class="nav-link" href="/projects">Проекты</a></li>
-        {{/if}}
-          <li class="nav-item"><a class="nav-link" href="/auth/logout">Выйти</a></li>
-      {{else}}
-        {{#if isLogin}}
-          <li class="nav-item active"><a class="nav-link" href="/auth/login">Войти</a></li>
-        {{else}}
-          <li class="nav-item"><a class="nav-link" href="/auth/login">Войти</a></li>
-        {{/if}} 
-      {{/if}}
+    {{#if isPC}}
+       <li class="nav-item active"><a class="nav-link" href="/pc">Производство</a></li>
+    {{else}}
+       <li class="nav-item"><a class="nav-link" href="/pc">Производство</a></li>
+    {{/if}}
+  {{/if}}
+{{/if}}
 
-      
+{{#if isAuth}}
+  {{#if isProjects}}
+    <li class="nav-item active"><a class="nav-link" href="/projects">Проекты</a></li>
+  {{else}}
+    <li class="nav-item"><a class="nav-link" href="/projects">Проекты</a></li>
+  {{/if}}
 
-      
-      
-      {{!-- {{#if isAdd}}
-        <li class="nav-item active"><a class="nav-link" href="/card">Корзина</a></li>
-      {{else}}
-        <li class="nav-item"><a class="nav-link" href="/card">Корзина</a></li>
-      {{/if}}       --}}
+    <li class="nav-item"><a class="nav-link" href="/auth/logout">Выйти</a></li>
+{{else}}
+  {{#if isLogin}}
+    <li class="nav-item active"><a class="nav-link" href="/auth/login">Войти</a></li>
+  {{else}}
+    <li class="nav-item"><a class="nav-link" href="/auth/login">Войти</a></li>
+  {{/if}} 
+{{/if}}
+
 
     </ul>
   </div>

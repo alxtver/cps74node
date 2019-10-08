@@ -1,25 +1,55 @@
 <script src="/pc.js"></script>
 
 <h1>Редактирование {{pc.serial_number}}</h1>
+<form action="/pc">
+    <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Проект</span>
+        </div>
+        <input type="text" id="part" name="part" class="form-control" aria-label="Small"
+            aria-describedby="inputGroup-sizing-sm" value="{{pc.part}}" required>
 
-<div>{{pc.serial_number}}</div>
-<div>{{pc.part}}</div>
-<table class="table table-sm table-bordered table-hover">
-    <thead class="thead-dark">
-        <tr>
-            <th></th>
-            <th>Обозначение изделия</th>
-            <th>Наименование изделия</th>
-            <th>Характеристика</th>
-            <th>Количество</th>
-            <th>Заводской номер</th>
-            <th>Примечания</th>
-        </tr>
-    </thead>
-    <tbody>
-        {{#each pc.pc_unit}}
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">ФДШИ</span>
+        </div>
+        <input type="text" id="fdsi" name="fdsi" class="form-control" aria-label="Small"
+            aria-describedby="inputGroup-sizing-sm" value="{{pc.fdsi}}" required>
+
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Заводской номер</span>
+        </div>
+        <input type="text" id="serial_number" name="serial_number" class="form-control" aria-label="Small"
+            aria-describedby="inputGroup-sizing-sm" value="{{pc.serial_number}}" required>
+
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">АРМ</span>
+        </div>
+        <input type="text" id="arm" name="arm" class="form-control" aria-label="Small"
+            aria-describedby="inputGroup-sizing-sm" value="{{pc.arm}}" required>
+
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Исполнение</span>
+        </div>
+        <input type="text" id="execution" name="execution" class="form-control" aria-label="Small"
+            aria-describedby="inputGroup-sizing-sm" value="{{pc.execution}}" required>
+    </div>
+
+    <table class="table table-sm table-bordered table-hover">
+        <thead class="thead-dark">
             <tr>
-                <td></td>
+                <th></th>
+                <th>Обозначение изделия</th>
+                <th>Наименование изделия</th>
+                <th>Характеристика</th>
+                <th>Количество</th>
+                <th>Заводской номер</th>
+                <th>Примечания</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each pc.pc_unit}}
+            <tr>
+                <td><input type='checkbox' name='record'></td>
                 <td>{{fdsi}}</td>
                 <td>{{type}}</td>
                 <td>{{name}}</td>
@@ -27,24 +57,24 @@
                 <td>{{serial_number}}</td>
                 <td>{{notes}}</td>
             </tr>
-        {{/each}}
-    </tbody>
+            {{/each}}
+        </tbody>
 
-    <thead class="thead-dark">
-        <tr>
-            <th></th>
-            <th>Обозначение изделия</th>
-            <th>Наименование изделия</th>
-            <th>Характеристика</th>
-            <th>Количество</th>
-            <th>Заводской номер</th>
-            <th>Примечания</th>
-        </tr>
-    </thead>
-    <tbody>
-        {{#each pc.system_case_unit}}
+        <thead class="thead-dark">
             <tr>
-                <td></td>
+                <th></th>
+                <th>Обозначение изделия</th>
+                <th>Наименование изделия</th>
+                <th>Характеристика</th>
+                <th>Количество</th>
+                <th>Заводской номер</th>
+                <th>Примечания</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each pc.system_case_unit}}
+            <tr>
+                <td><input type='checkbox' name='record'></td>
                 <td>{{fdsi}}</td>
                 <td>{{type}}</td>
                 <td>{{name}}</td>
@@ -52,18 +82,18 @@
                 <td>{{serial_number}}</td>
                 <td>{{notes}}</td>
             </tr>
-        {{/each}}
-    </tbody>
-</table>
-
+            {{/each}}
+        </tbody>
+    </table>
+    <div class="col-sm mt-5"><button type="submit" class="btn btn-dark mb-2">Редактировать</button></div>
+</form>
 
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         let pc = `{{pc}}`
         let arr = pc.split('&#x27;').join('')
         let jso = JSON.stringify(arr)
         console.log(jso)
-        
     })
 </script>

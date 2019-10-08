@@ -32,7 +32,7 @@ function CreateTablePC() {
         let chCell = tr.insertCell(-1)
         chCell.innerHTML = "<input type='checkbox' name='record'>"
         chCell.className = "record"
-        chCell.id = "ch"
+        // chCell.id = "ch"
 
         let fdsiCell = tr.insertCell(-1)
         fdsiCell.className = "fdsi"
