@@ -165,9 +165,7 @@ function load_data(q) {
             q: q
         },
         success: function (data) {
-
-            CreateTableFromJSON(JSON.parse(data));
-
+            CreateTableFromJSON(JSON.parse(data))
         }
     });
 };
@@ -386,19 +384,19 @@ function CreateTableFromJSON(data) {
 
         let button_copy = document.createElement('input')
         button_copy.type = "button"
-        button_copy.className = 'btn btn-dark mr-2 mb-1 copyBtn'
+        button_copy.className = 'btn btn-dark mr-2 mb-2 ml-3 copyBtn'
         
         button_copy.value = 'Копировать'
         button_copy.dataset.id = data[i]._id
         button_copy.dataset.serial_number = data[i].serial_number
         button_copy.dataset.toggle = 'modal'
-        button_copy.dataset.target = '#exampleModal'
+        button_copy.dataset.target = '#modalCopy'
 
         divCont.appendChild(button_copy)
 
         let button_edit = document.createElement('input')
         button_edit.type = 'button'
-        button_edit.className = 'btn btn-dark mr-2 mb-1'
+        button_edit.className = 'btn btn-dark mr-2 mb-2'
         button_edit.value = 'Редактировать'
         button_edit.setAttribute("onclick", "location.href='/pc/" + data[i]._id + "/edit?allow=true'")
         button_edit.dataset.id = data[i]._id

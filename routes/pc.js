@@ -146,4 +146,50 @@ router.get('/:id/edit', auth, async (req, res) => {
 
 })
 
+router.post('/copy', auth, async (req, res) => {
+  const pc = await PC.findById(req.body.id)  
+  let newPC = new PC({
+    serial_number: req.body.serial_number,
+    execution: pc.execution,
+    fdsi: pc.fdsi,
+    part: pc.part,
+    arm: pc.arm,
+    pc_unit: []
+  })
+  // newPC.pc_unit = pc.pc_unit
+  // newPC.system_case_unit = pc.system_case_unit
+
+  for (unit of pc.pc_unit) {
+    if (unit.serial_number == pc.serial_number) {
+      unit.serial_number = req.body.serial_number
+      newPC.pc_unit.push(unit)
+    } else if (unit.serial_number == 'б/н' || unit.serial_number == 'Б/Н' || unit.serial_number == 'Б/н') {
+        newPC.pc_unit.push(unit)
+    } else {
+        unit.name = ''
+        unit.serial_number = ''
+        newPC.pc_unit.push(unit)
+    }
+  }
+
+  for (unit of pc.system_case_unit) {
+    if (unit.serial_number == pc.serial_number) {
+      unit.serial_number = req.body.serial_number
+      newPC.system_case_unit.push(unit)
+    } else if (unit.serial_number == 'б/н' || unit.serial_number == 'Б/Н' || unit.serial_number == 'Б/н') {
+        newPC.system_case_unit.push(unit)
+    } else {
+        unit.name = ''
+        unit.serial_number = ''
+        newPC.system_case_unit.push(unit)
+    }
+  }
+  // console.log(newPC)
+  await newPC.save()
+    res.render('pc', {
+      title: 'Машины',  
+      isPC: true,
+    })
+  })
+
 module.exports = router
