@@ -4,7 +4,10 @@ const PKI = require('../models/pki')
 const Part = require('../models/part')
 const auth = require('../middleware/auth')
 const router = Router()
-const express = require("express");
+const express = require("express")
+
+
+
 
 const app = express();
 
@@ -184,12 +187,25 @@ router.post('/copy', auth, async (req, res) => {
         newPC.system_case_unit.push(unit)
     }
   }
-  // console.log(newPC)
-  await newPC.save()
+  try {
+    await newPC.save()
     res.render('pc', {
       title: 'Машины',  
-      isPC: true,
+      isPC: true,      
+      part: pc.part
     })
+  } catch (error) {
+    console.log(error)
+  }
+  
   })
+
+
+  router.post('/find_serial', auth, async (req, res) => {
+    const pc = await PC.findOne({serial_number: req.body.serial})
+    if (pc) {res.send(true)} else {res.send(false)}
+    })
+
+    
 
 module.exports = router

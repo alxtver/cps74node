@@ -410,3 +410,8 @@ input[type=text]:placeholder {
 #icon {
   width: 64px;
 }
+
+.danger {
+  color: indianred;
+  background: indianred;
+}

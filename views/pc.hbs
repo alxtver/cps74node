@@ -32,12 +32,16 @@
       <form action="/pc/copy" method="post">
       <input type="hidden" name="_csrf" value="{{csrf}}">
       <div class="modal-body">
+        {{!-- <input class="danger" id="danger" type="hidden" value="Такой серийный номер существует"> --}}
+        
+        
         <input id="inputCopy" name="serial_number" type="text" value="" class="form-control">
+        <div class="mb-2" id="hidd"></div>
       </div>
       <input type="hidden" name="id" id="hidInputCopy">
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <button type="submit" id="btnSubmit" class="btn btn-primary" disabled>Сохранить</button>
         
       </div>
       </form>
@@ -54,8 +58,8 @@
 
 <script>
   $(document).ready(function () {
-    load_data()
-    load_part()
+    load_data(`{{part}}`)
+    load_part()  
   })
 
   $(document).on('change', '#part_select', function () {
@@ -98,4 +102,12 @@
       }, 1000)
     }
   })
+
+  $('#inputCopy').keyup(function() {
+      let serial = $(this).val()
+      find_serial(serial)
+    })
+
+
+  
 </script>

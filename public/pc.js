@@ -385,12 +385,13 @@ function CreateTableFromJSON(data) {
         let button_copy = document.createElement('input')
         button_copy.type = "button"
         button_copy.className = 'btn btn-dark mr-2 mb-2 ml-3 copyBtn'
-        
+        button_copy.onchange = "klcCopy()"
         button_copy.value = 'Копировать'
         button_copy.dataset.id = data[i]._id
         button_copy.dataset.serial_number = data[i].serial_number
         button_copy.dataset.toggle = 'modal'
         button_copy.dataset.target = '#modalCopy'
+        
 
         divCont.appendChild(button_copy)
 
@@ -426,7 +427,7 @@ function edit_serial_number(id, obj, unit, serial_number) {
         success: function (pc) {
             UpdateCells(JSON.parse(pc))
         }
-    });
+    })
 }
 
 function UpdateCells(pc) {
@@ -445,4 +446,33 @@ function UpdateCells(pc) {
 function focusOn() {
     current_id = $("#hidd_id").val()
     $(".serial_number[data-data='" + current_id + "']").focus()
+}
+
+function find_serial(serial) {
+    $.ajax({
+        url: "/pc/find_serial",
+        method: "POST",
+        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+        data: {
+            serial: serial
+        },
+        success: function (data) {
+            if (data){
+                $("#inputCopy").css("background-color","indianred")
+                $("#hidd").append('<div id="danger" style="color: indianred">Машина с таким номером существует</div>')
+                $('#btnSubmit').prop('disabled', true)
+            } else {
+                $("#inputCopy").css("background-color","white")
+                $("#danger").remove()
+                $('#btnSubmit').prop('disabled', false)
+            }
+            
+            
+        }
+    })
+}
+
+function klcCopy() {
+    $("#inputCopy").focus()
+    $('#btnSubmit').prop('disabled', true)
 }

@@ -8,10 +8,10 @@ function load_data(q, selected) {
             selected: selected
         },
         success: function (data) {
-            CreateTableFromJSON(JSON.parse(data));
+            CreateTableFromJSON(JSON.parse(data))
         }
-    });
-};
+    })
+}
 
 // Редактирование ячеек таблицы ПКИ
 function edit_type(id, type) {

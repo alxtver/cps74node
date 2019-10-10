@@ -30,7 +30,6 @@
     
   
     $('#search').keyup(function() {
-
       let search = $(this).val()
       let blank_req = 'null'
       let selected = $("#part_select :selected").text()
@@ -40,7 +39,7 @@
       } else {
         load_data(blank_req, selected)
       }
-    });
+    })
 
   $(document).on('blur', '.type', function() {
     let id = $(this).data("id");
