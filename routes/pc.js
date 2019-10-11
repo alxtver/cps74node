@@ -146,7 +146,6 @@ router.get('/:id/edit', auth, async (req, res) => {
     title: `Редактирование ${pc.serial_number}`,
     pc
   })
-
 })
 
 router.post('/copy', auth, async (req, res) => {

@@ -231,7 +231,7 @@ function CreateTableFromJSON(data) {
         button_passport.type = "button"
         button_passport.className = 'btn btn-dark mr-2 mb-2 ml-3 copyBtn'
         button_passport.value = 'Паспорт'
-        // button_passport.setAttribute("onclick", "location.href='/projects/passport" + elem._id + "/passport'")
+        button_passport.setAttribute("onclick", "location.href='/projects/" + elem._id + "/passport'")
         button_passport.dataset.id = elem._id        
         divCont.appendChild(button_passport)
     }

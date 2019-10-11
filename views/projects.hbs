@@ -20,21 +20,21 @@
         load_part()
     })
 
-    $("body").on('click','.copyBtn',function () {
-        let id = $(this).data("id")
-
-        $.ajax({
-        url: "/projects/passport",
-        type: "POST",
-        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
-        data: {
-            id: id
-        },
-        success: function (data) {
-            console.log('Ok')
-        }
-    })
-  })
+ //   $("body").on('click','.copyBtn',function () {
+ //       let id = $(this).data("id")
+//
+ //       $.ajax({
+ //       url: "/projects/passport",
+ //       type: "get",
+ //       headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+ //       data: {
+ //           id: id
+ //       },
+ //       success: function (data) {
+ //           console.log('Ok')
+ //       }
+ //   })
+ // })
     
     $(document).on('change', '#part_select', function () {
         load_data($("#part_select :selected").text())
