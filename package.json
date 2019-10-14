@@ -16,13 +16,14 @@
     "connect-flash": "^0.1.1",
     "connect-mongodb-session": "^2.2.0",
     "csurf": "^1.10.0",
+    "docxtemplater": "^3.14.3",
     "express": "^4.16.4",
     "express-favicon": "^2.0.1",
     "express-handlebars": "^3.0.2",
     "express-session": "^1.16.2",
-    "hummus-recipe": "^1.8.20",
     "mongoose": "^5.6.11",
     "npm": "^6.11.3",
+    "pizzip": "^3.0.6",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
