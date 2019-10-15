@@ -14,4 +14,9 @@ router.get('/', auth, async (req, res) => {
     })
   })
 
+router.post("/search", auth, async (req, res) => {
+  apkzi = await Apkzi.find().sort([['created', -1]])
+  res.send(JSON.stringify(apkzi))
+  })
+
 module.exports = router

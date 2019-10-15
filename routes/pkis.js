@@ -74,7 +74,7 @@ router.post('/edit_ajax', auth, async (req, res) => {
   }  
 })
 
-router.post("/search", auth, async function (req, res) {
+router.post("/search", auth, async (req, res) =>  {
   let selected = ''
   if (req.body.selected != '...') {
     selected = req.body.selected
@@ -147,9 +147,9 @@ router.post("/search", auth, async function (req, res) {
 router.post("/part", auth, async function (req, res) {
   parts = await Part.find()
   
-  if (!req.body) return res.sendStatus(400);
+  if (!req.body) return res.sendStatus(400)
 
-  res.send(JSON.stringify(parts)); // отправляем пришедший ответ обратно
+  res.send(JSON.stringify(parts)) // отправляем пришедший ответ обратно
 })
 
 
