@@ -1,5 +1,6 @@
 const {Router} = require('express')
 const Pki = require('../models/pki')
+const Apkzi = require('../models/apkzi')
 const Country = require('../models/country')
 const auth = require('../middleware/auth')
 const router = Router()
@@ -43,6 +44,33 @@ router.post('/', auth, async (req, res) => {
   try {
     await pki.save()
     res.redirect('/add')
+  } catch (e) {
+    console.log(e)
+  }
+})
+
+
+router.get('/apkzi', auth, (req, res) => {
+  res.render('add_apkzi', {
+    title: 'Добавить АПКЗИ',
+    isApkzi: true
+  })
+})
+
+
+router.post('/apkzi', auth, async (req, res) => {
+  const apkzi = new Apkzi({
+    fdsi: req.body.fdsi,
+    apkzi_name: req.body.apkzi_name,
+    kont_name: req.body.kont_name,
+    zav_number: req.body.zav_number,
+    kontr_zav_number: req.body.kontr_zav_number,
+    part: req.body.part
+  })
+
+  try {
+    await apkzi.save()
+    res.redirect('/add/apkzi')
   } catch (e) {
     console.log(e)
   }

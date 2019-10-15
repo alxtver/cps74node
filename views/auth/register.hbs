@@ -1,0 +1,38 @@
+{{#if registerError}}
+<p class="alert alert-danger mt-1">{{registerError}}</p>
+{{/if}}
+
+
+<div class="wrapper fadeInDown">
+    <div id="formContent">
+        <!-- Tabs Titles -->
+
+        <!-- Icon -->
+        <div class="fadeIn first">
+            <img src="https://image.flaticon.com/icons/svg/1828/1828503.svg" id="icon" alt="User Icon" />
+
+
+            <!-- форма регистрациии -->
+            <form action="/auth/register" method="POST" class="mt-5">
+                <div class="form-group">
+                    <input type="text" id="rlogin" class="fadeIn second mb-1" name="username" placeholder="Логин"
+                        required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="group" class="fadeIn second mb-1" name="group" placeholder="Группа" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="rpassword" class="fadeIn third validate mb-1" name="password"
+                        placeholder="Пароль" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="rpassword" class="fadeIn third mb-1" name="passagain"
+                        placeholder="Пароль ещё раз" required>
+                </div>
+
+                <input type="hidden" name="_csrf" value="{{csrf}}">
+                <input type="submit" class="btn btn-dark mt-4" value="Создать аккаунт">
+            </form>
+        </div>
+    </div>
+</div>

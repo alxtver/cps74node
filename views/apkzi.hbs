@@ -1,0 +1,20 @@
+<script src="/apkzi.js"></script>
+<h1>АПКЗИ</h1>
+<button class="btn btn-dark" style="margin-bottom: 1rem" onclick="location.href='/add';">Добавить ПКИ</button>
+<button class="btn btn-dark" style="margin-bottom: 1rem" onclick="location.href='/add/apkzi';">Добавить АПКЗИ</button>
+<div class="form-group">
+    <label for="part_select">Партия</label>
+      <select class="form-control mb-2" id="part_select">
+          {{#each part}}
+            <option value="{{this}}">{{this}}</option>
+          {{/each}}
+      </select>
+    <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Поиск...">
+  </div>
+
+
+<div id="showData"></div>
+
+<script>
+    console.log('{{part}}')
+</script>

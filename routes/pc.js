@@ -9,8 +9,7 @@ const router = Router()
 router.get('/', auth, async (req, res) => {
   res.render('pc', {
     title: 'Машины',
-
-    isPC: true,
+    isPC: true
   })
 })
 

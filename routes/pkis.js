@@ -3,9 +3,7 @@ const Pki = require('../models/pki')
 const Part = require('../models/part')
 const auth = require('../middleware/auth')
 const router = Router()
-const express = require("express");
 
-const app = express();
 
 router.get('/', auth, async (req, res) => {  
   res.render('pkis', {

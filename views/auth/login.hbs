@@ -1,74 +1,33 @@
-
-{{#if loginError}}  
-  <p class="alert alert-danger mt-1">{{loginError}}</p>
+{{#if loginError}}
+<p class="alert alert-danger mt-1">{{loginError}}</p>
 {{/if}}
 
-{{#if registerError}}
-  <p class="alert alert-danger mt-1">{{registerError}}</p>
-{{/if}}
 
-<div class="mt-3">
-  <!-- Nav tabs -->
-  <ul class="nav nav-tabs" role="tablist">
-    <li class="nav-item">
-      <a class="nav-link active" data-toggle="tab" href="#login">Войти</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#register">Регистрация</a>
-    </li>
-  </ul>
 
-  <!-- Tab panes -->
-  <div class="tab-content">
-    <div id="login" class="container tab-pane active"><br>
-      <div class="wrapper fadeInDown">
-        <div id="formContent">
-          <!-- Tabs Titles -->
 
-          <!-- Icon -->
-          <div class="fadeIn first mt-4">
-            <img src="https://image.flaticon.com/icons/svg/1828/1828503.svg" id="icon" alt="User Icon" />
-          </div>
 
-          <!-- Login Form -->
-          <form action="/auth/login" method="POST" class="mt-5">
-            <div>
-              <input type="text" id="login" class="fadeIn second mb-1" name="username" placeholder="Логин" required>
-              <input type="password" id="password" class="fadeIn third mb-1" name="password" placeholder="Пароль"
-                required>
-            </div>
-            <input type="hidden" name="_csrf" value="{{csrf}}">
-            <input type="submit" class="btn btn-dark mt-4" value="Войти">
-          </form>
-        </div>
+
+<div id="login" class="container tab-pane active"><br>
+  <div class="wrapper fadeInDown">
+    <div id="formContent">
+      <!-- Tabs Titles -->
+
+      <!-- Icon -->
+      <div class="fadeIn first mt-4">
+        <img src="https://image.flaticon.com/icons/svg/1828/1828503.svg" id="icon" alt="User Icon" />
       </div>
-    </div>
-    <div id="register" class="container tab-pane fade"><br>
-      <div class="wrapper fadeInDown">
-        <div id="formContent">
-          <!-- Tabs Titles -->
 
-          <!-- Icon -->
-          <div class="fadeIn first">
-            <img src="https://image.flaticon.com/icons/svg/1828/1828503.svg" id="icon" alt="User Icon" />
-          </div>
-
-          <!-- Login Form -->
-          <form action="/auth/register" method="POST" class="mt-5">
-            <div>
-              <input type="text" id="rlogin" class="fadeIn second mb-1" name="username" placeholder="Логин" required>
-              <input type="text" id="group" class="fadeIn second mb-1" name="group" placeholder="Группа" required>
-              <input type="password" id="rpassword" class="fadeIn third validate mb-1" name="password"
-                placeholder="Пароль" required>
-              <input type="password" id="rpassword" class="fadeIn third mb-1" name="passagain"
-                placeholder="Пароль ещё раз" required>
-            </div>
-            <input type="hidden" name="_csrf" value="{{csrf}}">
-            <input type="submit" class="btn btn-dark mt-4" value="Создать аккаунт">
-          </form>
+      <!-- форма входа -->
+      <form action="/auth/login" method="POST" class="mt-5">
+        <div class="form-group">
+          <input type="text" id="login" class="fadeIn second mb-1" name="username" placeholder="Логин" required>
         </div>
-      </div>
+        <div class="form-group">
+          <input type="password" id="password" class="fadeIn third mb-1" name="password" placeholder="Пароль" required>
+        </div>
+        <input type="hidden" name="_csrf" value="{{csrf}}">
+        <input type="submit" class="btn btn-dark mt-4" value="Войти">
+      </form>
     </div>
   </div>
-</div>
 </div>

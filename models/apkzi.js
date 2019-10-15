@@ -1,22 +1,28 @@
 const {Schema, model} = require('mongoose')
 
-const pki = new Schema({
-  type_pki: {
+const apkzi = new Schema({
+  apkzi_name: {
     type: String,
     required: true
   },
 
-  vendor: {
+  kont_name: {
     type: String,
     required: true
   },
 
-  model: {
+  fdsi: {
     type: String,
     required: true
   },
 
-  serial_number: {
+
+  zav_number: {
+    type: String,
+    required: true
+  },
+
+  kontr_zav_number: {
     type: String,
     required: true
   },
@@ -26,25 +32,15 @@ const pki = new Schema({
     required: true
   },
 
-  country: {
-    type: String,
-    required: true
-  },
-
   number_machine: String,
 
   created: {
     type: Date,
     default: () => Date.now() + 3*60*60*1000 //время МСК
-  },
-
-  in_case: {
-    type: Boolean,
-    required: true
   }
 
 
 })
 
 
-module.exports = model('Pki', pki)
+module.exports = model('Apkzi', apkzi)
