@@ -64,26 +64,37 @@ router.post('/edit', auth, async (req, res) => {
 })
 
 router.post('/del', auth, async (req, res) => {
-  try {
-    const apkzi = await Apkzi.findById(req.body.id)
+  const part = req.body.part
+  try {    
     await Apkzi.deleteOne({_id: req.body.id})
-    if (apkzi) {
-      await Apkzi.find().distinct('part', function (error, part) {
-        res.render('apkzi', {
-          title: 'АПКЗИ',
-          isApkzi: true,
-          part: part,
-          apkzi_part: apkzi.part
-        })
-      })
-    } else {
-      res.redirect('/apkzi')
-    }
-    
-  } catch (error) {
-    console.log(error)
-  }
-  
+    res.send(part)
+  } catch (e) {
+    console.log(e)
+    res.send(part)
+  }  
 })
+
+// router.post('/del', auth, async (req, res) => {
+//   try {
+//     const apkzi = await Apkzi.findById(req.body.id)
+//     await Apkzi.deleteOne({_id: req.body.id})
+//     if (apkzi) {
+//       await Apkzi.find().distinct('part', function (error, part) {
+//         res.render('apkzi', {
+//           title: 'АПКЗИ',
+//           isApkzi: true,
+//           part: part,
+//           apkzi_part: apkzi.part
+//         })
+//       })
+//     } else {
+//       res.redirect('/apkzi')
+//     }
+    
+//   } catch (error) {
+//     console.log(error)
+//   }
+  
+// })
 
 module.exports = router

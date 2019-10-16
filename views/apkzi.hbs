@@ -12,6 +12,8 @@
     {{!-- <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Поиск..."> --}}
 </div>
 
+
+{{!-- модальное окно --}}
 <div class="modal fade" id="modalDel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -22,15 +24,16 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="/apkzi/del" method="post">
-      <input type="hidden" name="_csrf" value="{{csrf}}">
 
-      <input type="hidden" name="id" id="hidInputCopy">
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-        <button type="submit" id="btnSubmit" class="btn btn-danger">Удалить</button>
-        
-      </div>
+      {{!-- <form action="/apkzi/del" method="post"> --}}
+      <form>
+        <input type="hidden" name="_csrf" value="{{csrf}}">
+        <input type="hidden" name="id" id="hidId">
+        <input type="hidden" name="part" id="hidPart">
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+          <button type="button" id="btnSubmit" onclick="delBtn()" data-dismiss="modal" class="btn btn-danger">Удалить</button>        
+        </div>
       </form>
     </div>
   </div>
@@ -42,7 +45,6 @@
 <script>
   $(document).ready(function() {
     let a_part = '{{apkzi_part}}'
-    console.log(a_part)
     if (!a_part) {
       load_data('', $("#part_select :selected").text())
     } else {
@@ -52,7 +54,8 @@
   })
 
   $("body").on('click','.delBtn',function () {
-    $('#hidInputCopy').val($(this).data("id"))    
+    $('#hidId').val($(this).data("id"))
+    $('#hidPart').val($(this).data("part"))     
   })
 
   $(document).on('change', '#part_select', function() {

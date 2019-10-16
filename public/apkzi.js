@@ -13,6 +13,23 @@ function load_data(q, part) {
     })
 }
 
+function delBtn() {
+    let id = $('#hidId').val()
+    let part = $('#hidPart').val()
+    $.ajax({
+        url: "/apkzi/del",
+        method: "POST",
+        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+        data: {
+            id: id,
+            part: part
+        },
+        success: function (data) {
+            load_data('', data)
+        }
+    })
+}
+
 
 function CreateTableFromJSON(data) {
 
@@ -97,10 +114,11 @@ function CreateTableFromJSON(data) {
 
         let buttonCell = tr.insertCell(-1)
         let id = data[i]._id
+        let part = data[i].part
         buttonCell.dataset.id = id
         buttonCell.innerHTML = (
             "<button class=\"btn_f\" onclick=\"location.href='/apkzi/" + id + "/edit?allow=true';\"><i class=\"fa fa-pencil\"></i></button>" +
-            "<button class=\"btn_d delBtn\" data-id=\'" + id + "'\ data-toggle=\"modal\" data-target=\"#modalDel\"><i class=\"fa fa-trash\"></i></button>"
+            "<button class=\"btn_d delBtn\" data-id=\'" + id + "'\ data-part=\'" + part + "'\ data-toggle=\"modal\" data-target=\"#modalDel\"><i class=\"fa fa-trash\"></i></button>"
         )
 
 

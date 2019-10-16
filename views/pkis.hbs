@@ -9,6 +9,30 @@
     <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Поиск...">
   </div>
 
+{{!-- модальное окно --}}
+<div class="modal fade" id="modalDel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Удалить АПКЗИ?</h5>
+        
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/apkzi/del" method="post">
+      <input type="hidden" name="_csrf" value="{{csrf}}">
+
+      <input type="hidden" name="id" id="hidInputCopy">
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+        <button type="submit" id="btnSubmit" class="btn btn-danger">Удалить</button>
+        
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 <div id="showData"></div>
 
