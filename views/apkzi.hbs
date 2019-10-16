@@ -1,6 +1,6 @@
 <script src="/apkzi.js"></script>
 <h1>АПКЗИ</h1>
-<button class="btn btn-dark" style="margin-bottom: 1rem" onclick="location.href='/add';">Добавить ПКИ</button>
+
 <button class="btn btn-dark" style="margin-bottom: 1rem" onclick="location.href='/add/apkzi';">Добавить АПКЗИ</button>
 <div class="form-group">
     <label for="part_select">Партия</label>
@@ -9,14 +9,112 @@
             <option value="{{this}}">{{this}}</option>
           {{/each}}
       </select>
-    <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Поиск...">
+    {{!-- <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Поиск..."> --}}
+</div>
+
+<div class="modal fade" id="modalDel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Удалить АПКЗИ?</h5>
+        
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/apkzi/del" method="post">
+      <input type="hidden" name="_csrf" value="{{csrf}}">
+
+      <input type="hidden" name="id" id="hidInputCopy">
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+        <button type="submit" id="btnSubmit" class="btn btn-danger">Удалить</button>
+        
+      </div>
+      </form>
+    </div>
   </div>
+</div>
 
 
 <div id="showData"></div>
 
 <script>
-    $(document).ready(function() {
-    load_data('', '{{part}}')
-    })
+  $(document).ready(function() {
+    let a_part = '{{apkzi_part}}'
+    console.log(a_part)
+    if (!a_part) {
+      load_data('', $("#part_select :selected").text())
+    } else {
+      load_data('', a_part)
+      $("#part_select :contains('{{apkzi_part}}')").attr("selected", "selected")
+    }
+  })
+
+  $("body").on('click','.delBtn',function () {
+    $('#hidInputCopy').val($(this).data("id"))    
+  })
+
+  $(document).on('change', '#part_select', function() {
+    let search = $('#search').val()
+    if (search == ''){
+      search = 'null'
+    }
+    load_data(search, $("#part_select :selected").text())
+  })
+
+  $(document).on('blur', '.fdsi', function() {
+    let id = $(this).data("id")
+    let fdsi = $(this).text()
+    edit_fdsi(id, fdsi)
+  })
+
+  $(document).on('blur', '.apkzi_name', function() {
+    let id = $(this).data("id")
+    let apkzi_name = $(this).text()
+    edit_apkzi_name(id, apkzi_name)
+  })
+
+  $(document).on('blur', '.kont_name', function() {
+    let id = $(this).data("id")
+    let kont_name = $(this).text()
+    edit_kont_name(id, kont_name)
+  })
+
+  $(document).on('blur', '.zav_number', function() {
+    let id = $(this).data("id")
+    let zav_number = $(this).text()
+    edit_zav_number(id, zav_number)
+  })
+
+  $(document).on('blur', '.kontr_zav_number', function() {
+    let id = $(this).data("id")
+    let kontr_zav_number = $(this).text()
+    edit_kontr_zav_number(id, kontr_zav_number)
+  })
+
+  $(document).on('blur', '.part', function() {
+    let id = $(this).data("id")
+    let part = $(this).text()
+    edit_part(id, part)
+  })
+
+  $(document).on('blur', '.number_machine', function() {
+    let id = $(this).data("id")
+    let number_machine = $(this).text()
+    edit_number_machine(id, number_machine)
+  })
+  
+
+  //$('#search').keyup(function() {
+  //    let search = $(this).val()
+  //    let blank_req = 'null'
+  //    let selected = $("#part_select :selected").text()
+  //    load_data(search, selected)
+  //    if (search) {
+  //      load_data(search, selected)
+  //    } else {
+  //      load_data(blank_req, selected)
+  //    }
+  //})
 </script>

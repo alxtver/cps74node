@@ -391,8 +391,6 @@ function CreateTableFromJSON(data) {
         button_copy.dataset.serial_number = data[i].serial_number
         button_copy.dataset.toggle = 'modal'
         button_copy.dataset.target = '#modalCopy'
-        
-
         divCont.appendChild(button_copy)
 
         let button_edit = document.createElement('input')

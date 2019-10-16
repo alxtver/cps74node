@@ -24,7 +24,7 @@ function edit_type(id, type) {
             type_pki: type
         },
         dataType: "text",
-    });
+    })
 }
 
 function edit_vendor(id, vendor) {
@@ -37,7 +37,7 @@ function edit_vendor(id, vendor) {
             vendor: vendor
         },
         dataType: "text",
-    });
+    })
 }
 
 function edit_model(id, model) {
@@ -50,7 +50,7 @@ function edit_model(id, model) {
             model: model
         },
         dataType: "text",
-    });
+    })
 }
 
 function edit_serial_number(id, serial_number) {
@@ -63,7 +63,7 @@ function edit_serial_number(id, serial_number) {
             serial_number: serial_number
         },
         dataType: "text",
-    });
+    })
 }
 
 function edit_country(id, country) {
@@ -76,7 +76,7 @@ function edit_country(id, country) {
             country: country
         },
         dataType: "text",
-    });
+    })
 }
 
 function edit_part(id, part) {

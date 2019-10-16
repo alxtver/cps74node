@@ -50,9 +50,9 @@ function CreateTableFromJSON(data) {
         tr = tbody.insertRow(-1)
 
         let fdsiCell = tr.insertCell(-1)
-        fdsiCell.innerHTML = data[i].fdsi        
-        fdsiCell.className = "fdsi"
-        fdsiCell.id = "fdsi"
+        fdsiCell.innerHTML = data[i].fdsi    
+        fdsiCell.dataset.id = data[i]._id    
+        fdsiCell.className = "fdsi"        
         fdsiCell.contentEditable = "true"
 
         let apkzi_nameCell = tr.insertCell(-1)
@@ -86,6 +86,9 @@ function CreateTableFromJSON(data) {
         partCell.contentEditable = "true"
 
         let number_machineCell = tr.insertCell(-1)
+        number_machineCell.dataset.id = data[i]._id
+        number_machineCell.className = "number_machine"
+        number_machineCell.contentEditable = "true"
         if (data[i].number_machine) {
             number_machineCell.innerHTML = data[i].number_machine
         } else {
@@ -94,9 +97,10 @@ function CreateTableFromJSON(data) {
 
         let buttonCell = tr.insertCell(-1)
         let id = data[i]._id
+        buttonCell.dataset.id = id
         buttonCell.innerHTML = (
-            "<button class=\"btn_f\" onclick=\"location.href='/pkis/" + id + "/edit?allow=true';\"><i class=\"fa fa-pencil\"></i></button>" +
-            "<button class=\"btn_d\" onclick=\"location.href='/pkis/" + id + "/del?allow=true';\"><i class=\"fa fa-trash\"></i></button>"
+            "<button class=\"btn_f\" onclick=\"location.href='/apkzi/" + id + "/edit?allow=true';\"><i class=\"fa fa-pencil\"></i></button>" +
+            "<button class=\"btn_d delBtn\" data-id=\'" + id + "'\ data-toggle=\"modal\" data-target=\"#modalDel\"><i class=\"fa fa-trash\"></i></button>"
         )
 
 
@@ -107,3 +111,97 @@ function CreateTableFromJSON(data) {
     divContainer.className = "tableContent"
     divContainer.appendChild(table)
 }
+
+
+// Редактирование ячеек таблицы ПКИ
+function edit_fdsi(id, fdsi) {
+    $.ajax({
+        url: "/apkzi/edit_ajax",
+        type: "POST",
+        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+        data: {
+            id: id,
+            fdsi: fdsi
+        },
+        dataType: "text",
+    })
+}
+
+function edit_apkzi_name(id, apkzi_name) {
+    $.ajax({
+        url: "/apkzi/edit_ajax",
+        type: "POST",
+        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+        data: {
+            id: id,
+            apkzi_name: apkzi_name
+        },
+        dataType: "text",
+    })
+}
+
+function edit_kont_name(id, kont_name) {
+    $.ajax({
+        url: "/apkzi/edit_ajax",
+        type: "POST",
+        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+        data: {
+            id: id,
+            kont_name: kont_name
+        },
+        dataType: "text",
+    })
+}
+
+function edit_zav_number(id, zav_number) {
+    $.ajax({
+        url: "/apkzi/edit_ajax",
+        type: "POST",
+        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+        data: {
+            id: id,
+            zav_number: zav_number
+        },
+        dataType: "text",
+    })
+}
+
+function edit_kontr_zav_number(id, kontr_zav_number) {
+    $.ajax({
+        url: "/apkzi/edit_ajax",
+        type: "POST",
+        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+        data: {
+            id: id,
+            kontr_zav_number: kontr_zav_number
+        },
+        dataType: "text",
+    })
+}
+
+function edit_part(id, part) {
+    $.ajax({
+        url: "/apkzi/edit_ajax",
+        type: "POST",
+        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+        data: {
+            id: id,
+            part: part
+        },
+        dataType: "text",
+    })
+}
+
+function edit_number_machine(id, number_machine) {
+    $.ajax({
+        url: "/apkzi/edit_ajax",
+        type: "POST",
+        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+        data: {
+            id: id,
+            number_machine: number_machine
+        },
+        dataType: "text",
+    })
+}
+
