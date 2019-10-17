@@ -3,23 +3,24 @@
 
 <button class="btn btn-dark" style="margin-bottom: 1rem" onclick="location.href='/add/apkzi';">Добавить АПКЗИ</button>
 <div class="form-group">
-    <label for="part_select">Партия</label>
-      <select class="form-control mb-2" id="part_select">
-          {{#each part}}
-            <option value="{{this}}">{{this}}</option>
-          {{/each}}
-      </select>
-    {{!-- <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Поиск..."> --}}
+  <label for="part_select">Партия</label>
+  <select class="form-control mb-2" id="part_select">
+    {{#each part}}
+    <option value="{{this}}">{{this}}</option>
+    {{/each}}
+  </select>
+  {{!-- <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Поиск..."> --}}
 </div>
 
 
 {{!-- модальное окно --}}
-<div class="modal fade" id="modalDel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalDel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Удалить АПКЗИ?</h5>
-        
+
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -32,7 +33,8 @@
         <input type="hidden" name="part" id="hidPart">
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-          <button type="button" id="btnSubmit" onclick="delBtn()" data-dismiss="modal" class="btn btn-danger">Удалить</button>        
+          <button type="button" id="btnSubmit" onclick="delBtn()" data-dismiss="modal"
+            class="btn btn-danger">Удалить</button>
         </div>
       </form>
     </div>
@@ -43,7 +45,7 @@
 <div id="showData"></div>
 
 <script>
-  $(document).ready(function() {
+  $(document).ready(function () {
     let a_part = '{{apkzi_part}}'
     if (!a_part) {
       load_data('', $("#part_select :selected").text())
@@ -53,61 +55,61 @@
     }
   })
 
-  $("body").on('click','.delBtn',function () {
+  $("body").on('click', '.delBtn', function () {
     $('#hidId').val($(this).data("id"))
-    $('#hidPart').val($(this).data("part"))     
+    $('#hidPart').val($(this).data("part"))
   })
 
-  $(document).on('change', '#part_select', function() {
+  $(document).on('change', '#part_select', function () {
     let search = $('#search').val()
-    if (search == ''){
+    if (search == '') {
       search = 'null'
     }
     load_data(search, $("#part_select :selected").text())
   })
 
-  $(document).on('blur', '.fdsi', function() {
+  $(document).on('blur', '.fdsi', function () {
     let id = $(this).data("id")
     let fdsi = $(this).text()
     edit_fdsi(id, fdsi)
   })
 
-  $(document).on('blur', '.apkzi_name', function() {
+  $(document).on('blur', '.apkzi_name', function () {
     let id = $(this).data("id")
     let apkzi_name = $(this).text()
     edit_apkzi_name(id, apkzi_name)
   })
 
-  $(document).on('blur', '.kont_name', function() {
+  $(document).on('blur', '.kont_name', function () {
     let id = $(this).data("id")
     let kont_name = $(this).text()
     edit_kont_name(id, kont_name)
   })
 
-  $(document).on('blur', '.zav_number', function() {
+  $(document).on('blur', '.zav_number', function () {
     let id = $(this).data("id")
     let zav_number = $(this).text()
     edit_zav_number(id, zav_number)
   })
 
-  $(document).on('blur', '.kontr_zav_number', function() {
+  $(document).on('blur', '.kontr_zav_number', function () {
     let id = $(this).data("id")
     let kontr_zav_number = $(this).text()
     edit_kontr_zav_number(id, kontr_zav_number)
   })
 
-  $(document).on('blur', '.part', function() {
+  $(document).on('blur', '.part', function () {
     let id = $(this).data("id")
     let part = $(this).text()
     edit_part(id, part)
   })
 
-  $(document).on('blur', '.number_machine', function() {
+  $(document).on('blur', '.number_machine', function () {
     let id = $(this).data("id")
     let number_machine = $(this).text()
     edit_number_machine(id, number_machine)
   })
-  
+
 
   //$('#search').keyup(function() {
   //    let search = $(this).val()

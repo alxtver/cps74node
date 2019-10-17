@@ -14,21 +14,20 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Удалить АПКЗИ?</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Удалить ПКИ?</h5>
         
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="/apkzi/del" method="post">
-      <input type="hidden" name="_csrf" value="{{csrf}}">
-
-      <input type="hidden" name="id" id="hidInputCopy">
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-        <button type="submit" id="btnSubmit" class="btn btn-danger">Удалить</button>
-        
-      </div>
+      <form>
+        <input type="hidden" name="_csrf" value="{{csrf}}">
+        <input type="hidden" name="id" id="hidId">
+        <input type="hidden" name="part" id="hidPart">
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+          <button type="button" id="btnSubmit" onclick="delBtn()" data-dismiss="modal" class="btn btn-danger">Удалить</button>        
+        </div>
       </form>
     </div>
   </div>
@@ -49,9 +48,12 @@
         search = 'null'
       }
       load_data(search, $("#part_select :selected").text())
-  })
+    })
   
-    
+    $("body").on('click','.delBtn',function () {
+      $('#hidId').val($(this).data("id"))
+      $('#hidPart').val($(this).data("part"))     
+    })
   
     $('#search').keyup(function() {
       let search = $(this).val()

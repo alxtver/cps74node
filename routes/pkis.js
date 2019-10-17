@@ -31,26 +31,26 @@ router.get('/:id/edit', auth, async (req, res) => {
   })
 })
 
-router.post('/del', auth, async (req, res) => {
-  try {
-    await Pki.deleteOne({
-      _id: req.body._id
-    })
-    res.redirect('/pkis')
-  } catch (e) {
-    console.log(e)
-  }
-})
+// router.post('/del', auth, async (req, res) => {
+//   try {
+//     await Pki.deleteOne({
+//       _id: req.body._id
+//     })
+//     res.redirect('/pkis')
+//   } catch (e) {
+//     console.log(e)
+//   }
+// })
 
-router.get('/:id/del', auth, async (req, res) => {
-  if (!req.query.allow) {
-    return res.redirect('/')
-  }
-  const pki = await Pki.deleteOne({
-    _id: req.params.id
-  })
-  res.redirect('/pkis')
-})
+// router.get('/:id/del', auth, async (req, res) => {
+//   if (!req.query.allow) {
+//     return res.redirect('/')
+//   }
+//   const pki = await Pki.deleteOne({
+//     _id: req.params.id
+//   })
+//   res.redirect('/pkis')
+// })
 
 router.post('/edit', auth, async (req, res) => {
   if (req.body.in_case) {
@@ -79,7 +79,7 @@ router.post("/search", auth, async (req, res) =>  {
   if (req.body.selected != '...') {
     selected = req.body.selected
   }
-  if (!req.body.q) {
+  if (!req.body.q && !req.body.selected) {
     pkis = await Pki.find().sort([['created', -1]]).limit(100)
   } else if (req.body.q == 'null') {
     pkis = await Pki.find({'part': selected}).sort([['created', -1]])
@@ -150,6 +150,17 @@ router.post("/part", auth, async function (req, res) {
   if (!req.body) return res.sendStatus(400)
 
   res.send(JSON.stringify(parts)) // отправляем пришедший ответ обратно
+})
+
+router.post("/del", auth, async (req, res) => {
+  const part = req.body.part
+  try {    
+    await Pki.deleteOne({_id: req.body.id})
+    res.send(part)
+  } catch (e) {
+    console.log(e)
+    res.send(part)
+  }  
 })
 
 
