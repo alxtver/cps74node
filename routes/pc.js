@@ -101,8 +101,34 @@ router.post('/insert_serial', auth, async (req, res) => {
       part: pc.part,
       serial_number: req.body.serial_number
     })
+    
+
+    // Ищем ПКИ с таким же номером машины 
+    let oldPkis
+    try {
+      oldPkis = await PKI.find({type_pki: pki.type_pki, number_machine: pc.serial_number})
+    } catch (error) {
+      console.log(error)
+    }
+    
+    
+    if (oldPkis) {
+      for (const oldPki of oldPkis) {
+        let oldPc = await PC.find({serial_number: oldPki.number_machine})
+        console.log(oldPc.serial_number)
+
+        
+
+        oldPki.number_machine = ''
+        
+        await oldPki.save()
+      }
+    }
+
     if (pki) {
-      pki.number_machine = pc.serial_number
+          
+      pki.number_machine = pc.serial_number // тут надо подумать
+
       if (req.body.unit == 'pc_unit') {
         pc.pc_unit[req.body.obj].serial_number = req.body.serial_number //ищем серийный номер который хотим поменять и меняем его
         pc.pc_unit[req.body.obj].name = pki.vendor + " " + pki.model
@@ -124,18 +150,21 @@ router.post('/insert_serial', auth, async (req, res) => {
       await pc_copy.save() // и СУКА работает...
       await pki.save()
       res.send(JSON.stringify(pc_copy))
-    } else {
-      if (req.body.unit == 'pc_unit') {
-        pc.pc_unit[req.body.obj].serial_number = req.body.serial_number //ищем серийный номер который хотим поменять и меняем его
-        
-        pc.pc_unit[req.body.obj].type = "Н/Д"
-        // a.pc_unit[req.body.obj].name = pki.name
 
-      } else {
-        pc.system_case_unit[req.body.obj].serial_number = req.body.serial_number //ищем серийный номер который хотим поменять и меняем его
+
+    } else {
+      if (req.body.serial_number == 'б/н' || req.body.serial_number == 'Б/Н' || req.body.serial_number == 'Б/н') {
         
-        pc.system_case_unit[req.body.obj].type = "Н/Д"
+      } else {
+        if (req.body.unit == 'pc_unit') {
+          pc.pc_unit[req.body.obj].serial_number = req.body.serial_number //ищем серийный номер который хотим поменять и меняем его
+          pc.pc_unit[req.body.obj].name = "Н/Д"
+        } else {
+          pc.system_case_unit[req.body.obj].serial_number = req.body.serial_number //ищем серийный номер который хотим поменять и меняем его
+          pc.system_case_unit[req.body.obj].name = "Н/Д"
+        }        
       }
+      
       // a.save() - нихрена не работает, хотя должно
       let arr_pc_unit = pc.pc_unit
       let arr_system_case_unit = pc.system_case_unit // присваеваем гребаной переменной массив с компанентами

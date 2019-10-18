@@ -432,13 +432,34 @@ function UpdateCells(pc) {
     let divContainer = document.getElementById(pc._id)
     divContainer.innerHTML = ""
     table = TablePc(pc)
-
+    console.log(pc)
     let divCont = document.createElement("div")
     divCont.id = pc._id
     divCont.className = "tableContent"
     divContainer.appendChild(divCont);
     divCont.innerHTML = ""
     divCont.appendChild(table)
+
+    let button_copy = document.createElement('input')
+    button_copy.type = "button"
+    button_copy.className = 'btn btn-dark mr-2 mb-2 ml-3 copyBtn'
+    button_copy.onchange = "klcCopy()"
+    button_copy.value = 'Копировать'
+    button_copy.dataset.id = pc._id
+    button_copy.dataset.serial_number = pc.serial_number
+    button_copy.dataset.toggle = 'modal'
+    button_copy.dataset.target = '#modalCopy'
+    divCont.appendChild(button_copy)
+
+    let button_edit = document.createElement('input')
+    button_edit.type = 'button'
+    button_edit.className = 'btn btn-dark mr-2 mb-2'
+    button_edit.value = 'Редактировать'
+    button_edit.setAttribute("onclick", "location.href='/pc/" + pc._id + "/edit?allow=true'")
+    button_edit.dataset.id = pc._id
+    divCont.appendChild(button_edit)
+
+
 }
 
 function focusOn() {

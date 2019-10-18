@@ -2,6 +2,7 @@ const {Router} = require('express')
 const Pki = require('../models/pki')
 const Apkzi = require('../models/apkzi')
 const Country = require('../models/country')
+const Part = require('../models/part')
 const auth = require('../middleware/auth')
 const router = Router()
 
@@ -39,6 +40,19 @@ router.post('/', auth, async (req, res) => {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  if (!(await Part.findOne({
+    part: req.body.part
+  }))) {
+  const part = new Part({
+    part: req.body.part
+  })
+  try {
+    await part.save()
+  } catch (error) {
+    console.log(error)
+  }
   }
 
   try {
