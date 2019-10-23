@@ -1,5 +1,6 @@
 const {Router} = require('express')
 const Pki = require('../models/pki')
+const PC = require('../models/pc')
 const Part = require('../models/part')
 const auth = require('../middleware/auth')
 const router = Router()
@@ -145,15 +146,37 @@ router.post("/search", auth, async (req, res) =>  {
 })
 
 router.post("/part", auth, async function (req, res) {
-  parts = await Part.find()
-  
+  parts = await Part.find()  
   if (!req.body) return res.sendStatus(400)
-
   res.send(JSON.stringify(parts)) // отправляем пришедший ответ обратно
 })
 
-router.post("/del", auth, async (req, res) => {
+router.post("/del", auth, async (req, res) => {  
   const part = req.body.part
+  let pki = await Pki.findById(req.body.id)
+  if (pki.number_machine) {
+    let pc = await PC.findOne({part: pki.part, serial_number: pki.number_machine})
+    let unit = 'pc_unit'
+    for (let i in pc[unit]) {
+      if (pki.serial_number == pc[unit][i].serial_number){
+        pc[unit][i].serial_number = ''
+        pc[unit][i].name = ''
+        break
+      }
+    }
+    unit = 'system_case_unit'
+    for (let i in pc[unit]) {      
+      if (pki.serial_number == pc[unit][i].serial_number){
+        pc[unit][i].serial_number = ''
+        pc[unit][i].name = ''
+        break
+      }
+    }
+    let pc_copy = await PC.findOne({part: pki.part, serial_number: pki.number_machine})
+    pc_copy.pc_unit = pc.pc_unit
+    pc_copy.system_case_unit = pc.system_case_unit
+    pc_copy.save()
+  }
   try {    
     await Pki.deleteOne({_id: req.body.id})
     res.send(part)
@@ -161,6 +184,7 @@ router.post("/del", auth, async (req, res) => {
     console.log(e)
     res.send(part)
   }  
+  
 })
 
 

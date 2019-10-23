@@ -17,17 +17,60 @@ function CreateTablePC() {
         tr.appendChild(th)
         thead.appendChild(tr)
     }
-    let tbody = table.createTBody()
-    tbody.className = "pc_unit_tbody"
+
+    
+    // let tbody = table.createTBody()
+    // tbody.className = "pc_unit_tbody"
 
     const divContainer = document.getElementById("pc_unit_table");
     divContainer.innerHTML = "";
     divContainer.appendChild(table);
 
+
+    let tableRef = document.getElementById('pc_unit').getElementsByTagName('tbody')[0]
+    tr = tableRef.insertRow(-1)
+
+    let chCell = tr.insertCell(-1)
+    chCell.innerHTML = "<input type='checkbox' name='record'>"
+    chCell.className = "record"
+
+    let fdsiCell = tr.insertCell(-1)
+    fdsiCell.className = "fdsi"
+    fdsiCell.id = "fdsi"
+    fdsiCell.contentEditable = "true"
+
+    let typeCell = tr.insertCell(-1)
+    typeCell.className = "type"
+    typeCell.id = "type"
+    typeCell.contentEditable = "true"
+    typeCell.innerHTML = "АПКЗИ"
+
+    let nameCell = tr.insertCell(-1)
+    nameCell.className = "name"
+    nameCell.id = "name"
+    nameCell.contentEditable = "true"
+    
+
+    let quantityCell = tr.insertCell(-1)
+    quantityCell.innerHTML = "1"
+    quantityCell.className = "quantity"
+    quantityCell.id = "quantity"
+    quantityCell.contentEditable = "true"
+
+    let serial_numberCell = tr.insertCell(-1)
+    serial_numberCell.className = "serial_number"
+    serial_numberCell.id = "serial_number"
+    serial_numberCell.contentEditable = "true"
+
+    let notesCell = tr.insertCell(-1)
+    notesCell.className = "notes"
+    notesCell.id = "notes"
+    notesCell.contentEditable = "true"
+
     $(".add-row-pc").click(function () {
         let tableRef = document.getElementById('pc_unit').getElementsByTagName('tbody')[0]
 
-        tr = tableRef.insertRow(-1)
+        tr = tableRef.insertRow(0)
 
         let chCell = tr.insertCell(-1)
         chCell.innerHTML = "<input type='checkbox' name='record'>"
@@ -98,9 +141,48 @@ function CreateTableSystemCase() {
     }
     let tbody = table.createTBody()
 
-    const divContainer = document.getElementById("system_case_unit_table");
-    divContainer.innerHTML = "";
-    divContainer.appendChild(table);
+    const divContainer = document.getElementById("system_case_unit_table")
+    divContainer.innerHTML = ""
+    divContainer.appendChild(table)
+
+    tr = table.insertRow(-1)
+
+    let chCell = tr.insertCell(-1)
+    chCell.innerHTML = "<input type='checkbox' name='record'>"
+    chCell.className = "record"
+
+    let fdsiCell = tr.insertCell(-1)
+    fdsiCell.className = "fdsi"
+    fdsiCell.id = "fdsi"
+    fdsiCell.contentEditable = "true"
+
+    let typeCell = tr.insertCell(-1)
+    typeCell.className = "type"
+    typeCell.id = "type"
+    typeCell.contentEditable = "true"
+    typeCell.innerHTML = "Контроллер СЗИ10 PCI"
+
+    let nameCell = tr.insertCell(-1)
+    nameCell.className = "name"
+    nameCell.id = "name"
+    nameCell.contentEditable = "true"
+    
+
+    let quantityCell = tr.insertCell(-1)
+    quantityCell.innerHTML = "1"
+    quantityCell.className = "quantity"
+    quantityCell.id = "quantity"
+    quantityCell.contentEditable = "true"
+
+    let serial_numberCell = tr.insertCell(-1)
+    serial_numberCell.className = "serial_number"
+    serial_numberCell.id = "serial_number"
+    serial_numberCell.contentEditable = "true"
+
+    let notesCell = tr.insertCell(-1)
+    notesCell.className = "notes"
+    notesCell.id = "notes"
+    notesCell.contentEditable = "true"
 
     $(".add-row-system").click(function () {
         tr = tbody.insertRow(-1)
@@ -159,7 +241,9 @@ function load_data(q) {
 
     $.ajax({
         url: "/pc/search",
-        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+        headers: {
+            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        },
         method: "POST",
         data: {
             q: q
@@ -174,7 +258,9 @@ function load_part() {
     $.ajax({
         url: "/pc/part",
         method: "POST",
-        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+        headers: {
+            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        },
         success: function (data) {
 
             //$('#quote').html(data);
@@ -415,7 +501,9 @@ function edit_serial_number(id, obj, unit, serial_number) {
     $.ajax({
         url: "/pc/insert_serial",
         type: "POST",
-        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+        headers: {
+            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        },
         data: {
             id: id,
             obj: obj,
@@ -429,37 +517,40 @@ function edit_serial_number(id, obj, unit, serial_number) {
 }
 
 function UpdateCells(pc) {
-    let divContainer = document.getElementById(pc._id)
-    divContainer.innerHTML = ""
-    table = TablePc(pc)
-    console.log(pc)
-    let divCont = document.createElement("div")
-    divCont.id = pc._id
-    divCont.className = "tableContent"
-    divContainer.appendChild(divCont);
-    divCont.innerHTML = ""
-    divCont.appendChild(table)
+    // Обновление всех таблиц
+    load_data(pc.part)
 
-    let button_copy = document.createElement('input')
-    button_copy.type = "button"
-    button_copy.className = 'btn btn-dark mr-2 mb-2 ml-3 copyBtn'
-    button_copy.onchange = "klcCopy()"
-    button_copy.value = 'Копировать'
-    button_copy.dataset.id = pc._id
-    button_copy.dataset.serial_number = pc.serial_number
-    button_copy.dataset.toggle = 'modal'
-    button_copy.dataset.target = '#modalCopy'
-    divCont.appendChild(button_copy)
+    // Обновление только одной таблицы
 
-    let button_edit = document.createElement('input')
-    button_edit.type = 'button'
-    button_edit.className = 'btn btn-dark mr-2 mb-2'
-    button_edit.value = 'Редактировать'
-    button_edit.setAttribute("onclick", "location.href='/pc/" + pc._id + "/edit?allow=true'")
-    button_edit.dataset.id = pc._id
-    divCont.appendChild(button_edit)
+    // let divContainer = document.getElementById(pc._id)
+    // divContainer.innerHTML = ""
+    // console.log(pc.part);
+    // table = TablePc(pc)
+    // let divCont = document.createElement("div")
+    // divCont.id = pc._id
+    // divCont.className = "tableContent"
+    // divContainer.appendChild(divCont);
+    // divCont.innerHTML = ""
+    // divCont.appendChild(table)
 
+    // let button_copy = document.createElement('input')
+    // button_copy.type = "button"
+    // button_copy.className = 'btn btn-dark mr-2 mb-2 ml-3 copyBtn'
+    // button_copy.onchange = "klcCopy()"
+    // button_copy.value = 'Копировать'
+    // button_copy.dataset.id = pc._id
+    // button_copy.dataset.serial_number = pc.serial_number
+    // button_copy.dataset.toggle = 'modal'
+    // button_copy.dataset.target = '#modalCopy'
+    // divCont.appendChild(button_copy)
 
+    // let button_edit = document.createElement('input')
+    // button_edit.type = 'button'
+    // button_edit.className = 'btn btn-dark mr-2 mb-2'
+    // button_edit.value = 'Редактировать'
+    // button_edit.setAttribute("onclick", "location.href='/pc/" + pc._id + "/edit?allow=true'")
+    // button_edit.dataset.id = pc._id
+    // divCont.appendChild(button_edit)
 }
 
 function focusOn() {
@@ -471,22 +562,22 @@ function find_serial(serial) {
     $.ajax({
         url: "/pc/find_serial",
         method: "POST",
-        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+        headers: {
+            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        },
         data: {
             serial: serial
         },
         success: function (data) {
-            if (data){
-                $("#inputCopy").css("background-color","indianred")
+            if (data) {
+                $("#inputCopy").css("background-color", "indianred")
                 $("#hidd").append('<div id="danger" style="color: indianred">Машина с таким номером существует</div>')
                 $('#btnSubmit').prop('disabled', true)
             } else {
-                $("#inputCopy").css("background-color","white")
+                $("#inputCopy").css("background-color", "white")
                 $("#danger").remove()
                 $('#btnSubmit').prop('disabled', false)
             }
-            
-            
         }
     })
 }

@@ -1,4 +1,6 @@
-const {Router} = require('express')
+const {
+  Router
+} = require('express')
 const PC = require('../models/pc')
 const PKI = require('../models/pki')
 const Part = require('../models/part')
@@ -23,8 +25,10 @@ router.get('/add', auth, (req, res) => {
 
 
 router.post('/add', auth, async (req, res) => {
-// если нет такого проекта, то сохраняем
-  const part = await Part.findOne({part: req.body.part})  
+  // если нет такого проекта, то сохраняем
+  const part = await Part.findOne({
+    part: req.body.part
+  })
   if (!part) {
     const part_add = new Part({
       part: req.body.part
@@ -84,101 +88,55 @@ router.post("/search", auth, async function (req, res) {
 
 router.post("/part", auth, async function (req, res) {
   parts = await Part.find()
-
   if (!req.body) return res.sendStatus(400);
-
   res.send(JSON.stringify(parts)); // отправляем пришедший ответ обратно
 })
 
 
 router.post('/insert_serial', auth, async (req, res) => {
+  //Жесть пипец!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  let pc = await PC.findById(req.body.id) //ищем комп который собираемся редактировать
+  let pc_copy = await PC.findById(req.body.id) //и копию....
+  let pki = await PKI.findOne({part: pc.part, serial_number: req.body.serial_number})
+  let oldNumberMachine
+  const unit = req.body.unit
 
-  try {
-
-    //Жесть пипец!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    let pc = await PC.findById(req.body.id) //ищем комп который собираемся редактировать
-    let pki = await PKI.findOne({
-      part: pc.part,
-      serial_number: req.body.serial_number
-    })
-    
-
-    // Ищем ПКИ с таким же номером машины 
-    let oldPkis
-    try {
-      oldPkis = await PKI.find({type_pki: pki.type_pki, number_machine: pc.serial_number})
-    } catch (error) {
-      console.log(error)
-    }
-    
-    
-    if (oldPkis) {
-      for (const oldPki of oldPkis) {
-        let oldPc = await PC.find({serial_number: oldPki.number_machine})
-        console.log(oldPc.serial_number)
-
-        
-
-        oldPki.number_machine = ''
-        
-        await oldPki.save()
-      }
-    }
-
-    if (pki) {
-          
-      pki.number_machine = pc.serial_number // тут надо подумать
-
-      if (req.body.unit == 'pc_unit') {
-        pc.pc_unit[req.body.obj].serial_number = req.body.serial_number //ищем серийный номер который хотим поменять и меняем его
-        pc.pc_unit[req.body.obj].name = pki.vendor + " " + pki.model
-        pc.pc_unit[req.body.obj].type = pki.type_pki
-        // a.pc_unit[req.body.obj].name = pki.name
-
-      } else {
-        pc.system_case_unit[req.body.obj].serial_number = req.body.serial_number //ищем серийный номер который хотим поменять и меняем его
-        pc.system_case_unit[req.body.obj].name = pki.vendor + " " + pki.model
-        pc.system_case_unit[req.body.obj].type = pki.type_pki
-      }
-      // a.save() - нихрена не работает, хотя должно
-      let arr_pc_unit = pc.pc_unit
-      let arr_system_case_unit = pc.system_case_unit // присваеваем гребаной переменной массив с компанентами
-      let pc_copy = await PC.findById(req.body.id) // открываем еще один экземпляр
-      pc_copy.pc_unit = arr_pc_unit
-      pc_copy.system_case_unit = arr_system_case_unit // присваеваем
-
-      await pc_copy.save() // и СУКА работает...
-      await pki.save()
-      res.send(JSON.stringify(pc_copy))
-
-
-    } else {
-      if (req.body.serial_number == 'б/н' || req.body.serial_number == 'Б/Н' || req.body.serial_number == 'Б/н') {
-        
-      } else {
-        if (req.body.unit == 'pc_unit') {
-          pc.pc_unit[req.body.obj].serial_number = req.body.serial_number //ищем серийный номер который хотим поменять и меняем его
-          pc.pc_unit[req.body.obj].name = "Н/Д"
-        } else {
-          pc.system_case_unit[req.body.obj].serial_number = req.body.serial_number //ищем серийный номер который хотим поменять и меняем его
-          pc.system_case_unit[req.body.obj].name = "Н/Д"
-        }        
-      }
-      
-      // a.save() - нихрена не работает, хотя должно
-      let arr_pc_unit = pc.pc_unit
-      let arr_system_case_unit = pc.system_case_unit // присваеваем гребаной переменной массив с компанентами
-      let pc_copy = await PC.findById(req.body.id) // открываем еще один экземпляр
-      pc_copy.pc_unit = arr_pc_unit
-      pc_copy.system_case_unit = arr_system_case_unit // присваеваем
-
-      await pc_copy.save() // и СУКА работает...      
-      res.send(JSON.stringify(pc_copy))
-    }
-
-  } catch (error) {
-    console.log(error)
+  //Если серийник есть, то ищем ПКИ с таким серийником и отвязываем от машины
+  let oldPKI = await PKI.findOne({part: pc.part, serial_number: pc[unit][req.body.obj].serial_number})
+  if (oldPKI){
+    oldPKI.number_machine = ''
+    await oldPKI.save()
   }
+  // Проверяем был ли привязан ПКИ к машине и привязываем к новой машине
+  if (pki) {
+    if (pki.number_machine){      
+      if (pki.number_machine == pc.serial_number){
+        pki.number_machine = ''
+      } else {
+        oldNumberMachine = pki.number_machine
+      }
+    }
+    pki.number_machine = pc.serial_number
+    pki.save()
+    // Добавляем ПКИ к новой машине
+    pc[unit][req.body.obj].serial_number = req.body.serial_number //меняем серийник
+    pc[unit][req.body.obj].name = pki.vendor + " " + pki.model    //меняем имя
+    pc[unit][req.body.obj].type = pki.type_pki                    //меняем тип
+    pc_copy[unit] = pc[unit]
+    await pc_copy.save()
+    
+  }
+
+  // Если ПКИ был привязан удаляем ПКИ из старой машины
+  if (oldNumberMachine) {
+    let oldPC = await PC.findOne({serial_number: oldNumberMachine})  
+    oldPC[unit][req.body.obj].serial_number = ''
+    oldPC[unit][req.body.obj].name = ''
+    let newOldPC = await PC.findOne({serial_number: oldNumberMachine})
+    newOldPC[unit] = oldPC[unit]
+    newOldPC.save()
+  }
+  res.send(JSON.stringify(pc_copy))
 })
 
 
@@ -187,7 +145,7 @@ router.get('/:id/edit', auth, async (req, res) => {
     return res.redirect('/')
   }
   const pc = await PC.findById(req.params.id)
-  
+
   res.render('pc-edit', {
     title: `Редактирование ${pc.serial_number}`,
     pc: pc
@@ -196,7 +154,7 @@ router.get('/:id/edit', auth, async (req, res) => {
 
 
 router.post('/copy', auth, async (req, res) => {
-  const pc = await PC.findById(req.body.id)  
+  const pc = await PC.findById(req.body.id)
   let newPC = new PC({
     serial_number: req.body.serial_number,
     execution: pc.execution,
@@ -211,11 +169,11 @@ router.post('/copy', auth, async (req, res) => {
       unit.serial_number = req.body.serial_number
       newPC.pc_unit.push(unit)
     } else if (unit.serial_number == 'б/н' || unit.serial_number == 'Б/Н' || unit.serial_number == 'Б/н') {
-        newPC.pc_unit.push(unit)
+      newPC.pc_unit.push(unit)
     } else {
-        unit.name = ''
-        unit.serial_number = ''
-        newPC.pc_unit.push(unit)
+      unit.name = ''
+      unit.serial_number = ''
+      newPC.pc_unit.push(unit)
     }
   }
 
@@ -224,32 +182,38 @@ router.post('/copy', auth, async (req, res) => {
       unit.serial_number = req.body.serial_number
       newPC.system_case_unit.push(unit)
     } else if (unit.serial_number == 'б/н' || unit.serial_number == 'Б/Н' || unit.serial_number == 'Б/н') {
-        newPC.system_case_unit.push(unit)
+      newPC.system_case_unit.push(unit)
     } else {
-        unit.name = ''
-        unit.serial_number = ''
-        newPC.system_case_unit.push(unit)
+      unit.name = ''
+      unit.serial_number = ''
+      newPC.system_case_unit.push(unit)
     }
   }
 
   try {
     await newPC.save()
     res.render('pc', {
-      title: 'Машины',  
-      isPC: true,      
+      title: 'Машины',
+      isPC: true,
       part: pc.part
     })
   } catch (error) {
     console.log(error)
   }
-  
+
+})
+
+
+router.post('/find_serial', auth, async (req, res) => {
+  const pc = await PC.findOne({
+    serial_number: req.body.serial
   })
-
-
-  router.post('/find_serial', auth, async (req, res) => {
-    const pc = await PC.findOne({serial_number: req.body.serial})
-    if (pc) {res.send(true)} else {res.send(false)}
-    })
+  if (pc) {
+    res.send(true)
+  } else {
+    res.send(false)
+  }
+})
 
 
 module.exports = router
