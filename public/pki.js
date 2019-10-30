@@ -95,7 +95,7 @@ function edit_part(id, part) {
 function CreateTableFromJSON(data) {
     // EXTRACT VALUE FOR HTML HEADER. 
     // ('Book ID', 'Book Name', 'Category' and 'Price')
-    let col = ["type_pki", "vendor", "model", "serial_number", "country", "part", "number_machine", "in_case", ""];
+    let col = ["type_pki", "vendor", "model", "serial_number", "country", "part", "number_machine", ""];
     let col_rus = ["Тип", "Производитель", "Модель", "Серийный номер", "Страна производства", "Партия", "Номер машины", "В СБ", ""];
 
     // CREATE DYNAMIC TABLE.
@@ -170,9 +170,6 @@ function CreateTableFromJSON(data) {
             number_machineCell.innerHTML = ''
         }
 
-        let in_caseCell = tr.insertCell(-1)
-        in_caseCell.innerHTML = data[i].in_case
-
         let buttonCell = tr.insertCell(-1)
         let id = data[i]._id
         let part = data[i].part
@@ -196,10 +193,7 @@ function load_part() {
         method: "POST",
         headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
         success: function (data) {
-
-            //$('#quote').html(data);
             CreateSelect(JSON.parse(data))
-
         }
     })
 }

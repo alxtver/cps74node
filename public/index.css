@@ -416,7 +416,10 @@ input[type=text]:placeholder {
   background: indianred;
 }
 
-
+#ean_code {
+  background: #3d3d3d;
+  color: floralwhite;
+}
 
 
 

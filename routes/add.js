@@ -3,6 +3,7 @@ const Pki = require('../models/pki')
 const Apkzi = require('../models/apkzi')
 const Country = require('../models/country')
 const Part = require('../models/part')
+const EAN = require('../models/ean')
 const auth = require('../middleware/auth')
 const router = Router()
 
@@ -14,19 +15,29 @@ router.get('/', auth, (req, res) => {
 })
 
 router.post('/', auth, async (req, res) => {
-  if (req.body.in_case == 'true') {
-    var in_case = req.body.in_case
-  } else {
-    var in_case = 'false'
+  
+  
+  if (req.body.ean_code) {
+    const ean = await EAN.findOne({ean_code: req.body.ean_code})
+    if (!ean) {
+      const new_ean = new EAN({
+        ean_code: req.body.ean_code,
+        type_pki: req.body.type_pki,
+        vendor: req.body.vendor,
+        model: req.body.model,
+        country: req.body.country
+      })
+      new_ean.save()
+    }
   }
+
   const pki = new Pki({
     type_pki: req.body.type_pki,
     vendor: req.body.vendor,
     model: req.body.model,
     serial_number: req.body.serial_number,
     part: req.body.part,
-    country: req.body.country,
-    in_case: in_case
+    country: req.body.country
   })
 
   if (!(await Country.findOne({

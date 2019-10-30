@@ -125,6 +125,11 @@ router.post('/insert_serial', auth, async (req, res) => {
     pc_copy[unit] = pc[unit]
     await pc_copy.save()
     
+  } else {
+    pc[unit][req.body.obj].serial_number = req.body.serial_number
+    pc[unit][req.body.obj].name = "Н/Д"
+    pc_copy[unit] = pc[unit]
+    await pc_copy.save()
   }
 
   // Если ПКИ был привязан удаляем ПКИ из старой машины

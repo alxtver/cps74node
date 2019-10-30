@@ -2,6 +2,7 @@ const {Router} = require('express')
 const Pki = require('../models/pki')
 const PC = require('../models/pc')
 const Part = require('../models/part')
+const EAN = require('../models/ean')
 const auth = require('../middleware/auth')
 const router = Router()
 
@@ -54,11 +55,6 @@ router.get('/:id/edit', auth, async (req, res) => {
 // })
 
 router.post('/edit', auth, async (req, res) => {
-  if (req.body.in_case) {
-    req.body.in_case = 'true'
-  } else {
-    req.body.in_case = 'false'
-  }
   await Pki.findByIdAndUpdate(req.body._id, req.body)
   res.redirect('/pkis')
 })
@@ -145,18 +141,21 @@ router.post("/search", auth, async (req, res) =>  {
   res.send(JSON.stringify(pkis)); // отправляем пришедший ответ обратно
 })
 
+
 router.post("/part", auth, async function (req, res) {
   parts = await Part.find()  
   if (!req.body) return res.sendStatus(400)
   res.send(JSON.stringify(parts)) // отправляем пришедший ответ обратно
 })
 
+
 router.post("/del", auth, async (req, res) => {  
   const part = req.body.part
   let pki = await Pki.findById(req.body.id)
   if (pki.number_machine) {
     let pc = await PC.findOne({part: pki.part, serial_number: pki.number_machine})
-    let unit = 'pc_unit'
+    if (pc) {
+      let unit = 'pc_unit'
     for (let i in pc[unit]) {
       if (pki.serial_number == pc[unit][i].serial_number){
         pc[unit][i].serial_number = ''
@@ -171,6 +170,7 @@ router.post("/del", auth, async (req, res) => {
         pc[unit][i].name = ''
         break
       }
+    }    
     }
     let pc_copy = await PC.findOne({part: pki.part, serial_number: pki.number_machine})
     pc_copy.pc_unit = pc.pc_unit
@@ -184,7 +184,12 @@ router.post("/del", auth, async (req, res) => {
     console.log(e)
     res.send(part)
   }  
-  
+})
+
+router.post("/searchEAN", auth, async function (req, res) {
+  const ean = await EAN.findOne({ean_code: req.body.valueEAN})
+  if (!ean) return res.sendStatus(400)
+  res.send(JSON.stringify(ean)) // отправляем пришедший ответ обратно
 })
 
 

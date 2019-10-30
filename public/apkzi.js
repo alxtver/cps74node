@@ -33,7 +33,7 @@ function delBtn() {
 
 function CreateTableFromJSON(data) {
 
-    let col = ["type_pki", "vendor", "model", "serial_number", "country", "part", "number_machine", "in_case", ""];
+    let col = ["type_pki", "vendor", "model", "serial_number", "country", "part", "number_machine", ""];
     let col_rus = ["ФДШИ",
                    "Наименование АПКЗИ",
                    "Наименование контроллера СЗИ",

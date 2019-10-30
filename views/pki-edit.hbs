@@ -62,17 +62,6 @@
         </div>
       </div>
 
-      <div class="custom-control custom-checkbox">
-        {{#if pki.in_case}}
-        <input id="in_case" name="in_case" class="form-check-input" type="checkbox" value="true" checked>
-        {{else}}
-        <input id="in_case" name="in_case" class="form-check-input" type="checkbox" value="false">
-        {{/if}}
-        <label class="form-check-label" for="in_case">
-          В составе системного блока
-        </label>
-      </div>
-
       <div class="input-field">
         <input hidden="true" id="_id" name="_id" type="text" class="form-control" value="{{pki.id}}" required>
       </div>
