@@ -22,7 +22,7 @@
     "express-handlebars": "^3.0.2",
     "express-session": "^1.16.2",
     "mongoose": "^5.7.7",
-    "npm": "^6.11.3",
+    "npm": "^6.12.1",
     "pizzip": "^3.0.6",
     "uuid": "^3.3.2"
   },
