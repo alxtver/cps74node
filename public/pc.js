@@ -5,7 +5,6 @@ function CreateTablePC() {
   table.className = "table table-sm table-bordered table-hover"
   table.id = "pc_unit"
 
-
   // Заголовок таблицы
   let tr = table.insertRow(-1)
   let thead = table.createTHead()
@@ -560,18 +559,19 @@ function TablePc(pc) {
   return table
 }
 
-function TableEditPc(pc) {
+function TableEditPcUnit(pc) {
   // таблица ПЭВМ
 
   let table = document.createElement("table");
 
   table.className = "table table-sm table-bordered table-hover pctable"
-  table.id = pc._id
-
-
-
+  table.id = "pc_unit"
 
   tr = table.insertRow(-1) // TABLE ROW.        
+  
+  td = document.createElement("td")
+  td.className = "header"
+  tr.appendChild(td)
 
   td = document.createElement("td")
   td.innerHTML = 'Обозначение изделия'
@@ -608,23 +608,31 @@ function TableEditPc(pc) {
   for (let j = 0; j < arr_pc_unit.length; j++) {
     tr = table.insertRow(-1)
 
+    let chCell = tr.insertCell(-1)
+    chCell.innerHTML = "<input type='checkbox' name='record'>"
+    chCell.className = "record"
+
     let fdsiCell = tr.insertCell(-1)
     fdsiCell.innerHTML = arr_pc_unit[j].fdsi
     fdsiCell.dataset.id = pc._id
+    fdsiCell.contentEditable = "true"
 
     let typeCell = tr.insertCell(-1)
     typeCell.innerHTML = arr_pc_unit[j].type
     typeCell.dataset.id = pc._id
     typeCell.className = 'type'
+    typeCell.contentEditable = "true"
 
     let nameCell = tr.insertCell(-1)
     nameCell.innerHTML = arr_pc_unit[j].name
     nameCell.dataset.id = pc._id
     nameCell.className = 'name'
+    nameCell.contentEditable = "true"
 
     let quantityCell = tr.insertCell(-1)
     quantityCell.innerHTML = arr_pc_unit[j].quantity
     quantityCell.dataset.id = pc._id
+    quantityCell.contentEditable = "true"
 
     let serial_numberCell = tr.insertCell(-1)
     serial_numberCell.innerHTML = arr_pc_unit[j].serial_number
@@ -643,12 +651,25 @@ function TableEditPc(pc) {
     let notesCell = tr.insertCell(-1)
     notesCell.innerHTML = arr_pc_unit[j].notes
     notesCell.innerHTML = arr_pc_unit[j].notes
-    fdsiCell.dataset.id = pc._id
-
+    notesCell.dataset.id = pc._id
+    notesCell.contentEditable = "true"
   }
+  return table
+}
 
+function TableEditSystemCase(pc) {
+  // таблица ПЭВМ
+
+  let table = document.createElement("table");
+
+  table.className = "table table-sm table-bordered table-hover pctable"
+  table.id = "system_case"
 
   tr = table.insertRow(-1) // TABLE ROW.        
+  
+  td = document.createElement("td")
+  td.className = "header"
+  tr.appendChild(td)
 
   td = document.createElement("td")
   td.innerHTML = 'Обозначение изделия'
@@ -685,21 +706,29 @@ function TableEditPc(pc) {
   for (let j = 0; j < arr_system_case_unit.length; j++) {
     tr = table.insertRow(-1)
 
+    let chCell = tr.insertCell(-1)
+    chCell.innerHTML = "<input type='checkbox' name='record'>"
+    chCell.className = "record"
+
     let fdsiCell = tr.insertCell(-1)
     fdsiCell.innerHTML = arr_system_case_unit[j].fdsi
     fdsiCell.dataset.id = pc._id
+    fdsiCell.contentEditable = "true"
 
     let typeCell = tr.insertCell(-1)
     typeCell.innerHTML = arr_system_case_unit[j].type
     typeCell.dataset.id = pc._id
+    typeCell.contentEditable = "true"
 
     let nameCell = tr.insertCell(-1)
     nameCell.innerHTML = arr_system_case_unit[j].name
     nameCell.dataset.id = pc._id
+    nameCell.contentEditable = "true"
 
     let quantityCell = tr.insertCell(-1)
     quantityCell.innerHTML = arr_system_case_unit[j].quantity
     quantityCell.dataset.id = pc._id
+    quantityCell.contentEditable = "true"
 
     let serial_numberCell = tr.insertCell(-1)
     serial_numberCell.innerHTML = arr_system_case_unit[j].serial_number
@@ -717,6 +746,7 @@ function TableEditPc(pc) {
     let notesCell = tr.insertCell(-1)
     notesCell.innerHTML = arr_system_case_unit[j].notes
     notesCell.dataset.id = pc._id
+    notesCell.contentEditable = "true"
   }
   return table
 }
@@ -761,14 +791,20 @@ function CreateTableEditPC(data) {
   // CREATE DYNAMIC TABLE.
   let divContainer = document.getElementById("PC")
   divContainer.innerHTML = ""
-  table = TableEditPc(data)
+
+  tablePCUnit = TableEditPcUnit(data)
+  tablePCSystemCase = TableEditSystemCase(data)
+
   divContainer = document.getElementById("PC");
   let divCont = document.createElement("div")
-  divCont.id = data._id
-  divCont.className = "tableContent mb-3"
+  divCont.id = "pc_unit_div"
   divContainer.appendChild(divCont);
-  divCont.innerHTML = ""
-  divCont.appendChild(table)
+  divCont.appendChild(tablePCUnit)
+
+  divCont = document.createElement("div")
+  divCont.id = "system_case_div"
+  divContainer.appendChild(divCont);
+  divCont.appendChild(tablePCSystemCase)
 
 
   let button_edit = document.createElement('input')
@@ -777,8 +813,7 @@ function CreateTableEditPC(data) {
   button_edit.value = 'Редактировать'
   button_edit.setAttribute("onclick", "location.href='/pc/" + data._id + "/edit?allow=true'")
   button_edit.dataset.id = data._id
-  divCont.appendChild(button_edit)
-  
+  divCont.appendChild(button_edit)  
 }
 
 function CreateSelect(data) {
