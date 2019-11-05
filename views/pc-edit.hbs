@@ -34,66 +34,13 @@
             aria-describedby="inputGroup-sizing-sm" value="{{pc.execution}}" required>
     </div>
 
-    <table class="table table-sm table-bordered table-hover">
-        <thead class="thead-dark">
-            <tr>
-                <th></th>
-                <th>Обозначение изделия</th>
-                <th>Наименование изделия</th>
-                <th>Характеристика</th>
-                <th>Количество</th>
-                <th>Заводской номер</th>
-                <th>Примечания</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each pc.pc_unit}}
-            <tr>
-                <td><input type='checkbox' name='record'></td>
-                <td contenteditable>{{fdsi}}</td>
-                <td contenteditable>{{type}}</td>
-                <td contenteditable>{{name}}</td>
-                <td contenteditable>{{quantity}}</td>
-                <td contenteditable>{{serial_number}}</td>
-                <td contenteditable>{{notes}}</td>
-            </tr>
-            {{/each}}
-        </tbody>
-
-        <thead class="thead-dark">
-            <tr>
-                <th></th>
-                <th>Обозначение изделия</th>
-                <th>Наименование изделия</th>
-                <th>Характеристика</th>
-                <th>Количество</th>
-                <th>Заводской номер</th>
-                <th>Примечания</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each pc.system_case_unit}}
-            <tr>
-                <td><input type='checkbox' name='record'></td>
-                <td contenteditable>{{fdsi}}</td>
-                <td contenteditable>{{type}}</td>
-                <td contenteditable>{{name}}</td>
-                <td contenteditable>{{quantity}}</td>
-                <td contenteditable>{{serial_number}}</td>
-                <td contenteditable>{{notes}}</td>
-            </tr>
-            {{/each}}
-        </tbody>
-    </table>
-    <div class="col-sm mt-5"><button type="submit" class="btn btn-dark mb-2">Редактировать</button></div>
+    <div id="PC"></div>
+   
 </form>
 
 
 <script>
     $(document).ready(function () {
-        let pc = `{{pc}}`
-        let arr = pc.split('&#x27;').join('')
-        let jso = JSON.stringify(arr)
-        console.log(jso)
+        load_pc(`{{pc._id}}`)
     })
 </script>

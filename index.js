@@ -5,7 +5,6 @@ const flash = require('connect-flash')
 const session = require('express-session')
 const MongoStore = require('connect-mongodb-session')(session)
 const mongoose = require('mongoose')
-mongoose.set('useCreateIndex', true)
 const exphbs = require('express-handlebars')
 const homeRoutes = require('./routes/home')
 const apkziRoutes = require('./routes/apkzi')
@@ -27,10 +26,12 @@ const hbs = exphbs.create({
   extname: 'hbs'
 })
 
+mongoose.set('useCreateIndex', true)
 const store = new MongoStore ({
   collection: 'sessions',
   uri: config.url
 })
+
 
 app.engine('hbs', hbs.engine)
 app.set('view engine', 'hbs')
@@ -68,6 +69,7 @@ async function start() {
     
     await mongoose.connect(config.url, {
       useNewUrlParser: true,
+      useUnifiedTopology: true,
       useFindAndModify: false  
     })
     app.listen(PORT, () => {
@@ -79,5 +81,3 @@ async function start() {
 }
 
 start()
-
-

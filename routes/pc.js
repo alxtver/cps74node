@@ -3,6 +3,7 @@ const {
 } = require('express')
 const PC = require('../models/pc')
 const PKI = require('../models/pki')
+const APKZI = require('../models/apkzi')
 const Part = require('../models/part')
 const auth = require('../middleware/auth')
 const router = Router()
@@ -134,9 +135,13 @@ router.post('/insert_serial', auth, async (req, res) => {
 
   // Если ПКИ был привязан удаляем ПКИ из старой машины
   if (oldNumberMachine) {
-    let oldPC = await PC.findOne({serial_number: oldNumberMachine})  
-    oldPC[unit][req.body.obj].serial_number = ''
-    oldPC[unit][req.body.obj].name = ''
+    let oldPC = await PC.findOne({serial_number: oldNumberMachine})
+    for (let index = 0; index < oldPC[unit].length; index++) {
+      if (oldPC[unit][index].serial_number == pki.serial_number) {
+        oldPC[unit][index].serial_number = ''
+        oldPC[unit][index].name = ''
+      }
+    }
     let newOldPC = await PC.findOne({serial_number: oldNumberMachine})
     newOldPC[unit] = oldPC[unit]
     newOldPC.save()
@@ -144,6 +149,96 @@ router.post('/insert_serial', auth, async (req, res) => {
   res.send(JSON.stringify(pc_copy))
 })
 
+router.post('/insert_serial_apkzi', auth, async (req, res) => {
+  //Жесть пипец!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  
+  let pc = await PC.findById(req.body.id) //ищем комп который собираемся редактировать
+  let pc_copy = await PC.findById(req.body.id) //и копию....
+  
+  let apkzi = await APKZI.findOne({part: pc.part, kontr_zav_number: req.body.serial_number})
+  let oldNumberMachine
+  const unit = req.body.unit
+  // console.log(apkzi)
+
+  // Если серийник есть, то ищем ПКИ с таким серийником и отвязываем от машины
+  let oldapkzi = await APKZI.findOne({part: pc.part, kontr_zav_number: pc[unit][req.body.obj].serial_number})
+  if (oldapkzi){
+    oldapkzi.number_machine = ''
+    await oldapkzi.save()
+  }
+  // Проверяем был ли привязан APKZI к машине и привязываем к новой машине
+  if (apkzi) {
+    if (apkzi.number_machine){      
+      if (apkzi.number_machine == pc.serial_number){
+        apkzi.number_machine = ''
+      } else {
+        oldNumberMachine = apkzi.number_machine
+      }
+    }
+    apkzi.number_machine = pc.serial_number
+    apkzi.save()
+    // Добавляем ПКИ к новой машине
+    pc[unit][req.body.obj].serial_number = req.body.serial_number //меняем серийник
+    let kontr_name = apkzi.kont_name
+    const arr_kontr_name = kontr_name.split(' ')
+    const arr_end = arr_kontr_name.slice(-1)
+    const arr_start = arr_kontr_name.slice(0, -1) 
+    pc[unit][req.body.obj].name = arr_end //меняем тип
+    pc[unit][req.body.obj].type = arr_start.join(' ')  //меняем имя
+    
+    // console.log(pc.pc_unit[7]);
+    let index_apkzi
+    for (let index = 0; index < pc.pc_unit.length; index++) {
+      if (pc.pc_unit[index].apkzi) {
+        index_apkzi = index
+        break
+      }    
+    }
+    
+    const apkzi_name = apkzi.apkzi_name
+    const arr_apkzi_name = apkzi_name.split(' ')
+    const arr_apkzi_end = arr_apkzi_name.slice(-1)
+    const arr_apkzi_start = arr_apkzi_name.slice(0, -1) 
+    
+    pc.pc_unit[index_apkzi].fdsi = apkzi.fdsi
+    pc.pc_unit[index_apkzi].type = arr_apkzi_start 
+    pc.pc_unit[index_apkzi].name = arr_apkzi_end 
+    pc.pc_unit[index_apkzi].serial_number = apkzi.zav_number
+                     
+    pc_copy[unit] = pc[unit]
+    pc_copy.pc_unit = pc.pc_unit
+    await pc_copy.save()
+    
+  } else {
+    pc[unit][req.body.obj].serial_number = req.body.serial_number
+    pc[unit][req.body.obj].name = "Н/Д"
+    let index_apkzi
+    for (let index = 0; index < pc.pc_unit.length; index++) {
+      if (pc.pc_unit[index].apkzi) {
+        index_apkzi = index
+        break
+      }    
+    }
+
+    pc.pc_unit[index_apkzi].name = "Н/Д"
+    pc.pc_unit[index_apkzi].serial_number = ""
+
+    pc_copy[unit] = pc[unit]
+    pc_copy.pc_unit = pc.pc_unit
+    await pc_copy.save()
+  }
+
+  // // Если ПКИ был привязан удаляем ПКИ из старой машины
+  // if (oldNumberMachine) {
+  //   let oldPC = await PC.findOne({serial_number: oldNumberMachine})  
+  //   oldPC[unit][req.body.obj].serial_number = ''
+  //   oldPC[unit][req.body.obj].name = ''
+  //   let newOldPC = await PC.findOne({serial_number: oldNumberMachine})
+  //   newOldPC[unit] = oldPC[unit]
+  //   newOldPC.save()
+  // }
+  res.send(JSON.stringify(pc_copy))
+})
 
 router.get('/:id/edit', auth, async (req, res) => {
   if (!req.query.allow) {
@@ -205,7 +300,6 @@ router.post('/copy', auth, async (req, res) => {
   } catch (error) {
     console.log(error)
   }
-
 })
 
 
@@ -215,6 +309,15 @@ router.post('/find_serial', auth, async (req, res) => {
   })
   if (pc) {
     res.send(true)
+  } else {
+    res.send(false)
+  }
+})
+
+router.post('/pc_edit', auth, async (req, res) => {
+  const pc = await PC.findById(req.body.id)
+  if (pc) {
+    res.send(JSON.stringify(pc))
   } else {
     res.send(false)
   }
