@@ -52,8 +52,16 @@
 
 <script>
   $(document).ready(function () {
-    load_data(`{{part}}`)
-    load_part()  
+    let part = `{{part}}`
+    load_data(part)
+    load_part()
+    setTimeout(function () {
+        $("#part_select").val(part).change()
+      }, 400)
+
+    //$("#part_select").val(part).change()
+    
+    
   })
 
   $(document).on('change', '#part_select', function () {

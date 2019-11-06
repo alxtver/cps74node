@@ -70,17 +70,17 @@
     }
 
     // формирование POST запроса для таблицы ПЭВМ
-    let pc_unit = [];
+    let pc_unit = []
     $('#pc_unit tr').each(function (i) {
       if (i == 0) {
         return true
       }
-      let fdsi = $(this).find(".fdsi").html()
-      let type = $(this).find(".type").html()
-      let name = $(this).find(".name").html()
-      let quantity = $(this).find(".quantity").html()      
-      let serial_number = $(this).find(".serial_number").html()
-      let notes = $(this).find(".notes").html()
+      let fdsi = $(this).find(".fdsi").text()
+      let type = $(this).find(".type").text()
+      let name = $(this).find(".name").text()
+      let quantity = $(this).find(".quantity").text()      
+      let serial_number = $(this).find(".serial_number").text()
+      let notes = $(this).find(".notes").text()
 
       if ($(this).find(".serial_number").data("apkzi")) {
         pc_unit.push({
@@ -112,12 +112,15 @@
       if (i == 0) {
         return true
       }
-      let fdsi = $(this).find(".fdsi").html()
-      let type = $(this).find(".type").html()
-      let name = $(this).find(".name").html()
-      let quantity = $(this).find(".quantity").html()
-      let serial_number = $(this).find(".serial_number").html()
-      let notes = $(this).find(".notes").html()
+      let type = $(this).find(".type").text()
+      let fdsi = $(this).find(".fdsi").text()
+      let name = $(this).find(".name").text()
+      //убираем теги
+      //let nameTags = $(this).find(".name").html()
+      //let name = nameTags.replace(/<\/?[^>]+>/g,''))
+      let quantity = $(this).find(".quantity").text()
+      let serial_number = $(this).find(".serial_number").text()
+      let notes = $(this).find(".notes").text()
 
       if ($(this).find(".serial_number").data("apkzi")) {
         system_case_unit.push({
@@ -161,4 +164,16 @@
       }
     })
   })
+
+
+  $('#serial_number').keyup(function() {
+      let search = $(this).val()
+      let numbers = document.getElementsByClassName('number_mashine')
+      for (const number of numbers) {
+        number.innerHTML = search
+      }
+      
+      
+    })
+
 </script>

@@ -23,44 +23,67 @@ function CreateTablePC() {
 
 
   let tableRef = document.getElementById('pc_unit').getElementsByTagName('tbody')[0]
-  tr = tableRef.insertRow(-1)
 
-  let chCell = tr.insertCell(-1)
-  chCell.innerHTML = "<input type='checkbox' name='record'>"
-  chCell.className = "record"
+  const complectPCUnit = [
+    'Системный блок',
+    'Клавиатура',
+    'Мышь',
+    'Монитор',
+    'Монитор',
+    'Источник бесперебойного питания',
+    'Сетевой фильтр',
+    'Гарнитура'
+  ]
 
-  let fdsiCell = tr.insertCell(-1)
-  fdsiCell.className = "fdsi"
-  fdsiCell.id = "fdsi"
-  fdsiCell.contentEditable = "true"
+  for (const unit of complectPCUnit) {
+    tr = tableRef.insertRow(-1)
 
-  let typeCell = tr.insertCell(-1)
-  typeCell.className = "type"
-  typeCell.id = "type"
-  typeCell.contentEditable = "true"
-  typeCell.innerHTML = ""
+    let chCell = tr.insertCell(-1)
+    chCell.innerHTML = "<input type='checkbox' name='record'>"
+    chCell.className = "record"
 
-  let nameCell = tr.insertCell(-1)
-  nameCell.className = "name"
-  nameCell.id = "name"
-  nameCell.contentEditable = "true"
+    let fdsiCell = tr.insertCell(-1)
+    fdsiCell.className = "fdsi"
+    fdsiCell.id = "fdsi"
+    fdsiCell.contentEditable = "true"
+
+    let typeCell = tr.insertCell(-1)
+    typeCell.className = "type"
+    typeCell.id = "type"
+    typeCell.contentEditable = "true"
+    typeCell.innerHTML = unit
+
+    let nameCell = tr.insertCell(-1)
+    nameCell.className = "name"
+    nameCell.id = "name"
+    nameCell.contentEditable = "true"
 
 
-  let quantityCell = tr.insertCell(-1)
-  quantityCell.innerHTML = "1"
-  quantityCell.className = "quantity"
-  quantityCell.id = "quantity"
-  quantityCell.contentEditable = "true"
+    let quantityCell = tr.insertCell(-1)
+    quantityCell.innerHTML = "1"
+    quantityCell.className = "quantity"
+    quantityCell.id = "quantity"
+    quantityCell.contentEditable = "true"
 
-  let serial_numberCell = tr.insertCell(-1)
-  serial_numberCell.className = "serial_number"
-  serial_numberCell.id = "serial_number"
-  serial_numberCell.contentEditable = "true"
+    let serial_numberCell = tr.insertCell(-1)
+    
+    serial_numberCell.id = "serial_number"
+    serial_numberCell.contentEditable = "true"
+    if (unit == 'Системный блок' || unit == 'Сетевой фильтр' || unit == 'Гарнитура') {
+      serial_numberCell.className = "serial_number number_mashine"
+    } else {
+      serial_numberCell.className = "serial_number"
+    }
 
-  let notesCell = tr.insertCell(-1)
-  notesCell.className = "notes"
-  notesCell.id = "notes"
-  notesCell.contentEditable = "true"
+    let notesCell = tr.insertCell(-1)
+    notesCell.className = "notes"
+    notesCell.id = "notes"
+    notesCell.contentEditable = "true"
+    if (unit == 'Системный блок') {
+      notesCell.innerHTML = 'с кабелем питания'
+    }
+  }
+
 
   tr = tableRef.insertRow(-1)
   tr.className = "apkzi"
@@ -183,47 +206,71 @@ function CreateTableSystemCase() {
   divContainer.innerHTML = "";
   divContainer.appendChild(table);
 
-
   let tableRef = document.getElementById('system_case_unit_table').getElementsByTagName('tbody')[0]
-  tr = tableRef.insertRow(-1)
-  tr.className = "szi"
+  const complectSystemCaseUnit = [
+    'Корпус',
+    'Процессор',
+    'Вентилятор процессора',
+    'Блок питания',
+    'Оперативная память',
+    'Оперативная память',
+    'Системная плата',
+    'Видеокарта',
+    'Накопитель на жестком магнитном диске',
+    'Корзина для НЖМД',
+    'Оптический привод'
+  ]
+  for (const unit of complectSystemCaseUnit) {
+    tr = tableRef.insertRow(-1)
+    tr.className = "szi"
 
-  let chCell = tr.insertCell(-1)
-  chCell.innerHTML = "<input type='checkbox' name='record'>"
-  chCell.className = "record"
+    let chCell = tr.insertCell(-1)
+    chCell.innerHTML = "<input type='checkbox' name='record'>"
+    chCell.className = "record"
 
-  let fdsiCell = tr.insertCell(-1)
-  fdsiCell.className = "fdsi"
-  fdsiCell.id = "fdsi"
-  fdsiCell.contentEditable = "true"
+    let fdsiCell = tr.insertCell(-1)
+    fdsiCell.className = "fdsi"
+    fdsiCell.id = "fdsi"
+    fdsiCell.contentEditable = "true"
 
-  let typeCell = tr.insertCell(-1)
-  typeCell.className = "type"
-  typeCell.id = "type"
-  typeCell.contentEditable = "true"
-  typeCell.innerHTML = ""
+    let typeCell = tr.insertCell(-1)
+    typeCell.className = "type"
+    typeCell.id = "type"
+    typeCell.contentEditable = "true"
+    typeCell.innerHTML = unit
 
-  let nameCell = tr.insertCell(-1)
-  nameCell.className = "name"
-  nameCell.id = "name"
-  nameCell.contentEditable = "true"
+    let nameCell = tr.insertCell(-1)
+    nameCell.className = "name"
+    nameCell.id = "name"
+    nameCell.contentEditable = "true"
 
 
-  let quantityCell = tr.insertCell(-1)
-  quantityCell.innerHTML = "1"
-  quantityCell.className = "quantity"
-  quantityCell.id = "quantity"
-  quantityCell.contentEditable = "true"
+    let quantityCell = tr.insertCell(-1)
+    quantityCell.innerHTML = "1"
+    quantityCell.className = "quantity"
+    quantityCell.id = "quantity"
+    quantityCell.contentEditable = "true"
 
-  let serial_numberCell = tr.insertCell(-1)
-  serial_numberCell.className = "serial_number"
-  serial_numberCell.id = "serial_number"
-  serial_numberCell.contentEditable = "true"
+    let serial_numberCell = tr.insertCell(-1)
+    serial_numberCell.className = "serial_number"
+    serial_numberCell.id = "serial_number"
+    serial_numberCell.contentEditable = "true"
+    if (unit == 'Корпус') {
+      serial_numberCell.className = "serial_number number_mashine"
+    } else {
+      serial_numberCell.className = "serial_number"
+    }
+    if (unit == 'Вентилятор процессора') {
+      serial_numberCell.innerHTML = 'б/н'
+    }
 
-  let notesCell = tr.insertCell(-1)
-  notesCell.className = "notes"
-  notesCell.id = "notes"
-  notesCell.contentEditable = "true"
+    let notesCell = tr.insertCell(-1)
+    notesCell.className = "notes"
+    notesCell.id = "notes"
+    notesCell.contentEditable = "true"
+
+  }
+
 
   tr = tableRef.insertRow(-1)
 
@@ -448,7 +495,7 @@ function TablePc(pc) {
     fdsiCell.innerHTML = arr_pc_unit[j].fdsi
     fdsiCell.dataset.id = pc._id
 
-    
+
 
     let typeCell = tr.insertCell(-1)
     typeCell.innerHTML = arr_pc_unit[j].type
@@ -476,7 +523,7 @@ function TablePc(pc) {
     }
     serial_numberCell.dataset.data = pc._id + ';' + j + ';' + 'pc_unit'
     serial_numberCell.className = 'serial_number'
-    
+
 
     let notesCell = tr.insertCell(-1)
     notesCell.innerHTML = arr_pc_unit[j].notes
@@ -568,7 +615,7 @@ function TableEditPcUnit(pc) {
   table.id = "pc_unit"
 
   tr = table.insertRow(-1) // TABLE ROW.        
-  
+
   td = document.createElement("td")
   td.className = "header"
   tr.appendChild(td)
@@ -615,6 +662,7 @@ function TableEditPcUnit(pc) {
     let fdsiCell = tr.insertCell(-1)
     fdsiCell.innerHTML = arr_pc_unit[j].fdsi
     fdsiCell.dataset.id = pc._id
+    fdsiCell.className = 'fdsi'
     fdsiCell.contentEditable = "true"
 
     let typeCell = tr.insertCell(-1)
@@ -632,6 +680,7 @@ function TableEditPcUnit(pc) {
     let quantityCell = tr.insertCell(-1)
     quantityCell.innerHTML = arr_pc_unit[j].quantity
     quantityCell.dataset.id = pc._id
+    quantityCell.className = 'quantity'
     quantityCell.contentEditable = "true"
 
     let serial_numberCell = tr.insertCell(-1)
@@ -642,16 +691,16 @@ function TableEditPcUnit(pc) {
     serial_numberCell.contentEditable = "true"
     if (arr_pc_unit[j].apkzi) {
       serial_numberCell.dataset.apkzi = "apkzi"
-      serial_numberCell.contentEditable = "false"
     }
     serial_numberCell.dataset.data = pc._id + ';' + j + ';' + 'pc_unit'
     serial_numberCell.className = 'serial_number'
-    
+
 
     let notesCell = tr.insertCell(-1)
     notesCell.innerHTML = arr_pc_unit[j].notes
     notesCell.innerHTML = arr_pc_unit[j].notes
     notesCell.dataset.id = pc._id
+    notesCell.className = 'notes'
     notesCell.contentEditable = "true"
   }
   return table
@@ -663,10 +712,10 @@ function TableEditSystemCase(pc) {
   let table = document.createElement("table");
 
   table.className = "table table-sm table-bordered table-hover pctable"
-  table.id = "system_case"
+  table.id = "system_case_unit"
 
   tr = table.insertRow(-1) // TABLE ROW.        
-  
+
   td = document.createElement("td")
   td.className = "header"
   tr.appendChild(td)
@@ -713,21 +762,25 @@ function TableEditSystemCase(pc) {
     let fdsiCell = tr.insertCell(-1)
     fdsiCell.innerHTML = arr_system_case_unit[j].fdsi
     fdsiCell.dataset.id = pc._id
+    fdsiCell.className = 'fdsi'
     fdsiCell.contentEditable = "true"
 
     let typeCell = tr.insertCell(-1)
     typeCell.innerHTML = arr_system_case_unit[j].type
     typeCell.dataset.id = pc._id
+    typeCell.className = 'type'
     typeCell.contentEditable = "true"
 
     let nameCell = tr.insertCell(-1)
     nameCell.innerHTML = arr_system_case_unit[j].name
     nameCell.dataset.id = pc._id
+    nameCell.className = 'name'
     nameCell.contentEditable = "true"
 
     let quantityCell = tr.insertCell(-1)
     quantityCell.innerHTML = arr_system_case_unit[j].quantity
     quantityCell.dataset.id = pc._id
+    quantityCell.className = 'quantity'
     quantityCell.contentEditable = "true"
 
     let serial_numberCell = tr.insertCell(-1)
@@ -746,6 +799,7 @@ function TableEditSystemCase(pc) {
     let notesCell = tr.insertCell(-1)
     notesCell.innerHTML = arr_system_case_unit[j].notes
     notesCell.dataset.id = pc._id
+    notesCell.className = 'notes'
     notesCell.contentEditable = "true"
   }
   return table
@@ -808,18 +862,18 @@ function CreateTableEditPC(data) {
 
 
   let button_edit = document.createElement('input')
-  button_edit.type = 'button'
+  button_edit.type = 'submit'
   button_edit.className = 'btn btn-dark ml-2 mr-2 mb-2'
   button_edit.value = 'Редактировать'
-  button_edit.setAttribute("onclick", "location.href='/pc/" + data._id + "/edit?allow=true'")
+  button_edit.id = "submit"
   button_edit.dataset.id = data._id
-  divCont.appendChild(button_edit)  
+  divCont.appendChild(button_edit)
 }
 
 function CreateSelect(data) {
-  $("#part_select").append($('<option value="">...</option>'));
+  $("#part_select").append($('<option disabled selected value="">...</option>'))
   for (let i = 0; i < data.length; i++) {
-    $('#part_select').append('<option value="' + data[i]._id + '">' + data[i].part + '</option>');
+    $('#part_select').append('<option value="' + data[i].part + '">' + data[i].part + '</option>')
   }
 }
 

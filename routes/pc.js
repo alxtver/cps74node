@@ -9,10 +9,12 @@ const auth = require('../middleware/auth')
 const router = Router()
 
 
-router.get('/', auth, async (req, res) => {
+router.get('/', auth, async (req, res) => {  
   res.render('pc', {
     title: 'Машины',
-    isPC: true
+    isPC: true,
+    part: req.query.part,
+    serial_number: req.query.serial_number
   })
 })
 
@@ -84,7 +86,7 @@ router.post("/search", auth, async function (req, res) {
   }
   if (!req.body) return res.sendStatus(400);
   res.send(JSON.stringify(pcs)); // отправляем пришедший ответ обратно
-});
+})
 
 
 router.post("/part", auth, async function (req, res) {
@@ -177,7 +179,7 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
     }
     apkzi.number_machine = pc.serial_number
     apkzi.save()
-    // Добавляем ПКИ к новой машине
+    // Добавляем APKZI к новой машине
     pc[unit][req.body.obj].serial_number = req.body.serial_number //меняем серийник
     let kontr_name = apkzi.kont_name
     const arr_kontr_name = kontr_name.split(' ')
@@ -185,6 +187,7 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
     const arr_start = arr_kontr_name.slice(0, -1) 
     pc[unit][req.body.obj].name = arr_end //меняем тип
     pc[unit][req.body.obj].type = arr_start.join(' ')  //меняем имя
+    // pc[unit][req.body.obj].fdsi = apkzi.fdsi
     
     // console.log(pc.pc_unit[7]);
     let index_apkzi
@@ -200,7 +203,7 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
     const arr_apkzi_end = arr_apkzi_name.slice(-1)
     const arr_apkzi_start = arr_apkzi_name.slice(0, -1) 
     
-    pc.pc_unit[index_apkzi].fdsi = apkzi.fdsi
+    pc.pc_unit[index_apkzi].fdsi = 'ФДШИ. ' + apkzi.fdsi
     pc.pc_unit[index_apkzi].type = arr_apkzi_start 
     pc.pc_unit[index_apkzi].name = arr_apkzi_end 
     pc.pc_unit[index_apkzi].serial_number = apkzi.zav_number
@@ -321,6 +324,30 @@ router.post('/pc_edit', auth, async (req, res) => {
   } else {
     res.send(false)
   }
+})
+
+router.post('/pc_update', auth, async (req, res) => {  
+  const pc = await PC.findById(req.body.id)
+  
+  newPCUnit = []
+  newSystemCaseUnit = []
+  // добавление объектов в массив pc_unit
+  const pc_unit = req.body.pc_unit
+  json_pc = JSON.parse(pc_unit)
+  for (let i = 0; i < json_pc.length; i++) {
+    newPCUnit.push(json_pc[i]);
+  }
+
+  // добавление объектов в массив system_case_unit
+  const system_case_unit = req.body.system_case_unit
+  json_system = JSON.parse(system_case_unit)
+  for (let i = 0; i < json_system.length; i++) {
+    newSystemCaseUnit.push(json_system[i])
+  }
+  pc.pc_unit = newPCUnit
+  pc.system_case_unit = newSystemCaseUnit
+  await pc.save()
+  
 })
 
 
