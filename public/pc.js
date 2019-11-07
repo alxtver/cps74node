@@ -375,6 +375,7 @@ function load_data(q) {
       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
     },
     method: "POST",
+    async: false,
     data: {
       q: q
     },
@@ -405,14 +406,12 @@ function load_part() {
   $.ajax({
     url: "/pc/part",
     method: "POST",
+    async: false,
     headers: {
       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
     },
     success: function (data) {
-
-      //$('#quote').html(data);
       CreateSelect(JSON.parse(data))
-
     }
   })
 }
@@ -435,6 +434,7 @@ function TablePc(pc) {
 
   td = document.createElement("td")
   td.innerHTML = pc.serial_number
+  td.id = pc.serial_number
   td.className = "serial up"
   tr.appendChild(td)
 
@@ -864,7 +864,7 @@ function CreateTableEditPC(data) {
   let button_edit = document.createElement('input')
   button_edit.type = 'submit'
   button_edit.className = 'btn btn-dark ml-2 mr-2 mb-2'
-  button_edit.value = 'Редактировать'
+  button_edit.value = 'Сохранить изменения'
   button_edit.id = "submit"
   button_edit.dataset.id = data._id
   divCont.appendChild(button_edit)

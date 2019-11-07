@@ -26,7 +26,6 @@ router.get('/add', auth, (req, res) => {
   })
 })
 
-
 router.post('/add', auth, async (req, res) => {
   // если нет такого проекта, то сохраняем
   const part = await Part.findOne({

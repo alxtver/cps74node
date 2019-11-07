@@ -33,8 +33,6 @@
       <input type="hidden" name="_csrf" value="{{csrf}}">
       <div class="modal-body">
         {{!-- <input class="danger" id="danger" type="hidden" value="Такой серийный номер существует"> --}}
-        
-        
         <input id="inputCopy" name="serial_number" type="text" value="" class="form-control">
         <div class="mb-2" id="hidd"></div>
       </div>
@@ -51,18 +49,23 @@
 
 
 <script>
-  $(document).ready(function () {
-    let part = `{{part}}`
-    load_data(part)
-    load_part()
-    setTimeout(function () {
-        $("#part_select").val(part).change()
-      }, 400)
 
-    //$("#part_select").val(part).change()
-    
-    
-  })
+
+$(document).ready(function () {
+  const part = `{{part}}`
+  const serial_number = `{{serial_number}}`
+  
+  load_data(part)
+  load_part()
+  $("#part_select").val(part).change()
+  if (serial_number) {
+    const serial_number_id = '#' + serial_number
+    $('html, body').animate({scrollTop: $(serial_number_id).offset().top}, 500)
+  }
+  
+  
+    })
+ 
 
   $(document).on('change', '#part_select', function () {
     load_data($("#part_select :selected").text())
@@ -117,4 +120,6 @@
       let serial = $(this).val()
       find_serial(serial)
     })
+
+   
 </script>
