@@ -25,7 +25,6 @@ router.get('/register', auth, async (req, res) => {
     } else {
         res.redirect('/auth/login')
     }
-    
 })
 
 

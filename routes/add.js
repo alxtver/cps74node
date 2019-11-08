@@ -10,12 +10,12 @@ const router = Router()
 router.get('/', auth, (req, res) => {
   res.render('add', {
     title: 'Добавить ПКИ',
-    isAdd: true
+    isAdd: true,
+    insertError: req.flash('insertError'),
   })
 })
 
 router.post('/', auth, async (req, res) => {
-  
   
   if (req.body.ean_code) {
     const ean = await EAN.findOne({ean_code: req.body.ean_code})
@@ -31,47 +31,60 @@ router.post('/', auth, async (req, res) => {
     }
   }
 
-  const pki = new Pki({
-    type_pki: req.body.type_pki,
-    vendor: req.body.vendor,
-    model: req.body.model,
+  const candidate = await Pki.findOne({
     serial_number: req.body.serial_number,
-    part: req.body.part,
-    country: req.body.country
+    part: req.body.part
   })
-
-  if (!(await Country.findOne({
-      country: req.body.country
-    }))) {
-    const country = new Country({
+  
+  if (!candidate) {
+    const pki = new Pki({
+      type_pki: req.body.type_pki,
+      vendor: req.body.vendor,
+      model: req.body.model,
+      serial_number: req.body.serial_number,
+      part: req.body.part,
       country: req.body.country
     })
+  
+    if (!(await Country.findOne({
+        country: req.body.country
+      }))) {
+      const country = new Country({
+        country: req.body.country
+      })
+      try {
+        await country.save()
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  
+    if (!(await Part.findOne({
+      part: req.body.part
+    }))) {
+    const part = new Part({
+      part: req.body.part
+    })
     try {
-      await country.save()
+      await part.save()
     } catch (error) {
       console.log(error)
     }
-  }
-
-  if (!(await Part.findOne({
-    part: req.body.part
-  }))) {
-  const part = new Part({
-    part: req.body.part
-  })
-  try {
-    await part.save()
-  } catch (error) {
-    console.log(error)
-  }
-  }
-
-  try {
-    await pki.save()
+    }
+  
+    try {
+      await pki.save()
+      res.redirect('/add')
+    } catch (e) {
+      console.log(e)
+    }
+  } else {
+    flashErr = candidate.type_pki + ' с таким серийным номером существует в ' + candidate.part
+    req.flash('insertError', flashErr)
     res.redirect('/add')
-  } catch (e) {
-    console.log(e)
   }
+
+  
 })
 
 

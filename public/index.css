@@ -433,3 +433,7 @@ form {
   transition: color .9s ease-in-out,background-color .5s ease-in-out,border-color .5s ease-in-out,box-shadow .5s ease-in-out;
 }
 
+.error_message {
+  padding: 1rem;
+}
+
