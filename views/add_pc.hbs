@@ -1,5 +1,6 @@
 <script src="/pc.js"></script>
 <h1>Добавить ПЭВМ</h1>
+<div class="tableContent">
 <form action="/pc">
 
   <div class="input-group input-group-sm mb-3">
@@ -37,19 +38,19 @@
 
 
   <div id="pc_unit_table"></div>
-  <input type="button" class="add-row-pc btn btn-dark mb-2" value="Добавить строку">
-  <input type="button" class="delete-row-pc btn btn-dark mb-2" value="Удалить строку">
+  
 
   <div id="system_case_unit_table"></div>
-  <input type="button" class="add-row-system btn btn-dark" value="Добавить строку">
-  <input type="button" class="delete-row-system btn btn-dark" value="Удалить строку">
+  <input type="button" class="add-row btn btn-outline-primary" value="Добавить строку">
+  <input type="button" class="delete-row btn btn-outline-danger" value="Удалить строку">
 
   <input type="hidden" name="_csrf" value="{{csrf}}">
 
 
-  <div class="col-sm mt-5"><button type="submit" class="btn btn-dark mb-2">Добавить</button></div>
+  <div class="mt-2 "><button type="submit" class="save_button btn btn-outline-success mb-2">Сохранить ПЭВМ</button></div>
 
 </form>
+</div>
 
 <script type="text/javascript">
   $(document).ready(function () {

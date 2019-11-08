@@ -127,59 +127,6 @@ function CreateTablePC() {
   notesCell.id = "notes"
   notesCell.contentEditable = "true"
 
-  $(".add-row-pc").click(function () {
-    $("#pc_unit").find('input[name="record"]').each(function () {
-      if ($(this).is(":checked")) {
-        let checkedRow = $(this).parents("tr")
-        newRow = document.createElement("tr")
-
-        let checkCell = newRow.insertCell(-1)
-        checkCell.innerHTML = "<input type='checkbox' name='record'>"
-        checkCell.className = "record"
-
-        let fdsiCell = newRow.insertCell(-1)
-        fdsiCell.className = "fdsi"
-        fdsiCell.id = "fdsi"
-        fdsiCell.contentEditable = "true"
-
-        let typeCell = newRow.insertCell(-1)
-        typeCell.className = "type"
-        typeCell.id = "type"
-        typeCell.contentEditable = "true"
-
-        let nameCell = newRow.insertCell(-1)
-        nameCell.className = "name"
-        nameCell.id = "name"
-        nameCell.contentEditable = "true"
-
-        let quantityCell = newRow.insertCell(-1)
-        quantityCell.innerHTML = "1"
-        quantityCell.className = "quantity"
-        quantityCell.id = "quantity"
-        quantityCell.contentEditable = "true"
-
-        let serial_numberCell = newRow.insertCell(-1)
-        serial_numberCell.className = "serial_number"
-        serial_numberCell.id = "serial_number"
-        serial_numberCell.contentEditable = "true"
-
-        let notesCell = newRow.insertCell(-1)
-        notesCell.className = "notes"
-        notesCell.id = "notes"
-        notesCell.contentEditable = "true"
-
-        $(newRow).insertAfter(checkedRow)
-      }
-    })
-
-    $(".delete-row-pc").click(function () {
-      $("#pc_unit").find('input[name="record"]').each(function () {
-        if ($(this).is(":checked")) {
-          $(this).parents("tr").remove();
-        }
-      })
-    })
-  })
 }
 
 function CreateTableSystemCase() {
@@ -312,7 +259,50 @@ function CreateTableSystemCase() {
   notesCell.id = "notes"
   notesCell.contentEditable = "true"
 
-  $(".add-row-system").click(function () {
+  $(".add-row").click(function () {
+    $("#pc_unit").find('input[name="record"]').each(function () {
+      if ($(this).is(":checked")) {
+        let checkedRow = $(this).parents("tr")
+        newRow = document.createElement("tr")
+
+        let checkCell = newRow.insertCell(-1)
+        checkCell.innerHTML = "<input type='checkbox' name='record'>"
+        checkCell.className = "record"
+
+        let fdsiCell = newRow.insertCell(-1)
+        fdsiCell.className = "fdsi"
+        fdsiCell.id = "fdsi"
+        fdsiCell.contentEditable = "true"
+
+        let typeCell = newRow.insertCell(-1)
+        typeCell.className = "type"
+        typeCell.id = "type"
+        typeCell.contentEditable = "true"
+
+        let nameCell = newRow.insertCell(-1)
+        nameCell.className = "name"
+        nameCell.id = "name"
+        nameCell.contentEditable = "true"
+
+        let quantityCell = newRow.insertCell(-1)
+        quantityCell.innerHTML = "1"
+        quantityCell.className = "quantity"
+        quantityCell.id = "quantity"
+        quantityCell.contentEditable = "true"
+
+        let serial_numberCell = newRow.insertCell(-1)
+        serial_numberCell.className = "serial_number"
+        serial_numberCell.id = "serial_number"
+        serial_numberCell.contentEditable = "true"
+
+        let notesCell = newRow.insertCell(-1)
+        notesCell.className = "notes"
+        notesCell.id = "notes"
+        notesCell.contentEditable = "true"
+
+        $(newRow).insertAfter(checkedRow)
+      }
+    })
     $("#system_case_unit").find('input[name="record"]').each(function () {
       if ($(this).is(":checked")) {
         let checkedRow = $(this).parents("tr")
@@ -356,13 +346,17 @@ function CreateTableSystemCase() {
         $(newRow).insertAfter(checkedRow)
       }
     })
-
-    $(".delete-row-system").click(function () {
-      $("#system_case_unit").find('input[name="record"]').each(function () {
-        if ($(this).is(":checked")) {
-          $(this).parents("tr").remove();
-        }
-      })
+})
+  $(".delete-row").click(function () {
+    $("#pc_unit").find('input[name="record"]').each(function () {
+      if ($(this).is(":checked")) {
+        $(this).parents("tr").remove();
+      }
+    })
+    $("#system_case_unit").find('input[name="record"]').each(function () {
+      if ($(this).is(":checked")) {
+        $(this).parents("tr").remove();
+      }
     })
   })
 }
@@ -580,6 +574,7 @@ function TablePc(pc) {
 
     let nameCell = tr.insertCell(-1)
     nameCell.innerHTML = arr_system_case_unit[j].name
+    nameCell.className = 'name'
     nameCell.dataset.id = pc._id
 
     let quantityCell = tr.insertCell(-1)
@@ -822,7 +817,7 @@ function CreateTableFromJSON(data) {
 
     let button_copy = document.createElement('input')
     button_copy.type = "button"
-    button_copy.className = 'btn btn-dark mr-2 mb-2 ml-3 copyBtn'
+    button_copy.className = 'btn btn-outline-primary mr-2 mb-2 ml-3 copyBtn'
     button_copy.onchange = "klcCopy()"
     button_copy.value = 'Копировать'
     button_copy.dataset.id = data[i]._id
@@ -833,7 +828,7 @@ function CreateTableFromJSON(data) {
 
     let button_edit = document.createElement('input')
     button_edit.type = 'button'
-    button_edit.className = 'btn btn-dark mr-2 mb-2'
+    button_edit.className = 'btn btn-outline-success mr-2 mb-2'
     button_edit.value = 'Редактировать'
     button_edit.setAttribute("onclick", "location.href='/pc/" + data[i]._id + "/edit?allow=true'")
     button_edit.dataset.id = data[i]._id
@@ -860,14 +855,138 @@ function CreateTableEditPC(data) {
   divContainer.appendChild(divCont);
   divCont.appendChild(tablePCSystemCase)
 
+  let button_add_row = document.createElement('input')
+  button_add_row.type = 'button'
+  button_add_row.id = 'add-row'
+  button_add_row.className = 'btn btn-outline-primary ml-2 mr-2 mb-2'
+  button_add_row.value = 'Добавить строку'
+  divCont.appendChild(button_add_row)
+
+  let button_del_row = document.createElement('input')
+  button_del_row.type = 'button'
+  button_del_row.id = 'delete-row'
+  button_del_row.className = 'btn btn-outline-danger ml-2 mr-2 mb-2'
+  button_del_row.value = 'Удалить строку'
+  divCont.appendChild(button_del_row)
+  
 
   let button_edit = document.createElement('input')
   button_edit.type = 'submit'
-  button_edit.className = 'btn btn-dark ml-2 mr-2 mb-2'
+  button_edit.className = 'btn btn-outline-success mt-2 save_button'
   button_edit.value = 'Сохранить изменения'
   button_edit.id = "submit"
   button_edit.dataset.id = data._id
   divCont.appendChild(button_edit)
+
+  let button_back = document.createElement('input')
+  button_back.type = 'button'
+  button_back.className = 'btn btn-outline-primary  mt-2 save_button'
+  button_back.value = 'Назад'
+  button_back.setAttribute("onclick", "location.href='/pc?part=" + data.part + "&serial_number=" + data.serial_number + "'")
+  divCont.appendChild(button_back)
+
+  $("#add-row").click(function () {
+    $("#pc_unit").find('input[name="record"]').each(function () {
+      if ($(this).is(":checked")) {
+        let checkedRow = $(this).parents("tr")
+        newRow = document.createElement("tr")
+
+        let checkCell = newRow.insertCell(-1)
+        checkCell.innerHTML = "<input type='checkbox' name='record'>"
+        checkCell.className = "record"
+
+        let fdsiCell = newRow.insertCell(-1)
+        fdsiCell.className = "fdsi"
+        fdsiCell.id = "fdsi"
+        fdsiCell.contentEditable = "true"
+
+        let typeCell = newRow.insertCell(-1)
+        typeCell.className = "type"
+        typeCell.id = "type"
+        typeCell.contentEditable = "true"
+
+        let nameCell = newRow.insertCell(-1)
+        nameCell.className = "name"
+        nameCell.id = "name"
+        nameCell.contentEditable = "true"
+
+        let quantityCell = newRow.insertCell(-1)
+        quantityCell.innerHTML = "1"
+        quantityCell.className = "quantity"
+        quantityCell.id = "quantity"
+        quantityCell.contentEditable = "true"
+
+        let serial_numberCell = newRow.insertCell(-1)
+        serial_numberCell.className = "serial_number"
+        serial_numberCell.id = "serial_number"
+        serial_numberCell.contentEditable = "true"
+
+        let notesCell = newRow.insertCell(-1)
+        notesCell.className = "notes"
+        notesCell.id = "notes"
+        notesCell.contentEditable = "true"
+
+        $(newRow).insertAfter(checkedRow)
+      }
+    })
+    $("#system_case_unit").find('input[name="record"]').each(function () {
+      if ($(this).is(":checked")) {
+        let checkedRow = $(this).parents("tr")
+        newRow = document.createElement("tr")
+
+        let checkCell = newRow.insertCell(-1)
+        checkCell.innerHTML = "<input type='checkbox' name='record'>"
+        checkCell.className = "record"
+
+        let fdsiCell = newRow.insertCell(-1)
+        fdsiCell.className = "fdsi"
+        fdsiCell.id = "fdsi"
+        fdsiCell.contentEditable = "true"
+
+        let typeCell = newRow.insertCell(-1)
+        typeCell.className = "type"
+        typeCell.id = "type"
+        typeCell.contentEditable = "true"
+
+        let nameCell = newRow.insertCell(-1)
+        nameCell.className = "name"
+        nameCell.id = "name"
+        nameCell.contentEditable = "true"
+
+        let quantityCell = newRow.insertCell(-1)
+        quantityCell.innerHTML = "1"
+        quantityCell.className = "quantity"
+        quantityCell.id = "quantity"
+        quantityCell.contentEditable = "true"
+
+        let serial_numberCell = newRow.insertCell(-1)
+        serial_numberCell.className = "serial_number"
+        serial_numberCell.id = "serial_number"
+        serial_numberCell.contentEditable = "true"
+
+        let notesCell = newRow.insertCell(-1)
+        notesCell.className = "notes"
+        notesCell.id = "notes"
+        notesCell.contentEditable = "true"
+
+        $(newRow).insertAfter(checkedRow)
+      }
+    })
+})
+  
+
+  $('#delete-row').click(function(){
+    $("#pc_unit").find('input[name="record"]').each(function () {
+      if ($(this).is(":checked")) {
+        $(this).parents("tr").remove();
+      }
+    })
+    $("#system_case_unit").find('input[name="record"]').each(function () {
+      if ($(this).is(":checked")) {
+        $(this).parents("tr").remove();
+      }
+    })
+  })
 }
 
 function CreateSelect(data) {

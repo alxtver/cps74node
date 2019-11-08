@@ -421,5 +421,15 @@ input[type=text]:placeholder {
   color: floralwhite;
 }
 
+.save_button {
+  width: 100%;
+}
 
+form {
+  padding: 1rem;
+}
+
+.btn {
+  transition: color .9s ease-in-out,background-color .5s ease-in-out,border-color .5s ease-in-out,box-shadow .5s ease-in-out;
+}
 

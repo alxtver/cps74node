@@ -69,6 +69,18 @@ $(document).ready(function () {
 
   $(document).on('change', '#part_select', function () {
     load_data($("#part_select :selected").text())
+    $("td.serial_number").each(function(){
+      if (!$(this).text()) {
+        $(this).css("background-color", "darkgray")
+      }
+    })
+
+    $("td.name").each(function(){          
+          if ($(this).text() == 'Н/Д') {
+            $(this).css("background-color", "coral")
+          }
+        })
+
   })
 
 
@@ -105,6 +117,7 @@ $(document).ready(function () {
       }
       
       
+      
       let current_id = $("#hidd_id").val()
       let next_id = current_id.split(";")
       next_id[1] = Number(next_id[1]) + 1 + ''
@@ -112,8 +125,20 @@ $(document).ready(function () {
       $(".serial_number[data-data='" + next_id.join(';') + "']").focus()
       setTimeout(function () {
         $(".serial_number[data-data='" + next_id.join(';') + "']").focus()
+        $("td.serial_number").each(function(){
+          if (!$(this).text()) {
+            $(this).css("background-color", "darkgray")
+          }
+        })
+        $("td.name").each(function(){          
+          if ($(this).text() == 'Н/Д') {
+            $(this).css("background-color", "coral")
+          }
+        })
+
       }, 1000)
     }
+    
   })
 
   $('#inputCopy').keyup(function() {
