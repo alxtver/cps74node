@@ -2,6 +2,17 @@
 <h1>Производство</h1>
 <button class="btn btn-dark mb-2" onclick="location.href='pc/add';">Добавить ПЭВМ</button>
 
+<div class="popup-wrapper">
+  <input type="checkbox" class="popup-checkbox" id="popupCheckboxOne">
+  <div class="popup">
+    <div class="popup-content">
+      <label for="popupCheckboxOne" class="popup-closer">&#215;</label>
+      Popup text
+    </div>
+  </div>
+</div>
+
+
 <form>
   <div class="form-group">
     <label for="part_select">Партия</label>
@@ -80,7 +91,7 @@ $(document).ready(function () {
             $(this).css("background-color", "coral")
           }
         })
-
+    // $(".popup-checkbox").prop('checked', true)
   })
 
 
