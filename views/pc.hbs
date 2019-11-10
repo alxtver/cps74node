@@ -7,7 +7,9 @@
   <div class="popup">
     <div class="popup-content">
       <label for="popupCheckboxOne" class="popup-closer">&#215;</label>
-      Popup text
+      <p id="oldNumber" class="alert alert-danger mt-1"></p>
+      {{!-- <audio src="/sounds/S20759.mp3" autoplay="autoplay"></audio> --}}
+      
     </div>
   </div>
 </div>
@@ -91,7 +93,7 @@ $(document).ready(function () {
             $(this).css("background-color", "coral")
           }
         })
-    // $(".popup-checkbox").prop('checked', true)
+   
   })
 
 
@@ -120,7 +122,7 @@ $(document).ready(function () {
       let data_apkzi = $(this).data("apkzi")
 
       $("#hidd_id").val(data_hidd)
-
+      check_serial_number(serial_number)
       if (data_apkzi) {
         edit_serial_number_apkzi(id, obj, unit, serial_number)
       } else {

@@ -978,12 +978,12 @@ function CreateTableEditPC(data) {
   $('#delete-row').click(function(){
     $("#pc_unit").find('input[name="record"]').each(function () {
       if ($(this).is(":checked")) {
-        $(this).parents("tr").remove();
+        $(this).parents("tr").remove()
       }
     })
     $("#system_case_unit").find('input[name="record"]').each(function () {
       if ($(this).is(":checked")) {
-        $(this).parents("tr").remove();
+        $(this).parents("tr").remove()
       }
     })
   })
@@ -1014,6 +1014,33 @@ function edit_serial_number(id, obj, unit, serial_number) {
     }
   })
 }
+
+function check_serial_number(serial_number) {
+  $.ajax({
+    url: "/pc/check_serial",
+    type: "POST",
+    headers: {
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    },
+    data: {
+      serial_number: serial_number
+    },
+    success: function (data) {
+      if (data != 'ok') {
+        $(".popup-checkbox").prop('checked', true)
+        let msg_txt = 'Серийник был привязан к машине с номером ' + data
+        $("#oldNumber").text(msg_txt)
+        var audio = {};
+        audio["walk"] = new Audio();
+        audio["walk"].src = "/sounds/S20759.mp3"        
+        audio["walk"].play();
+
+      }
+      
+    }
+  })
+}
+
 
 function edit_serial_number_apkzi(id, obj, unit, serial_number) {
   $.ajax({
