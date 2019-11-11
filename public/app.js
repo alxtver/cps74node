@@ -18,6 +18,9 @@ function addSession() {
 
   let field_part = document.getElementById("part").value
   sessionStorage.setItem("part", field_part)
+
+  let field_serial_number = document.getElementById("serial_number").value
+  sessionStorage.setItem("serial_number", field_serial_number)
 }
 
 // выгрузка данных из сессии браузера
@@ -64,26 +67,25 @@ function loadSession() {
   'use strict';
   window.addEventListener('load', function () {
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    var forms = document.getElementsByClassName('needs-validation');
+    var forms = document.getElementsByClassName('needs-validation')
     // Loop over them and prevent submission
     var validation = Array.prototype.filter.call(forms, function (form) {
       form.addEventListener('submit', function (event) {
         if (form.checkValidity() === false) {
-          event.preventDefault();
-          event.stopPropagation();
+          event.preventDefault()
+          event.stopPropagation()
         }
-        form.classList.add('was-validated');
-      }, false);
-    });
-  }, false);
-})();
+        form.classList.add('was-validated')
+      }, false)
+    })
+  }, false)
+})()
 
 function plusOne(number) {
   let indexChar = 0
     for (let index = 0; index < number.length; index++) {
       if (!/\d/.test(number[index])){
         indexChar = index
-        
       }
       
     }

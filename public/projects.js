@@ -230,8 +230,8 @@ function CreateTableFromJSON(data) {
         let button_passport = document.createElement('input')
         button_passport.type = "button"
         button_passport.className = 'btn btn-outline-primary mr-2 mb-2 ml-3 copyBtn'
-        button_passport.value = 'Паспорт'
-        button_passport.setAttribute("onclick", "location.href='/projects/" + elem._id + "/passport'")
+        button_passport.value = 'Паспорт Word'
+        button_passport.setAttribute("onclick", "location.href='/projects/" + elem._id + "/passportDocx'")
         button_passport.dataset.id = elem._id        
         divCont.appendChild(button_passport)
     }

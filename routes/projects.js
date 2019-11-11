@@ -21,7 +21,7 @@ router.get('/file', function (req, res) {
 })
 
 
-router.get('/:id/passport', auth, async (req, res) => {
+router.get('/:id/passportDocx', auth, async (req, res) => {
   const appDir = path.dirname(require.main.filename)
   const docDir = appDir + '/public/docx'
  
@@ -68,6 +68,9 @@ router.get('/:id/passport', auth, async (req, res) => {
   const fileName = pc.serial_number + '.docx'
   res.download(file, fileName)
 })
+
+
+
 
 
 module.exports = router

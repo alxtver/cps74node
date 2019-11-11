@@ -8,8 +8,7 @@
     <div class="popup-content">
       <label for="popupCheckboxOne" class="popup-closer">&#215;</label>
       <p id="oldNumber" class="alert alert-danger mt-1"></p>
-      {{!-- <audio src="/sounds/S20759.mp3" autoplay="autoplay"></audio> --}}
-      
+      <input id="hiddInp" type="hidden" value="">
     </div>
   </div>
 </div>
@@ -67,7 +66,6 @@
 $(document).ready(function () {
   const part = `{{part}}`
   const serial_number = `{{serial_number}}`
-  
   load_data(part)
   load_part()
   $("#part_select").val(part).change()
@@ -136,13 +134,18 @@ $(document).ready(function () {
       next_id[1] = Number(next_id[1]) + 1 + ''
       
       $(".serial_number[data-data='" + next_id.join(';') + "']").focus()
-      setTimeout(function () {
-        $(".serial_number[data-data='" + next_id.join(';') + "']").focus()
-        $("td.serial_number").each(function(){
-          if (!$(this).text()) {
-            $(this).css("background-color", "darkgray")
-          }
-        })
+      setTimeout(function () {        
+        if ($(".popup-checkbox").is(":not(:checked)")) {
+          $(".serial_number[data-data='" + next_id.join(';') + "']").focus()
+          $("td.serial_number").each(function(){
+            if (!$(this).text()) {
+              $(this).css("background-color", "darkgray")
+            }
+          })
+        }    
+          
+        
+        
         $("td.name").each(function(){          
           if ($(this).text() == 'Н/Д') {
             $(this).css("background-color", "coral")

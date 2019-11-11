@@ -1033,10 +1033,8 @@ function check_serial_number(serial_number) {
         var audio = {};
         audio["walk"] = new Audio();
         audio["walk"].src = "/sounds/S20759.mp3"        
-        audio["walk"].play();
-
+        audio["walk"].play()
       }
-      
     }
   })
 }

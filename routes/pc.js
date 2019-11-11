@@ -292,7 +292,6 @@ router.post('/copy', auth, async (req, res) => {
       newPC.system_case_unit.push(unit)
     }
   }
-
   try {
     await newPC.save()
     res.render('pc', {
@@ -329,10 +328,15 @@ router.post('/pc_edit', auth, async (req, res) => {
 router.post('/check_serial', auth, async (req, res) => {  
   const pki = await PKI.findOne({serial_number: req.body.serial_number})
   if (pki) {
-    res.send(pki.number_machine)
+    if (pki.number_machine) {
+      res.send(pki.number_machine)
+    } else {
+      res.send('ok')
+    }
   } else {
     res.send('ok')
   }
+  
 })
 
 router.post('/pc_update', auth, async (req, res) => {  
