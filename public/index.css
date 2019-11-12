@@ -427,6 +427,12 @@ input[type=text]:placeholder {
 
 form {
   padding: 1rem;
+  
+}
+
+.padd {
+  padding: 1rem;
+  text-align: center;
 }
 
 .btn {

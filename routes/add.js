@@ -16,7 +16,7 @@ router.get('/', auth, (req, res) => {
 })
 
 router.post('/', auth, async (req, res) => {
-  
+  let serial_number = req.body.serial_number
   if (req.body.ean_code) {
     const ean = await EAN.findOne({ean_code: req.body.ean_code})
     if (!ean) {
@@ -29,19 +29,22 @@ router.post('/', auth, async (req, res) => {
       })
       new_ean.save()
     }
+    if (req.body.ean_code == '4718390028172') {
+      serial_number = serial_number.split(' ').reverse().join(' ')
+    }
   }
 
   const candidate = await Pki.findOne({
-    serial_number: req.body.serial_number,
+    serial_number: serial_number,
     part: req.body.part
   })
-  
+
   if (!candidate) {
     const pki = new Pki({
       type_pki: req.body.type_pki,
       vendor: req.body.vendor,
       model: req.body.model,
-      serial_number: req.body.serial_number,
+      serial_number: serial_number,
       part: req.body.part,
       country: req.body.country
     })

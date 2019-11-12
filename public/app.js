@@ -156,12 +156,20 @@ function searchEAN(valueEAN) {
       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
     },
     data: {valueEAN: valueEAN},
-    success: function (data) {      
-      ean = JSON.parse(data)
-      $('#type_pki').val(ean.type_pki)
-      $('#vendor').val(ean.vendor)
-      $('#model').val(ean.model)
-      $('#country').val(ean.country)
+    success: function (data) {  
+      if (data != 'none') {
+        ean = JSON.parse(data)
+        $('#type_pki').val(ean.type_pki)
+        $('#vendor').val(ean.vendor)
+        $('#model').val(ean.model)
+        $('#country').val(ean.country)
+      } else {        
+        $('#type_pki').val('')
+        $('#vendor').val('')
+        $('#model').val('')
+        $('#country').val('')
+      }
+      
     }
   })
 }
