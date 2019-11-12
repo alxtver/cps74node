@@ -9,9 +9,9 @@ router.get('/', auth, async (req, res) => {
   countPKI = await PKI.countDocuments()
   countPC = await PC.countDocuments()
   let dateNow = new Date()  
-  let newYear = Date.parse(dateNow.getFullYear())  
-  countPCinYear = await PC.find({created: {$gt: newYear}}).count()
-
+  let nowYear = Date.parse(dateNow.getFullYear())  
+  countPCinYear = await PC.countDocuments({created: {$gt: nowYear}})
+  countPKIinYear = await PKI.countDocuments({created: {$gt: nowYear}})
 
   
   
@@ -20,8 +20,25 @@ router.get('/', auth, async (req, res) => {
     isHome: true,
     countPKI: countPKI,
     countPC: countPC,
-    countPCinYear: countPCinYear
+    countPCinYear: countPCinYear,
+    countPKIinYear: countPKIinYear
   })
+})
+
+router.post('/diagram', auth, async (req, res) => {  
+  
+  PC.find().distinct('part', async function (error, parts) {
+    if (error) {
+      res.sendStatus(400)
+      }
+    let arr = [['Проект', 'Процентное отношение']]
+    for (const part of parts) {
+      let count = await PC.countDocuments({part: part})
+      arr.push([part, count])
+    }
+    res.send(arr)
+  })
+  
 })
 
 
