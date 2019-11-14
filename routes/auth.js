@@ -44,8 +44,7 @@ router.post('/login', async (req, res) =>{
         if (candidate) {
             const areSame = await bcrypt.compare(password, candidate.password)
             if (areSame) {
-                req.session.user = candidate
-                
+                req.session.user = candidate                
                 req.session.isAuthenticated = true
                 req.session.group = candidate.group
                 req.session.save(err =>{

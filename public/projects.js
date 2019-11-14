@@ -15,8 +15,8 @@ function load_data(q) {
             CreateTableFromJSON(JSON.parse(data));
 
         }
-    });
-};
+    })
+}
 
 function load_part() {
     $.ajax({
@@ -27,10 +27,9 @@ function load_part() {
 
             //$('#quote').html(data);
             CreateSelect(JSON.parse(data))
-
         }
-    });
-};
+    })
+}
 
 function TablePc(pc) {
     // таблица ПЭВМ

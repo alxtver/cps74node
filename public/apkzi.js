@@ -30,6 +30,20 @@ function delBtn() {
     })
 }
 
+function load_part_session() {
+    $.ajax({
+        url: "/apkzi/part_session",
+        method: "POST",
+        async: false,
+        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+        success: function (data) {
+            console.log(data);
+            if (data) {
+                $("#part_select option:contains(" + data + ")").prop('selected', true)
+            }
+        }
+    })
+}
 
 function CreateTableFromJSON(data) {
 

@@ -2,7 +2,9 @@ function load_data(q, selected) {
     $.ajax({
         url: "/pkis/search",
         method: "POST",
+        async: false,
         headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+
         data: {
             q: q,
             selected: selected
@@ -102,8 +104,6 @@ function CreateTableFromJSON(data) {
     let table = document.createElement("table");
     table.className = "table table-sm table-bordered table-hover table-striped"
 
-    // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
-
     // TABLE ROW.
     let thead = table.createTHead()
     let tr = thead.insertRow(-1) 
@@ -191,12 +191,27 @@ function load_part() {
     $.ajax({
         url: "/pkis/part",
         method: "POST",
+        async: false,
         headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
         success: function (data) {
             CreateSelect(JSON.parse(data))
         }
     })
 }
+
+// function load_part_session() {
+//     $.ajax({
+//         url: "/pkis/part_session",
+//         method: "POST",
+//         async: false,
+//         headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+//         success: function (data) {            
+//             if (data) {
+//                 $("#part_select option:contains(" + data + ")").prop('selected', true)
+//             }
+//         }
+//     })
+// }
 
 function CreateSelect(data) {
     $("#part_select").append( $('<option value="">...</option>'));
@@ -207,8 +222,7 @@ function CreateSelect(data) {
 
 function delBtn() {
     let id = $('#hidId').val()
-    let part = $('#hidPart').val()
-    console.log('Начинаем')
+    let part = $('#hidPart').val()    
     $.ajax({
         url: "/pkis/del",
         method: "POST",

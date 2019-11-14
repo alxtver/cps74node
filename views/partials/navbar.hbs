@@ -1,58 +1,80 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <a class="navbar-brand" href="/">74 отдел</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav">
 
-{{#if isAuth}}
-{{#if isHome}}
-  <li class="nav-item active"><a class="nav-link" href="/">Главная</a></li>
-{{else}}
-  <li class="nav-item"><a class="nav-link" href="/">Главная</a></li>
-{{/if}}
-{{/if}}
+      {{#if isAuth}}
+      {{#if isHome}}
+      <li class="nav-item active"><a class="nav-link" href="/">Главная</a></li>
+      {{else}}
+      <li class="nav-item"><a class="nav-link" href="/">Главная</a></li>
+      {{/if}}
+      {{/if}}
 
-{{#if group}}
-  {{#if isAuth}}
-    {{#if isPkis}}
-       <li class="nav-item active"><a class="nav-link" href="/pkis">ПКИ</a></li>
-    {{else}}
-       <li class="nav-item"><a class="nav-link" href="/pkis">ПКИ</a></li>
-    {{/if}}
+      {{#if group}}
+      {{#if isAuth}}
+      {{#if isPkis}}
+      <li class="nav-item active"><a class="nav-link" href="/pkis">ПКИ</a></li>
+      {{else}}
+      <li class="nav-item"><a class="nav-link" href="/pkis">ПКИ</a></li>
+      {{/if}}
 
-    {{#if isApkzi}}
-       <li class="nav-item active"><a class="nav-link" href="/apkzi">АПКЗИ</a></li>
-    {{else}}
-       <li class="nav-item"><a class="nav-link" href="/apkzi">АПКЗИ</a></li>
-    {{/if}} 
+      {{#if isApkzi}}
+      <li class="nav-item active"><a class="nav-link" href="/apkzi">АПКЗИ</a></li>
+      {{else}}
+      <li class="nav-item"><a class="nav-link" href="/apkzi">АПКЗИ</a></li>
+      {{/if}}
 
-    {{#if isPC}}
-       <li class="nav-item active"><a class="nav-link" href="/pc">Производство</a></li>
-    {{else}}
-       <li class="nav-item"><a class="nav-link" href="/pc">Производство</a></li>
-    {{/if}}
-  {{/if}}
-{{/if}}
+      {{#if isPC}}
+      <li class="nav-item active"><a class="nav-link" href="/pc">Производство</a></li>
+      {{else}}
+      <li class="nav-item"><a class="nav-link" href="/pc">Производство</a></li>
+      {{/if}}
+      {{/if}}
+      {{/if}}
 
-{{#if isAuth}}
-  {{#if isProjects}}
-    <li class="nav-item active"><a class="nav-link" href="/projects">Проекты</a></li>
-  {{else}}
-    <li class="nav-item"><a class="nav-link" href="/projects">Проекты</a></li>
-  {{/if}}
+        
 
-    <li class="nav-item"><a class="nav-link" href="/auth/logout">Выйти</a></li>
-{{else}}
-  {{#if isLogin}}
-    <li class="nav-item active"><a class="nav-link" href="/auth/login">Войти</a></li>
-  {{else}}
-    <li class="nav-item"><a class="nav-link" href="/auth/login">Войти</a></li>
-  {{/if}} 
-{{/if}}
+      {{#if isAuth}}
+      {{#if isProjects}}
+      <li class="nav-item active"><a class="nav-link" href="/projects">Проекты</a></li>
+      {{else}}
+      <li class="nav-item"><a class="nav-link" href="/projects">Проекты</a></li>
+      {{/if}}
 
+      <li class="nav-item"><a class="nav-link" href="/auth/logout">Выйти</a></li>
+      {{else}}
+      {{#if isLogin}}
+      <li class="nav-item active"><a class="nav-link" href="/auth/login">Войти</a></li>
+      {{else}}
+      <li class="nav-item"><a class="nav-link" href="/auth/login">Войти</a></li>
+      {{/if}}
+
+      
+
+      {{/if}}
+      
 
     </ul>
+          <select id="part_select_navbar" class="custom-select">
+            <option selected>Выберите проект</option>
+          </select>      
+    <script>
+      $(document).ready(function() {
+        load_part_navbar()
+        load_part_session()
+      })
+
+      $(document).on('change', '#part_select_navbar', function() {
+        changeSelect($("#part_select_navbar :selected").text())
+        location.reload()
+        
+    })
+    </script>
   </div>
+
 </nav>

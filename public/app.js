@@ -173,3 +173,51 @@ function searchEAN(valueEAN) {
     }
   })
 }
+
+function load_part_navbar() {
+  $.ajax({
+      url: "/pc/part",
+      method: "POST",
+      async: false,
+      headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+      success: function (data) {
+          if (data){
+            CreateSelectNavbar(JSON.parse(data))
+          }          
+      }
+  })
+}
+
+function CreateSelectNavbar(data) {
+  $("#part_select").append($('<option value="">...</option>'));
+  for (let i = 0; i < data.length; i++) {
+      $('#part_select_navbar').append('<option value="' + data[i]._id + '">' + data[i].part + '</option>');
+  }
+}
+
+function load_part_session() {
+  $.ajax({
+      url: "/pkis/part_session",
+      method: "POST",
+      async: false,
+      headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+      success: function (data) {            
+          if (data) {
+              $("#part_select_navbar option:contains(" + data + ")").prop('selected', true)
+          }
+      }
+  })
+}
+
+function changeSelect(selectedItem) {
+  $.ajax({
+    url: "/insert_part_session",
+    method: "POST",
+    async: false,
+    headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+    data: {
+      selectedItem: selectedItem
+    }
+    
+})
+}

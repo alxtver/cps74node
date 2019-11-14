@@ -13,8 +13,6 @@ router.get('/', auth, async (req, res) => {
   countPCinYear = await PC.countDocuments({created: {$gt: nowYear}})
   countPKIinYear = await PKI.countDocuments({created: {$gt: nowYear}})
 
-  
-  
   res.render('index', {
     title: 'Главная страница',
     isHome: true,
@@ -25,8 +23,7 @@ router.get('/', auth, async (req, res) => {
   })
 })
 
-router.post('/diagram', auth, async (req, res) => {  
-  
+router.post('/diagram', auth, async (req, res) => {    
   PC.find().distinct('part', async function (error, parts) {
     if (error) {
       res.sendStatus(400)
@@ -37,8 +34,12 @@ router.post('/diagram', auth, async (req, res) => {
       arr.push([part, count])
     }
     res.send(arr)
-  })
-  
+  })  
+})
+
+router.post("/insert_part_session", async function (req, res) {  
+  req.session.part = req.body.selectedItem
+  res.sendStatus(200)
 })
 
 

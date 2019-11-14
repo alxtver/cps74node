@@ -5,6 +5,7 @@
 <div class="form-group">
   <label for="part_select">Партия</label>
   <select class="form-control mb-2" id="part_select">
+    <option value="...">...</option>
     {{#each part}}
     <option value="{{this}}">{{this}}</option>
     {{/each}}
@@ -46,13 +47,8 @@
 
 <script>
   $(document).ready(function () {
-    let a_part = '{{apkzi_part}}'
-    if (!a_part) {
-      load_data('', $("#part_select :selected").text())
-    } else {
-      load_data('', a_part)
-      $("#part_select :contains('{{apkzi_part}}')").attr("selected", "selected")
-    }
+    load_data()
+    load_part_session()
   })
 
   $("body").on('click', '.delBtn', function () {

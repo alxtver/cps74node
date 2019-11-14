@@ -88,7 +88,7 @@ router.post("/search", auth, async function (req, res) {
 })
 
 
-router.post("/part", auth, async function (req, res) {
+router.post("/part", async function (req, res) {
   parts = await Part.find()
   if (!req.body) return res.sendStatus(400);
   res.send(JSON.stringify(parts)); // отправляем пришедший ответ обратно
@@ -99,7 +99,18 @@ router.post('/insert_serial', auth, async (req, res) => {
   //Жесть пипец!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   let pc = await PC.findById(req.body.id) //ищем комп который собираемся редактировать
   let pc_copy = await PC.findById(req.body.id) //и копию....
-  let pki = await PKI.findOne({part: pc.part, serial_number: req.body.serial_number})
+  let serial_number = req.body.serial_number
+
+
+  // проверка на гребаные сидюки два запроса вместо одного
+  let pki = await PKI.findOne({part: pc.part, serial_number: serial_number})
+  if (!pki) {
+    pki = await PKI.findOne({part: pc.part, serial_number: serial_number.split(' ').reverse().join(' ')})
+    if (pki) {
+      serial_number = serial_number.split(' ').reverse().join(' ')
+    }
+  }
+  
   let oldNumberMachine
   const unit = req.body.unit
 
@@ -121,14 +132,14 @@ router.post('/insert_serial', auth, async (req, res) => {
     pki.number_machine = pc.serial_number
     pki.save()
     // Добавляем ПКИ к новой машине
-    pc[unit][req.body.obj].serial_number = req.body.serial_number //меняем серийник
+    pc[unit][req.body.obj].serial_number = serial_number //меняем серийник
     pc[unit][req.body.obj].name = pki.vendor + " " + pki.model    //меняем имя
     pc[unit][req.body.obj].type = pki.type_pki                    //меняем тип
     pc_copy[unit] = pc[unit]
     await pc_copy.save()
     
   } else {
-    pc[unit][req.body.obj].serial_number = req.body.serial_number
+    pc[unit][req.body.obj].serial_number = serial_number
     pc[unit][req.body.obj].name = "Н/Д"
     pc_copy[unit] = pc[unit]
     await pc_copy.save()
@@ -157,7 +168,7 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
   let pc = await PC.findById(req.body.id) //ищем комп который собираемся редактировать
   let pc_copy = await PC.findById(req.body.id) //и копию....
   
-  let apkzi = await APKZI.findOne({part: pc.part, kontr_zav_number: req.body.serial_number})
+  let apkzi = await APKZI.findOne({part: pc.part, kontr_zav_number: serial_number})
   let oldNumberMachine
   const unit = req.body.unit
   // console.log(apkzi)
@@ -180,7 +191,7 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
     apkzi.number_machine = pc.serial_number
     apkzi.save()
     // Добавляем APKZI к новой машине
-    pc[unit][req.body.obj].serial_number = req.body.serial_number //меняем серийник
+    pc[unit][req.body.obj].serial_number = serial_number //меняем серийник
     let kontr_name = apkzi.kont_name
     const arr_kontr_name = kontr_name.split(' ')
     const arr_end = arr_kontr_name.slice(-1)
@@ -213,7 +224,7 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
     await pc_copy.save()
     
   } else {
-    pc[unit][req.body.obj].serial_number = req.body.serial_number
+    pc[unit][req.body.obj].serial_number = serial_number
     pc[unit][req.body.obj].name = "Н/Д"
     let index_apkzi
     for (let index = 0; index < pc.pc_unit.length; index++) {

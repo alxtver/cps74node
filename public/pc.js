@@ -495,11 +495,13 @@ function TablePc(pc) {
     typeCell.innerHTML = arr_pc_unit[j].type
     typeCell.dataset.id = pc._id
     typeCell.className = 'type'
+    typeCell.contentEditable = 'true'
 
     let nameCell = tr.insertCell(-1)
     nameCell.innerHTML = arr_pc_unit[j].name
     nameCell.dataset.id = pc._id
     nameCell.className = 'name'
+    nameCell.contentEditable = 'true'
 
     let quantityCell = tr.insertCell(-1)
     quantityCell.innerHTML = arr_pc_unit[j].quantity
@@ -571,11 +573,13 @@ function TablePc(pc) {
     let typeCell = tr.insertCell(-1)
     typeCell.innerHTML = arr_system_case_unit[j].type
     typeCell.dataset.id = pc._id
+    typeCell.contentEditable = 'true'
 
     let nameCell = tr.insertCell(-1)
     nameCell.innerHTML = arr_system_case_unit[j].name
     nameCell.className = 'name'
     nameCell.dataset.id = pc._id
+    nameCell.contentEditable = 'true'
 
     let quantityCell = tr.insertCell(-1)
     quantityCell.innerHTML = arr_system_case_unit[j].quantity
