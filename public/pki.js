@@ -1,13 +1,10 @@
-function load_data(q, selected) {
+function load_data(q) {
     $.ajax({
         url: "/pkis/search",
-        method: "POST",
-        async: false,
+        method: "POST",        
         headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
-
         data: {
             q: q,
-            selected: selected
         },
         success: function (data) {
             CreateTableFromJSON(JSON.parse(data))
@@ -187,31 +184,7 @@ function CreateTableFromJSON(data) {
     divContainer.appendChild(table)
 }
 
-function load_part() {
-    $.ajax({
-        url: "/pkis/part",
-        method: "POST",
-        async: false,
-        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
-        success: function (data) {
-            CreateSelect(JSON.parse(data))
-        }
-    })
-}
 
-// function load_part_session() {
-//     $.ajax({
-//         url: "/pkis/part_session",
-//         method: "POST",
-//         async: false,
-//         headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
-//         success: function (data) {            
-//             if (data) {
-//                 $("#part_select option:contains(" + data + ")").prop('selected', true)
-//             }
-//         }
-//     })
-// }
 
 function CreateSelect(data) {
     $("#part_select").append( $('<option value="">...</option>'));

@@ -35,26 +35,6 @@ router.get('/:id/edit', auth, async (req, res) => {
   })
 })
 
-// router.post('/del', auth, async (req, res) => {
-//   try {
-//     await Pki.deleteOne({
-//       _id: req.body._id
-//     })
-//     res.redirect('/pkis')
-//   } catch (e) {
-//     console.log(e)
-//   }
-// })
-
-// router.get('/:id/del', auth, async (req, res) => {
-//   if (!req.query.allow) {
-//     return res.redirect('/')
-//   }
-//   const pki = await Pki.deleteOne({
-//     _id: req.params.id
-//   })
-//   res.redirect('/pkis')
-// })
 
 router.post('/edit', auth, async (req, res) => {
   await Pki.findByIdAndUpdate(req.body._id, req.body)
@@ -74,64 +54,16 @@ router.post('/edit_ajax', auth, async (req, res) => {
 })
 
 router.post("/search", auth, async (req, res) => {
-  let selected
-
-
-  if (req.body.selected) {
-    selected = req.body.selected
-    req.session.part = req.body.selected
-  } else {
-    selected = req.session.part
-  }
+  let selected = req.session.part  
 
   let pkis
   if (!req.body.q && !selected) {
-    pkis = await Pki.find().sort([
-      ['created', -1]
-    ]).limit(100)
+    pkis = await Pki.find().sort([['created', -1]]).limit(100)
   } else if (req.body.q == 'null' && selected) {
-    pkis = await Pki.find({
-      part: selected
-    }).sort([
-      ['created', -1]
-    ])
-  } else if (selected == '...') {
-    let query = {
-      $or: [{
-          type_pki: new RegExp(req.body.q + '.*', "i")
-        },
-        {
-          vendor: new RegExp(req.body.q + '.*', "i")
-        },
-        {
-          country: new RegExp(req.body.q + '.*', "i")
-        },
-        {
-          model: new RegExp(req.body.q + '.*', "i")
-        },
-        {
-          part: new RegExp(req.body.q + '.*', "i")
-        },
-        {
-          serial_number: new RegExp(req.body.q + '.*', "i")
-        },
-        {
-          number_machine: new RegExp(req.body.q + '.*', "i")
-        }
-      ]
-    }
-    pkis = await Pki.find(query).sort([
-      ['created', -1]
-    ])
-
+    query = {part: selected}
   } else if (!req.body.q && selected) {
-    pkis = await Pki.find({
-      part: selected
-    }).sort([
-      ['created', -1]
-    ])
-  } else {
-    console.log('Тут');
+    query = {part: selected}    
+  } else {    
     query = {
       $and: [{
           $or: [{
@@ -161,14 +93,9 @@ router.post("/search", auth, async (req, res) => {
           part: selected
         }
       ]
-
     }
-    pkis = await Pki.find(query).sort([
-      ['created', -1]
-    ])
-
   }
-
+  pkis = await Pki.find(query).sort([['created', -1]])
   res.send(JSON.stringify(pkis)); // отправляем пришедший ответ обратно
 })
 

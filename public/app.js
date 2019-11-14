@@ -178,11 +178,12 @@ function load_part_navbar() {
   $.ajax({
       url: "/pc/part",
       method: "POST",
-      async: false,
+      //async: false,
       headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
       success: function (data) {
           if (data){
             CreateSelectNavbar(JSON.parse(data))
+            load_part_session()
           }          
       }
   })
@@ -199,7 +200,7 @@ function load_part_session() {
   $.ajax({
       url: "/pkis/part_session",
       method: "POST",
-      async: false,
+      //async: false,
       headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
       success: function (data) {            
           if (data) {
@@ -213,7 +214,7 @@ function changeSelect(selectedItem) {
   $.ajax({
     url: "/insert_part_session",
     method: "POST",
-    async: false,
+    //async: false,
     headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
     data: {
       selectedItem: selectedItem

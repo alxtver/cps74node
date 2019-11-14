@@ -362,19 +362,23 @@ function CreateTableSystemCase() {
 }
 
 function load_data(q) {
-
   $.ajax({
     url: "/pc/search",
     headers: {
       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
     },
     method: "POST",
-    async: false,
     data: {
       q: q
     },
     success: function (data) {
       CreateTableFromJSON(JSON.parse(data))
+      if (q) {
+        const serial_number_id = '#' + q
+        $('html, body').animate({
+          scrollTop: $(serial_number_id).offset().top
+        }, 500)
+      }
     }
   })
 }
@@ -396,19 +400,7 @@ function load_pc(id) {
   })
 }
 
-function load_part() {
-  $.ajax({
-    url: "/pc/part",
-    method: "POST",
-    async: false,
-    headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-    },
-    success: function (data) {
-      CreateSelect(JSON.parse(data))
-    }
-  })
-}
+
 
 function TablePc(pc) {
   // таблица ПЭВМ
@@ -1065,7 +1057,7 @@ function edit_serial_number_apkzi(id, obj, unit, serial_number) {
 
 function UpdateCells(pc) {
   // Обновление всех таблиц
-  load_data(pc.part)
+  load_data()
 
   // Обновление только одной таблицы
 

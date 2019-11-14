@@ -15,13 +15,7 @@
 
 
 <form>
-  <div class="form-group">
-    <label for="part_select">Партия</label>
-    <select class="form-control" id="part_select">
-
-    </select>
-  </div>
-<input type="hidden" name="_csrf" value="{{csrf}}">
+  <input type="hidden" name="_csrf" value="{{csrf}}">
 </form>
 
 <div id="PC"></div>
@@ -31,29 +25,30 @@
 
 <!-- Modal -->
 
-<div class="modal fade" id="modalCopy" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalCopy" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Серийный номер</h5>
-        
+
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <form action="/pc/copy" method="post">
-      <input type="hidden" name="_csrf" value="{{csrf}}">
-      <div class="modal-body">
-        {{!-- <input class="danger" id="danger" type="hidden" value="Такой серийный номер существует"> --}}
-        <input id="inputCopy" name="serial_number" type="text" value="" class="form-control">
-        <div class="mb-2" id="hidd"></div>
-      </div>
-      <input type="hidden" name="id" id="hidInputCopy">
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-        <button type="submit" id="btnSubmit" class="btn btn-primary" disabled>Сохранить</button>
-        
-      </div>
+        <input type="hidden" name="_csrf" value="{{csrf}}">
+        <div class="modal-body">
+          {{!-- <input class="danger" id="danger" type="hidden" value="Такой серийный номер существует"> --}}
+          <input id="inputCopy" name="serial_number" type="text" value="" class="form-control">
+          <div class="mb-2" id="hidd"></div>
+        </div>
+        <input type="hidden" name="id" id="hidInputCopy">
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+          <button type="submit" id="btnSubmit" class="btn btn-primary" disabled>Сохранить</button>
+
+        </div>
       </form>
     </div>
   </div>
@@ -61,41 +56,28 @@
 
 
 <script>
+  $(document).ready(function () {
 
+    const serial_number = `{{serial_number}}`
+    load_data(serial_number)
 
-$(document).ready(function () {
-  const part = `{{part}}`
-  const serial_number = `{{serial_number}}`
-  load_data(part)
-  load_part()
-  $("#part_select").val(part).change()
-  if (serial_number) {
-    const serial_number_id = '#' + serial_number
-    $('html, body').animate({scrollTop: $(serial_number_id).offset().top}, 500)
-  }
-  
-  
+    
+  })
+
+  setTimeout(function () {
+    $("td.name").each(function () {
+      if ($(this).text() == 'Н/Д') {
+        $(this).css("background-color", "coral")
+      }
     })
- 
-
-  $(document).on('change', '#part_select', function () {
-    load_data($("#part_select :selected").text())
-    $("td.serial_number").each(function(){
+    $("td.serial_number").each(function () {
       if (!$(this).text()) {
         $(this).css("background-color", "darkgray")
       }
     })
-
-    $("td.name").each(function(){          
-          if ($(this).text() == 'Н/Д') {
-            $(this).css("background-color", "coral")
-          }
-        })
-   
-  })
-
-
-  $("body").on('click','.copyBtn',function () {
+  }, 1000)
+  
+  $("body").on('click', '.copyBtn', function () {
     $('#hidInputCopy').val($(this).data("id"))
     $('#inputCopy').val($(this).data("serial_number"))
   })
@@ -126,27 +108,22 @@ $(document).ready(function () {
       } else {
         edit_serial_number(id, obj, unit, serial_number)
       }
-      
-      
-      
+
       let current_id = $("#hidd_id").val()
       let next_id = current_id.split(";")
       next_id[1] = Number(next_id[1]) + 1 + ''
-      
+
       $(".serial_number[data-data='" + next_id.join(';') + "']").focus()
-      setTimeout(function () {        
+      setTimeout(function () {
         if ($(".popup-checkbox").is(":not(:checked)")) {
           $(".serial_number[data-data='" + next_id.join(';') + "']").focus()
-          $("td.serial_number").each(function(){
+          $("td.serial_number").each(function () {
             if (!$(this).text()) {
               $(this).css("background-color", "darkgray")
             }
           })
-        }    
-          
-        
-        
-        $("td.name").each(function(){          
+        }
+        $("td.name").each(function () {
           if ($(this).text() == 'Н/Д') {
             $(this).css("background-color", "coral")
           }
@@ -154,13 +131,11 @@ $(document).ready(function () {
 
       }, 1000)
     }
-    
+
   })
 
-  $('#inputCopy').keyup(function() {
-      let serial = $(this).val()
-      find_serial(serial)
-    })
-
-   
+  $('#inputCopy').keyup(function () {
+    let serial = $(this).val()
+    find_serial(serial)
+  })
 </script>

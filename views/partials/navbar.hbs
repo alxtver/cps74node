@@ -60,13 +60,15 @@
       
 
     </ul>
+    <ul class="navbar-nav ml-auto">
           <select id="part_select_navbar" class="custom-select">
             <option selected>Выберите проект</option>
-          </select>      
+          </select>
+    </ul>
     <script>
       $(document).ready(function() {
         load_part_navbar()
-        load_part_session()
+       // load_part_session()
       })
 
       $(document).on('change', '#part_select_navbar', function() {

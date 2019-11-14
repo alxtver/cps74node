@@ -20,8 +20,6 @@ function drawChart() {
   })
 }
 
-
-
 $(window).resize(function () {
   drawChart()
 })

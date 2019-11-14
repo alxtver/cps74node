@@ -23,8 +23,6 @@ router.post("/search", auth, async (req, res) => {
   } else {
     apkzi = await Apkzi.find({part: req.session.part}).sort([['created', -1] ])
   }
-  
-  
   res.send(JSON.stringify(apkzi))
 })
 
@@ -38,6 +36,7 @@ router.post('/edit_ajax', auth, async (req, res) => {
     console.log(error)
   }
 })
+
 
 router.get('/:id/edit', auth, async (req, res) => {
   if (!req.query.allow) {
@@ -72,32 +71,5 @@ router.post('/del', auth, async (req, res) => {
     res.send(part)
   }  
 })
-
-router.post("/part_session", auth, async function (req, res) {  
-  if (!req.session.part) return res.sendStatus(400)
-  res.send(req.session.part) 
-})
-// router.post('/del', auth, async (req, res) => {
-//   try {
-//     const apkzi = await Apkzi.findById(req.body.id)
-//     await Apkzi.deleteOne({_id: req.body.id})
-//     if (apkzi) {
-//       await Apkzi.find().distinct('part', function (error, part) {
-//         res.render('apkzi', {
-//           title: 'АПКЗИ',
-//           isApkzi: true,
-//           part: part,
-//           apkzi_part: apkzi.part
-//         })
-//       })
-//     } else {
-//       res.redirect('/apkzi')
-//     }
-    
-//   } catch (error) {
-//     console.log(error)
-//   }
-  
-// })
 
 module.exports = router

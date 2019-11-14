@@ -2,16 +2,7 @@
 <h1>АПКЗИ</h1>
 
 <button class="btn btn-dark" style="margin-bottom: 1rem" onclick="location.href='/add/apkzi';">Добавить АПКЗИ</button>
-<div class="form-group">
-  <label for="part_select">Партия</label>
-  <select class="form-control mb-2" id="part_select">
-    <option value="...">...</option>
-    {{#each part}}
-    <option value="{{this}}">{{this}}</option>
-    {{/each}}
-  </select>
-  {{!-- <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Поиск..."> --}}
-</div>
+
 
 
 {{!-- модальное окно --}}
@@ -27,7 +18,7 @@
         </button>
       </div>
 
-      {{!-- <form action="/apkzi/del" method="post"> --}}
+      
       <form>
         <input type="hidden" name="_csrf" value="{{csrf}}">
         <input type="hidden" name="id" id="hidId">
@@ -42,13 +33,11 @@
   </div>
 </div>
 
-
 <div id="showData"></div>
 
 <script>
   $(document).ready(function () {
-    load_data()
-    load_part_session()
+    load_data()    
   })
 
   $("body").on('click', '.delBtn', function () {
@@ -106,16 +95,4 @@
     edit_number_machine(id, number_machine)
   })
 
-
-  //$('#search').keyup(function() {
-  //    let search = $(this).val()
-  //    let blank_req = 'null'
-  //    let selected = $("#part_select :selected").text()
-  //    load_data(search, selected)
-  //    if (search) {
-  //      load_data(search, selected)
-  //    } else {
-  //      load_data(blank_req, selected)
-  //    }
-  //})
 </script>

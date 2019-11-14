@@ -74,16 +74,7 @@ router.post('/add', auth, async (req, res) => {
 
 
 router.post("/search", auth, async function (req, res) {
-  if (!req.body.q) {
-    pcs = await PC.find({
-      part: req.body.q
-    })
-  } else {
-    pcs = await PC.find({
-      part: req.body.q
-    })
-  }
-  if (!req.body) return res.sendStatus(400);
+  pcs = await PC.find({part: req.session.part})
   res.send(JSON.stringify(pcs)); // отправляем пришедший ответ обратно
 })
 

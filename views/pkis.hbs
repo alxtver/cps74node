@@ -1,11 +1,7 @@
 <script src="/pki.js"></script>
 <h1>ПКИ</h1>
 <button class="btn btn-dark" style="margin-bottom: 1rem" onclick="location.href='/add';">Добавить ПКИ</button>
-<div class="form-group">
-    <label for="part_select">Партия</label>
-      <select class="form-control mb-2" id="part_select">
-
-    </select>
+<div class="form-group">    
     <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Поиск...">
   </div>
 
@@ -34,22 +30,11 @@
 </div>
 
 <div id="showData"></div>
-
 <input hidden="true" id="temp" value="0"></input>
 
 <script>
     $(document).ready(function() {
     load_data()
-    load_part()
-    load_part_session()
-    
-    $(document).on('change', '#part_select', function() {
-      let search = $('#search').val()
-      if (search == ''){
-        search = 'null'
-      }
-      load_data(search, $("#part_select :selected").text())
-    })
   
     $("body").on('click','.delBtn',function () {
       $('#hidId').val($(this).data("id"))
@@ -59,12 +44,10 @@
     $('#search').keyup(function() {
       let search = $(this).val()
       let blank_req = 'null'
-      let selected = $("#part_select :selected").text()
-      load_data(search, selected)
       if (search) {
-        load_data(search, selected)
+        load_data(search)
       } else {
-        load_data(blank_req, selected)
+        load_data(blank_req)
       }
     })
 
