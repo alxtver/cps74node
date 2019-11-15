@@ -86,14 +86,11 @@ function plusOne(number) {
     for (let index = 0; index < number.length; index++) {
       if (!/\d/.test(number[index])){
         indexChar = index
-      }
-      
+      }      
     }
     let first_part = number.slice(0, indexChar+1)
     let second_part = number.slice(indexChar+1)
-
     return first_part + (parseInt(second_part)+1)
-
 }
 
 

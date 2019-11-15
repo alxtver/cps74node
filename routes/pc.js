@@ -157,13 +157,12 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
   //Жесть пипец!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   
   let pc = await PC.findById(req.body.id) //ищем комп который собираемся редактировать
-  let pc_copy = await PC.findById(req.body.id) //и копию....
-  
+  let pc_copy = await PC.findById(req.body.id) //и копию....  
+  let serial_number = req.body.serial_number
   let apkzi = await APKZI.findOne({part: pc.part, kontr_zav_number: serial_number})
   let oldNumberMachine
   const unit = req.body.unit
-  // console.log(apkzi)
-
+ 
   // Если серийник есть, то ищем ПКИ с таким серийником и отвязываем от машины
   let oldapkzi = await APKZI.findOne({part: pc.part, kontr_zav_number: pc[unit][req.body.obj].serial_number})
   if (oldapkzi){
@@ -205,10 +204,13 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
     const arr_apkzi_end = arr_apkzi_name.slice(-1)
     const arr_apkzi_start = arr_apkzi_name.slice(0, -1) 
     
-    pc.pc_unit[index_apkzi].fdsi = 'ФДШИ. ' + apkzi.fdsi
-    pc.pc_unit[index_apkzi].type = arr_apkzi_start 
-    pc.pc_unit[index_apkzi].name = arr_apkzi_end 
-    pc.pc_unit[index_apkzi].serial_number = apkzi.zav_number
+    if (index_apkzi) {
+      pc.pc_unit[index_apkzi].fdsi = 'ФДШИ. ' + apkzi.fdsi
+      pc.pc_unit[index_apkzi].type = arr_apkzi_start 
+      pc.pc_unit[index_apkzi].name = arr_apkzi_end 
+      pc.pc_unit[index_apkzi].serial_number = apkzi.zav_number
+    }
+    
                      
     pc_copy[unit] = pc[unit]
     pc_copy.pc_unit = pc.pc_unit
@@ -224,10 +226,10 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
         break
       }    
     }
-
+    if (index_apkzi) {
     pc.pc_unit[index_apkzi].name = "Н/Д"
     pc.pc_unit[index_apkzi].serial_number = ""
-
+    }
     pc_copy[unit] = pc[unit]
     pc_copy.pc_unit = pc.pc_unit
     await pc_copy.save()
@@ -260,49 +262,124 @@ router.get('/:id/edit', auth, async (req, res) => {
 
 router.post('/copy', auth, async (req, res) => {
   const pc = await PC.findById(req.body.id)
-  let newPC = new PC({
-    serial_number: req.body.serial_number,
-    execution: pc.execution,
-    fdsi: pc.fdsi,
-    part: pc.part,
-    arm: pc.arm,
-    pc_unit: []
-  })
 
-  for (unit of pc.pc_unit) {
-    if (unit.serial_number == pc.serial_number) {
-      unit.serial_number = req.body.serial_number
-      newPC.pc_unit.push(unit)
-    } else if (unit.serial_number == 'б/н' || unit.serial_number == 'Б/Н' || unit.serial_number == 'Б/н') {
-      newPC.pc_unit.push(unit)
-    } else {
-      unit.name = ''
-      unit.serial_number = ''
-      newPC.pc_unit.push(unit)
-    }
+  function plusOne(number) {
+    let indexChar = 0
+      for (let index = 0; index < number.length; index++) {
+        if (!/\d/.test(number[index])){
+          indexChar = index
+        }      
+      }
+      let first_part = number.slice(0, indexChar+1)
+      let second_part = number.slice(indexChar+1)
+      return first_part + (parseInt(second_part)+1)
   }
-
-  for (unit of pc.system_case_unit) {
-    if (unit.serial_number == pc.serial_number) {
-      unit.serial_number = req.body.serial_number
-      newPC.system_case_unit.push(unit)
-    } else if (unit.serial_number == 'б/н' || unit.serial_number == 'Б/Н' || unit.serial_number == 'Б/н') {
-      newPC.system_case_unit.push(unit)
-    } else {
-      unit.name = ''
-      unit.serial_number = ''
-      newPC.system_case_unit.push(unit)
+  
+  let reqSerial = req.body.serial_number
+  let range = reqSerial.split(';')
+  if (range.length > 1) {
+    let firstNumber = range[0].trim() //убираем пробелы, если есть
+    let lastNumber = range[1].trim()
+    let number = firstNumber
+    while (number != plusOne(lastNumber)) {
+      const pc = await PC.findById(req.body.id)
+      checkPCNumber = await PC.findOne({serial_number: number})
+      if (!checkPCNumber) {
+        let newPC = new PC({
+          serial_number: number,
+          execution: pc.execution,
+          fdsi: pc.fdsi,
+          part: pc.part,
+          arm: pc.arm,
+          pc_unit: [],
+          system_case_unit: []
+        })
+      
+        for (unit of pc.pc_unit) {
+          if (unit.serial_number == pc.serial_number) {
+            unit.serial_number = number
+            newPC.pc_unit.push(unit)
+          } else if (unit.serial_number == 'б/н' || unit.serial_number == 'Б/Н' || unit.serial_number == 'Б/н') {
+            newPC.pc_unit.push(unit)
+          } else {
+            unit.name = ''
+            unit.serial_number = ''
+            newPC.pc_unit.push(unit)
+          }
+        }
+      
+        for (unit of pc.system_case_unit) {          
+          if (unit.serial_number == pc.serial_number) {
+            unit.serial_number = number
+            newPC.system_case_unit.push(unit)
+          } else if (unit.serial_number == 'б/н' || unit.serial_number == 'Б/Н' || unit.serial_number == 'Б/н') {
+            newPC.system_case_unit.push(unit)
+          } else {
+            unit.name = ''
+            unit.serial_number = ''
+            newPC.system_case_unit.push(unit)
+          }
+        }
+        try {
+          await newPC.save()
+          
+        } catch (error) {
+          console.log(error)
+        }
+      }
+      
+      number = plusOne(number)
     }
-  }
-  try {
-    await newPC.save()
     res.render('pc', {
       title: 'Машины',
       isPC: true,
       part: pc.part
     })
-  } catch (error) {
-    console.log(error)
+  } else {
+    let newPC = new PC({
+      serial_number: req.body.serial_number,
+      execution: pc.execution,
+      fdsi: pc.fdsi,
+      part: pc.part,
+      arm: pc.arm,
+      pc_unit: []
+    })
+  
+    for (unit of pc.pc_unit) {
+      if (unit.serial_number == pc.serial_number) {
+        unit.serial_number = req.body.serial_number
+        newPC.pc_unit.push(unit)
+      } else if (unit.serial_number == 'б/н' || unit.serial_number == 'Б/Н' || unit.serial_number == 'Б/н') {
+        newPC.pc_unit.push(unit)
+      } else {
+        unit.name = ''
+        unit.serial_number = ''
+        newPC.pc_unit.push(unit)
+      }
+    }
+  
+    for (unit of pc.system_case_unit) {
+      if (unit.serial_number == pc.serial_number) {
+        unit.serial_number = req.body.serial_number
+        newPC.system_case_unit.push(unit)
+      } else if (unit.serial_number == 'б/н' || unit.serial_number == 'Б/Н' || unit.serial_number == 'Б/н') {
+        newPC.system_case_unit.push(unit)
+      } else {
+        unit.name = ''
+        unit.serial_number = ''
+        newPC.system_case_unit.push(unit)
+      }
+    }
+    try {
+      await newPC.save()
+      res.render('pc', {
+        title: 'Машины',
+        isPC: true,
+        part: pc.part
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 })
 

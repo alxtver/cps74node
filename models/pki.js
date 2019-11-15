@@ -27,8 +27,7 @@ const pki = new Schema({
   },
 
   country: {
-    type: String,
-    required: true
+    type: String    
   },
 
   number_machine: String,

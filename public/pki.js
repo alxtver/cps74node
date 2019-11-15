@@ -94,8 +94,8 @@ function edit_part(id, part) {
 function CreateTableFromJSON(data) {
     // EXTRACT VALUE FOR HTML HEADER. 
     // ('Book ID', 'Book Name', 'Category' and 'Price')
-    let col = ["type_pki", "vendor", "model", "serial_number", "country", "part", "number_machine", ""];
-    let col_rus = ["Тип", "Производитель", "Модель", "Серийный номер", "Страна производства", "Партия", "Номер машины", "В СБ", ""];
+    let col = ["#", "type_pki", "vendor", "model", "serial_number", "country", "part", "number_machine", ""];
+    let col_rus = ["#", "Тип", "Производитель", "Модель", "Серийный номер", "Страна производства", "Партия", "Номер машины", "В СБ", ""];
 
     // CREATE DYNAMIC TABLE.
     let table = document.createElement("table");
@@ -117,6 +117,10 @@ function CreateTableFromJSON(data) {
     let tbody = table.createTBody()
     for (let i = 0; i < data.length; i++) {
         tr = tbody.insertRow(-1)
+
+        let numberCell = tr.insertCell(-1)
+        numberCell.innerHTML = i + 1 
+
 
         let typeCell = tr.insertCell(-1)
         typeCell.innerHTML = data[i].type_pki

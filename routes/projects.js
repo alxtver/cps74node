@@ -27,8 +27,7 @@ router.get('/:id/passportDocx', auth, async (req, res) => {
  
   const pc = await PC.findById(req.params.id)
     
-  var content = fs
-    .readFileSync(path.resolve(docDir, 'input.docx'), 'binary');
+  var content = fs.readFileSync(path.resolve(docDir, 'input.docx'), 'binary');
 
   var zip = new PizZip(content);
 

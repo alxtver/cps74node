@@ -61,8 +61,10 @@ router.post("/search", auth, async (req, res) => {
     pkis = await Pki.find().sort([['created', -1]]).limit(100)
   } else if (req.body.q == 'null' && selected) {
     query = {part: selected}
+    pkis = await Pki.find(query).sort([['created', -1]])
   } else if (!req.body.q && selected) {
-    query = {part: selected}    
+    query = {part: selected}
+    pkis = await Pki.find(query).sort([['created', -1]])   
   } else {    
     query = {
       $and: [{
@@ -94,8 +96,9 @@ router.post("/search", auth, async (req, res) => {
         }
       ]
     }
+    pkis = await Pki.find(query).sort([['created', -1]])
   }
-  pkis = await Pki.find(query).sort([['created', -1]])
+  
   res.send(JSON.stringify(pkis)); // отправляем пришедший ответ обратно
 })
 

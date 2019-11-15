@@ -4,6 +4,8 @@ const auth = require('../middleware/auth')
 const PKI = require('../models/pki')
 const PC = require('../models/pc')
 const APKZI = require('../models/apkzi')
+const path = require('path')
+const fs = require('fs')
 
 router.get('/', auth, async (req, res) => {
   countPKI = await PKI.countDocuments()
@@ -12,6 +14,32 @@ router.get('/', auth, async (req, res) => {
   let nowYear = Date.parse(dateNow.getFullYear())  
   countPCinYear = await PC.countDocuments({created: {$gt: nowYear}})
   countPKIinYear = await PKI.countDocuments({created: {$gt: nowYear}})
+
+  // PKI.deleteMany({ part: 'ЛОТ 10,11(2020)' }, function (err) {
+  //   if (err) return handleError(err);
+  //   // deleted at most one tank document
+  // });
+
+  // const appDir = path.dirname(require.main.filename)
+  // const docDir = appDir + '/public/'
+  // let fileContent = fs.readFileSync(docDir + '/base.csv', "utf8")
+  // for (const pki of fileContent.split(';;')) {
+  //   type = pki.split(';')[1]
+  //   vendor = pki.split(';')[2]
+  //   model = pki.split(';')[3]
+  //   serial_number = pki.split(';')[4]
+  //   part = 'ЛОТ 10,11(2020)'
+  //   const pkiNew = new PKI({
+  //     type_pki: type,
+  //     vendor: vendor,
+  //     model: model,
+  //     serial_number: serial_number,
+  //     part: part,
+  //     country: 'Китай'
+  //   })
+  //   console.log(type + ' ' + vendor + ' ' + model + ' ' + serial_number);
+  //   await pkiNew.save()
+  // }
 
   res.render('index', {
     title: 'Главная страница',
@@ -22,6 +50,7 @@ router.get('/', auth, async (req, res) => {
     countPKIinYear: countPKIinYear
   })
 })
+
 
 router.post('/diagram', auth, async (req, res) => {    
   PC.find().distinct('part', async function (error, parts) {
