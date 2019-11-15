@@ -235,15 +235,15 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
     await pc_copy.save()
   }
 
-  // // Если ПКИ был привязан удаляем ПКИ из старой машины
-  // if (oldNumberMachine) {
-  //   let oldPC = await PC.findOne({serial_number: oldNumberMachine})  
-  //   oldPC[unit][req.body.obj].serial_number = ''
-  //   oldPC[unit][req.body.obj].name = ''
-  //   let newOldPC = await PC.findOne({serial_number: oldNumberMachine})
-  //   newOldPC[unit] = oldPC[unit]
-  //   newOldPC.save()
-  // }
+  // Если ПКИ был привязан удаляем ПКИ из старой машины
+  if (oldNumberMachine) {
+    let oldPC = await PC.findOne({serial_number: oldNumberMachine})  
+    oldPC[unit][req.body.obj].serial_number = ''
+    oldPC[unit][req.body.obj].name = ''
+    let newOldPC = await PC.findOne({serial_number: oldNumberMachine})
+    newOldPC[unit] = oldPC[unit]
+    newOldPC.save()
+  }
   res.send(JSON.stringify(pc_copy))
 })
 
