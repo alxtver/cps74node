@@ -26,6 +26,7 @@ router.get('/add', auth, (req, res) => {
   })
 })
 
+
 router.post('/add', auth, async (req, res) => {
   // если нет такого проекта, то сохраняем
   const part = await Part.findOne({
@@ -153,6 +154,7 @@ router.post('/insert_serial', auth, async (req, res) => {
   res.send(JSON.stringify(pc_copy))
 })
 
+
 router.post('/insert_serial_apkzi', auth, async (req, res) => {
   //Жесть пипец!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   
@@ -246,6 +248,7 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
   }
   res.send(JSON.stringify(pc_copy))
 })
+
 
 router.get('/:id/edit', auth, async (req, res) => {
   if (!req.query.allow) {
@@ -395,6 +398,7 @@ router.post('/find_serial', auth, async (req, res) => {
   }
 })
 
+
 router.post('/pc_edit', auth, async (req, res) => {
   const pc = await PC.findById(req.body.id)
   if (pc) {
@@ -403,6 +407,7 @@ router.post('/pc_edit', auth, async (req, res) => {
     res.send(false)
   }
 })
+
 
 router.post('/check_serial', auth, async (req, res) => {  
   const pki = await PKI.findOne({serial_number: req.body.serial_number})
@@ -418,9 +423,9 @@ router.post('/check_serial', auth, async (req, res) => {
   
 })
 
+
 router.post('/pc_update', auth, async (req, res) => {  
-  const pc = await PC.findById(req.body.id)
-  
+  const pc = await PC.findById(req.body.id)  
   newPCUnit = []
   newSystemCaseUnit = []
   // добавление объектов в массив pc_unit
@@ -429,7 +434,6 @@ router.post('/pc_update', auth, async (req, res) => {
   for (let i = 0; i < json_pc.length; i++) {
     newPCUnit.push(json_pc[i]);
   }
-
   // добавление объектов в массив system_case_unit
   const system_case_unit = req.body.system_case_unit
   json_system = JSON.parse(system_case_unit)
@@ -438,9 +442,20 @@ router.post('/pc_update', auth, async (req, res) => {
   }
   pc.pc_unit = newPCUnit
   pc.system_case_unit = newSystemCaseUnit
-  await pc.save()
-  
+  await pc.save()  
 })
+
+
+router.post('/delete', auth, async (req, res) => {  
+  pc = await PC.findById(req.body.id)
+  await PKI.updateMany({part: pc.part, number_machine: pc.serial_number}, {number_machine: ''})
+  await APKZI.updateMany({part: pc.part, number_machine: pc.serial_number}, {number_machine: ''})
+  await PC.deleteOne({_id: req.body.id})
+  res.sendStatus(200)
+})
+
+
+
 
 
 module.exports = router

@@ -829,6 +829,16 @@ function CreateTableFromJSON(data) {
     button_edit.setAttribute("onclick", "location.href='/pc/" + data[i]._id + "/edit?allow=true'")
     button_edit.dataset.id = data[i]._id
     divCont.appendChild(button_edit)
+
+    let button_del = document.createElement('input')
+    button_del.type = 'button'
+    button_del.className = 'btn btn-outline-danger mr-2 mb-2 delBtn float-right'
+    button_del.value = 'Удалить'    
+    button_del.dataset.id = data[i]._id
+    button_del.dataset.serial_number = data[i].serial_number
+    button_del.dataset.target = '#modalDel'
+    button_del.dataset.toggle = 'modal'
+    divCont.appendChild(button_del)
   }
 }
 
@@ -1124,4 +1134,19 @@ function find_serial(serial) {
 function klcCopy() {
   $("#inputCopy").focus()
   $('#btnSubmit').prop('disabled', true)
+}
+
+function delBtn() {
+  let id = $('#hidId').val()  
+  $.ajax({
+      url: "/pc/delete",
+      method: "POST",
+      headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+      data: {
+          id: id
+      },
+      success: function (data) {
+          load_data()
+      }
+  })
 }

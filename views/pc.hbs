@@ -54,6 +54,31 @@
   </div>
 </div>
 
+{{!-- модальное окно --}}
+<div class="modal fade" id="modalDel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Удалить ПЭВМ?</h5>        
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form>
+        <p id="serial"></p>
+        
+        <input type="hidden" name="_csrf" value="{{csrf}}">
+        <input type="hidden" name="id" id="hidId">
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+          <button type="button" id="btnSubmit" onclick="delBtn()" data-dismiss="modal" class="btn btn-danger">Удалить</button>        
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 
 <script>
   $(document).ready(function () {
@@ -63,6 +88,11 @@
 
     
   })
+
+  $("body").on('click','.delBtn',function () {
+      $('#hidId').val($(this).data("id"))
+      $('#serial').text('Серийный номер - ' + $(this).data("serial_number"))          
+    })
 
   setTimeout(function () {
     $("td.name").each(function () {
