@@ -28,6 +28,7 @@ const pc = new Schema({
         type: Date,
         default: () => Date.now() + 3*60*60*1000 //время МСК
       },
+    back_color: String
 })
 
 module.exports = model('Pc', pc)

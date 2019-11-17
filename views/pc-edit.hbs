@@ -45,13 +45,6 @@
     load_pc(`{{pc._id}}`)
   })
 
-  $('#delete-row').click(function(){
-    console.log("Нажал")
-  })
-
-  $( "#delete-row" ).click(function() {
-    alert( "Handler for .click() called." );
-  });
 
   $('form').submit(function () {
 
@@ -63,6 +56,8 @@
     let serial_number = $('#serial_number').val()
     let arm = $('#arm').val()
     let execution = $('#execution').val()
+    let color = $("#select_color :selected").text()
+    
 
     //// формирование POST запроса для таблицы ПЭВМ
     let pc_unit = []
@@ -153,6 +148,7 @@
         serial_number: serial_number,
         arm: arm,
         execution: execution,
+        color: color,
         pc_unit: JSON.stringify(pc_unit),
         system_case_unit: JSON.stringify(system_case_unit)
       },

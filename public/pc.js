@@ -404,12 +404,9 @@ function load_pc(id) {
 
 function TablePc(pc) {
   // таблица ПЭВМ
-
   let table = document.createElement("table");
-
   table.className = "table table-sm table-bordered table-hover pctable"
   table.id = pc._id
-
 
   let tr = table.insertRow(-1) // TABLE ROW.        
 
@@ -421,7 +418,17 @@ function TablePc(pc) {
   td = document.createElement("td")
   td.innerHTML = pc.serial_number
   td.id = pc.serial_number
-  td.className = "serial up"
+  if (pc.back_color == 'Синий') {
+    td.className = "serial_blue up"
+  } else if (pc.back_color == 'Зеленый') {
+    td.className = "serial_green up"
+  } else if (pc.back_color == 'Красный') {
+    td.className = "serial_red up"
+  } else if (pc.back_color == 'Желтый') {
+    td.className = "serial_yelow up"
+  } else {
+    td.className = "serial up"
+  }
   tr.appendChild(td)
 
   td = document.createElement("td")
@@ -439,38 +446,39 @@ function TablePc(pc) {
   td = document.createElement("td")
   tr.appendChild(td)
 
+  if (pc.pc_unit.length > 0) {
+    tr = table.insertRow(-1) // TABLE ROW.        
 
-  tr = table.insertRow(-1) // TABLE ROW.        
+    td = document.createElement("td")
+    td.innerHTML = 'Обозначение изделия'
+    td.className = "header"
+    tr.appendChild(td)
 
-  td = document.createElement("td")
-  td.innerHTML = 'Обозначение изделия'
-  td.className = "header"
-  tr.appendChild(td)
+    td = document.createElement("td")
+    td.innerHTML = 'Наименование изделия'
+    td.className = "header"
+    tr.appendChild(td)
 
-  td = document.createElement("td")
-  td.innerHTML = 'Наименование изделия'
-  td.className = "header"
-  tr.appendChild(td)
+    td = document.createElement("td")
+    td.innerHTML = 'Характеристика'
+    td.className = "header"
+    tr.appendChild(td)
 
-  td = document.createElement("td")
-  td.innerHTML = 'Характеристика'
-  td.className = "header"
-  tr.appendChild(td)
+    td = document.createElement("td")
+    td.innerHTML = 'Количество'
+    td.className = "header"
+    tr.appendChild(td)
 
-  td = document.createElement("td")
-  td.innerHTML = 'Количество'
-  td.className = "header"
-  tr.appendChild(td)
+    td = document.createElement("td")
+    td.innerHTML = 'Заводской номер'
+    td.className = "header"
+    tr.appendChild(td)
 
-  td = document.createElement("td")
-  td.innerHTML = 'Заводской номер'
-  td.className = "header"
-  tr.appendChild(td)
-
-  td = document.createElement("td")
-  td.innerHTML = 'Примечания'
-  td.className = "header"
-  tr.appendChild(td)
+    td = document.createElement("td")
+    td.innerHTML = 'Примечания'
+    td.className = "header"
+    tr.appendChild(td)
+  }
 
   arr_pc_unit = pc.pc_unit
 
@@ -520,39 +528,39 @@ function TablePc(pc) {
 
   }
 
+  if (pc.system_case_unit.length > 0) {
+    tr = table.insertRow(-1) // TABLE ROW.        
 
-  tr = table.insertRow(-1) // TABLE ROW.        
+    td = document.createElement("td")
+    td.innerHTML = 'Обозначение изделия'
+    td.className = "header"
+    tr.appendChild(td)
 
-  td = document.createElement("td")
-  td.innerHTML = 'Обозначение изделия'
-  td.className = "header"
-  tr.appendChild(td)
+    td = document.createElement("td")
+    td.innerHTML = 'Наименование изделия'
+    td.className = "header"
+    tr.appendChild(td)
 
-  td = document.createElement("td")
-  td.innerHTML = 'Наименование изделия'
-  td.className = "header"
-  tr.appendChild(td)
+    td = document.createElement("td")
+    td.innerHTML = 'Характеристика'
+    td.className = "header"
+    tr.appendChild(td)
 
-  td = document.createElement("td")
-  td.innerHTML = 'Характеристика'
-  td.className = "header"
-  tr.appendChild(td)
+    td = document.createElement("td")
+    td.innerHTML = 'Количество'
+    td.className = "header"
+    tr.appendChild(td)
 
-  td = document.createElement("td")
-  td.innerHTML = 'Количество'
-  td.className = "header"
-  tr.appendChild(td)
+    td = document.createElement("td")
+    td.innerHTML = 'Заводской номер'
+    td.className = "header"
+    tr.appendChild(td)
 
-  td = document.createElement("td")
-  td.innerHTML = 'Заводской номер'
-  td.className = "header"
-  tr.appendChild(td)
-
-  td = document.createElement("td")
-  td.innerHTML = 'Примечания'
-  td.className = "header"
-  tr.appendChild(td)
-
+    td = document.createElement("td")
+    td.innerHTML = 'Примечания'
+    td.className = "header"
+    tr.appendChild(td)
+  }
   arr_system_case_unit = pc.system_case_unit
 
   for (let j = 0; j < arr_system_case_unit.length; j++) {
@@ -806,7 +814,17 @@ function CreateTableFromJSON(data) {
     let divContainer = document.getElementById("PC");
     let divCont = document.createElement("div")
     divCont.id = data[i]._id
-    divCont.className = "tableContent mb-3"
+    if (data[i].back_color == 'Синий') {
+      divCont.className = "tableContent-blue mb-3"
+    } else if (data[i].back_color == 'Зеленый') {
+      divCont.className = "tableContent-green mb-3"
+    } else if (data[i].back_color == 'Красный') {
+      divCont.className = "tableContent-red mb-3"
+    } else if (data[i].back_color == 'Желтый') {
+      divCont.className = "tableContent-yelow mb-3"
+    } else {
+      divCont.className = "tableContent mb-3"
+    }    
     divContainer.appendChild(divCont);
     divCont.innerHTML = ""
     divCont.appendChild(table)
@@ -875,6 +893,16 @@ function CreateTableEditPC(data) {
   button_del_row.value = 'Удалить строку'
   divCont.appendChild(button_del_row)
   
+  let select_color = document.createElement('select')
+  select_color.className = 'form-control'
+  select_color.id = 'select_color'
+  let colors = ['...', 'Красный', 'Синий', 'Зеленый', 'Желтый']
+  for (const color of colors) {
+    let option = document.createElement("option")
+    option.text = color;
+    select_color.add(option)
+  }  
+  divCont.appendChild(select_color)
 
   let button_edit = document.createElement('input')
   button_edit.type = 'submit'
@@ -890,6 +918,8 @@ function CreateTableEditPC(data) {
   button_back.value = 'Назад'
   button_back.setAttribute("onclick", "location.href='/pc?part=" + data.part + "&serial_number=" + data.serial_number + "'")
   divCont.appendChild(button_back)
+
+  
 
   $("#add-row").click(function () {
     $("#pc_unit").find('input[name="record"]').each(function () {

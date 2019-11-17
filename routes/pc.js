@@ -425,7 +425,14 @@ router.post('/check_serial', auth, async (req, res) => {
 
 
 router.post('/pc_update', auth, async (req, res) => {  
-  const pc = await PC.findById(req.body.id)  
+  console.log(req.body);
+  const pc = await PC.findById(req.body.id)
+  pc.part = req.body.part
+  pc.fdsi = req.body.fdsi
+  pc.serial_number = req.body.serial_number
+  pc.arm = req.body.arm
+  pc.execution = req.body.execution
+  pc.back_color = req.body.color
   newPCUnit = []
   newSystemCaseUnit = []
   // добавление объектов в массив pc_unit

@@ -216,6 +216,5 @@ function changeSelect(selectedItem) {
     data: {
       selectedItem: selectedItem
     }
-    
-})
+   })
 }
