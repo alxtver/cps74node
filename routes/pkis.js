@@ -1,12 +1,13 @@
-const {
-  Router
-} = require('express')
+const {Router} = require('express')
 const Pki = require('../models/pki')
 const PC = require('../models/pc')
 const Part = require('../models/part')
 const EAN = require('../models/ean')
 const auth = require('../middleware/auth')
 const router = Router()
+const path = require('path')
+const fs = require('fs')
+const excel = require('excel4node')
 
 
 router.get('/', auth, async (req, res) => {
@@ -168,5 +169,143 @@ router.post("/searchEAN", auth, async function (req, res) {
   res.send(JSON.stringify(ean)) // отправляем пришедший ответ обратно
 })
 
+router.get("/excelImport", auth, async function (req, res) {
+  let workbook = new excel.Workbook()
+// Add Worksheets to the workbook
+let ws = workbook.addWorksheet('Sheet 1')
+// Create a reusable style
+let style = workbook.createStyle({
+  font: {    
+    size: 12
+  },
+  border: {
+		left: {
+			style: 'thin',
+			color: 'black',
+		},
+		right: {
+			style: 'thin',
+			color: 'black',
+		},
+		top: {
+			style: 'thin',
+			color: 'black',
+		},
+		bottom: {
+			style: 'thin',
+			color: 'black',
+		},
+}})
+
+let style1 = workbook.createStyle({
+  font: {    
+    size: 12
+  },
+  border: {
+		left: {
+			style: 'thin',
+			color: 'black',
+		},
+		right: {
+			style: 'thin',
+			color: 'black',
+		},
+		top: {
+			style: 'thick',
+			color: 'black',
+		},
+		bottom: {
+			style: 'thin',
+			color: 'black',
+		},
+}})
+
+let styleheader = workbook.createStyle({
+  font: {    
+    bold: true,
+    size: 12
+  },  
+  border: {
+		left: {
+			style: 'thin',
+			color: 'black',
+		},
+		right: {
+			style: 'thin',
+			color: 'black',
+		},
+		top: {
+			style: 'thin',
+			color: 'black',
+		},
+		bottom: {
+			style: 'thin',
+			color: 'black',
+		},
+}})
+
+
+
+let styleHead = workbook.createStyle({
+  font: {
+    bold: true, 
+    size: 18
+  },  
+})
+
+pkis = await Pki.find({part: req.session.part}).sort({type_pki: 1})
+
+ws.column(1).setWidth(3)
+ws.column(2).setWidth(33)
+ws.column(3).setWidth(17)
+ws.column(4).setWidth(25)
+ws.column(5).setWidth(28)
+ws.column(6).setWidth(17)
+ws.column(7).setWidth(17)
+
+ws.row(1).setHeight(30)
+ws.cell(1,2).string(req.session.part).style(styleHead)
+
+ws.cell(2,2).string('Наименование').style(styleheader)
+ws.cell(2,3).string('Производитель').style(styleheader)
+ws.cell(2,4).string('Модель').style(styleheader)
+ws.cell(2,5).string('Серийный номер').style(styleheader)
+ws.cell(2,6).string('Страна').style(styleheader)
+ws.cell(2,7).string('Номер ПЭВМ').style(styleheader)
+
+ws.row(2).freeze()
+let n = 3
+let model = ''
+let st = style
+for (const pki of pkis) {
+  if (pki.model == model) {
+    st = style
+  } else {
+    st = style1
+  }
+  model = pki.model
+  ws.cell(n,2).string(pki.type_pki).style(st)
+  ws.cell(n,3).string(pki.vendor).style(st)
+  ws.cell(n,4).string(pki.model).style(st)
+  ws.cell(n,5).string(pki.serial_number).style(st)  
+  ws.cell(n,6).string(pki.country).style(st)
+  if (pki.number_machine){
+    ws.cell(n,7).string(pki.number_machine).style(st)
+  } else {
+    ws.cell(n,7).string('').style(st)
+  }
+  //ws.cell(n,1).string(pki.number_machine).style(style)
+  n += 1
+}
+
+const appDir = path.dirname(require.main.filename)
+const docDir = appDir + '/public/docx'
+pathToExcel = `${docDir}/excel.xlsx`
+
+workbook.write(pathToExcel, function () {
+  const fileName = req.session.part + '.xlsx'
+  res.download(pathToExcel, fileName)
+})
+})
 
 module.exports = router

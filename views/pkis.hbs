@@ -1,9 +1,10 @@
 <script src="/pki.js"></script>
 <h1>ПКИ</h1>
 <button class="btn btn-dark" style="margin-bottom: 1rem" onclick="location.href='/add';">Добавить ПКИ</button>
+<button id="excelImport" class="btn btn-outline-success" onclick="location.href='/pkis/excelImport';" style="margin-bottom: 1rem">Импорт в Excel</button>
 <div class="form-group">    
     <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Поиск...">
-  </div>
+</div>
 
 {{!-- модальное окно --}}
 <div class="modal fade" id="modalDel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -35,10 +36,15 @@
     $(document).ready(function() {
     load_data()
   
+    //$("body").on('click','#excelImport',function () {
+    //  excelImport()
+    //})
+
     $("body").on('click','.delBtn',function () {
       $('#hidId').val($(this).data("id"))
       $('#hidPart').val($(this).data("part"))     
     })
+  
   
     $('#search').keyup(function() {
       let search = $(this).val()
@@ -51,43 +57,40 @@
     })
 
   $(document).on('blur', '.type', function() {
-    let id = $(this).data("id");
-    let type = $(this).text();
-    edit_type(id, type);
-  });
+    let id = $(this).data("id")
+    let type = $(this).text()
+    edit_type(id, type)
+  })
   
   $(document).on('blur', '.model', function() {
-    let id = $(this).data("id");
-    let model = $(this).text();
-    edit_model(id, model);
-  });
+    let id = $(this).data("id")
+    let model = $(this).text()
+    edit_model(id, model)
+  })
 
   $(document).on('blur', '.serial_number', function() {
-    let id = $(this).data("id");
-    let serial_number = $(this).text();
-    edit_serial_number(id, serial_number);
-  });
+    let id = $(this).data("id")
+    let serial_number = $(this).text()
+    edit_serial_number(id, serial_number)
+  })
 
   $(document).on('blur', '.vendor', function() {
-    let id = $(this).data("id");
-    let vendor = $(this).text();
-    edit_vendor(id, vendor);
-  });
+    let id = $(this).data("id")
+    let vendor = $(this).text()
+    edit_vendor(id, vendor)
+  })
 
   $(document).on('blur', '.country', function() {
-    let id = $(this).data("id");
-    let country = $(this).text();
-    edit_country(id, country);
-  });
+    let id = $(this).data("id")
+    let country = $(this).text()
+    edit_country(id, country)
+  })
 
   $(document).on('blur', '.part', function() {
-    let id = $(this).data("id");
-    let part = $(this).text();
-    edit_part(id, part);
-  });
-
-
-    
-  });
+    let id = $(this).data("id")
+    let part = $(this).text()
+    edit_part(id, part)
+  })    
+  })
 
 </script>

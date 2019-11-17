@@ -239,6 +239,7 @@ function CreateTableFromJSON(data) {
   }
 }
 
+
 function CreateSelect(data) {
   $("#part_select").append($('<option value="">...</option>'));
   for (let i = 0; i < data.length; i++) {
