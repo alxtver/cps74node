@@ -372,7 +372,30 @@ function load_data(q) {
       q: q
     },
     success: function (data) {
-      CreateTableFromJSON(JSON.parse(data))
+      CreateTableFromJSON(JSON.parse(data), function () {
+        $("td.name").each(function () {
+          if ($(this).text() == 'Н/Д') {
+            $(this).css("background-color", "coral")
+          }
+        })
+        $("td.serial_number").each(function () {
+          if (!$(this).text()) {
+            $(this).css("background-color", "darkgray")
+          }
+        })
+        let current_id = $("#hidd_id").val()
+        let next_id = current_id.split(";")
+        next_id[1] = Number(next_id[1]) + 1 + ''
+
+        if ($(".popup-checkbox").is(":not(:checked)")) {
+          $(".serial_number[data-data='" + next_id.join(';') + "']").focus()
+          $("td.serial_number").each(function () {
+            if (!$(this).text()) {
+              $(this).css("background-color", "darkgray")
+            }
+          })
+        }
+      })
       if (q) {
         const serial_number_id = '#' + q
         $('html, body').animate({
@@ -804,7 +827,7 @@ function TableEditSystemCase(pc) {
   return table
 }
 
-function CreateTableFromJSON(data) {
+function CreateTableFromJSON(data, callback) {
   // CREATE DYNAMIC TABLE.
   let divContainer = document.getElementById("PC")
   divContainer.innerHTML = ""
@@ -858,6 +881,7 @@ function CreateTableFromJSON(data) {
     button_del.dataset.toggle = 'modal'
     divCont.appendChild(button_del)
   }
+  callback()
 }
 
 function CreateTableEditPC(data) {
@@ -1046,7 +1070,16 @@ function edit_serial_number(id, obj, unit, serial_number) {
       serial_number: serial_number
     },
     success: function (pc) {
-      UpdateCells(JSON.parse(pc))
+      UpdateCells(JSON.parse(pc), function () {
+      
+        $("td.name").each(function () {
+          if ($(this).text() == 'Н/Д') {
+            $(this).css("background-color", "coral")
+          }
+        })
+
+      
+      })
     }
   })
 }
@@ -1095,9 +1128,10 @@ function edit_serial_number_apkzi(id, obj, unit, serial_number) {
   })
 }
 
-function UpdateCells(pc) {
+function UpdateCells(pc, callback) {
   // Обновление всех таблиц
   load_data()
+  if(callback) callback()
 
   // Обновление только одной таблицы
 

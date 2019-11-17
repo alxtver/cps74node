@@ -94,18 +94,6 @@
       $('#serial').text('Серийный номер - ' + $(this).data("serial_number"))          
     })
 
-  setTimeout(function () {
-    $("td.name").each(function () {
-      if ($(this).text() == 'Н/Д') {
-        $(this).css("background-color", "coral")
-      }
-    })
-    $("td.serial_number").each(function () {
-      if (!$(this).text()) {
-        $(this).css("background-color", "darkgray")
-      }
-    })
-  }, 1000)
   
   $("body").on('click', '.copyBtn', function () {
     $('#hidInputCopy').val($(this).data("id"))
@@ -137,29 +125,7 @@
         edit_serial_number_apkzi(id, obj, unit, serial_number)
       } else {
         edit_serial_number(id, obj, unit, serial_number)
-      }
-
-      let current_id = $("#hidd_id").val()
-      let next_id = current_id.split(";")
-      next_id[1] = Number(next_id[1]) + 1 + ''
-
-      $(".serial_number[data-data='" + next_id.join(';') + "']").focus()
-      setTimeout(function () {
-        if ($(".popup-checkbox").is(":not(:checked)")) {
-          $(".serial_number[data-data='" + next_id.join(';') + "']").focus()
-          $("td.serial_number").each(function () {
-            if (!$(this).text()) {
-              $(this).css("background-color", "darkgray")
-            }
-          })
-        }
-        $("td.name").each(function () {
-          if ($(this).text() == 'Н/Д') {
-            $(this).css("background-color", "coral")
-          }
-        })
-
-      }, 1000)
+      }      
     }
 
   })
