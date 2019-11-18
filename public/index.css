@@ -405,6 +405,31 @@ input[type=text]:placeholder {
   background: rgba(255, 173, 0, 0.7);
 }
 
+.attachment {
+  font-size: 1rem;
+  background: peachpuff;
+}
+
+.attachment_red {
+  font-size: 1rem;
+  background: rgba(247, 0, 129, 0.7);
+}
+
+.attachment_green {
+  font-size: 1rem;
+  background: rgba(64, 247, 0, 0.7);
+}
+
+.attachment_blue {
+  font-size: 1rem;
+  background: rgba(72, 13, 224, 0.7);
+}
+
+.attachment_yelow {
+  font-size: 1rem;
+  background: rgba(255, 173, 0, 0.7);
+}
+
 .tableContent {
   -webkit-border-radius: 10px 10px 10px 10px;
   border-radius: 10px 10px 10px 10px;

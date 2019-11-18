@@ -19,8 +19,7 @@ const pc = new Schema({
         required: true
     },
     arm: {
-        type: String,
-        required: true
+        type: String        
     },
     pc_unit: Array,
     system_case_unit: Array,
@@ -28,7 +27,8 @@ const pc = new Schema({
         type: Date,
         default: () => Date.now() + 3*60*60*1000 //время МСК
       },
-    back_color: String
+    back_color: String,
+    attachment: String
 })
 
 module.exports = model('Pc', pc)

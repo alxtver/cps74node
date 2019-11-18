@@ -111,7 +111,7 @@
 
   $(document).on('keypress', '.serial_number', function (e) {
     let id = $(this).data("obj")
-    if (e.which == 13) {
+    if (e.which == 13) {      
       let id = $(this).data("id")
       let obj = $(this).data("obj")
       let unit = $(this).data("unit")
@@ -127,8 +127,9 @@
         edit_serial_number(id, obj, unit, serial_number)
       }      
     }
-
   })
+
+
 
   $('#inputCopy').keyup(function () {
     let serial = $(this).val()

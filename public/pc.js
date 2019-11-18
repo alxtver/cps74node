@@ -417,8 +417,11 @@ function load_pc(id) {
     data: {
       id: id
     },
-    success: function (data) {
+    success: function (data) {      
+      let color = JSON.parse(data).back_color      
       CreateTableEditPC(JSON.parse(data))
+      $("#select_color option:contains(" + color + ")").prop('selected', true)
+      
     }
   })
 }
@@ -464,9 +467,29 @@ function TablePc(pc) {
   td.className = "up"
   tr.appendChild(td)
 
+ 
+
   td = document.createElement("td")
   tr.appendChild(td)
+
   td = document.createElement("td")
+  if (pc.attachment) {
+    td.innerHTML = pc.attachment
+    if (pc.back_color == 'Синий') {
+      td.className = "attachment_blue up"
+    } else if (pc.back_color == 'Зеленый') {
+      td.className = "attachment_green up"
+    } else if (pc.back_color == 'Красный') {
+      td.className = "attachment_red up"
+    } else if (pc.back_color == 'Желтый') {
+      td.className = "attachment_yelow up"
+    } else {
+      td.className = "attachment up"
+    }
+  }
+  
+  
+  
   tr.appendChild(td)
 
   if (pc.pc_unit.length > 0) {
@@ -884,7 +907,7 @@ function CreateTableFromJSON(data, callback) {
   callback()
 }
 
-function CreateTableEditPC(data) {
+function CreateTableEditPC(data, callback) {
   // CREATE DYNAMIC TABLE.
   let divContainer = document.getElementById("PC")
   divContainer.innerHTML = ""
@@ -925,7 +948,7 @@ function CreateTableEditPC(data) {
     let option = document.createElement("option")
     option.text = color;
     select_color.add(option)
-  }  
+  }
   divCont.appendChild(select_color)
 
   let button_edit = document.createElement('input')
@@ -1030,8 +1053,11 @@ function CreateTableEditPC(data) {
         notesCell.contentEditable = "true"
 
         $(newRow).insertAfter(checkedRow)
+
+      
       }
     })
+    callback()
 })
   
 

@@ -21,7 +21,8 @@
       </div>
       <input type="text" id="serial_number" name="serial_number" class="form-control" aria-label="Small"
         aria-describedby="inputGroup-sizing-sm" value="{{pc.serial_number}}" required>
-
+    </div>
+    <div class="input-group input-group-sm mb-3">
       <div class="input-group-prepend">
         <span class="input-group-text" id="inputGroup-sizing-sm">АРМ</span>
       </div>
@@ -32,9 +33,14 @@
         <span class="input-group-text" id="inputGroup-sizing-sm">Исполнение</span>
       </div>
       <input type="text" id="execution" name="execution" class="form-control" aria-label="Small"
-        aria-describedby="inputGroup-sizing-sm" value="{{pc.execution}}" required>
-    </div>
+        aria-describedby="inputGroup-sizing-sm" value="{{pc.execution}}">
 
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroup-sizing-sm">Приложение</span>
+      </div>
+      <input type="text" id="attachment" name="attachment" class="form-control" aria-label="Small"
+        aria-describedby="inputGroup-sizing-sm" value="{{pc.attachment}}">
+    </div>
     <div id="PC"></div>
 
   </form>
@@ -56,8 +62,9 @@
     let serial_number = $('#serial_number').val()
     let arm = $('#arm').val()
     let execution = $('#execution').val()
+    let attachment = $('#attachment').val()
     let color = $("#select_color :selected").text()
-    
+
 
     //// формирование POST запроса для таблицы ПЭВМ
     let pc_unit = []
@@ -148,6 +155,7 @@
         serial_number: serial_number,
         arm: arm,
         execution: execution,
+        attachment: attachment,
         color: color,
         pc_unit: JSON.stringify(pc_unit),
         system_case_unit: JSON.stringify(system_case_unit)

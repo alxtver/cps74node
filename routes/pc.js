@@ -42,13 +42,27 @@ router.post('/add', auth, async (req, res) => {
       console.log(error)
     }
   }
+  let execution
+  if (req.body.execution) {
+    execution = req.body.execution
+  } else {
+    execution = ''
+  }
+
+  let attachment
+  if (req.body.attachment) {
+    attachment = req.body.attachment
+  } else {
+    attachment = ''
+  }
 
   const pc = new PC({
-    serial_number: req.body.serial_number,
-    execution: req.body.execution,
+    serial_number: req.body.serial_number,    
+    execution: execution,
     fdsi: req.body.fdsi,
     part: req.body.part,
     arm: req.body.arm,
+    attachment: req.body.attachment
   })
 
   // добавление объектов в массив pc_unit
@@ -424,14 +438,14 @@ router.post('/check_serial', auth, async (req, res) => {
 })
 
 
-router.post('/pc_update', auth, async (req, res) => {  
-  console.log(req.body);
+router.post('/pc_update', auth, async (req, res) => {    
   const pc = await PC.findById(req.body.id)
   pc.part = req.body.part
   pc.fdsi = req.body.fdsi
   pc.serial_number = req.body.serial_number
   pc.arm = req.body.arm
   pc.execution = req.body.execution
+  pc.attachment = req.body.attachment
   pc.back_color = req.body.color
   newPCUnit = []
   newSystemCaseUnit = []
