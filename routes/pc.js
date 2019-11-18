@@ -106,10 +106,21 @@ router.post('/insert_serial', auth, async (req, res) => {
   let pc = await PC.findById(req.body.id) //ищем комп который собираемся редактировать
   let pc_copy = await PC.findById(req.body.id) //и копию....
   let serial_number = req.body.serial_number
+  console.log(req.body)
 
 
-  // проверка на гребаные сидюки два запроса вместо одного
+  
   let pki = await PKI.findOne({part: pc.part, serial_number: serial_number})
+  // проверка на левый серийник Gigabyte
+  if (!pki) {
+    let regex = /SN\w*/g
+    pki = await PKI.findOne({part: pc.part, serial_number: serial_number.match(regex)[0]})
+    if (pki) {
+      serial_number = serial_number.match(regex)[0]
+    }
+  }
+
+// проверка на гребаные сидюки два запроса вместо одного
   if (!pki) {
     pki = await PKI.findOne({part: pc.part, serial_number: serial_number.split(' ').reverse().join(' ')})
     if (pki) {
@@ -117,6 +128,8 @@ router.post('/insert_serial', auth, async (req, res) => {
     }
   }
   
+
+
   let oldNumberMachine
   const unit = req.body.unit
 

@@ -15,7 +15,7 @@ router.get('/', auth, async (req, res) => {
   countPCinYear = await PC.countDocuments({created: {$gt: nowYear}})
   countPKIinYear = await PKI.countDocuments({created: {$gt: nowYear}})
 
-  // PKI.deleteMany({ part: 'ЛОТ 10,11(2020)' }, function (err) {
+  // PC.deleteMany({ part: 'АСО МСК' }, function (err) {
   //   if (err) return handleError(err);
   //   // deleted at most one tank document
   // });
