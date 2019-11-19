@@ -38,8 +38,8 @@ router.get('/:id/passportDocx', auth, async (req, res) => {
   doc.setData({
       fdsi: pc.fdsi,
       serial_number: pc.serial_number,
-      "pc_unit": pc.pc_unit,
-      "system_case_unit": pc.system_case_unit
+      pc_unit: pc.pc_unit,
+      system_case_unit: pc.system_case_unit
   })
 
   try {
@@ -58,10 +58,10 @@ router.get('/:id/passportDocx', auth, async (req, res) => {
       throw error
   }
 
- // let buf = doc.getZip().generate({type: 'nodebuffer'});
+  let buf = doc.getZip().generate({type: 'nodebuffer'});
 
   // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
-  //fs.writeFileSync(path.resolve(docDir, 'output.docx'), buf)
+  fs.writeFileSync(path.resolve(docDir, 'output.docx'), buf)
   const file = `${docDir}/output.docx`
   const fileName = pc.serial_number + '.docx'
   res.download(file, fileName)
