@@ -106,12 +106,8 @@ router.post('/insert_serial', auth, async (req, res) => {
   let pc = await PC.findById(req.body.id) //ищем комп который собираемся редактировать
   let pc_copy = await PC.findById(req.body.id) //и копию....
   let serial_number = req.body.serial_number
- 
 
-
-  
-  let pki = await PKI.findOne({part: pc.part, serial_number: serial_number})
-  
+  let pki = await PKI.findOne({part: pc.part, serial_number: serial_number})  
 
 // проверка на гребаные сидюки два запроса вместо одного
   if (!pki) {
@@ -120,7 +116,7 @@ router.post('/insert_serial', auth, async (req, res) => {
       serial_number = serial_number.split(' ').reverse().join(' ')
     }
   }
- 
+
   // проверка на левый серийник Gigabyte
   if (!pki) {
     let regex = /SN\w*/g    
@@ -129,12 +125,8 @@ router.post('/insert_serial', auth, async (req, res) => {
       if (pki) {
         serial_number = serial_number.match(regex)[0]
       }
-    }
-    
-    
+    }    
   }
-  
-
 
   let oldNumberMachine
   const unit = req.body.unit
@@ -176,7 +168,7 @@ router.post('/insert_serial', auth, async (req, res) => {
     for (let index = 0; index < oldPC[unit].length; index++) {
       if (oldPC[unit][index].serial_number == pki.serial_number) {
         oldPC[unit][index].serial_number = ''
-        oldPC[unit][index].name = ''
+        oldPC[unit][index].name = 'Н/Д'
       }
     }
     let newOldPC = await PC.findOne({serial_number: oldNumberMachine})
@@ -448,7 +440,7 @@ router.post('/pc_edit', auth, async (req, res) => {
 
 
 router.post('/check_serial', auth, async (req, res) => {  
-  const pki = await PKI.findOne({serial_number: req.body.serial_number})
+  const pki = await PKI.findOne({part: req.session.part, serial_number: req.body.serial_number})
   if (pki) {
     if (pki.number_machine) {
       res.send(pki.number_machine)
@@ -498,9 +490,6 @@ router.post('/delete', auth, async (req, res) => {
   await PC.deleteOne({_id: req.body.id})
   res.sendStatus(200)
 })
-
-
-
 
 
 module.exports = router

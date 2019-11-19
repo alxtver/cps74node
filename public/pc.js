@@ -66,7 +66,7 @@ function CreateTablePC() {
     quantityCell.contentEditable = "true"
 
     let serial_numberCell = tr.insertCell(-1)
-    
+
     serial_numberCell.id = "serial_number"
     serial_numberCell.contentEditable = "true"
     if (unit == 'Системный блок' || unit == 'Сетевой фильтр' || unit == 'Гарнитура') {
@@ -346,7 +346,7 @@ function CreateTableSystemCase() {
         $(newRow).insertAfter(checkedRow)
       }
     })
-})
+  })
   $(".delete-row").click(function () {
     $("#pc_unit").find('input[name="record"]').each(function () {
       if ($(this).is(":checked")) {
@@ -417,11 +417,11 @@ function load_pc(id) {
     data: {
       id: id
     },
-    success: function (data) {      
-      let color = JSON.parse(data).back_color      
+    success: function (data) {
+      let color = JSON.parse(data).back_color
       CreateTableEditPC(JSON.parse(data))
       $("#select_color option:contains(" + color + ")").prop('selected', true)
-      
+
     }
   })
 }
@@ -467,7 +467,7 @@ function TablePc(pc) {
   td.className = "up"
   tr.appendChild(td)
 
- 
+
 
   td = document.createElement("td")
   tr.appendChild(td)
@@ -487,9 +487,9 @@ function TablePc(pc) {
       td.className = "attachment up"
     }
   }
-  
-  
-  
+
+
+
   tr.appendChild(td)
 
   if (pc.pc_unit.length > 0) {
@@ -870,7 +870,7 @@ function CreateTableFromJSON(data, callback) {
       divCont.className = "tableContent-yelow mb-3"
     } else {
       divCont.className = "tableContent mb-3"
-    }    
+    }
     divContainer.appendChild(divCont);
     divCont.innerHTML = ""
     divCont.appendChild(table)
@@ -897,7 +897,7 @@ function CreateTableFromJSON(data, callback) {
     let button_del = document.createElement('input')
     button_del.type = 'button'
     button_del.className = 'btn btn-outline-danger mr-2 mb-2 delBtn float-right'
-    button_del.value = 'Удалить'    
+    button_del.value = 'Удалить'
     button_del.dataset.id = data[i]._id
     button_del.dataset.serial_number = data[i].serial_number
     button_del.dataset.target = '#modalDel'
@@ -907,7 +907,7 @@ function CreateTableFromJSON(data, callback) {
   callback()
 }
 
-function CreateTableEditPC(data, callback) {
+function CreateTableEditPC(data) {
   // CREATE DYNAMIC TABLE.
   let divContainer = document.getElementById("PC")
   divContainer.innerHTML = ""
@@ -939,7 +939,7 @@ function CreateTableEditPC(data, callback) {
   button_del_row.className = 'btn btn-outline-danger ml-2 mr-2 mb-2'
   button_del_row.value = 'Удалить строку'
   divCont.appendChild(button_del_row)
-  
+
   let select_color = document.createElement('select')
   select_color.className = 'form-control'
   select_color.id = 'select_color'
@@ -966,7 +966,7 @@ function CreateTableEditPC(data, callback) {
   button_back.setAttribute("onclick", "location.href='/pc?part=" + data.part + "&serial_number=" + data.serial_number + "'")
   divCont.appendChild(button_back)
 
-  
+
 
   $("#add-row").click(function () {
     $("#pc_unit").find('input[name="record"]').each(function () {
@@ -1054,14 +1054,13 @@ function CreateTableEditPC(data, callback) {
 
         $(newRow).insertAfter(checkedRow)
 
-      
+
       }
     })
-    callback()
-})
-  
+  })
 
-  $('#delete-row').click(function(){
+
+  $('#delete-row').click(function () {
     $("#pc_unit").find('input[name="record"]').each(function () {
       if ($(this).is(":checked")) {
         $(this).parents("tr").remove()
@@ -1084,27 +1083,46 @@ function CreateSelect(data) {
 
 function edit_serial_number(id, obj, unit, serial_number) {
   $.ajax({
-    url: "/pc/insert_serial",
+    url: "/pc/check_serial",
     type: "POST",
     headers: {
       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
     },
     data: {
-      id: id,
-      obj: obj,
-      unit: unit,
       serial_number: serial_number
     },
-    success: function (pc) {
-      UpdateCells(JSON.parse(pc), function () {
-      
-        $("td.name").each(function () {
-          if ($(this).text() == 'Н/Д') {
-            $(this).css("background-color", "coral")
-          }
-        })
+    success: function (data) {
+      if (data != 'ok') {
+        $(".popup-checkbox").prop('checked', true)
+        let msg_txt = 'Серийник был привязан к машине с номером ' + data
+        $("#oldNumber").text(msg_txt)
+        var audio = {};
+        audio["walk"] = new Audio();
+        audio["walk"].src = "/sounds/S20759.mp3"
+        audio["walk"].play()
+      }
+      $.ajax({
+        url: "/pc/insert_serial",
+        type: "POST",
+        headers: {
+          'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        },
+        data: {
+          id: id,
+          obj: obj,
+          unit: unit,
+          serial_number: serial_number
+        },
+        success: function (pc) {
+          UpdateCells(JSON.parse(pc), data, function () {
 
-      
+            $("td.name").each(function () {
+              if ($(this).text() == 'Н/Д') {
+                $(this).css("background-color", "coral")
+              }
+            })
+          })
+        }
       })
     }
   })
@@ -1127,7 +1145,7 @@ function check_serial_number(serial_number) {
         $("#oldNumber").text(msg_txt)
         var audio = {};
         audio["walk"] = new Audio();
-        audio["walk"].src = "/sounds/S20759.mp3"        
+        audio["walk"].src = "/sounds/S20759.mp3"
         audio["walk"].play()
       }
     }
@@ -1154,43 +1172,63 @@ function edit_serial_number_apkzi(id, obj, unit, serial_number) {
   })
 }
 
-function UpdateCells(pc, callback) {
-  // Обновление всех таблиц
-  //load_data()
-  
+function UpdateCells(pc, how, callback) {
+  if (how != 'ok') {
+    // Обновление всех таблиц
+    load_data()
+  } else {
+    //Обновление только одной таблицы
+    let divContainer = document.getElementById(pc._id)
+    divContainer.innerHTML = ""
+    table = TablePc(pc)
+    let divCont = document.createElement("div")
+    divCont.id = pc._id
+    divCont.className = "tableContent"
+    divContainer.appendChild(divCont);
+    divCont.innerHTML = ""
+    divCont.appendChild(table)
 
-  //Обновление только одной таблицы
+    let button_copy = document.createElement('input')
+    button_copy.type = "button"
+    button_copy.className = 'btn btn-dark mr-2 mb-2 ml-3 copyBtn'
+    button_copy.onchange = "klcCopy()"
+    button_copy.value = 'Копировать'
+    button_copy.dataset.id = pc._id
+    button_copy.dataset.serial_number = pc.serial_number
+    button_copy.dataset.toggle = 'modal'
+    button_copy.dataset.target = '#modalCopy'
+    divCont.appendChild(button_copy)
 
-  let divContainer = document.getElementById(pc._id)
-  divContainer.innerHTML = ""  
-  table = TablePc(pc)
-  let divCont = document.createElement("div")
-  divCont.id = pc._id
-  divCont.className = "tableContent"
-  divContainer.appendChild(divCont);
-  divCont.innerHTML = ""
-  divCont.appendChild(table)
-
-  let button_copy = document.createElement('input')
-  button_copy.type = "button"
-  button_copy.className = 'btn btn-dark mr-2 mb-2 ml-3 copyBtn'
-  button_copy.onchange = "klcCopy()"
-  button_copy.value = 'Копировать'
-  button_copy.dataset.id = pc._id
-  button_copy.dataset.serial_number = pc.serial_number
-  button_copy.dataset.toggle = 'modal'
-  button_copy.dataset.target = '#modalCopy'
-  divCont.appendChild(button_copy)
-
-  let button_edit = document.createElement('input')
-  button_edit.type = 'button'
-  button_edit.className = 'btn btn-dark mr-2 mb-2'
-  button_edit.value = 'Редактировать'
-  button_edit.setAttribute("onclick", "location.href='/pc/" + pc._id + "/edit?allow=true'")
-  button_edit.dataset.id = pc._id
-  divCont.appendChild(button_edit)
-
-  if(callback) {
+    let button_edit = document.createElement('input')
+    button_edit.type = 'button'
+    button_edit.className = 'btn btn-dark mr-2 mb-2'
+    button_edit.value = 'Редактировать'
+    button_edit.setAttribute("onclick", "location.href='/pc/" + pc._id + "/edit?allow=true'")
+    button_edit.dataset.id = pc._id
+    divCont.appendChild(button_edit)
+    
+    
+    
+    //переход на одну ячейку вниз
+    let current_id = $("#hidd_id").val()
+    let next_id = current_id.split(";")
+    next_id[1] = Number(next_id[1]) + 1 + ''    
+    if ($(".popup-checkbox").is(":not(:checked)")) {
+      nextCellText = $(".serial_number[data-data='" + next_id.join(';') + "']").text()
+      while (nextCellText == 'б/н' || nextCellText == 'Б/Н') {
+        next_id[1] = Number(next_id[1]) + 1 + ''
+        nextCellText = $(".serial_number[data-data='" + next_id.join(';') + "']").text()
+      }
+      $(".serial_number[data-data='" + next_id.join(';') + "']").focus()
+      
+      $("td.serial_number").each(function () {
+        if (!$(this).text()) {
+          $(this).css("background-color", "darkgray")
+        }
+      })
+    }
+  }
+  if (callback) {
     callback()
   }
 }
@@ -1230,16 +1268,18 @@ function klcCopy() {
 }
 
 function delBtn() {
-  let id = $('#hidId').val()  
+  let id = $('#hidId').val()
   $.ajax({
-      url: "/pc/delete",
-      method: "POST",
-      headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
-      data: {
-          id: id
-      },
-      success: function (data) {
-          load_data()
-      }
+    url: "/pc/delete",
+    method: "POST",
+    headers: {
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    },
+    data: {
+      id: id
+    },
+    success: function (data) {
+      load_data()
+    }
   })
 }
