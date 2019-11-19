@@ -70,8 +70,7 @@ router.post('/login', async (req, res) =>{
 router.post('/register', async (req, res) =>{
     
     try {
-        const {username, password, passagain, group} = req.body
-        console.log(group)
+        const {username, password, passagain, group} = req.body       
         const candidate = await User.findOne({username})
 
         if (candidate) {

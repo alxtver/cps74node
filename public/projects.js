@@ -50,7 +50,17 @@ function TablePc(pc) {
 
   td = document.createElement("td")
   td.innerHTML = pc.serial_number
-  td.className = "serial up"
+  if (pc.back_color == 'Синий') {
+    td.className = "serial_blue up"
+  } else if (pc.back_color == 'Зеленый') {
+    td.className = "serial_green up"
+  } else if (pc.back_color == 'Красный') {
+    td.className = "serial_red up"
+  } else if (pc.back_color == 'Желтый') {
+    td.className = "serial_yelow up"
+  } else {
+    td.className = "serial up"
+  }
   tr.appendChild(td)
 
   td = document.createElement("td")
@@ -65,7 +75,22 @@ function TablePc(pc) {
 
   td = document.createElement("td")
   tr.appendChild(td)
+ 
   td = document.createElement("td")
+  if (pc.attachment) {
+    td.innerHTML = pc.attachment
+    if (pc.back_color == 'Синий') {
+      td.className = "attachment_blue up"
+    } else if (pc.back_color == 'Зеленый') {
+      td.className = "attachment_green up"
+    } else if (pc.back_color == 'Красный') {
+      td.className = "attachment_red up"
+    } else if (pc.back_color == 'Желтый') {
+      td.className = "attachment_yelow up"
+    } else {
+      td.className = "attachment up"
+    }
+  }
   tr.appendChild(td)
 
   if (pc.pc_unit.length > 0) {
@@ -224,7 +249,17 @@ function CreateTableFromJSON(data) {
     let divContainer = document.getElementById("PC");
     let divCont = document.createElement("div")
     divCont.id = elem._id
-    divCont.className = "tableContent mb-3"
+    if (elem.back_color == 'Синий') {
+      divCont.className = "tableContent-blue mb-3"
+    } else if (elem.back_color == 'Зеленый') {
+      divCont.className = "tableContent-green mb-3"
+    } else if (elem.back_color == 'Красный') {
+      divCont.className = "tableContent-red mb-3"
+    } else if (elem.back_color == 'Желтый') {
+      divCont.className = "tableContent-yelow mb-3"
+    } else {
+      divCont.className = "tableContent mb-3"
+    }   
     divContainer.appendChild(divCont);
     divCont.innerHTML = ""
     divCont.appendChild(table)

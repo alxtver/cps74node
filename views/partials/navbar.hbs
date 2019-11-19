@@ -1,5 +1,6 @@
+{{#if isAuth}}
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="/">74 отдел</a>
+  <a class="navbar-brand" href="/"></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
     aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -7,7 +8,7 @@
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav">
 
-      {{#if isAuth}}
+      
       {{#if isHome}}
       <li class="nav-item active"><a class="nav-link" href="/">Главная</a></li>
       {{else}}
@@ -48,23 +49,19 @@
 
       <li class="nav-item"><a class="nav-link" href="/auth/logout">Выйти</a></li>
       {{else}}
-      {{#if isLogin}}
-      <li class="nav-item active"><a class="nav-link" href="/auth/login">Войти</a></li>
-      {{else}}
-      <li class="nav-item"><a class="nav-link" href="/auth/login">Войти</a></li>
-      {{/if}}
 
       
 
       {{/if}}
       
-
+{{#if isAuth}}
     </ul>
     <ul class="navbar-nav ml-auto">
           <select id="part_select_navbar" class="custom-select">
             <option selected>Выберите проект</option>
           </select>
     </ul>
+    {{/if}}
     <script>
       $(document).ready(function() {
         load_part_navbar()

@@ -20,10 +20,10 @@
       <!-- форма входа -->
       <form action="/auth/login" method="POST" class="mt-5">
         <div class="form-group">
-          <input type="text" id="login" class="fadeIn second mb-1" name="username" placeholder="Логин" required autofocus>
+          <input type="text" id="login" class="form-control form-control-lg" name="username" placeholder="Логин" required autofocus>
         </div>
         <div class="form-group">
-          <input type="password" id="password" class="fadeIn third mb-1" name="password" placeholder="Пароль" required>
+          <input type="password" id="password" class="form-control form-control-lg" name="password" placeholder="Пароль" required>
         </div>
         <input type="hidden" name="_csrf" value="{{csrf}}">
         <input type="submit" class="btn btn-dark mt-4" value="Войти">
