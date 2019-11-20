@@ -25,6 +25,7 @@ router.post('/', auth, async (req, res) => {
   })
 })
 
+
 router.get('/:id/edit', auth, async (req, res) => {
   if (!req.query.allow) {
     return res.redirect('/')
@@ -42,17 +43,52 @@ router.post('/edit', auth, async (req, res) => {
   res.redirect('/pkis')
 })
 
+
 router.post('/edit_ajax', auth, async (req, res) => {
   try {
-
     await Pki.findByIdAndUpdate(req.body.id, req.body)
-    res.sendStatus(200)
-
-    if (!req.body) return res.sendStatus(400);
   } catch (error) {
     console.log(error)
   }
+  let pki = await Pki.findById(req.body.id)
+  // let pc
+
+  if (pki.number_machine) {
+    let pc = await PC.findOne({
+      part: pki.part,
+      serial_number: pki.number_machine
+    })
+    if (pc) {
+      let unit = 'pc_unit'
+      for (let i in pc[unit]) {
+        if (pki.serial_number == pc[unit][i].serial_number) {
+          pc[unit][i].name = pki.vendor + " " + pki.model
+          pc[unit][i].type = pki.type_pki
+          break
+        }
+      }
+      unit = 'system_case_unit'
+      for (let i in pc[unit]) {
+        if (pki.serial_number == pc[unit][i].serial_number) {          
+          pc[unit][i].name = pki.vendor + " " + pki.model
+          pc[unit][i].type = pki.type_pki
+          break
+        }
+      }
+    }
+    let pc_copy = await PC.findOne({
+      part: pki.part,
+      serial_number: pki.number_machine
+    })
+    pc_copy.pc_unit = pc.pc_unit
+    pc_copy.system_case_unit = pc.system_case_unit
+    pc_copy.save()
+  }
+
+    res.sendStatus(200)
+
 })
+
 
 router.post("/search", auth, async (req, res) => {
   let selected = req.session.part  
@@ -243,8 +279,6 @@ let styleheader = workbook.createStyle({
 			color: 'black',
 		},
 }})
-
-
 
 let styleHead = workbook.createStyle({
   font: {

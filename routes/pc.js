@@ -176,7 +176,10 @@ router.post('/insert_serial', auth, async (req, res) => {
     newOldPC.save()
   }
   
-  res.send(JSON.stringify(pc_copy))
+  res.send(JSON.stringify({
+    pc: pc_copy,
+    oldNumberMachine: oldNumberMachine
+  }))
 })
 
 
@@ -436,21 +439,6 @@ router.post('/pc_edit', auth, async (req, res) => {
   } else {
     res.send(false)
   }
-})
-
-
-router.post('/check_serial', auth, async (req, res) => {  
-  const pki = await PKI.findOne({part: req.session.part, serial_number: req.body.serial_number})
-  if (pki) {
-    if (pki.number_machine) {
-      res.send(pki.number_machine)
-    } else {
-      res.send('ok')
-    }
-  } else {
-    res.send('ok')
-  }
-  
 })
 
 

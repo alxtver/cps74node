@@ -1083,74 +1083,41 @@ function CreateSelect(data) {
 
 function edit_serial_number(id, obj, unit, serial_number) {
   $.ajax({
-    url: "/pc/check_serial",
+    url: "/pc/insert_serial",
     type: "POST",
     headers: {
       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
     },
     data: {
+      id: id,
+      obj: obj,
+      unit: unit,
       serial_number: serial_number
     },
-    success: function (data) {
-      if (data != 'ok') {
+    success: function (pc) {
+      let oldNumberMachine = JSON.parse(pc).oldNumberMachine
+      if (oldNumberMachine) {
         $(".popup-checkbox").prop('checked', true)
-        let msg_txt = 'Серийник был привязан к машине с номером ' + data
+        let msg_txt = 'Серийник был привязан к машине с номером ' + oldNumberMachine
         $("#oldNumber").text(msg_txt)
         var audio = {};
-        audio["walk"] = new Audio();
-        audio["walk"].src = "/sounds/S20759.mp3"
-        audio["walk"].play()
+        audio["alert"] = new Audio();
+        audio["alert"].src = "/sounds/S20759.mp3"
+        audio["alert"].play()
       }
-      $.ajax({
-        url: "/pc/insert_serial",
-        type: "POST",
-        headers: {
-          'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-        },
-        data: {
-          id: id,
-          obj: obj,
-          unit: unit,
-          serial_number: serial_number
-        },
-        success: function (pc) {
-          UpdateCells(JSON.parse(pc), data, function () {
-
-            $("td.name").each(function () {
-              if ($(this).text() == 'Н/Д') {
-                $(this).css("background-color", "coral")
-              }
-            })
-          })
-        }
+      UpdateCells(JSON.parse(pc).pc, oldNumberMachine, function () {
+        $("td.name").each(function () {
+          if ($(this).text() == 'Н/Д') {
+            $(this).css("background-color", "coral")
+          }
+        })
       })
     }
   })
+
 }
 
-function check_serial_number(serial_number) {
-  $.ajax({
-    url: "/pc/check_serial",
-    type: "POST",
-    headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-    },
-    data: {
-      serial_number: serial_number
-    },
-    success: function (data) {
-      if (data != 'ok') {
-        $(".popup-checkbox").prop('checked', true)
-        let msg_txt = 'Серийник был привязан к машине с номером ' + data
-        $("#oldNumber").text(msg_txt)
-        var audio = {};
-        audio["walk"] = new Audio();
-        audio["walk"].src = "/sounds/S20759.mp3"
-        audio["walk"].play()
-      }
-    }
-  })
-}
+
 
 
 function edit_serial_number_apkzi(id, obj, unit, serial_number) {
@@ -1173,7 +1140,7 @@ function edit_serial_number_apkzi(id, obj, unit, serial_number) {
 }
 
 function UpdateCells(pc, how, callback) {
-  if (how != 'ok') {
+  if (how) {
     // Обновление всех таблиц
     load_data()
   } else {
@@ -1206,13 +1173,13 @@ function UpdateCells(pc, how, callback) {
     button_edit.setAttribute("onclick", "location.href='/pc/" + pc._id + "/edit?allow=true'")
     button_edit.dataset.id = pc._id
     divCont.appendChild(button_edit)
-    
-    
-    
+
+
+
     //переход на одну ячейку вниз
     let current_id = $("#hidd_id").val()
     let next_id = current_id.split(";")
-    next_id[1] = Number(next_id[1]) + 1 + ''    
+    next_id[1] = Number(next_id[1]) + 1 + ''
     if ($(".popup-checkbox").is(":not(:checked)")) {
       nextCellText = $(".serial_number[data-data='" + next_id.join(';') + "']").text()
       while (nextCellText == 'б/н' || nextCellText == 'Б/Н') {
@@ -1220,7 +1187,7 @@ function UpdateCells(pc, how, callback) {
         nextCellText = $(".serial_number[data-data='" + next_id.join(';') + "']").text()
       }
       $(".serial_number[data-data='" + next_id.join(';') + "']").focus()
-      
+
       $("td.serial_number").each(function () {
         if (!$(this).text()) {
           $(this).css("background-color", "darkgray")
