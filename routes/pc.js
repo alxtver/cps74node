@@ -129,18 +129,37 @@ router.post('/insert_serial', auth, async (req, res) => {
   }
 
   let oldNumberMachine
+  let numberToRequest
   const unit = req.body.unit
 
   //Если серийник есть, то ищем ПКИ с таким серийником и отвязываем от машины
   let oldPKI = await PKI.findOne({part: pc.part, serial_number: pc[unit][req.body.obj].serial_number})
-  if (oldPKI){
-    oldPKI.number_machine = ''
+
+  if (oldPKI && pki){    
+    if (oldPKI.serial_number != pki.serial_number) {
+      oldPKI.number_machine = ''
+    } else {
+      // проверяем на дубляж ПКИ в текущей машине
+      let countPki = 0
+      for (let index = 0; index < pc[unit].length; index++) {
+        if (pc[unit][index].serial_number != '') {
+          if (pc[unit][index].serial_number == pki.serial_number) {
+            countPki += 1 
+           }
+        }        
+      }
+      console.log('Количество одинаковых ПКИ - ' + countPki);
+    }
+    
     await oldPKI.save()
   }
+
+
   // Проверяем был ли привязан ПКИ к машине и привязываем к новой машине
   if (pki) {
     if (pki.number_machine){      
-      if (pki.number_machine == pc.serial_number){
+      numberToRequest = pki.number_machine
+      if (pki.number_machine == pc.serial_number){        
         pki.number_machine = ''
       } else {
         oldNumberMachine = pki.number_machine
@@ -161,9 +180,10 @@ router.post('/insert_serial', auth, async (req, res) => {
     pc_copy[unit] = pc[unit]
     await pc_copy.save()
   }
-
+  console.log('Старый номер машины- ' + oldNumberMachine);
   // Если ПКИ был привязан удаляем ПКИ из старой машины
   if (oldNumberMachine) {
+    console.log('Мы тут');
     let oldPC = await PC.findOne({serial_number: oldNumberMachine})
     for (let index = 0; index < oldPC[unit].length; index++) {
       if (oldPC[unit][index].serial_number == pki.serial_number) {
@@ -178,7 +198,7 @@ router.post('/insert_serial', auth, async (req, res) => {
   
   res.send(JSON.stringify({
     pc: pc_copy,
-    oldNumberMachine: oldNumberMachine
+    oldNumberMachine: numberToRequest
   }))
 })
 
