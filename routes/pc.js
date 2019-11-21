@@ -9,7 +9,7 @@ const auth = require('../middleware/auth')
 const router = Router()
 
 
-router.get('/', auth, async (req, res) => {  
+router.get('/', auth, async (req, res) => {
   res.render('pc', {
     title: 'Машины',
     isPC: true,
@@ -57,7 +57,7 @@ router.post('/add', auth, async (req, res) => {
   }
 
   const pc = new PC({
-    serial_number: req.body.serial_number,    
+    serial_number: req.body.serial_number,
     execution: execution,
     fdsi: req.body.fdsi,
     part: req.body.part,
@@ -89,7 +89,9 @@ router.post('/add', auth, async (req, res) => {
 
 
 router.post("/search", auth, async function (req, res) {
-  pcs = await PC.find({part: req.session.part})
+  pcs = await PC.find({
+    part: req.session.part
+  })
   res.send(JSON.stringify(pcs)); // отправляем пришедший ответ обратно
 })
 
@@ -106,12 +108,18 @@ router.post('/insert_serial', auth, async (req, res) => {
   let pc = await PC.findById(req.body.id) //ищем комп который собираемся редактировать
   let pc_copy = await PC.findById(req.body.id) //и копию....
   let serial_number = req.body.serial_number
+  const unit = req.body.unit
+  let pki = await PKI.findOne({
+    part: pc.part,
+    serial_number: serial_number
+  })
 
-  let pki = await PKI.findOne({part: pc.part, serial_number: serial_number})  
-
-// проверка на гребаные сидюки два запроса вместо одного
+  // проверка на гребаные сидюки два запроса вместо одного
   if (!pki) {
-    pki = await PKI.findOne({part: pc.part, serial_number: serial_number.split(' ').reverse().join(' ')})
+    pki = await PKI.findOne({
+      part: pc.part,
+      serial_number: serial_number.split(' ').reverse().join(' ')
+    })
     if (pki) {
       serial_number = serial_number.split(' ').reverse().join(' ')
     }
@@ -119,110 +127,132 @@ router.post('/insert_serial', auth, async (req, res) => {
 
   // проверка на левый серийник Gigabyte
   if (!pki) {
-    let regex = /SN\w*/g    
+    let regex = /SN\w*/g
     if (serial_number.match(regex)) {
-      pki = await PKI.findOne({part: pc.part, serial_number: serial_number.match(regex)[0]})
+      pki = await PKI.findOne({
+        part: pc.part,
+        serial_number: serial_number.match(regex)[0]
+      })
       if (pki) {
         serial_number = serial_number.match(regex)[0]
       }
-    }    
-  }
-
-  let oldNumberMachine
-  let numberToRequest
-  const unit = req.body.unit
-
-  //Если серийник есть, то ищем ПКИ с таким серийником и отвязываем от машины
-  let oldPKI = await PKI.findOne({part: pc.part, serial_number: pc[unit][req.body.obj].serial_number})
-
-  if (oldPKI && pki){    
-    if (oldPKI.serial_number != pki.serial_number) {
-      oldPKI.number_machine = ''
-    } else {
-      // проверяем на дубляж ПКИ в текущей машине
-      let countPki = 0
-      for (let index = 0; index < pc[unit].length; index++) {
-        if (pc[unit][index].serial_number != '') {
-          if (pc[unit][index].serial_number == pki.serial_number) {
-            countPki += 1 
-           }
-        }        
-      }
-      console.log('Количество одинаковых ПКИ - ' + countPki);
     }
-    
-    await oldPKI.save()
   }
 
+  let oldPki // ПКИ который раньше был на этом месте  
+  if (pc[unit][req.body.obj].serial_number) {
+    oldPki = await PKI.findOne({
+      part: pc.part,
+      serial_number: pc[unit][req.body.obj].serial_number
+    })
+    if (oldPki) {
+      if (oldPki.number_machine != pc.serial_number) {
+        oldPki.number_machine = ''
+        await oldPki.save()
+      } else {
+        // если ПКИ задублировались, то чтобы при удалении одного не отвязывался другой
+        // применяем цикл
+        let countPki = 0  
+        for (let index = 0; index < pc[unit].length; index++) {
+          if (pc[unit][index].serial_number == oldPki.serial_number) {
+            countPki += 1
+          }
+        }
+        if (countPki <= 1) {
+          oldPki.number_machine = ''
+          await oldPki.save()
+        }
+      }
+    }
+  }
+
+  let oldNumberMachine //номер машины, который раньше был у ПКИ
+  if (pki) {
+    if (pki.number_machine) {
+      oldNumberMachine = pki.number_machine
+      pki.number_machine = pc.serial_number
+      await pki.save()
+    }
+  }
+
+  // Если ПКИ был привязан удаляем ПКИ из старой машины
+  if (oldNumberMachine) {
+    if (oldNumberMachine != pc.serial_number) {
+      let oldPC = await PC.findOne({serial_number: oldNumberMachine})
+      for (let index = 0; index < oldPC[unit].length; index++) {
+        if (oldPC[unit][index].serial_number == pki.serial_number) {
+          oldPC[unit][index].serial_number = ''
+          oldPC[unit][index].name = 'Н/Д'
+        }
+      }
+      let newOldPC = await PC.findOne({serial_number: oldNumberMachine})
+      newOldPC[unit] = oldPC[unit]
+      await newOldPC.save()
+    }
+  }
 
   // Проверяем был ли привязан ПКИ к машине и привязываем к новой машине
   if (pki) {
-    if (pki.number_machine){      
-      numberToRequest = pki.number_machine
-      if (pki.number_machine == pc.serial_number){        
+    if (pki.number_machine) {
+      if (pki.number_machine == pc.serial_number) {
         pki.number_machine = ''
       } else {
         oldNumberMachine = pki.number_machine
       }
     }
     pki.number_machine = pc.serial_number
-    pki.save()
+    await pki.save()
     // Добавляем ПКИ к новой машине
     pc[unit][req.body.obj].serial_number = serial_number //меняем серийник
-    pc[unit][req.body.obj].name = pki.vendor + " " + pki.model    //меняем имя
-    pc[unit][req.body.obj].type = pki.type_pki                    //меняем тип
+    pc[unit][req.body.obj].name = pki.vendor + " " + pki.model //меняем имя
+    pc[unit][req.body.obj].type = pki.type_pki //меняем тип
     pc_copy[unit] = pc[unit]
     await pc_copy.save()
-    
+
   } else {
     pc[unit][req.body.obj].serial_number = serial_number
     pc[unit][req.body.obj].name = "Н/Д"
     pc_copy[unit] = pc[unit]
     await pc_copy.save()
   }
-  console.log('Старый номер машины- ' + oldNumberMachine);
-  // Если ПКИ был привязан удаляем ПКИ из старой машины
-  if (oldNumberMachine) {
-    console.log('Мы тут');
-    let oldPC = await PC.findOne({serial_number: oldNumberMachine})
-    for (let index = 0; index < oldPC[unit].length; index++) {
-      if (oldPC[unit][index].serial_number == pki.serial_number) {
-        oldPC[unit][index].serial_number = ''
-        oldPC[unit][index].name = 'Н/Д'
-      }
-    }
-    let newOldPC = await PC.findOne({serial_number: oldNumberMachine})
-    newOldPC[unit] = oldPC[unit]
-    newOldPC.save()
-  }
-  
+
+
+
   res.send(JSON.stringify({
     pc: pc_copy,
-    oldNumberMachine: numberToRequest
+    oldNumberMachine: oldNumberMachine
   }))
+
+
 })
 
 
 router.post('/insert_serial_apkzi', auth, async (req, res) => {
   //Жесть пипец!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  
+
   let pc = await PC.findById(req.body.id) //ищем комп который собираемся редактировать
   let pc_copy = await PC.findById(req.body.id) //и копию....  
   let serial_number = req.body.serial_number
-  let apkzi = await APKZI.findOne({part: pc.part, kontr_zav_number: serial_number})
+  let apkzi = await APKZI.findOne({
+    part: pc.part,
+    kontr_zav_number: serial_number
+  })
   let oldNumberMachine
   const unit = req.body.unit
- 
+
   // Если серийник есть, то ищем ПКИ с таким серийником и отвязываем от машины
-  let oldapkzi = await APKZI.findOne({part: pc.part, kontr_zav_number: pc[unit][req.body.obj].serial_number})
-  if (oldapkzi){
+  let oldapkzi = await APKZI.findOne({
+    part: pc.part,
+    kontr_zav_number: pc[unit][req.body.obj].serial_number
+  })
+  if (oldapkzi) {
     oldapkzi.number_machine = ''
     await oldapkzi.save()
   }
   // Проверяем был ли привязан APKZI к машине и привязываем к новой машине
   if (apkzi) {
-    if (apkzi.number_machine){      
-      if (apkzi.number_machine == pc.serial_number){
+    if (apkzi.number_machine) {
+      if (apkzi.number_machine == pc.serial_number) {
         apkzi.number_machine = ''
       } else {
         oldNumberMachine = apkzi.number_machine
@@ -235,37 +265,37 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
     let kontr_name = apkzi.kont_name
     const arr_kontr_name = kontr_name.split(' ')
     const arr_end = arr_kontr_name.slice(-1)
-    const arr_start = arr_kontr_name.slice(0, -1) 
+    const arr_start = arr_kontr_name.slice(0, -1)
     pc[unit][req.body.obj].name = arr_end //меняем тип
-    pc[unit][req.body.obj].type = arr_start.join(' ')  //меняем имя
+    pc[unit][req.body.obj].type = arr_start.join(' ') //меняем имя
     // pc[unit][req.body.obj].fdsi = apkzi.fdsi
-    
+
     // console.log(pc.pc_unit[7]);
     let index_apkzi
     for (let index = 0; index < pc.pc_unit.length; index++) {
       if (pc.pc_unit[index].apkzi) {
         index_apkzi = index
         break
-      }    
+      }
     }
-    
+
     const apkzi_name = apkzi.apkzi_name
     const arr_apkzi_name = apkzi_name.split(' ')
     const arr_apkzi_end = arr_apkzi_name.slice(-1)
-    const arr_apkzi_start = arr_apkzi_name.slice(0, -1) 
-    
+    const arr_apkzi_start = arr_apkzi_name.slice(0, -1)
+
     if (index_apkzi) {
       pc.pc_unit[index_apkzi].fdsi = 'ФДШИ. ' + apkzi.fdsi
-      pc.pc_unit[index_apkzi].type = arr_apkzi_start 
-      pc.pc_unit[index_apkzi].name = arr_apkzi_end 
+      pc.pc_unit[index_apkzi].type = arr_apkzi_start
+      pc.pc_unit[index_apkzi].name = arr_apkzi_end
       pc.pc_unit[index_apkzi].serial_number = apkzi.zav_number
     }
-    
-                     
+
+
     pc_copy[unit] = pc[unit]
     pc_copy.pc_unit = pc.pc_unit
     await pc_copy.save()
-    
+
   } else {
     pc[unit][req.body.obj].serial_number = serial_number
     pc[unit][req.body.obj].name = "Н/Д"
@@ -274,11 +304,11 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
       if (pc.pc_unit[index].apkzi) {
         index_apkzi = index
         break
-      }    
+      }
     }
     if (index_apkzi) {
-    pc.pc_unit[index_apkzi].name = "Н/Д"
-    pc.pc_unit[index_apkzi].serial_number = ""
+      pc.pc_unit[index_apkzi].name = "Н/Д"
+      pc.pc_unit[index_apkzi].serial_number = ""
     }
     pc_copy[unit] = pc[unit]
     pc_copy.pc_unit = pc.pc_unit
@@ -287,10 +317,14 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
 
   // Если ПКИ был привязан удаляем ПКИ из старой машины
   if (oldNumberMachine) {
-    let oldPC = await PC.findOne({serial_number: oldNumberMachine})  
+    let oldPC = await PC.findOne({
+      serial_number: oldNumberMachine
+    })
     oldPC[unit][req.body.obj].serial_number = ''
     oldPC[unit][req.body.obj].name = ''
-    let newOldPC = await PC.findOne({serial_number: oldNumberMachine})
+    let newOldPC = await PC.findOne({
+      serial_number: oldNumberMachine
+    })
     newOldPC[unit] = oldPC[unit]
     newOldPC.save()
   }
@@ -316,16 +350,16 @@ router.post('/copy', auth, async (req, res) => {
 
   function plusOne(number) {
     let indexChar = 0
-      for (let index = 0; index < number.length; index++) {
-        if (!/\d/.test(number[index])){
-          indexChar = index
-        }      
+    for (let index = 0; index < number.length; index++) {
+      if (!/\d/.test(number[index])) {
+        indexChar = index
       }
-      let first_part = number.slice(0, indexChar+1)
-      let second_part = number.slice(indexChar+1)
-      return first_part + (parseInt(second_part)+1)
+    }
+    let first_part = number.slice(0, indexChar + 1)
+    let second_part = number.slice(indexChar + 1)
+    return first_part + (parseInt(second_part) + 1)
   }
-  
+
   let reqSerial = req.body.serial_number
   let range = reqSerial.split(';')
   if (range.length > 1) {
@@ -334,7 +368,9 @@ router.post('/copy', auth, async (req, res) => {
     let number = firstNumber
     while (number != plusOne(lastNumber)) {
       const pc = await PC.findById(req.body.id)
-      checkPCNumber = await PC.findOne({serial_number: number})
+      checkPCNumber = await PC.findOne({
+        serial_number: number
+      })
       if (!checkPCNumber) {
         let newPC = new PC({
           serial_number: number,
@@ -347,7 +383,7 @@ router.post('/copy', auth, async (req, res) => {
           pc_unit: [],
           system_case_unit: []
         })
-      
+
         for (unit of pc.pc_unit) {
           if (unit.serial_number == pc.serial_number) {
             unit.serial_number = number
@@ -360,8 +396,8 @@ router.post('/copy', auth, async (req, res) => {
             newPC.pc_unit.push(unit)
           }
         }
-      
-        for (unit of pc.system_case_unit) {          
+
+        for (unit of pc.system_case_unit) {
           if (unit.serial_number == pc.serial_number) {
             unit.serial_number = number
             newPC.system_case_unit.push(unit)
@@ -375,12 +411,12 @@ router.post('/copy', auth, async (req, res) => {
         }
         try {
           await newPC.save()
-          
+
         } catch (error) {
           console.log(error)
         }
       }
-      
+
       number = plusOne(number)
     }
     res.render('pc', {
@@ -400,7 +436,7 @@ router.post('/copy', auth, async (req, res) => {
       pc_unit: [],
       system_case_unit: []
     })
-  
+
     for (unit of pc.pc_unit) {
       if (unit.serial_number == pc.serial_number) {
         unit.serial_number = req.body.serial_number
@@ -413,7 +449,7 @@ router.post('/copy', auth, async (req, res) => {
         newPC.pc_unit.push(unit)
       }
     }
-  
+
     for (unit of pc.system_case_unit) {
       if (unit.serial_number == pc.serial_number) {
         unit.serial_number = req.body.serial_number
@@ -462,7 +498,7 @@ router.post('/pc_edit', auth, async (req, res) => {
 })
 
 
-router.post('/pc_update', auth, async (req, res) => {    
+router.post('/pc_update', auth, async (req, res) => {
   const pc = await PC.findById(req.body.id)
   pc.part = req.body.part
   pc.fdsi = req.body.fdsi
@@ -487,15 +523,27 @@ router.post('/pc_update', auth, async (req, res) => {
   }
   pc.pc_unit = newPCUnit
   pc.system_case_unit = newSystemCaseUnit
-  await pc.save()  
+  await pc.save()
 })
 
 
-router.post('/delete', auth, async (req, res) => {  
+router.post('/delete', auth, async (req, res) => {
   pc = await PC.findById(req.body.id)
-  await PKI.updateMany({part: pc.part, number_machine: pc.serial_number}, {number_machine: ''})
-  await APKZI.updateMany({part: pc.part, number_machine: pc.serial_number}, {number_machine: ''})
-  await PC.deleteOne({_id: req.body.id})
+  await PKI.updateMany({
+    part: pc.part,
+    number_machine: pc.serial_number
+  }, {
+    number_machine: ''
+  })
+  await APKZI.updateMany({
+    part: pc.part,
+    number_machine: pc.serial_number
+  }, {
+    number_machine: ''
+  })
+  await PC.deleteOne({
+    _id: req.body.id
+  })
   res.sendStatus(200)
 })
 
