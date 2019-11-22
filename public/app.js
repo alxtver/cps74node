@@ -179,18 +179,30 @@ function load_part_navbar() {
       headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
       success: function (data) {
           if (data){
-            CreateSelectNavbar(JSON.parse(data))
-            load_part_session()
+            CreateSelectNavbar(JSON.parse(data), function () {
+              $.ajax({
+                url: "/pkis/part_session",
+                method: "POST",
+                //async: false,
+                headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+                success: function (data) {            
+                    if (data) {
+                        $("#part_select_navbar option:contains(" + data + ")").prop('selected', true)
+                    }
+                }
+            })
+            })            
           }          
       }
   })
 }
 
-function CreateSelectNavbar(data) {
+function CreateSelectNavbar(data, callback) {
   $("#part_select").append($('<option value="">...</option>'));
   for (let i = 0; i < data.length; i++) {
       $('#part_select_navbar').append('<option value="' + data[i]._id + '">' + data[i].part + '</option>');
   }
+  callback()
 }
 
 function load_part_session() {
@@ -216,5 +228,7 @@ function changeSelect(selectedItem) {
     data: {
       selectedItem: selectedItem
     }
+    
    })
+   console.log('Аякс стработал')
 }
