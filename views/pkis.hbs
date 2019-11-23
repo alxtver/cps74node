@@ -1,7 +1,8 @@
 <script src="/pki.js"></script>
 <h1>ПКИ</h1>
 <button class="btn btn-dark" style="margin-bottom: 1rem" onclick="location.href='/add';">Добавить ПКИ</button>
-<button id="excelImport" class="btn btn-outline-success" onclick="location.href='/pkis/excelImport';" style="margin-bottom: 1rem">Импорт в Excel</button>
+<button id="excelImport" class="btn btn-outline-success" data-toggle="modal" data-target="#modalSort" style="margin-bottom: 1rem">Импорт в Excel</button>
+
 <div class="form-group">    
     <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Поиск...">
 </div>
@@ -22,8 +23,32 @@
         <input type="hidden" name="id" id="hidId">
         <input type="hidden" name="part" id="hidPart">
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Закрыть</button>
           <button type="button" id="btnSubmit" onclick="delBtn()" data-dismiss="modal" class="btn btn-danger">Удалить</button>        
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalSort" tabindex="-1" role="dialog" aria-labelledby="modalSortLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalSortLabel">Выбор сортировки</h5>
+        
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <form method="GET" action="/pkis/excelImport">
+        <select name="sortSelect" class="custom-select type-select mt-3 mb-3" id="sortSelect">
+          <option value="byType">По типу</option>
+          <option value="byPC">По ПЭВМ</option>
+        </select>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" id="close" data-dismiss="modal">Назад</button>
+          <button onclick="modalHide()" class="btn btn-outline-success" id="btnSort" >Импорт</button>
+          {{!-- <input  type="submit" id="sbmSort" value="OK" class="btn btn-danger"> --}}
+                
         </div>
       </form>
     </div>
@@ -33,19 +58,20 @@
 <input hidden="true" id="temp" value="0"></input>
 
 <script>
+  function modalHide(){
+      $('#modalSort').modal('toggle')
+    }
     $(document).ready(function() {
     load_data()
-  
-    //$("body").on('click','#excelImport',function () {
-    //  excelImport()
-    //})
+
 
     $("body").on('click','.delBtn',function () {
       $('#hidId').val($(this).data("id"))
       $('#hidPart').val($(this).data("part"))     
     })
   
-  
+    
+
     $('#search').keyup(function() {
       let search = $(this).val()
       let blank_req = 'null'

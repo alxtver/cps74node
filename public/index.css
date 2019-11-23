@@ -71,9 +71,7 @@
 
 }
 
-form {
-  margin-bottom: 1rem;
-}
+
 
 
 a_boot {
@@ -626,4 +624,8 @@ form {
 
 .custom-select {
   width: 25rem;  
+}
+
+#sortSelect {
+  width: 100%;  
 }

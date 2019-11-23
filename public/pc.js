@@ -359,6 +359,9 @@ function CreateTableSystemCase() {
       }
     })
   })
+
+ 
+  
 }
 
 function load_data(q) {
@@ -961,7 +964,7 @@ function CreateTableEditPC(data) {
 
   let button_back = document.createElement('input')
   button_back.type = 'button'
-  button_back.className = 'btn btn-outline-primary  mt-2 save_button'
+  button_back.className = 'btn btn-outline-primary mb-2 mt-2 save_button'
   button_back.value = 'Назад'
   button_back.setAttribute("onclick", "location.href='/pc?part=" + data.part + "&serial_number=" + data.serial_number + "'")
   divCont.appendChild(button_back)
