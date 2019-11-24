@@ -36,7 +36,10 @@ router.post('/', auth, async (req, res) => {
 
   if (req.body.vendor == 'Gigabyte' || req.body.vendor == 'GIGABYTE') {
     let regex = /SN\w*/g
-    serial_number = serial_number.match(regex)[0]
+    if (serial_number.match(regex)) {
+      serial_number = serial_number.match(regex)[0]
+    }
+    
   }
 
   const candidate = await Pki.findOne({

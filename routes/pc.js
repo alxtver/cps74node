@@ -97,7 +97,7 @@ router.post("/search", auth, async function (req, res) {
 
 
 router.post("/part", async function (req, res) {
-  parts = await Part.find()
+  parts = await Part.find().sort({created: -1})
   reqSesPart = req.session.part
   if (!req.body) return res.sendStatus(400);
   res.send(JSON.stringify({

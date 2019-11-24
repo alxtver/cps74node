@@ -16,6 +16,7 @@ const projectsRoutes = require('./routes/projects')
 const favicon = require('express-favicon')
 const varMiddleware = require('./middleware/variables')
 const userMiddleware = require('./middleware/user')
+const partMiddleware = require('./middleware/part')
 
 const app = express()
 
@@ -50,6 +51,7 @@ app.use(csrf())
 app.use(flash())
 app.use(varMiddleware)
 app.use(userMiddleware)
+app.use(partMiddleware)
 
 app.use('/', homeRoutes)
 app.use('/add', addRoutes)

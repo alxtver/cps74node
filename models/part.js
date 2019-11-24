@@ -8,7 +8,11 @@ const part = new Schema({
         type: String,
         required: true,
         unique: true
-    }
+    },
+    created: {
+        type: Date,
+        default: () => Date.now() + 3*60*60*1000 //время МСК
+      }
 })
 
 module.exports = model('Part', part)
