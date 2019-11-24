@@ -631,9 +631,7 @@ form {
 }
 
 .blacklstHead {
-  font-size: 1.5rem;    
-  
-  text-align: center;
+  font-size: 1.5rem;
 }
 .blacklst {
   font-size: 2rem;
@@ -644,8 +642,7 @@ form {
 }
 
 .blacklstHead p {
-  font-style: oblique;
-  margin-top: 50%;
+  font-style: oblique;  
 }
 
 .blacklst p {
@@ -653,3 +650,13 @@ form {
   margin-top: 3rem;
 }
 
+.tinyText_right {  
+  margin: -28px auto;
+  font-size: 1rem;
+  text-align: right;
+}
+.tinyText_left {  
+  margin: -28px auto;
+  font-size: 1rem;
+  text-align: left;
+}
