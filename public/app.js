@@ -1,4 +1,3 @@
-
 // добавление данных в сессию браузера
 function addSession() {
   let field_ean_code = document.getElementById("ean_code").value
@@ -83,14 +82,14 @@ function loadSession() {
 
 function plusOne(number) {
   let indexChar = 0
-    for (let index = 0; index < number.length; index++) {
-      if (!/\d/.test(number[index])){
-        indexChar = index
-      }      
+  for (let index = 0; index < number.length; index++) {
+    if (!/\d/.test(number[index])) {
+      indexChar = index
     }
-    let first_part = number.slice(0, indexChar+1)
-    let second_part = number.slice(indexChar+1)
-    return first_part + (parseInt(second_part)+1)
+  }
+  let first_part = number.slice(0, indexChar + 1)
+  let second_part = number.slice(indexChar + 1)
+  return first_part + (parseInt(second_part) + 1)
 }
 
 
@@ -122,7 +121,7 @@ function loadSessionApkzi() {
   }
 
   let field_zav_number = document.getElementById("zav_number")
-  if (sessionStorage.getItem("zav_number")) {    
+  if (sessionStorage.getItem("zav_number")) {
     let zav_number_number = plusOne(sessionStorage.getItem("zav_number"))
     field_zav_number.value = zav_number_number
   }
@@ -152,83 +151,86 @@ function searchEAN(valueEAN) {
     headers: {
       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
     },
-    data: {valueEAN: valueEAN},
-    success: function (data) {  
+    data: {
+      valueEAN: valueEAN
+    },
+    success: function (data) {
       if (data != 'none') {
         ean = JSON.parse(data)
         $('#type_pki').val(ean.type_pki)
         $('#vendor').val(ean.vendor)
         $('#model').val(ean.model)
         $('#country').val(ean.country)
-      } else {        
+      } else {
         $('#type_pki').val('')
         $('#vendor').val('')
         $('#model').val('')
         $('#country').val('')
       }
-      
+
     }
   })
 }
 
+
 function load_part_navbar() {
   $.ajax({
-      url: "/pc/part",
-      method: "POST",
-      //async: false,
-      headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
-      success: function (data) {
-          if (data){
-            CreateSelectNavbar(JSON.parse(data), function () {
-              $.ajax({
-                url: "/pkis/part_session",
-                method: "POST",
-                //async: false,
-                headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
-                success: function (data) {            
-                    if (data) {
-                        $("#part_select_navbar option:contains(" + data + ")").prop('selected', true)
-                    }
-                }
-            })
-            })            
-          }          
+    url: "/pc/part",
+    method: "POST",
+    //async: false,
+    headers: {
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    },
+    success: function (data) {
+      if (data) {
+        CreateSelectNavbar(JSON.parse(data).parts, function () {
+          if (JSON.parse(data).reqSesPart) {
+            $("#part_select_navbar option:contains(" + JSON.parse(data).reqSesPart + ")").prop('selected', true)
+          }
+        })
       }
+    }
   })
 }
 
 function CreateSelectNavbar(data, callback) {
   $("#part_select").append($('<option value="">...</option>'));
   for (let i = 0; i < data.length; i++) {
-      $('#part_select_navbar').append('<option value="' + data[i]._id + '">' + data[i].part + '</option>');
+    $('#part_select_navbar').append('<option value="' + data[i]._id + '">' + data[i].part + '</option>');
   }
   callback()
 }
 
 function load_part_session() {
   $.ajax({
-      url: "/pkis/part_session",
-      method: "POST",
-      //async: false,
-      headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
-      success: function (data) {            
-          if (data) {
-              $("#part_select_navbar option:contains(" + data + ")").prop('selected', true)
-          }
+    url: "/pkis/part_session",
+    method: "POST",
+    //async: false,
+    headers: {
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    },
+    success: function (data) {
+      if (data) {
+        $("#part_select_navbar option:contains(" + data + ")").prop('selected', true)
       }
+    }
   })
 }
 
-function changeSelect(selectedItem) {
+function changeSelect(selectedItem, callback) {
   $.ajax({
     url: "/insert_part_session",
     method: "POST",
     //async: false,
-    headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+    headers: {
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    },
     data: {
       selectedItem: selectedItem
+    },
+    success: function () {
+      location.reload()
     }
-    
-   })
-   console.log('Аякс стработал')
+
+  })
 }

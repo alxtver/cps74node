@@ -49,7 +49,6 @@
 
       <li class="nav-item"><a class="nav-link" href="/auth/logout">Выйти</a></li>
       {{else}}
-
       
 
       {{/if}}
@@ -68,10 +67,8 @@
        // load_part_session()
       })
 
-      $(document).on('change', '#part_select_navbar', function() {
-        changeSelect($("#part_select_navbar :selected").text())
-        location.reload()
-        
+      $(document).on('change', '#part_select_navbar', function() {        
+        changeSelect($("#part_select_navbar :selected").text())          
     })
     </script>
   </div>

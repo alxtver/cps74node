@@ -98,8 +98,12 @@ router.post("/search", auth, async function (req, res) {
 
 router.post("/part", async function (req, res) {
   parts = await Part.find()
+  reqSesPart = req.session.part
   if (!req.body) return res.sendStatus(400);
-  res.send(JSON.stringify(parts)); // отправляем пришедший ответ обратно
+  res.send(JSON.stringify({
+    parts: parts,
+    reqSesPart: reqSesPart
+  })) // отправляем пришедший ответ обратно
 })
 
 
