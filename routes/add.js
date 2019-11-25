@@ -12,6 +12,7 @@ router.get('/', auth, (req, res) => {
     title: 'Добавить ПКИ',
     isAdd: true,
     insertError: req.flash('insertError'),
+    part: req.session.part
   })
 })
 
@@ -49,19 +50,19 @@ router.post('/', auth, async (req, res) => {
 
   if (!candidate) {
     const pki = new Pki({
-      type_pki: req.body.type_pki,
-      vendor: req.body.vendor,
-      model: req.body.model,
+      type_pki: req.body.type_pki.trim(),
+      vendor: req.body.vendor.trim(),
+      model: req.body.model.trim(),
       serial_number: serial_number,
-      part: req.body.part,
-      country: req.body.country
+      part: req.body.part.trim(),
+      country: req.body.country.trim()
     })
-  
+
     if (!(await Country.findOne({
-        country: req.body.country
+        country: req.body.country.trim()
       }))) {
       const country = new Country({
-        country: req.body.country
+        country: req.body.country.trim()
       })
       try {
         await country.save()
@@ -71,17 +72,17 @@ router.post('/', auth, async (req, res) => {
     }
   
     if (!(await Part.findOne({
-      part: req.body.part
+      part: req.body.part.trim()
     }))) {
     const part = new Part({
-      part: req.body.part
+      part: req.body.part.trim()
     })
     try {
       await part.save()
     } catch (error) {
       console.log(error)
     }
-    }
+  }
   
     try {
       await pki.save()
@@ -102,7 +103,8 @@ router.post('/', auth, async (req, res) => {
 router.get('/apkzi', auth, (req, res) => {
   res.render('add_apkzi', {
     title: 'Добавить АПКЗИ',
-    isApkzi: true
+    isApkzi: true,
+    part: req.session.part
   })
 })
 

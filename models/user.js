@@ -6,7 +6,8 @@ const User = new Schema({
         required: true
     },
     password: String,
-    group: String
+    group: String,
+    lastPart: String
 })
 
 module.exports = model('User', User)

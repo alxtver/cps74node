@@ -9,7 +9,7 @@ router.get('/', auth, async (req, res) => {
     res.render('apkzi', {
       title: 'АПКЗИ',
       isApkzi: true,
-      part: part
+      part: req.session.part
     })
   })
 })

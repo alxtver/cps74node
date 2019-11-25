@@ -16,7 +16,7 @@ router.get('/', auth, async (req, res) => {
   res.render('pkis', {
     title: 'ПКИ',
     isPkis: true,
-
+    part: req.session.part
   })
 })
 

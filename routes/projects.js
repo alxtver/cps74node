@@ -11,7 +11,8 @@ const Docxtemplater = require('docxtemplater')
 router.get('/', auth, (req, res) => {
   res.render('projects', {
     title: 'Проекты',
-    isProjects: true,    
+    isProjects: true,
+    part: req.session.part
   })
 })
 

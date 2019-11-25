@@ -13,8 +13,9 @@ router.get('/', auth, async (req, res) => {
   res.render('pc', {
     title: 'Машины',
     isPC: true,
-    part: req.query.part,
-    serial_number: req.query.serial_number
+    part: req.session.part,
+    serial_number: req.query.serial_number,
+    
   })
 })
 
@@ -22,7 +23,8 @@ router.get('/', auth, async (req, res) => {
 router.get('/add', auth, (req, res) => {
   res.render('add_pc', {
     title: 'Добавить ПЭВМ',
-    isAdd: true
+    isAdd: true,
+    part: req.session.part
   })
 })
 

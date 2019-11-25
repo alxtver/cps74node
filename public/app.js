@@ -167,11 +167,9 @@ function searchEAN(valueEAN) {
         $('#model').val('')
         $('#country').val('')
       }
-
     }
   })
 }
-
 
 function load_part_navbar() {
   $.ajax({
@@ -217,7 +215,7 @@ function load_part_session() {
   })
 }
 
-function changeSelect(selectedItem, callback) {
+function changeSelect(selectedItem) {
   $.ajax({
     url: "/insert_part_session",
     method: "POST",
@@ -230,7 +228,9 @@ function changeSelect(selectedItem, callback) {
     },
     success: function () {
       location.reload()
+      
     }
 
   })
+  
 }

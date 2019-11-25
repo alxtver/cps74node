@@ -4,6 +4,7 @@ const auth = require('../middleware/auth')
 const PKI = require('../models/pki')
 const PC = require('../models/pc')
 const APKZI = require('../models/apkzi')
+const User = require('../models/user')
 const path = require('path')
 const fs = require('fs')
 
@@ -47,7 +48,8 @@ router.get('/', auth, async (req, res) => {
     countPKI: countPKI,
     countPC: countPC,
     countPCinYear: countPCinYear,
-    countPKIinYear: countPKIinYear
+    countPKIinYear: countPKIinYear,
+    part: req.session.part
   })
 })
 
@@ -66,7 +68,9 @@ router.post('/diagram', auth, async (req, res) => {
   })  
 })
 
-router.post("/insert_part_session", async function (req, res) {  
+router.post("/insert_part_session", async function (req, res) {
+  
+  await User.findByIdAndUpdate(req.session.user._id, {lastPart: req.body.selectedItem})
   req.session.part = req.body.selectedItem
   res.sendStatus(200)
 })
