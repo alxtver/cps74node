@@ -1,6 +1,4 @@
-const {
-  Router
-} = require('express')
+const {Router} = require('express')
 const Pki = require('../models/pki')
 const PC = require('../models/pc')
 const Part = require('../models/part')
@@ -310,8 +308,7 @@ router.get("/excelImport", auth, async function (req, res) {
     pkis = await Pki.find({part: req.session.part}).sort({type_pki: 1})
   } else {
     pkis = await Pki.find({part: req.session.part}).sort({number_machine: 1})
-  }
-  
+  }  
 
   ws.column(1).setWidth(3)
   ws.column(2).setWidth(33)
@@ -332,6 +329,7 @@ router.get("/excelImport", auth, async function (req, res) {
   ws.cell(2, 7).string('Номер ПЭВМ').style(styleheader)
 
   ws.row(2).freeze()
+  
   let n = 3
   let model = ''
   let number_machine

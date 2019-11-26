@@ -270,7 +270,7 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
     pc[unit][req.body.obj].serial_number = serial_number //меняем серийник
     let kontr_name = apkzi.kont_name
     const arr_kontr_name = kontr_name.split(' ')
-    const arr_end = arr_kontr_name.slice(-1)
+    const arr_end = arr_kontr_name.slice(-1).join('')
     const arr_start = arr_kontr_name.slice(0, -1)
     pc[unit][req.body.obj].name = arr_end //меняем тип
     pc[unit][req.body.obj].type = arr_start.join(' ') //меняем имя
@@ -287,8 +287,8 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
 
     const apkzi_name = apkzi.apkzi_name
     const arr_apkzi_name = apkzi_name.split(' ')
-    const arr_apkzi_end = arr_apkzi_name.slice(-1)
-    const arr_apkzi_start = arr_apkzi_name.slice(0, -1)
+    const arr_apkzi_end = arr_apkzi_name.slice(-1).join('')
+    const arr_apkzi_start = arr_apkzi_name.slice(0, -1).join('')
 
     if (index_apkzi) {
       pc.pc_unit[index_apkzi].fdsi = 'ФДШИ. ' + apkzi.fdsi

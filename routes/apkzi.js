@@ -4,7 +4,7 @@ const auth = require('../middleware/auth')
 const router = Router()
 
 
-router.get('/', auth, async (req, res) => {
+router.get('/', auth, async (req, res) => {  
   Apkzi.find().distinct('part', function (error, part) {
     res.render('apkzi', {
       title: 'АПКЗИ',

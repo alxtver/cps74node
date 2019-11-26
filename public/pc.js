@@ -402,7 +402,7 @@ function load_data(q) {
       if (q) {
         const serial_number_id = '#' + q
         $('html, body').animate({
-          scrollTop: $(serial_number_id).offset().top
+          scrollTop: $(serial_number_id).offset().top-70
         }, 500)
       }
     }
@@ -1160,7 +1160,7 @@ function UpdateCells(pc, how, callback) {
 
     let button_copy = document.createElement('input')
     button_copy.type = "button"
-    button_copy.className = 'btn btn-dark mr-2 mb-2 ml-3 copyBtn'
+    button_copy.className = 'btn btn-outline-primary mr-2 mb-2 ml-3 copyBtn'
     button_copy.onchange = "klcCopy()"
     button_copy.value = 'Копировать'
     button_copy.dataset.id = pc._id
@@ -1171,7 +1171,7 @@ function UpdateCells(pc, how, callback) {
 
     let button_edit = document.createElement('input')
     button_edit.type = 'button'
-    button_edit.className = 'btn btn-dark mr-2 mb-2'
+    button_edit.className = 'btn btn-outline-success mr-2 mb-2'
     button_edit.value = 'Редактировать'
     button_edit.setAttribute("onclick", "location.href='/pc/" + pc._id + "/edit?allow=true'")
     button_edit.dataset.id = pc._id
