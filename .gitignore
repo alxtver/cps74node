@@ -90,3 +90,4 @@ public/docx
 .dynamodb/
 
 config.js
+process.json

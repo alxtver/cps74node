@@ -204,6 +204,7 @@ router.post("/del", auth, async (req, res) => {
     await Pki.deleteOne({
       _id: req.body.id
     })
+    console.log(`PKI ${pki.type_pki} ${pki.vendor} ${pki.model} ${pki.serial_number} has been deleted`)
     res.send(part)
   } catch (e) {
     console.log(e)
@@ -368,6 +369,7 @@ router.get("/excelImport", auth, async function (req, res) {
   pathToExcel = `${docDir}/excel.xlsx`
 
   workbook.write(pathToExcel, function () {
+    console.log('PKI report xlsx generated')
     const fileName = req.session.part + '.xlsx'
     res.download(pathToExcel, fileName)
   })

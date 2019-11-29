@@ -86,6 +86,7 @@ router.post('/', auth, async (req, res) => {
   
     try {
       await pki.save()
+      console.log(`PKI ${pki.type_pki} ${pki.vendor} ${pki.model} ${pki.serial_number} added to DB`)
       res.redirect('/add')
     } catch (e) {
       console.log(e)
@@ -121,6 +122,7 @@ router.post('/apkzi', auth, async (req, res) => {
 
   try {
     await apkzi.save()
+    console.log(`APKZI ${apkzi.apkzi_name} ${apkzi.kont_name} ${apkzi.zav_number} ${apkzi.kontr_zav_number} added to DB`)
     res.redirect('/add/apkzi')
   } catch (e) {
     console.log(e)

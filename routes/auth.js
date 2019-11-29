@@ -47,6 +47,7 @@ router.post('/login', async (req, res) =>{
                 req.session.user = candidate                
                 req.session.isAuthenticated = true
                 req.session.group = candidate.group
+                console.log(`User ${req.session.user.username} is logged`);
                 req.session.save(err =>{
                     if (err) {
                         throw err

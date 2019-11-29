@@ -410,6 +410,7 @@ router.get('/import', auth, async (req, res) => {
 
   workbook.write(pathToExcel, function () {
     const fileName = req.session.part + '.xlsx'
+    console.log('PC report xlsx generated')
     res.download(pathToExcel, fileName)
   })
 })
@@ -458,6 +459,7 @@ router.get('/:id/passportDocx', auth, async (req, res) => {
   fs.writeFileSync(path.resolve(docDir, 'output.docx'), buf)
   const file = `${docDir}/output.docx`
   const fileName = pc.serial_number + '.docx'
+  console.log(`Passport #${pc.serial_number} was formed`)
   res.download(file, fileName)
 })
 
