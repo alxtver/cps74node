@@ -130,6 +130,37 @@ router.get('/import', auth, async (req, res) => {
     fill: {
       type: 'pattern',
       patternType: 'solid',
+      bgColor: '#AAAAAA',
+      fgColor: '#AAAAAA',
+    },
+    border: {
+      left: {
+        style: 'thin',
+        color: 'black',
+      },
+      right: {
+        style: 'thin',
+        color: 'black',
+      },
+      top: {
+        style: 'thick',
+        color: 'black',
+      },
+      bottom: {
+        style: 'thin',
+        color: 'black',
+      },
+    }
+  })
+
+  let styleBoldColorYellow = workbook.createStyle({
+    font: {
+      size: 14,
+      bold: true
+    },
+    fill: {
+      type: 'pattern',
+      patternType: 'solid',
       bgColor: '#FFFF00',
       fgColor: '#FFFF00',
     },
@@ -152,6 +183,101 @@ router.get('/import', auth, async (req, res) => {
       },
     }
   })
+
+  let styleBoldColorRed = workbook.createStyle({
+    font: {
+      size: 14,
+      bold: true
+    },
+    fill: {
+      type: 'pattern',
+      patternType: 'solid',
+      bgColor: '#FF0000',
+      fgColor: '#FF0000',
+    },
+    border: {
+      left: {
+        style: 'thin',
+        color: 'black',
+      },
+      right: {
+        style: 'thin',
+        color: 'black',
+      },
+      top: {
+        style: 'thick',
+        color: 'black',
+      },
+      bottom: {
+        style: 'thin',
+        color: 'black',
+      },
+    }
+  })
+
+  let styleBoldColorGreen = workbook.createStyle({
+    font: {
+      size: 14,
+      bold: true
+    },
+    fill: {
+      type: 'pattern',
+      patternType: 'solid',
+      bgColor: '#00FF00',
+      fgColor: '#00FF00',
+    },
+    border: {
+      left: {
+        style: 'thin',
+        color: 'black',
+      },
+      right: {
+        style: 'thin',
+        color: 'black',
+      },
+      top: {
+        style: 'thick',
+        color: 'black',
+      },
+      bottom: {
+        style: 'thin',
+        color: 'black',
+      },
+    }
+  })
+
+  let styleBoldColorBlue = workbook.createStyle({
+    font: {
+      size: 14,
+      bold: true
+    },
+    fill: {
+      type: 'pattern',
+      patternType: 'solid',
+      bgColor: '#0000FF',
+      fgColor: '#0000FF',
+    },
+    border: {
+      left: {
+        style: 'thin',
+        color: 'black',
+      },
+      right: {
+        style: 'thin',
+        color: 'black',
+      },
+      top: {
+        style: 'thick',
+        color: 'black',
+      },
+      bottom: {
+        style: 'thin',
+        color: 'black',
+      },
+    }
+  })
+
+
 
   let styleBot = workbook.createStyle({
     font: {
@@ -308,12 +434,28 @@ router.get('/import', auth, async (req, res) => {
   let col7width = 13
 
   for (const pc of allPC) {
+    let stColor = styleBoldColor
+    if (pc.back_color == "Желтый") {
+      stColor = styleBoldColorYellow
+    }
+    if (pc.back_color == "Зеленый") {
+      stColor = styleBoldColorGreen
+    }
+    if (pc.back_color == "Синий") {
+      stColor = styleBoldColorBlue
+    }
+    if (pc.back_color == "Красный") {
+      stColor = styleBoldColorRed
+    }
     ws.cell(n, 2).string("ФДШИ." + pc.fdsi).style(styleBotLeft)    
-    ws.cell(n, 3).string(pc.serial_number).style(styleBoldColor)
+    ws.cell(n, 3).string(pc.serial_number).style(stColor)
     ws.cell(n, 4).string('').style(styleBot)
     ws.cell(n, 5).string(pc.execution).style(styleBot)
     ws.cell(n, 6).string('').style(styleBot)
     ws.cell(n, 7).string(pc.attachment).style(styleBotRight)
+    if (col7width < pc.attachment.length) {
+      col7width = pc.attachment.length+1
+    }
     n += 1
     if (pc.pc_unit.length > 0) {
       ws.cell(n, 2).string('Обозначение изделия').style(styleBoldLeft)

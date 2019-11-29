@@ -28,8 +28,9 @@ router.get('/register', auth, async (req, res) => {
 })
 
 
-router.get('/logout', async (req, res) => {      
-    req.session.destroy(() =>{
+router.get('/logout', async (req, res) => { 
+    console.log(`User ${req.session.user.username} is loguot`);     
+    req.session.destroy(() =>{       
         res.redirect('/auth/login')
     })
 })
