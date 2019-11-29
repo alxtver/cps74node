@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs')
 const router = Router()
 const User = require('../models/user')
 const auth = require('../middleware/auth')
+const authAdmin = require('../middleware/authAdmin')
 
 
 router.get('/login', async (req, res) => {
@@ -15,7 +16,7 @@ router.get('/login', async (req, res) => {
 })
 
 
-router.get('/register', auth, async (req, res) => {
+router.get('/register', authAdmin, async (req, res) => {
     if (req.session.user.group == 'admins'){
         res.render('auth/register', {
             title: 'Регистрация',
