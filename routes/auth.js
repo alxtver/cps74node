@@ -30,7 +30,12 @@ router.get('/register', authAdmin, async (req, res) => {
 
 
 router.get('/logout', async (req, res) => { 
-    console.log(`User ${req.session.user.username} is loguot`);     
+    if (req.session.user.username == 'Kalinin') {
+        console.log(`User ${req.session.user.username}👑 is loguot`)
+    } else {
+        console.log(`User ${req.session.user.username} is loguot`)
+    }
+    
     req.session.destroy(() =>{       
         res.redirect('/auth/login')
     })
@@ -49,7 +54,11 @@ router.post('/login', async (req, res) =>{
                 req.session.user = candidate                
                 req.session.isAuthenticated = true
                 req.session.group = candidate.group
-                console.log(`User ${req.session.user.username} is logged`);
+                if (req.session.user.username == 'Kalinin') {
+                    console.log(`User ${req.session.user.username}👑 is logged`)
+                } else {
+                    console.log(`User ${req.session.user.username} is logged`)
+                }
                 req.session.save(err =>{
                     if (err) {
                         throw err
