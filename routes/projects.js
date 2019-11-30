@@ -161,8 +161,8 @@ router.get('/import', auth, async (req, res) => {
     fill: {
       type: 'pattern',
       patternType: 'solid',
-      bgColor: '#FFFF00',
-      fgColor: '#FFFF00',
+      bgColor: '#f9ab05',
+      fgColor: '#F9AB05',
     },
     border: {
       left: {
@@ -181,6 +181,15 @@ router.get('/import', auth, async (req, res) => {
         style: 'thin',
         color: 'black',
       },
+    }
+  })
+
+  let styleYellow = workbook.createStyle({
+    fill: {
+      type: 'pattern',
+      patternType: 'solid',
+      bgColor: '#F9AB05',
+      fgColor: '#F9AB05',
     }
   })
 
@@ -192,8 +201,8 @@ router.get('/import', auth, async (req, res) => {
     fill: {
       type: 'pattern',
       patternType: 'solid',
-      bgColor: '#FF0000',
-      fgColor: '#FF0000',
+      bgColor: '#F94CA5',
+      fgColor: '#F94CA5',
     },
     border: {
       left: {
@@ -212,6 +221,15 @@ router.get('/import', auth, async (req, res) => {
         style: 'thin',
         color: 'black',
       },
+    }
+  })
+
+  let styleRed = workbook.createStyle({
+    fill: {
+      type: 'pattern',
+      patternType: 'solid',
+      bgColor: '#F94CA5',
+      fgColor: '#F94CA5',
     }
   })
 
@@ -223,8 +241,8 @@ router.get('/import', auth, async (req, res) => {
     fill: {
       type: 'pattern',
       patternType: 'solid',
-      bgColor: '#00FF00',
-      fgColor: '#00FF00',
+      bgColor: '#79F94C',
+      fgColor: '#79F94C',
     },
     border: {
       left: {
@@ -245,6 +263,25 @@ router.get('/import', auth, async (req, res) => {
       },
     }
   })
+
+  let styleGreen = workbook.createStyle({
+    fill: {
+      type: 'pattern',
+      patternType: 'solid',
+      bgColor: '#79F94C',
+      fgColor: '#79F94C',
+    }
+  })
+
+  let styleWhite = workbook.createStyle({
+    fill: {
+      type: 'pattern',
+      patternType: 'solid',
+      bgColor: '#FFFFFF',
+      fgColor: '#FFFFFF',
+    }
+  })
+
 
   let styleBoldColorBlue = workbook.createStyle({
     font: {
@@ -254,8 +291,8 @@ router.get('/import', auth, async (req, res) => {
     fill: {
       type: 'pattern',
       patternType: 'solid',
-      bgColor: '#0000FF',
-      fgColor: '#0000FF',
+      bgColor: '#7D54E9',
+      fgColor: '#7D54E9',
     },
     border: {
       left: {
@@ -277,7 +314,14 @@ router.get('/import', auth, async (req, res) => {
     }
   })
 
-
+  let styleBlue = workbook.createStyle({
+    fill: {
+      type: 'pattern',
+      patternType: 'solid',
+      bgColor: '#7D54E9',
+      fgColor: '#7D54E9',
+    }
+  })
 
   let styleBot = workbook.createStyle({
     font: {
@@ -433,20 +477,27 @@ router.get('/import', auth, async (req, res) => {
   let col6width = 17
   let col7width = 13
 
+  let firstCellColor = styleWhite
+
   for (const pc of allPC) {
     let stColor = styleBoldColor
     if (pc.back_color == "Желтый") {
       stColor = styleBoldColorYellow
+      firstCellColor = styleYellow
     }
     if (pc.back_color == "Зеленый") {
       stColor = styleBoldColorGreen
+      firstCellColor = styleGreen
     }
     if (pc.back_color == "Синий") {
       stColor = styleBoldColorBlue
+      firstCellColor = styleBlue
     }
     if (pc.back_color == "Красный") {
       stColor = styleBoldColorRed
+      firstCellColor = styleRed
     }
+    ws.cell(n, 1).string("").style(firstCellColor)
     ws.cell(n, 2).string("ФДШИ." + pc.fdsi).style(styleBotLeft)    
     ws.cell(n, 3).string(pc.serial_number).style(stColor)
     ws.cell(n, 4).string('').style(styleBot)
@@ -458,6 +509,7 @@ router.get('/import', auth, async (req, res) => {
     }
     n += 1
     if (pc.pc_unit.length > 0) {
+      ws.cell(n, 1).string("").style(firstCellColor)
       ws.cell(n, 2).string('Обозначение изделия').style(styleBoldLeft)
       ws.cell(n, 3).string('Наименование изделия').style(styleBold)
       ws.cell(n, 4).string('Характеристика').style(styleBold)
@@ -466,6 +518,7 @@ router.get('/import', auth, async (req, res) => {
       ws.cell(n, 7).string('Примечание').style(styleBoldRight)
       n += 1
       for (const unit of pc.pc_unit) {
+        ws.cell(n, 1).string("").style(firstCellColor)
         ws.cell(n, 2).string(unit.fdsi).style(styleLeft)
         if (col2width < unit.fdsi.length) {
           col2width = unit.fdsi.length
@@ -494,6 +547,7 @@ router.get('/import', auth, async (req, res) => {
       }      
     }
     if (pc.system_case_unit.length > 0) {
+      ws.cell(n, 1).string("").style(firstCellColor)
       ws.cell(n, 2).string('Обозначение изделия').style(styleBoldLeft)
       ws.cell(n, 3).string('Наименование изделия').style(styleBold)
       ws.cell(n, 4).string('Характеристика').style(styleBold)
@@ -502,6 +556,7 @@ router.get('/import', auth, async (req, res) => {
       ws.cell(n, 7).string('Примечание').style(styleBoldRight)
       n += 1
       for (const unit of pc.system_case_unit) {
+        ws.cell(n, 1).string("").style(firstCellColor)
         ws.cell(n, 2).string(unit.fdsi).style(styleLeft)
         if (col2width < unit.fdsi.length) {
           col2width = unit.fdsi.length

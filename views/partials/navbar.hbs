@@ -54,13 +54,20 @@
       {{/if}}
       
 {{#if isAuth}}
-    </ul>
-    <ul class="navbar-nav ml-auto">
-          <select id="part_select_navbar" class="custom-select">
-            {{!-- <option value="part">Выберите проект</option> --}}
-          </select>
-    </ul>
-    {{/if}}
+</ul>
+
+<ul class="navbar-nav ml-auto">
+{{#if isPC}}
+  <select class="selectpicker mr-2" id="serials" data-live-search="true"></select>
+{{/if}}
+{{#if isProjects}}
+  <select class="selectpicker mr-2" id="serials" data-live-search="true"></select>
+{{/if}}
+<select id="part_select_navbar" class="custom-select">
+  {{!-- <option value="part">Выберите проект</option> --}}
+</select>
+</ul>
+{{/if}}
     <script>
       $(document).ready(function() {
         load_part_navbar()

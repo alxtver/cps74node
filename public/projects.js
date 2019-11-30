@@ -13,6 +13,14 @@ function load_data(q) {
     success: function (data) {
 
       CreateTableFromJSON(JSON.parse(data));
+      let select = document.getElementById("serials")      
+      for (const d of JSON.parse(data)) {
+        let option = document.createElement("option")
+        option.value = d.serial_number
+        option.text = d.serial_number        
+        select.add(option)        
+      }
+      $("#serials").selectpicker("refresh")
 
     }
   })
@@ -29,6 +37,8 @@ function load_part() {
 
       //$('#quote').html(data);
       CreateSelect(JSON.parse(data))
+
+      
     }
   })
 }
@@ -50,6 +60,7 @@ function TablePc(pc) {
 
   td = document.createElement("td")
   td.innerHTML = pc.serial_number
+  td.id = pc.serial_number
   if (pc.back_color == 'Синий') {
     td.className = "serial_blue up"
   } else if (pc.back_color == 'Зеленый') {

@@ -358,10 +358,7 @@ function CreateTableSystemCase() {
         $(this).parents("tr").remove();
       }
     })
-  })
-
- 
-  
+  })  
 }
 
 function load_data(q) {
@@ -399,6 +396,16 @@ function load_data(q) {
           })
         }
       })
+
+      let select = document.getElementById("serials")      
+      for (const d of JSON.parse(data)) {
+        let option = document.createElement("option")
+        option.value = d.serial_number
+        option.text = d.serial_number        
+        select.add(option)        
+      }
+      $("#serials").selectpicker("refresh")
+
       if (q) {
         const serial_number_id = '#' + q
         $('html, body').animate({

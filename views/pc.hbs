@@ -2,6 +2,9 @@
 <h1>Производство</h1>
 <button class="btn btn-dark mb-2" onclick="location.href='pc/add';">Добавить ПЭВМ</button>
 <button id="excelImport" onclick="location.href='/projects/import';" class="btn btn-outline-success mb-2" >Экспорт в Excel</button>
+
+
+
 <div class="popup-wrapper">
   <input type="checkbox" class="popup-checkbox" id="popupCheckboxOne">
   <div class="popup">
@@ -12,7 +15,6 @@
     </div>
   </div>
 </div>
-
 
 <form>
   <input type="hidden" name="_csrf" value="{{csrf}}">
@@ -82,11 +84,15 @@
 
 <script>
   $(document).ready(function () {
-
     const serial_number = `{{serial_number}}`
-    load_data(serial_number)
+    load_data(serial_number)    
+  })
 
-    
+  $(document).on('change', '#serials', function () {
+    let serial_number_id = '#' + $("#serials :selected").val()    
+    $('html, body').animate({
+          scrollTop: $(serial_number_id).offset().top-70
+        }, 500)
   })
 
   $("body").on('click','.delBtn',function () {
