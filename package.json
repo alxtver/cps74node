@@ -1,8 +1,12 @@
 {
   "name": "node-express",
   "version": "1.0.0",
-  "description": "",
+  "description": "CPS74 node app",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/alxtver/cps74node.git"
+  },
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js"
