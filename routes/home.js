@@ -4,10 +4,8 @@ const auth = require('../middleware/auth')
 const authAdmin = require('../middleware/authAdmin')
 const PKI = require('../models/pki')
 const PC = require('../models/pc')
-const APKZI = require('../models/apkzi')
 const User = require('../models/user')
-const path = require('path')
-const fs = require('fs')
+
 
 router.get('/', auth, async (req, res) => {
   countPKI = await PKI.countDocuments()
@@ -16,12 +14,7 @@ router.get('/', auth, async (req, res) => {
   let nowYear = Date.parse(dateNow.getFullYear())  
   countPCinYear = await PC.countDocuments({created: {$gt: nowYear}})
   countPKIinYear = await PKI.countDocuments({created: {$gt: nowYear}})
-
-  
-
-  
-
-  res.render('index', {
+  let args_devel = {
     title: 'Главная страница',
     isHome: true,
     countPKI: countPKI,
@@ -29,7 +22,8 @@ router.get('/', auth, async (req, res) => {
     countPCinYear: countPCinYear,
     countPKIinYear: countPKIinYear,
     part: req.session.part
-  })
+  }
+  res.render('index', args_devel)
 })
 
 
@@ -47,12 +41,13 @@ router.post('/diagram', auth, async (req, res) => {
   })  
 })
 
-router.post("/insert_part_session", async function (req, res) {
-  
+
+router.post("/insert_part_session", async function (req, res) {  
   await User.findByIdAndUpdate(req.session.user._id, {lastPart: req.body.selectedItem})
   req.session.part = req.body.selectedItem
   res.sendStatus(200)
 })
+
 
 router.get('/script', authAdmin, async (req, res) => {
   //  скрипт для удаления PC по партии

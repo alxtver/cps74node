@@ -8,7 +8,6 @@
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav">
 
-      
       {{#if isHome}}
       <li class="nav-item active"><a class="nav-link" href="/">Главная</a></li>
       {{else}}
@@ -16,68 +15,72 @@
       {{/if}}
       {{/if}}
 
-      {{#if group}}
+      {{#if admin}}
+        {{#if isAuth}}
+          {{#if isPkis}}
+            <li class="nav-item active"><a class="nav-link" href="/pkis">ПКИ</a></li>
+          {{else}}
+            <li class="nav-item"><a class="nav-link" href="/pkis">ПКИ</a></li>
+          {{/if}}
+
+          {{#if isApkzi}}
+            <li class="nav-item active"><a class="nav-link" href="/apkzi">АПКЗИ</a></li>
+          {{else}}
+            <li class="nav-item"><a class="nav-link" href="/apkzi">АПКЗИ</a></li>
+          {{/if}}
+
+          {{#if isPC}}
+            <li class="nav-item active"><a class="nav-link" href="/pc">Производство</a></li>
+          {{else}}
+            <li class="nav-item"><a class="nav-link" href="/pc">Производство</a></li>
+          {{/if}}
+        {{/if}}
+      {{/if}}
+
+
+      {{#if sp}}
+        {{#if isSP}}
+          <li class="nav-item active"><a class="nav-link" href="/sp">Спецпроверка</a></li>
+        {{else}}
+          <li class="nav-item"><a class="nav-link" href="/sp">Спецпроверка</a></li>
+        {{/if}}
+      {{/if}}
+
       {{#if isAuth}}
-      {{#if isPkis}}
-      <li class="nav-item active"><a class="nav-link" href="/pkis">ПКИ</a></li>
+        {{#if isProjects}}
+         <li class="nav-item active"><a class="nav-link" href="/projects">Проекты</a></li>
+        {{else}}
+          <li class="nav-item"><a class="nav-link" href="/projects">Проекты</a></li>
+        {{/if}}
+         <li class="nav-item"><a class="nav-link" href="/auth/logout">Выйти</a></li>
       {{else}}
-      <li class="nav-item"><a class="nav-link" href="/pkis">ПКИ</a></li>
+
       {{/if}}
 
-      {{#if isApkzi}}
-      <li class="nav-item active"><a class="nav-link" href="/apkzi">АПКЗИ</a></li>
-      {{else}}
-      <li class="nav-item"><a class="nav-link" href="/apkzi">АПКЗИ</a></li>
-      {{/if}}
+      {{#if isAuth}}
+    </ul>
 
+    <ul class="navbar-nav ml-auto">
       {{#if isPC}}
-      <li class="nav-item active"><a class="nav-link" href="/pc">Производство</a></li>
-      {{else}}
-      <li class="nav-item"><a class="nav-link" href="/pc">Производство</a></li>
+      <select class="selectpicker mr-2" id="serials" data-live-search="true"></select>
       {{/if}}
-      {{/if}}
-      {{/if}}
-
-        
-
-      {{#if isAuth}}
       {{#if isProjects}}
-      <li class="nav-item active"><a class="nav-link" href="/projects">Проекты</a></li>
-      {{else}}
-      <li class="nav-item"><a class="nav-link" href="/projects">Проекты</a></li>
+      <select class="selectpicker mr-2" id="serials" data-live-search="true"></select>
       {{/if}}
-
-      <li class="nav-item"><a class="nav-link" href="/auth/logout">Выйти</a></li>
-      {{else}}
-      
-
-      {{/if}}
-      
-{{#if isAuth}}
-</ul>
-
-<ul class="navbar-nav ml-auto">
-{{#if isPC}}
-  <select class="selectpicker mr-2" id="serials" data-live-search="true"></select>
-{{/if}}
-{{#if isProjects}}
-  <select class="selectpicker mr-2" id="serials" data-live-search="true"></select>
-{{/if}}
-<select id="part_select_navbar" class="custom-select">
-  {{!-- <option value="part">Выберите проект</option> --}}
-</select>
-</ul>
-{{/if}}
+      <select id="part_select_navbar" class="custom-select">
+        {{!-- <option value="part">Выберите проект</option> --}}
+      </select>
+    </ul>
+    {{/if}}
     <script>
-      $(document).ready(function() {
+      $(document).ready(function () {
         load_part_navbar()
-       // load_part_session()
+        // load_part_session()
       })
 
-      $(document).on('change', '#part_select_navbar', function() {        
+      $(document).on('change', '#part_select_navbar', function () {
         changeSelect($("#part_select_navbar :selected").text())
-        }
-      )
+      })
     </script>
   </div>
 

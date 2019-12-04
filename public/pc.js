@@ -417,7 +417,6 @@ function load_data(q) {
 }
 
 function load_pc(id) {
-
   $.ajax({
     url: "/pc/pc_edit",
     headers: {
@@ -435,8 +434,6 @@ function load_pc(id) {
     }
   })
 }
-
-
 
 function TablePc(pc) {
   // таблица ПЭВМ
@@ -476,8 +473,6 @@ function TablePc(pc) {
   td.innerHTML = pc.execution
   td.className = "up"
   tr.appendChild(td)
-
-
 
   td = document.createElement("td")
   tr.appendChild(td)

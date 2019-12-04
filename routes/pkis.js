@@ -50,8 +50,7 @@ router.post('/edit_ajax', auth, async (req, res) => {
   } catch (error) {
     console.log(error)
   }
-  let pki = await Pki.findById(req.body.id)
-  // let pc
+  let pki = await Pki.findById(req.body.id) 
 
   if (pki.number_machine) {
     let pc = await PC.findOne({
@@ -84,9 +83,7 @@ router.post('/edit_ajax', auth, async (req, res) => {
     pc_copy.system_case_unit = pc.system_case_unit
     pc_copy.save()
   }
-
   res.sendStatus(200)
-
 })
 
 

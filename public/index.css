@@ -119,6 +119,19 @@ h2_boot {
   text-align: center;
 }
 
+#formContentSP {
+  -webkit-border-radius: 10px 10px 10px 10px;
+  border-radius: 10px 10px 10px 10px;
+  background: #fff;
+  padding: 30px;
+  width: 95%;  
+  position: relative;
+  padding: 0px;
+  -webkit-box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.9);
+  box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.9);
+  text-align: center;
+}
+
 #formFooter {
   background-color: #f6f6f6;
   border-top: 1px solid #dce8f1;
@@ -660,4 +673,8 @@ form {
   margin: -28px auto;
   font-size: 1rem;
   text-align: left;
+}
+
+#type_select_navbar {
+  width: 100%;
 }

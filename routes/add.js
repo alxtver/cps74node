@@ -55,7 +55,8 @@ router.post('/', auth, async (req, res) => {
       model: req.body.model.trim(),
       serial_number: serial_number,
       part: req.body.part.trim(),
-      country: req.body.country.trim()
+      country: req.body.country.trim(),
+      ean_code: req.body.ean_code.trim()
     })
 
     if (!(await Country.findOne({

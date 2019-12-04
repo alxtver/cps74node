@@ -1,0 +1,74 @@
+<h1>Редактировать {{pki.vendor}} {{pki.model}}</h1>
+
+<div class="wrapper fadeInDown">
+  <div id="formContentSP">
+    <!-- Tabs Titles -->
+
+    <form action="/sp/edit" method="POST" class="needs-validation pki-form" novalidate>
+
+      <div class="input-field">
+        <input id="type_pki" name="type_pki" type="text" class="form-control" aria-describedby="pkilHelp"
+          placeholder="Тип ПКИ" value="{{pki.type_pki}}" required>
+        <div class="invalid-feedback">
+          Введите тип ПКИ!
+        </div>
+      </div>
+
+      <div class="input-field">
+        <input id="vendor" name="vendor" type="text" class="form-control" aria-describedby="vendorHelp"
+          placeholder="Производитель" value="{{pki.vendor}}" required>
+        <div class="invalid-feedback">
+          Введите Производителя!
+        </div>
+      </div>
+
+      <div class="input-field">
+        <input id="model" name="model" type="text" class="form-control" placeholder="Модель" value="{{pki.model}}"
+          required>
+        <div class="invalid-feedback">
+          Введите Модель!
+        </div>
+      </div>
+
+      <div class="input-field">
+        <input id="serial_number" name="serial_number" type="text" class="form-control" placeholder="Серийный номер"
+          value="{{pki.serial_number}}" required>
+        <div class="invalid-feedback">
+          Введите серийный номер!
+        </div>
+      </div>
+
+      <div class="input-field">
+        <input id="country" name="country" type="text" class="form-control" placeholder="Страна изготовитель"
+          value="{{pki.country}}" required>
+        <div class="invalid-feedback">
+          Введите страну!
+        </div>
+      </div>
+
+      <div class="input-field">
+        <input id="part" name="part" type="text" class="form-control" placeholder="Партия" value="{{pki.part}}"
+          required>
+        <div class="invalid-feedback">
+          Введите название партии!
+        </div>
+      </div>
+
+      <div class="input-field">
+        <input id="number_machine" name="number_machine" type="text" class="form-control" placeholder="Номер машины"
+          value="{{pki.number_machine}}">
+        <div class="invalid-feedback">
+          Номер машины
+        </div>
+      </div>
+
+      <div class="input-field">
+        <input hidden="true" id="_id" name="_id" type="text" class="form-control" value="{{pki.id}}" required>
+      </div>
+
+      <input type="hidden" name="_csrf" value="{{csrf}}">
+
+      <button type="submit" class="btn btn-outline-success">Редактировать ПКИ</button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,35 @@
+<script src="/sp.js"></script>
+<h1>ПКИ</h1>
+<button id="excelImport" class="btn btn-outline-success" data-toggle="modal" data-target="#modalSort"
+  style="margin-bottom: 1rem">Экспорт в Excel</button>
+
+<div class="form-group">
+  <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Поиск...">
+  <select id="type_select_navbar" class="custom-select mt-2">
+    {{!-- <option value="part">Выберите проект</option> --}}
+  </select>
+</div>
+
+<div id="showData"></div>
+
+<input hidden="true" id="temp" value="0"></input>
+
+<script>
+  $(document).ready(function () {
+    load_data()
+
+    $('#search').keyup(function () {
+      let search = $(this).val()
+      let blank_req = 'null'
+      if (search) {
+        searchPKI(search)
+      } else {
+        searchPKI(blank_req)
+      }
+    })
+  })
+
+  $(document).on('change', '#type_select_navbar', function () {
+        changeSelectType($("#type_select_navbar :selected").text())
+      })
+</script>

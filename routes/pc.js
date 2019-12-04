@@ -1,6 +1,4 @@
-const {
-  Router
-} = require('express')
+const {Router} = require('express')
 const PC = require('../models/pc')
 const PKI = require('../models/pki')
 const APKZI = require('../models/apkzi')
@@ -14,8 +12,7 @@ router.get('/', auth, async (req, res) => {
     title: 'Машины',
     isPC: true,
     part: req.session.part,
-    serial_number: req.query.serial_number,
-    
+    serial_number: req.query.serial_number    
   })
 })
 
@@ -94,7 +91,7 @@ router.post("/search", auth, async function (req, res) {
   pcs = await PC.find({
     part: req.session.part
   })
-  res.send(JSON.stringify(pcs)); // отправляем пришедший ответ обратно
+  res.send(JSON.stringify(pcs)) // отправляем пришедший ответ обратно
 })
 
 

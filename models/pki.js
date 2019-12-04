@@ -31,6 +31,7 @@ const pki = new Schema({
   },
 
   number_machine: String,
+  ean_code: String,
 
   created: {
     type: Date,

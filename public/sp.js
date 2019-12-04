@@ -1,6 +1,6 @@
-function load_data(q) {
+function searchPKI(q) {
   $.ajax({
-    url: "/pkis/search",
+    url: "/sp/search",
     method: "POST",
     headers: {
       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
@@ -9,100 +9,30 @@ function load_data(q) {
       q: q,
     },
     success: function (data) {
-      CreateTableFromJSON(JSON.parse(data))
+      CreateTableFromJSON(JSON.parse(data).pkis)
     }
   })
 }
 
-// Редактирование ячеек таблицы ПКИ
-function edit_type(id, type) {
+function load_data(q) {
   $.ajax({
-    url: "/pkis/edit_ajax",
-    type: "POST",
+    url: "/sp/search",
+    method: "POST",
     headers: {
       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
     },
     data: {
-      id: id,
-      type_pki: type
+      q: q,
     },
-    dataType: "text",
+    success: function (data) {
+      CreateTableFromJSON(JSON.parse(data).pkis)
+      CreateSelectType(JSON.parse(data).types, function () {
+        if (JSON.parse(data).selectedType) {          
+          $("#type_select_navbar option:contains(" + JSON.parse(data).selectedType + ")").prop('selected', true)
+        }
+      })
+    }
   })
-}
-
-function edit_vendor(id, vendor) {
-  $.ajax({
-    url: "/pkis/edit_ajax",
-    type: "POST",
-    headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-    },
-    data: {
-      id: id,
-      vendor: vendor
-    },
-    dataType: "text",
-  })
-}
-
-function edit_model(id, model) {
-  $.ajax({
-    url: "/pkis/edit_ajax",
-    type: "POST",
-    headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-    },
-    data: {
-      id: id,
-      model: model
-    },
-    dataType: "text",
-  })
-}
-
-function edit_serial_number(id, serial_number) {
-  $.ajax({
-    url: "/pkis/edit_ajax",
-    type: "POST",
-    headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-    },
-    data: {
-      id: id,
-      serial_number: serial_number
-    },
-    dataType: "text",
-  })
-}
-
-function edit_country(id, country) {
-  $.ajax({
-    url: "/pkis/edit_ajax",
-    type: "POST",
-    headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-    },
-    data: {
-      id: id,
-      country: country
-    },
-    dataType: "text",
-  })
-}
-
-function edit_part(id, part) {
-  $.ajax({
-    url: "/pkis/edit_ajax",
-    type: "POST",
-    headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-    },
-    data: {
-      id: id,
-      part: part
-    },
-    dataType: "text",
-  });
 }
 
 function CreateTableFromJSON(data) {
@@ -139,29 +69,25 @@ function CreateTableFromJSON(data) {
     typeCell.innerHTML = data[i].type_pki
     typeCell.dataset.id = data[i]._id
     typeCell.className = "type"
-    typeCell.id = "type"
-    typeCell.contentEditable = "true"
+    typeCell.id = "type"    
 
     let vendorCell = tr.insertCell(-1)
     vendorCell.innerHTML = data[i].vendor
     vendorCell.dataset.id = data[i]._id
     vendorCell.className = "vendor"
-    vendorCell.id = "vendor"
-    vendorCell.contentEditable = "true"
+    vendorCell.id = "vendor"    
 
     let modelCell = tr.insertCell(-1)
     modelCell.innerHTML = data[i].model
     modelCell.dataset.id = data[i]._id
     modelCell.className = "model"
-    modelCell.id = "model"
-    modelCell.contentEditable = "true"
+    modelCell.id = "model"    
 
     let serial_numberCell = tr.insertCell(-1)
     serial_numberCell.innerHTML = data[i].serial_number
     serial_numberCell.dataset.id = data[i]._id
     serial_numberCell.className = "serial_number"
-    serial_numberCell.id = "serial_number"
-    serial_numberCell.contentEditable = "true"
+    serial_numberCell.id = "serial_number"    
 
     let countryCell = tr.insertCell(-1)
     countryCell.innerHTML = data[i].country
@@ -174,8 +100,7 @@ function CreateTableFromJSON(data) {
     partCell.innerHTML = data[i].part
     partCell.dataset.id = data[i]._id
     partCell.className = "part"
-    partCell.id = "part"
-    partCell.contentEditable = "true"
+    partCell.id = "part"   
 
     let number_machineCell = tr.insertCell(-1)
     if (data[i].number_machine) {
@@ -188,8 +113,8 @@ function CreateTableFromJSON(data) {
     let id = data[i]._id
     let part = data[i].part
     buttonCell.innerHTML = (
-      "<button class=\"btn_f\" onclick=\"location.href='/pkis/" + id + "/edit?allow=true';\"><i class=\"fa fa-pencil\"></i></button>" +
-      "<button class=\"btn_d delBtn\" data-id=\'" + id + "'\ data-part=\'" + part + "'\ data-toggle=\"modal\" data-target=\"#modalDel\"><i class=\"fa fa-trash\"></i></button>"
+      "<button class=\"btn_f\" onclick=\"location.href='/sp/" + id + "/edit?allow=true';\"><i class=\"fa fa-pencil\"></i></button>"
+      //"<button class=\"btn_d delBtn\" data-id=\'" + id + "'\ data-part=\'" + part + "'\ data-toggle=\"modal\" data-target=\"#modalDel\"><i class=\"fa fa-trash\"></i></button>"
     )
   }
 
@@ -199,30 +124,69 @@ function CreateTableFromJSON(data) {
   divContainer.appendChild(table)
 }
 
+$(document).on('blur', '.country', function() {
+  let id = $(this).data("id")
+  let country = $(this).text()
+  edit_country(id, country)
+})
 
-
-function CreateSelect(data) {
-  $("#part_select").append($('<option value="">...</option>'));
-  for (let i = 0; i < data.length; i++) {
-    $('#part_select').append('<option value="' + data[i]._id + '">' + data[i].part + '</option>');
-  }
-}
-
-function delBtn() {
-  let id = $('#hidId').val()
-  let part = $('#hidPart').val()
+function edit_country(id, country) {
   $.ajax({
-    url: "/pkis/del",
-    method: "POST",
+    url: "/sp/edit_ajax",
+    type: "POST",
     headers: {
       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
     },
     data: {
       id: id,
-      part: part
+      country: country
+    },
+    dataType: "text",
+  })
+}
+
+function load_type_select() {
+  $.ajax({
+    url: "/sp/types",
+    method: "POST",
+    //async: false,
+    headers: {
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
     },
     success: function (data) {
-      load_data('', data)
+      if (data) {
+        CreateSelectType(JSON.parse(data).parts, function () {
+          if (JSON.parse(data).reqSesPart) {
+            $("#type_select_navbar option:contains(" + JSON.parse(data).reqSesPart + ")").prop('selected', true)
+          }
+        })
+      }
     }
   })
 }
+
+function CreateSelectType(data, callback) {
+  $("#type_select_navbar").append($('<option value="">...</option>'));
+  for (let i = 0; i < data.length; i++) {
+    $('#type_select_navbar').append('<option value="' + data[i] + '">' + data[i] + '</option>');
+  }
+  callback()
+}
+
+function changeSelectType(selectedItem) {
+  $.ajax({
+    url: "/sp/insert_type_session",
+    method: "POST",
+    //async: false,
+    headers: {
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    },
+    data: {
+      selectedItem: selectedItem
+    },
+    success: function () {
+      searchPKI(selectedItem)  
+    }
+  })  
+}
+

@@ -12,6 +12,7 @@ const addRoutes = require('./routes/add')
 const pkiRoutes = require('./routes/pkis')
 const pcRoutes = require('./routes/pc')
 const authRoutes = require('./routes/auth')
+const spRoutes = require('./routes/sp')
 const projectsRoutes = require('./routes/projects')
 const favicon = require('express-favicon')
 const varMiddleware = require('./middleware/variables')
@@ -60,6 +61,7 @@ app.use('/apkzi', apkziRoutes)
 app.use('/pc', pcRoutes)
 app.use('/projects', projectsRoutes)
 app.use('/auth', authRoutes)
+app.use('/sp', spRoutes)
 
 
 const PORT = process.env.PORT || 3000
