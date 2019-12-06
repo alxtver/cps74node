@@ -358,7 +358,7 @@ function CreateTableSystemCase() {
         $(this).parents("tr").remove();
       }
     })
-  })  
+  })
 }
 
 function load_data(q) {

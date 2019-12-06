@@ -146,7 +146,11 @@ router.get('/:id/edit', auth, async (req, res) => {
 
 
 router.post('/edit', auth, async (req, res) => {
-  await Pki.findByIdAndUpdate(req.body._id, req.body)
+	const id = req.body.id
+	const ean_code = req.body.ean_code
+	const szz1 = req.body.ssz1
+	console.log(req.body)
+  await Pki.findByIdAndUpdate(req.body.id, req.body)
   res.redirect('/sp')
 })
 

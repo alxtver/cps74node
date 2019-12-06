@@ -68,11 +68,7 @@
 
 .td_btn {
   align-items: center;
-
 }
-
-
-
 
 a_boot {
   color: #92badd;
@@ -522,8 +518,8 @@ input[type=text]:placeholder {
 }
 
 #ean_code {
-  background: #3d3d3d;
-  color: floralwhite;
+  background: #dad2d2;
+  
 }
 
 .save_button {
