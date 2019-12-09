@@ -27,7 +27,7 @@ function load_data(q) {
     success: function (data) {
       CreateTableFromJSON(JSON.parse(data).pkis)
       CreateSelectType(JSON.parse(data).types, function () {
-        if (JSON.parse(data).selectedType) {          
+        if (JSON.parse(data).selectedType) {
           $("#type_select_navbar option:contains(" + JSON.parse(data).selectedType + ")").prop('selected', true)
         }
       })
@@ -39,7 +39,7 @@ function CreateTableFromJSON(data) {
   // EXTRACT VALUE FOR HTML HEADER. 
   // ('Book ID', 'Book Name', 'Category' and 'Price')
   let col = ["#", "type_pki", "vendor", "model", "serial_number", "country", "part", "number_machine", ""];
-  let col_rus = ["#", "Тип", "Производитель", "Модель", "Серийный номер", "Страна производства", "Партия", "Номер машины", "В СБ", ""];
+  let col_rus = ["#", "Наименование", "Фирма", "Модель", "Количество", "Серийный номер", "Страна производства"];
 
   // CREATE DYNAMIC TABLE.
   let table = document.createElement("table");
@@ -49,13 +49,33 @@ function CreateTableFromJSON(data) {
   let thead = table.createTHead()
   let tr = thead.insertRow(-1)
   thead.className = "thead-dark"
-  for (let i = 0; i < col.length; i++) {
+  for (let i = 0; i < col_rus.length; i++) {
     let th = document.createElement("th") // TABLE HEADER.
-    // th.className = "thead-dark"
+    th.rowSpan = 2
     th.innerHTML = col_rus[i];
     tr.appendChild(th);
     thead.appendChild(tr)
   }
+
+  let th = document.createElement("th")
+  th.innerHTML = 'СЗЗ'
+  th.colSpan = 2
+  tr.appendChild(th)
+  thead.appendChild(tr)
+
+  th = document.createElement("th")
+  th.innerHTML = ''
+  th.rowSpan = 2
+  tr.appendChild(th)
+
+  tr = table.insertRow(-1)
+  th = document.createElement("th")
+  th.innerHTML = 'Тип 1'
+  tr.appendChild(th)
+  th = document.createElement("th")
+  th.innerHTML = 'Тип 2'
+  tr.appendChild(th)
+  thead.appendChild(tr)
 
   // Заполнение таблицы
   let tbody = table.createTBody()
@@ -64,30 +84,38 @@ function CreateTableFromJSON(data) {
 
     let numberCell = tr.insertCell(-1)
     numberCell.innerHTML = i + 1
+    numberCell.style.fontWeight = "700"
 
     let typeCell = tr.insertCell(-1)
     typeCell.innerHTML = data[i].type_pki
     typeCell.dataset.id = data[i]._id
     typeCell.className = "type"
-    typeCell.id = "type"    
+    typeCell.id = "type"
+    typeCell.style.fontWeight = "700"
 
     let vendorCell = tr.insertCell(-1)
     vendorCell.innerHTML = data[i].vendor
     vendorCell.dataset.id = data[i]._id
     vendorCell.className = "vendor"
-    vendorCell.id = "vendor"    
+    vendorCell.id = "vendor"
 
     let modelCell = tr.insertCell(-1)
     modelCell.innerHTML = data[i].model
     modelCell.dataset.id = data[i]._id
     modelCell.className = "model"
-    modelCell.id = "model"    
+    modelCell.id = "model"
+
+    let quantityCell = tr.insertCell(-1)
+    quantityCell.innerHTML = '1'
+    quantityCell.dataset.id = data[i]._id
+    quantityCell.className = "quantity"
+    quantityCell.id = "quantity"
 
     let serial_numberCell = tr.insertCell(-1)
     serial_numberCell.innerHTML = data[i].serial_number
     serial_numberCell.dataset.id = data[i]._id
     serial_numberCell.className = "serial_number"
-    serial_numberCell.id = "serial_number"    
+    serial_numberCell.id = "serial_number"
 
     let countryCell = tr.insertCell(-1)
     countryCell.innerHTML = data[i].country
@@ -96,17 +124,24 @@ function CreateTableFromJSON(data) {
     countryCell.id = "country"
     countryCell.contentEditable = "true"
 
-    let partCell = tr.insertCell(-1)
-    partCell.innerHTML = data[i].part
-    partCell.dataset.id = data[i]._id
-    partCell.className = "part"
-    partCell.id = "part"   
-
-    let number_machineCell = tr.insertCell(-1)
-    if (data[i].number_machine) {
-      number_machineCell.innerHTML = data[i].number_machine
+    let szz1Cell = tr.insertCell(-1)
+    szz1Cell.dataset.id = data[i]._id
+    szz1Cell.className = "szz1"
+    szz1Cell.id = "szz1"
+    if (data[i].szz1) {
+      szz1Cell.innerHTML = data[i].szz1
     } else {
-      number_machineCell.innerHTML = ''
+      szz1Cell.innerHTML = ''
+    }
+
+    let szz2Cell = tr.insertCell(-1)
+    szz2Cell.dataset.id = data[i]._id
+    szz2Cell.className = "szz1"
+    szz2Cell.id = "szz1"
+    if (data[i].szz1) {
+      szz2Cell.innerHTML = ''
+    } else {
+      szz2Cell.innerHTML = '1'
     }
 
     let buttonCell = tr.insertCell(-1)
@@ -116,6 +151,66 @@ function CreateTableFromJSON(data) {
       "<button class=\"btn_f\" onclick=\"location.href='/sp/" + id + "/edit?allow=true';\"><i class=\"fa fa-pencil\"></i></button>"
       //"<button class=\"btn_d delBtn\" data-id=\'" + id + "'\ data-part=\'" + part + "'\ data-toggle=\"modal\" data-target=\"#modalDel\"><i class=\"fa fa-trash\"></i></button>"
     )
+
+    if (data[i].sp_unit.length > 0) {
+      for (const unit of data[i].sp_unit) {
+        tr = tbody.insertRow(-1)
+        let numberCell = tr.insertCell(-1)
+        numberCell.innerHTML = ''
+
+        let nameCell = tr.insertCell(-1)
+        nameCell.innerHTML = unit.name
+        nameCell.dataset.id = data[i]._id
+        nameCell.className = "name"
+        nameCell.id = "name"
+
+        let vendorCell = tr.insertCell(-1)
+        vendorCell.innerHTML = unit.vendor
+        vendorCell.dataset.id = data[i]._id
+        vendorCell.className = "vendor"
+        vendorCell.id = "vendor"
+
+        let modelCell = tr.insertCell(-1)
+        modelCell.innerHTML = unit.model
+        modelCell.dataset.id = data[i]._id
+        modelCell.className = "model"
+        modelCell.id = "model"
+
+        let quantityCell = tr.insertCell(-1)
+        quantityCell.innerHTML = unit.quantity
+        quantityCell.dataset.id = data[i]._id
+        quantityCell.className = "quantity"
+        quantityCell.id = "quantity"
+
+        let serial_numberCell = tr.insertCell(-1)
+        serial_numberCell.innerHTML = unit.serial_number
+        serial_numberCell.dataset.id = data[i]._id
+        serial_numberCell.className = "serial_number"
+        serial_numberCell.id = "serial_number"
+
+        let countryCell = tr.insertCell(-1)
+        countryCell.innerHTML = ''
+        countryCell.dataset.id = data[i]._id
+        countryCell.className = "country"
+        countryCell.id = "country"
+
+        let szz1Cell = tr.insertCell(-1)
+        szz1Cell.innerHTML = ''
+        szz1Cell.dataset.id = data[i]._id
+        szz1Cell.className = "szz1"
+        szz1Cell.id = "szz1"
+
+        let szz2Cell = tr.insertCell(-1)
+        szz2Cell.innerHTML = unit.szz2_number
+        szz2Cell.dataset.id = data[i]._id
+        szz2Cell.className = "szz2"
+        szz2Cell.id = "szz2"
+        szz2Cell.style.fontWeight = "700"
+
+        let blankCell = tr.insertCell(-1)
+        blankCell.innerHTML = ''
+      }
+    }
   }
 
   const divContainer = document.getElementById("showData")
@@ -124,7 +219,7 @@ function CreateTableFromJSON(data) {
   divContainer.appendChild(table)
 }
 
-$(document).on('blur', '.country', function() {
+$(document).on('blur', '.country', function () {
   let id = $(this).data("id")
   let country = $(this).text()
   edit_country(id, country)
@@ -185,12 +280,13 @@ function changeSelectType(selectedItem) {
       selectedItem: selectedItem
     },
     success: function () {
-      searchPKI(selectedItem)  
+      searchPKI(selectedItem)
     }
-  })  
+  })
 }
 
-function CreateTableSP(sp_unit) {
+function CreateTableSP(pki_id ) { 
+  console.log(pki_id);
   let col_rus = ["", "Наименование", "Фирма", "Модель", "Количество", "Серийный (инв.) номер", "СЗЗ Тип 2"]
 
   let table = document.createElement("table");
@@ -209,19 +305,6 @@ function CreateTableSP(sp_unit) {
     tr.appendChild(th)
     thead.appendChild(tr)
   }
-  // let th = document.createElement("th")
-  // th.innerHTML = 'СЗЗ Тип 2'
-  // th.colSpan = 2
-  // tr.appendChild(th)
-  // thead.appendChild(tr)
-
-  // tr = table.insertRow(-1)
-  // th = document.createElement("th")
-  // th.innerHTML = 'Тип 1'  
-  // tr.appendChild(th)
-  // th = document.createElement("th")
-  // th.innerHTML = 'Тип 2'  
-  // tr.appendChild(th)
 
   const divContainer = document.getElementById("pki_sp_table");
   divContainer.innerHTML = "";
@@ -229,107 +312,51 @@ function CreateTableSP(sp_unit) {
 
 
   let tableRef = document.getElementById('pki_sp_table').getElementsByTagName('tbody')[0]
-  
-  const complectSP = [
-    'Системный блок',
-    'Клавиатура',
-    'Мышь',
-    'Монитор',
-    'Монитор',
-    'Источник бесперебойного питания',
-    'Сетевой фильтр',
-    'Гарнитура'
-  ]
 
- 
-    tr = tableRef.insertRow(-1)
+  tr = tableRef.insertRow(-1)
 
-    let chCell = tr.insertCell(-1)
-    chCell.innerHTML = "<input type='checkbox' name='record'>"
-    chCell.className = "record"
+  let chCell = tr.insertCell(-1)
+  chCell.innerHTML = "<input type='checkbox' name='record'>"
+  chCell.className = "record"
 
-    let nameCell = tr.insertCell(-1)
-    nameCell.className = "name"
-    nameCell.id = "name"
-    nameCell.contentEditable = "true"
+  let nameCell = tr.insertCell(-1)
+  nameCell.className = "name"
+  nameCell.id = "name"
+  nameCell.contentEditable = "true"
 
-    let vendorCell = tr.insertCell(-1)
-    vendorCell.className = "vendor"
-    vendorCell.id = "vendor"
-    vendorCell.contentEditable = "true"   
+  let vendorCell = tr.insertCell(-1)
+  vendorCell.className = "vendor"
+  vendorCell.id = "vendor"
+  vendorCell.contentEditable = "true"
 
-    let modelCell = tr.insertCell(-1)
-    modelCell.className = "model"
-    modelCell.id = "model"
-    modelCell.contentEditable = "true"
+  let modelCell = tr.insertCell(-1)
+  modelCell.className = "model"
+  modelCell.id = "model"
+  modelCell.contentEditable = "true"
 
-    let quantityCell = tr.insertCell(-1)
-    quantityCell.innerHTML = "1"
-    quantityCell.className = "quantity"
-    quantityCell.id = "quantity"
-    quantityCell.contentEditable = "true"    
+  let quantityCell = tr.insertCell(-1)
+  quantityCell.innerHTML = "1"
+  quantityCell.className = "quantity"
+  quantityCell.id = "quantity"
+  quantityCell.contentEditable = "true"
 
-    let serial_numberCell = tr.insertCell(-1)
-    serial_numberCell.className = "serial_number"
-    serial_numberCell.id = "serial_number"
-    serial_numberCell.contentEditable = "true"  
-    
-    let szz2Cell = tr.insertCell(-1)
-    szz2Cell.innerHTML = "1"
-    szz2Cell.className = "szz2"
-    szz2Cell.id = "szz2"
-    szz2Cell.contentEditable = "true"
-    
-  
+  let serial_numberCell = tr.insertCell(-1)
+  serial_numberCell.className = "serial_number"
+  serial_numberCell.id = "serial_number"
+  serial_numberCell.contentEditable = "true"
 
+  let szz2Cell = tr.insertCell(-1)
+  szz2Cell.innerHTML = "1"
+  szz2Cell.className = "szz2"
+  szz2Cell.id = "szz2"
+  szz2Cell.contentEditable = "true"
 
-  // tr = tableRef.insertRow(-1)
-  // tr.className = "apkzi"
-
-  // chCell = tr.insertCell(-1)
-  // chCell.innerHTML = "<input type='checkbox' name='record'>"
-  // chCell.className = "record"
-
-  // fdsiCell = tr.insertCell(-1)
-  // fdsiCell.className = "fdsi"
-  // fdsiCell.id = "fdsi"
-  // fdsiCell.contentEditable = "true"
-
-  // typeCell = tr.insertCell(-1)
-  // typeCell.className = "type"
-  // typeCell.id = "type"
-  // typeCell.contentEditable = "true"
-  // typeCell.dataset.apkzi = "apkzi"
-  // typeCell.innerHTML = "АПКЗИ"
-
-  // nameCell = tr.insertCell(-1)
-  // nameCell.className = "name"
-  // nameCell.id = "name"
-  // nameCell.contentEditable = "true"
-
-
-  // quantityCell = tr.insertCell(-1)
-  // quantityCell.innerHTML = "1"
-  // quantityCell.className = "quantity"
-  // quantityCell.id = "quantity"
-  // quantityCell.contentEditable = "true"
-
-  // serial_numberCell = tr.insertCell(-1)
-  // serial_numberCell.className = "serial_number"
-  // serial_numberCell.id = "serial_number"
-  // serial_numberCell.dataset.apkzi = "apkzi"
-  // serial_numberCell.contentEditable = "true"
-
-  // notesCell = tr.insertCell(-1)
-  // notesCell.className = "notes"
-  // notesCell.id = "notes"
-  // notesCell.contentEditable = "true"
   $("#add-row").click(function () {
     $("#sp_unit").find('input[name="record"]').each(function () {
       if ($(this).is(":checked")) {
         let checkedRow = $(this).parents("tr")
         let newRow = document.createElement("tr")
-  
+
         let chCell = newRow.insertCell(-1)
         chCell.innerHTML = "<input type='checkbox' name='record'>"
         chCell.className = "record"
@@ -342,7 +369,7 @@ function CreateTableSP(sp_unit) {
         let vendorCell = newRow.insertCell(-1)
         vendorCell.className = "vendor"
         vendorCell.id = "vendor"
-        vendorCell.contentEditable = "true"   
+        vendorCell.contentEditable = "true"
 
         let modelCell = newRow.insertCell(-1)
         modelCell.className = "model"
@@ -353,19 +380,19 @@ function CreateTableSP(sp_unit) {
         quantityCell.innerHTML = "1"
         quantityCell.className = "quantity"
         quantityCell.id = "quantity"
-        quantityCell.contentEditable = "true"    
+        quantityCell.contentEditable = "true"
 
         let serial_numberCell = newRow.insertCell(-1)
         serial_numberCell.className = "serial_number"
         serial_numberCell.id = "serial_number"
-        serial_numberCell.contentEditable = "true"  
-        
+        serial_numberCell.contentEditable = "true"
+
         let szz2Cell = newRow.insertCell(-1)
         szz2Cell.innerHTML = "1"
         szz2Cell.className = "szz2"
         szz2Cell.id = "szz2"
         szz2Cell.contentEditable = "true"
-  
+
         $(newRow).insertAfter(checkedRow)
       }
     })
@@ -385,30 +412,38 @@ function CreateTableSP(sp_unit) {
     let ean_code = $('#ean_code').val()
     let szz1 = $('#szz1').val()
 
-    let sp_unit = []  
-    // формирование POST запроса для таблицы СП
-    
+    let sp_unit = []
+    let n = 0
+    let name_temp = ''
     $('#pki_sp_table tr').each(function (i) {
-      if (i == 0) {
-        return true
-      }
-      let name = $(this).find(".name").text()
-      let vendor = $(this).find(".vendor").text()
-      let model = $(this).find(".model").text()
-      let quantity = $(this).find(".quantity").text()      
-      let serial_number = $(this).find(".serial_number").text()
-      let szz2 = $(this).find(".szz2").text()
-      sp_unit.push({
-        i: i,
-        name: name,
-        vendor: vendor,
-        model: model,
-        quantity: quantity,
-        serial_number: serial_number,
-        szz1_number: szz2
-      })    
+      name_temp = $(this).find(".name").text()
+      n += 1
     })
-  
+    // формирование POST запроса для таблицы СП
+    if (n != 1 && name_temp != '') {
+      $('#pki_sp_table tr').each(function (i) {
+        if (i == 0) {
+          return true
+        }
+        let name = $(this).find(".name").text()
+        let vendor = $(this).find(".vendor").text()
+        let model = $(this).find(".model").text()
+        let quantity = $(this).find(".quantity").text()
+        let serial_number = $(this).find(".serial_number").text()
+        let szz2 = $(this).find(".szz2").text()
+        sp_unit.push({
+          i: i,
+          name: name,
+          vendor: vendor,
+          model: model,
+          quantity: quantity,
+          serial_number: serial_number,
+          szz2_number: szz2
+        })
+      })
+    }
+
+
     $.ajax({
       url: "/sp/edit",
       type: "POST",
@@ -424,6 +459,3 @@ function CreateTableSP(sp_unit) {
     })
   })
 }
-
-
-

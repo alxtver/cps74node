@@ -109,7 +109,7 @@ function CreateTableFromJSON(data) {
   // EXTRACT VALUE FOR HTML HEADER. 
   // ('Book ID', 'Book Name', 'Category' and 'Price')
   let col = ["#", "type_pki", "vendor", "model", "serial_number", "country", "part", "number_machine", ""];
-  let col_rus = ["#", "Тип", "Производитель", "Модель", "Серийный номер", "Страна производства", "Партия", "Номер машины", "В СБ", ""];
+  let col_rus = ["#", "Тип", "Производитель", "Модель", "Серийный номер", "Страна производства", "Партия", "Номер машины", ""];
 
   // CREATE DYNAMIC TABLE.
   let table = document.createElement("table");

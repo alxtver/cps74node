@@ -24,11 +24,12 @@
         <div class="input-group-prepend">
           <span class="input-group-text" id="ean_span">СЗЗ Тип 1</span>
         </div>
-        <input value="{{pki.szz1_number}}" placeholder="СЗЗ Тип 1" id="szz1" type="text" class="form-control" aria-label="Default"
+        <input value="{{pki.szz1}}" placeholder="СЗЗ Тип 1" id="szz1" type="text" class="form-control" aria-label="Default"
           aria-describedby="ean_span">
       </div>
 
       <div id="pki_sp_table"></div>
+
       <div class="mb-3" style="text-align: left;">
         <input type="button" id="add-row" class="add-row btn btn-outline-primary" value="Добавить строку">
         <input type="button" id="delete-row" class="delete-row btn btn-outline-danger" value="Удалить строку">
@@ -42,12 +43,10 @@
   </div>
 </div>
 
+
 <script>
   $(document).ready(function () {
-    let sp_unit = `{{pki.sp_unit}}`
-    CreateTableSP(sp_unit)
-  })
-
-
- 
+    let pki_id = `{{pki.id}}`
+    CreateTableSP(pki_id)
+  }) 
 </script>
