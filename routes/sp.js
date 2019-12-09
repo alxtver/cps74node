@@ -144,11 +144,32 @@ router.get('/:id/edit', auth, async (req, res) => {
 
 
 router.post('/edit', auth, async (req, res) => {
+	//console.log(req.body)
 	const id = req.body.id
 	const ean_code = req.body.ean_code
 	const szz1 = req.body.ssz1
-	console.log(req.body)
-  await Pki.findByIdAndUpdate(req.body.id, req.body)
+	const sp_unit = req.body.sp_unit
+	let pki = await Pki.findByIdAndUpdate(req.body.id, req.body)
+	console.log(pki);
+	if (sp_unit && sp_unit.length > 0) {
+		ean = await EAN.findOne({ean_code: ean_code})
+		if (!ean) {
+			const new_ean = new EAN({
+        ean_code: ean_code,
+        type_pki: pki.type_pki,
+        vendor: pki.vendor,
+        model: pki.model,
+				country: pki.country,
+				sp_unit: sp_unit
+			})
+			new_ean.save()
+		} else {
+			ean.sp_unit = sp_unit
+			ean.save()
+		}
+		//await EAN.findOneAndUpdate({ean_code: ean_code}, {sp_unit: sp_unit})
+	}	
+  
   res.redirect('/sp')
 })
 

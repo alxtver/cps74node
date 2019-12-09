@@ -21,7 +21,8 @@ const ean = new Schema({
   country: {
     type: String,
     required: true
-  }
+  },
+  sp_unit: Array
 })
 
 module.exports = model('EAN', ean)
