@@ -10,7 +10,6 @@
       <div>Страна производитель: {{pki.country}}, тема: {{pki.part}}</div>
       <hr>
 
-
       <input hidden="true" id="id" name="id" type="text" class="form-control" value="{{pki.id}}" required>
 
       <div class="input-group input-group-sm mb-1">
@@ -47,6 +46,7 @@
 <script>
   $(document).ready(function () {
     let pki_id = `{{pki.id}}`
-    CreateTableSP(pki_id)
+    
+    load_table_sp(pki_id)
   }) 
 </script>

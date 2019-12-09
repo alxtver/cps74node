@@ -36,10 +36,8 @@ function load_data(q) {
 }
 
 function CreateTableFromJSON(data) {
-  // EXTRACT VALUE FOR HTML HEADER. 
-  // ('Book ID', 'Book Name', 'Category' and 'Price')
-  let col = ["#", "type_pki", "vendor", "model", "serial_number", "country", "part", "number_machine", ""];
-  let col_rus = ["#", "Наименование", "Фирма", "Модель", "Количество", "Серийный номер", "Страна производства"];
+
+  let col_rus = ["#", "Наименование", "Фирма", "Модель", "Количество", "Серийный номер", "Страна производства"]
 
   // CREATE DYNAMIC TABLE.
   let table = document.createElement("table");
@@ -285,8 +283,8 @@ function changeSelectType(selectedItem) {
   })
 }
 
-function CreateTableSP(pki_id ) { 
-  console.log(pki_id);
+function CreateTableSP() { 
+  
   let col_rus = ["", "Наименование", "Фирма", "Модель", "Количество", "Серийный (инв.) номер", "СЗЗ Тип 2"]
 
   let table = document.createElement("table");
@@ -457,5 +455,210 @@ function CreateTableSP(pki_id ) {
         sp_unit: sp_unit
       },
     })
+  })
+}
+
+function CreateTableSP_PKI(pki) { 
+  
+  let col_rus = ["", "Наименование", "Фирма", "Модель", "Количество", "Серийный (инв.) номер", "СЗЗ Тип 2"]
+
+  let table = document.createElement("table");
+  table.className = "table table-sm table-bordered table-hover"
+  table.id = "sp_unit"
+
+  // Заголовок таблицы
+  let tr = table.insertRow(-1)
+  let thead = table.createTHead()
+  thead.className = "thead-dark"
+  for (let i = 0; i < col_rus.length; i++) {
+    let th = document.createElement("th")
+    //th.rowSpan = 2
+    // th.className = "thead-dark"
+    th.innerHTML = col_rus[i]
+    tr.appendChild(th)
+    thead.appendChild(tr)
+  }
+
+  const divContainer = document.getElementById("pki_sp_table");
+  divContainer.innerHTML = "";
+  divContainer.appendChild(table);
+
+  let tableRef = document.getElementById('pki_sp_table').getElementsByTagName('tbody')[0]
+
+  for (const unit of pki.sp_unit) {
+    tr = tableRef.insertRow(-1)
+
+  let chCell = tr.insertCell(-1)
+  chCell.innerHTML = "<input type='checkbox' name='record'>"
+  chCell.className = "record"
+
+  let nameCell = tr.insertCell(-1)
+  nameCell.className = "name"
+  nameCell.innerHTML = unit.name
+  nameCell.id = "name"
+  nameCell.contentEditable = "true"
+
+  let vendorCell = tr.insertCell(-1)
+  vendorCell.className = "vendor"
+  vendorCell.innerHTML = unit.vendor
+  vendorCell.id = "vendor"
+  vendorCell.contentEditable = "true"
+
+  let modelCell = tr.insertCell(-1)
+  modelCell.className = "model"
+  modelCell.innerHTML = unit.model
+  modelCell.id = "model"
+  modelCell.contentEditable = "true"
+
+  let quantityCell = tr.insertCell(-1)
+  quantityCell.innerHTML = unit.quantity
+  quantityCell.className = "quantity"
+  quantityCell.id = "quantity"
+  quantityCell.contentEditable = "true"
+
+  let serial_numberCell = tr.insertCell(-1)
+  serial_numberCell.className = "serial_number"
+  serial_numberCell.innerHTML = unit.serial_number
+  serial_numberCell.id = "serial_number"
+  serial_numberCell.contentEditable = "true"
+
+  let szz2Cell = tr.insertCell(-1)
+  szz2Cell.innerHTML = unit.szz2_number
+  szz2Cell.className = "szz2"
+  szz2Cell.id = "szz2"
+  szz2Cell.contentEditable = "true"
+  }
+  
+
+  
+
+  $("#add-row").click(function () {
+    $("#sp_unit").find('input[name="record"]').each(function () {
+      if ($(this).is(":checked")) {
+        let checkedRow = $(this).parents("tr")
+        let newRow = document.createElement("tr")
+
+        let chCell = newRow.insertCell(-1)
+        chCell.innerHTML = "<input type='checkbox' name='record'>"
+        chCell.className = "record"
+
+        let nameCell = newRow.insertCell(-1)
+        nameCell.className = "name"
+        nameCell.id = "name"
+        nameCell.contentEditable = "true"
+
+        let vendorCell = newRow.insertCell(-1)
+        vendorCell.className = "vendor"
+        vendorCell.id = "vendor"
+        vendorCell.contentEditable = "true"
+
+        let modelCell = newRow.insertCell(-1)
+        modelCell.className = "model"
+        modelCell.id = "model"
+        modelCell.contentEditable = "true"
+
+        let quantityCell = newRow.insertCell(-1)
+        quantityCell.innerHTML = "1"
+        quantityCell.className = "quantity"
+        quantityCell.id = "quantity"
+        quantityCell.contentEditable = "true"
+
+        let serial_numberCell = newRow.insertCell(-1)
+        serial_numberCell.className = "serial_number"
+        serial_numberCell.id = "serial_number"
+        serial_numberCell.contentEditable = "true"
+
+        let szz2Cell = newRow.insertCell(-1)
+        szz2Cell.innerHTML = "1"
+        szz2Cell.className = "szz2"
+        szz2Cell.id = "szz2"
+        szz2Cell.contentEditable = "true"
+
+        $(newRow).insertAfter(checkedRow)
+      }
+    })
+  })
+
+  $("#delete-row").click(function () {
+    $("#sp_unit").find('input[name="record"]').each(function () {
+      if ($(this).is(":checked")) {
+        $(this).parents("tr").remove();
+      }
+    })
+  })
+
+  $('#edit').submit(function () {
+    // get table html
+    let id = $('#id').val()
+    let ean_code = $('#ean_code').val()
+    let szz1 = $('#szz1').val()
+
+    let sp_unit = []
+    let n = 0
+    let name_temp = ''
+    $('#pki_sp_table tr').each(function (i) {
+      name_temp = $(this).find(".name").text()
+      n += 1
+    })
+    // формирование POST запроса для таблицы СП
+    if (n != 1 && name_temp != '') {
+      $('#pki_sp_table tr').each(function (i) {
+        if (i == 0) {
+          return true
+        }
+        let name = $(this).find(".name").text()
+        let vendor = $(this).find(".vendor").text()
+        let model = $(this).find(".model").text()
+        let quantity = $(this).find(".quantity").text()
+        let serial_number = $(this).find(".serial_number").text()
+        let szz2 = $(this).find(".szz2").text()
+        sp_unit.push({
+          i: i,
+          name: name,
+          vendor: vendor,
+          model: model,
+          quantity: quantity,
+          serial_number: serial_number,
+          szz2_number: szz2
+        })
+      })
+    }
+
+
+    $.ajax({
+      url: "/sp/edit",
+      type: "POST",
+      headers: {
+        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      },
+      data: {
+        id: id,
+        ean_code: ean_code,
+        szz1: szz1,
+        sp_unit: sp_unit
+      },
+    })
+  })
+}
+
+function load_table_sp(pki_id) {
+  $.ajax({
+    url: "/sp/sp_unit",
+    method: "GET",
+    headers: {
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    },
+    data: {
+      id: pki_id,
+    },
+    success: function (data) {
+      if (data == 'OK'){
+        CreateTableSP()
+      } else if (data.serial_number) {
+        CreateTableSP_PKI(data)
+      } else {
+        console.log('EAN!!!')
+      }
+    }
   })
 }

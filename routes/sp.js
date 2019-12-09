@@ -1,10 +1,9 @@
-const {
-	Router
-} = require('express')
+const {Router} = require('express')
 const router = Router()
 const auth = require('../middleware/auth')
 const authAdmin = require('../middleware/authAdmin')
 const Pki = require('../models/pki')
+const EAN = require('../models/ean')
 const PC = require('../models/pc')
 const APKZI = require('../models/apkzi')
 const User = require('../models/user')
@@ -107,7 +106,6 @@ router.post("/search", auth, async (req, res) => {
 		}
 		pkis = await Pki.find(query).sort({type_pki: 1})
 	}
-
 	res.send(JSON.stringify({
 		pkis: pkis,
 		types: typesList,
@@ -153,5 +151,18 @@ router.post('/edit', auth, async (req, res) => {
   await Pki.findByIdAndUpdate(req.body.id, req.body)
   res.redirect('/sp')
 })
+
+
+router.get('/sp_unit', auth, async (req, res) => {
+  const pki = await Pki.findById(req.query.id)
+  if (pki.sp_unit && pki.sp_unit.length > 0) {
+    res.send(pki)
+  } else if (pki.ean_code) {
+    ean = await EAN.findOne({ean_code: pki.ean_code})
+    res.send(ean)
+  } else {
+    res.sendStatus(200)
+  }	
+  })
 
 module.exports = router
