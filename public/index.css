@@ -605,16 +605,14 @@ form {
   position: absolute;
   float: right;
   top: -5px;
-  right: 8px;
-  
+  right: 8px;  
   font-size: 1.5rem;
   font-weight: 700;
   color: #000;
   text-shadow: 0 1px 0 #fff;
   opacity: .5;  
   cursor: pointer;
-}
-  
+}  
 
 .popup-closer:hover {
   color: #000;
@@ -677,4 +675,13 @@ form {
 
 th {
   text-align: center;
+}
+
+.padd_l_r {
+  padding-left: 1rem;
+  padding-right: 1rem;  
+}
+
+.input-group-text {
+  width: 130px;
 }

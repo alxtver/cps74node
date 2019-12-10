@@ -96,24 +96,28 @@ function CreateTableFromJSON(data) {
     vendorCell.dataset.id = data[i]._id
     vendorCell.className = "vendor"
     vendorCell.id = "vendor"
+    vendorCell.style.fontWeight = "700"
 
     let modelCell = tr.insertCell(-1)
     modelCell.innerHTML = data[i].model
     modelCell.dataset.id = data[i]._id
     modelCell.className = "model"
     modelCell.id = "model"
+    modelCell.style.fontWeight = "700"
 
     let quantityCell = tr.insertCell(-1)
     quantityCell.innerHTML = '1'
     quantityCell.dataset.id = data[i]._id
     quantityCell.className = "quantity"
     quantityCell.id = "quantity"
+    quantityCell.style.fontWeight = "700"
 
     let serial_numberCell = tr.insertCell(-1)
     serial_numberCell.innerHTML = data[i].serial_number
     serial_numberCell.dataset.id = data[i]._id
     serial_numberCell.className = "serial_number"
     serial_numberCell.id = "serial_number"
+    serial_numberCell.style.fontWeight = "700"
 
     let countryCell = tr.insertCell(-1)
     countryCell.innerHTML = data[i].country
@@ -121,6 +125,7 @@ function CreateTableFromJSON(data) {
     countryCell.className = "country"
     countryCell.id = "country"
     countryCell.contentEditable = "true"
+    countryCell.style.fontWeight = "700"
 
     let szz1Cell = tr.insertCell(-1)
     szz1Cell.dataset.id = data[i]._id
@@ -131,6 +136,8 @@ function CreateTableFromJSON(data) {
     } else {
       szz1Cell.innerHTML = ''
     }
+    szz1Cell.style.fontWeight = "700"
+    szz1Cell.contentEditable = "true"
 
     let szz2Cell = tr.insertCell(-1)
     szz2Cell.dataset.id = data[i]._id
@@ -140,7 +147,8 @@ function CreateTableFromJSON(data) {
       szz2Cell.innerHTML = ''
     } else {
       szz2Cell.innerHTML = '1'
-    }
+    }    
+    szz2Cell.style.fontWeight = "700"
 
     let buttonCell = tr.insertCell(-1)
     let id = data[i]._id
@@ -235,6 +243,30 @@ function edit_country(id, country) {
       country: country
     },
     dataType: "text",
+  })
+}
+
+$(document).on('blur', '.szz1', function () {
+  let id = $(this).data("id")
+  let szz1 = $(this).text()
+  edit_szz1(id, szz1)
+})
+
+function edit_szz1(id, szz1) {
+  $.ajax({
+    url: "/sp/edit_ajax",
+    type: "POST",
+    headers: {
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    },
+    data: {
+      id: id,
+      szz1: szz1
+    },
+    dataType: "text",
+    success: function () {
+      //load_data()
+    }
   })
 }
 
@@ -349,60 +381,7 @@ function CreateTableSP() {
   szz2Cell.id = "szz2"
   szz2Cell.contentEditable = "true"
 
-  $("#add-row").click(function () {
-    $("#sp_unit").find('input[name="record"]').each(function () {
-      if ($(this).is(":checked")) {
-        let checkedRow = $(this).parents("tr")
-        let newRow = document.createElement("tr")
-
-        let chCell = newRow.insertCell(-1)
-        chCell.innerHTML = "<input type='checkbox' name='record'>"
-        chCell.className = "record"
-
-        let nameCell = newRow.insertCell(-1)
-        nameCell.className = "name"
-        nameCell.id = "name"
-        nameCell.contentEditable = "true"
-
-        let vendorCell = newRow.insertCell(-1)
-        vendorCell.className = "vendor"
-        vendorCell.id = "vendor"
-        vendorCell.contentEditable = "true"
-
-        let modelCell = newRow.insertCell(-1)
-        modelCell.className = "model"
-        modelCell.id = "model"
-        modelCell.contentEditable = "true"
-
-        let quantityCell = newRow.insertCell(-1)
-        quantityCell.innerHTML = "1"
-        quantityCell.className = "quantity"
-        quantityCell.id = "quantity"
-        quantityCell.contentEditable = "true"
-
-        let serial_numberCell = newRow.insertCell(-1)
-        serial_numberCell.className = "serial_number"
-        serial_numberCell.id = "serial_number"
-        serial_numberCell.contentEditable = "true"
-
-        let szz2Cell = newRow.insertCell(-1)
-        szz2Cell.innerHTML = "1"
-        szz2Cell.className = "szz2"
-        szz2Cell.id = "szz2"
-        szz2Cell.contentEditable = "true"
-
-        $(newRow).insertAfter(checkedRow)
-      }
-    })
-  })
-
-  $("#delete-row").click(function () {
-    $("#sp_unit").find('input[name="record"]').each(function () {
-      if ($(this).is(":checked")) {
-        $(this).parents("tr").remove();
-      }
-    })
-  })
+  
 
   $('#edit').submit(function () {
     // get table html
@@ -528,61 +507,6 @@ function CreateTableSP_PKI(pki) {
   szz2Cell.id = "szz2"
   szz2Cell.contentEditable = "true"
   }  
-
-  $("#add-row").click(function () {
-    $("#sp_unit").find('input[name="record"]').each(function () {
-      if ($(this).is(":checked")) {
-        let checkedRow = $(this).parents("tr")
-        let newRow = document.createElement("tr")
-
-        let chCell = newRow.insertCell(-1)
-        chCell.innerHTML = "<input type='checkbox' name='record'>"
-        chCell.className = "record"
-
-        let nameCell = newRow.insertCell(-1)
-        nameCell.className = "name"
-        nameCell.id = "name"
-        nameCell.contentEditable = "true"
-
-        let vendorCell = newRow.insertCell(-1)
-        vendorCell.className = "vendor"
-        vendorCell.id = "vendor"
-        vendorCell.contentEditable = "true"
-
-        let modelCell = newRow.insertCell(-1)
-        modelCell.className = "model"
-        modelCell.id = "model"
-        modelCell.contentEditable = "true"
-
-        let quantityCell = newRow.insertCell(-1)
-        quantityCell.innerHTML = "1"
-        quantityCell.className = "quantity"
-        quantityCell.id = "quantity"
-        quantityCell.contentEditable = "true"
-
-        let serial_numberCell = newRow.insertCell(-1)
-        serial_numberCell.className = "serial_number"
-        serial_numberCell.id = "serial_number"
-        serial_numberCell.contentEditable = "true"
-
-        let szz2Cell = newRow.insertCell(-1)
-        szz2Cell.innerHTML = "1"
-        szz2Cell.className = "szz2"
-        szz2Cell.id = "szz2"
-        szz2Cell.contentEditable = "true"
-
-        $(newRow).insertAfter(checkedRow)
-      }
-    })
-  })
-
-  $("#delete-row").click(function () {
-    $("#sp_unit").find('input[name="record"]').each(function () {
-      if ($(this).is(":checked")) {
-        $(this).parents("tr").remove();
-      }
-    })
-  })
 
   $('#edit').submit(function () {
     // get table html
@@ -711,60 +635,6 @@ function CreateTableSP_EAN(ean) {
   szz2Cell.contentEditable = "true"
   }  
 
-  $("#add-row").click(function () {
-    $("#sp_unit").find('input[name="record"]').each(function () {
-      if ($(this).is(":checked")) {
-        let checkedRow = $(this).parents("tr")
-        let newRow = document.createElement("tr")
-
-        let chCell = newRow.insertCell(-1)
-        chCell.innerHTML = "<input type='checkbox' name='record'>"
-        chCell.className = "record"
-
-        let nameCell = newRow.insertCell(-1)
-        nameCell.className = "name"
-        nameCell.id = "name"
-        nameCell.contentEditable = "true"
-
-        let vendorCell = newRow.insertCell(-1)
-        vendorCell.className = "vendor"
-        vendorCell.id = "vendor"
-        vendorCell.contentEditable = "true"
-
-        let modelCell = newRow.insertCell(-1)
-        modelCell.className = "model"
-        modelCell.id = "model"
-        modelCell.contentEditable = "true"
-
-        let quantityCell = newRow.insertCell(-1)
-        quantityCell.innerHTML = "1"
-        quantityCell.className = "quantity"
-        quantityCell.id = "quantity"
-        quantityCell.contentEditable = "true"
-
-        let serial_numberCell = newRow.insertCell(-1)
-        serial_numberCell.className = "serial_number"
-        serial_numberCell.id = "serial_number"
-        serial_numberCell.contentEditable = "true"
-
-        let szz2Cell = newRow.insertCell(-1)
-        szz2Cell.innerHTML = "1"
-        szz2Cell.className = "szz2"
-        szz2Cell.id = "szz2"
-        szz2Cell.contentEditable = "true"
-
-        $(newRow).insertAfter(checkedRow)
-      }
-    })
-  })
-
-  $("#delete-row").click(function () {
-    $("#sp_unit").find('input[name="record"]').each(function () {
-      if ($(this).is(":checked")) {
-        $(this).parents("tr").remove();
-      }
-    })
-  })
 
   $('#edit').submit(function () {
     // get table html
@@ -782,28 +652,26 @@ function CreateTableSP_EAN(ean) {
     // формирование POST запроса для таблицы СП
     if (n != 1 && name_temp != '') {
       $('#pki_sp_table tr').each(function (i) {
-        if (i == 0) {
-          return true
+        if (i != 0) {
+          let name = $(this).find(".name").text()
+          let vendor = $(this).find(".vendor").text()
+          let model = $(this).find(".model").text()
+          let quantity = $(this).find(".quantity").text()
+          let serial_number = $(this).find(".serial_number").text()
+          let szz2 = $(this).find(".szz2").text()
+          sp_unit.push({
+            i: i,
+            name: name,
+            vendor: vendor,
+            model: model,
+            quantity: quantity,
+            serial_number: serial_number,
+            szz2_number: szz2
+          })
         }
-        let name = $(this).find(".name").text()
-        let vendor = $(this).find(".vendor").text()
-        let model = $(this).find(".model").text()
-        let quantity = $(this).find(".quantity").text()
-        let serial_number = $(this).find(".serial_number").text()
-        let szz2 = $(this).find(".szz2").text()
-        sp_unit.push({
-          i: i,
-          name: name,
-          vendor: vendor,
-          model: model,
-          quantity: quantity,
-          serial_number: serial_number,
-          szz2_number: szz2
-        })
+       
       })
     }
-
-
     $.ajax({
       url: "/sp/edit",
       type: "POST",
@@ -841,3 +709,26 @@ function load_table_sp(pki_id) {
     }
   })
 }
+
+$(document).on('keypress', '#ean_code', function (e) {  
+  let ean = $(this).val()
+  if (e.which == 13) {      
+    $.ajax({
+      url: "/sp/check_ean",
+      method: "GET",
+      headers: {
+        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      },
+      data: {
+        ean: ean,
+      },
+      success: function (data) {
+        if (data != "OK") {
+          CreateTableSP_EAN(data)
+        } else {
+          CreateTableSP()
+        }
+      }
+    }) 
+  }
+})
