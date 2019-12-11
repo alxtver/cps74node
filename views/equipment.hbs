@@ -1,0 +1,25 @@
+<script src="/equipment.js"></script>
+<h1>Оборудование</h1>
+
+<button onclick="location.href='equipment/add';" class="btn btn-outline-success mb-1">Новое оборудование</button>
+<div class="form-group">
+  <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Штрих-код">
+</div>
+
+<div id="showData"></div>
+
+<script>
+  $(document).ready(function () {
+    load_data()
+
+    $('#search').keyup(function () {
+      let search = $(this).val()
+      let blank_req = 'null'
+      if (search) {
+        searchEANCode(search)
+      } else {
+        searchEANCode(blank_req)
+      }
+    })
+  })
+</script>

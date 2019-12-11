@@ -22,7 +22,12 @@ const ean = new Schema({
     type: String,
     required: true
   },
-  sp_unit: Array
+  sp_unit: Array,
+  sp_unit1: Array,
+  created: {
+    type: Date,
+    default: () => Date.now() + 3*60*60*1000 //время МСК
+  },
 })
 
 module.exports = model('EAN', ean)

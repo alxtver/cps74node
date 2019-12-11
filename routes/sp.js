@@ -1,6 +1,4 @@
-const {
-	Router
-} = require('express')
+const {Router} = require('express')
 const router = Router()
 const auth = require('../middleware/auth')
 const authAdmin = require('../middleware/authAdmin')
@@ -175,14 +173,14 @@ router.get('/:id/edit', auth, async (req, res) => {
 	const pki = await Pki.findById(req.params.id)
 	res.render('sp-pki-edit', {
 		title: `Редактировать ${pki.type_pki}`,
+		part: req.session.part,
 		pki
 	})
 })
 
 
 router.post('/edit', auth, async (req, res) => {
-	const id = req.body.id
-	console.log(req.body);
+	const id = req.body.id	
 	const ean_code = req.body.ean_code
 	const szz1 = req.body.ssz1
 	const sp_unit = req.body.sp_unit

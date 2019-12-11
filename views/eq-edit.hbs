@@ -1,0 +1,224 @@
+<script src="/equipment.js"></script>
+<h1>Редактирование оборудования</h1>
+
+<div class="wrapper fadeInDown">
+  <div id="formContentSP">
+    <div class="error_message">
+      {{#if insertError}}
+      <p class="alert alert-danger mt-1">{{insertError}}</p>
+      <audio src="/sounds/S20759.mp3" autoplay="autoplay"></audio>
+      {{/if}}
+    </div>
+
+    <form id="edit" action="/equipment" class="needs-validation" novalidate>
+
+      <div class="input-field">
+        <input value="{{ean.ean_code}}" id="ean_code" name="ean_code" type="text" class="form-control" aria-describedby="eanlHelp"
+          placeholder="Штрих-код" disabled required>
+        <div class="invalid-feedback">
+          Введите Штрих-код!
+        </div>
+      </div>
+
+      <div class="input-field">
+        <input value="{{ean.type_pki}}" id="type_pki" name="type_pki" type="text" class="form-control" aria-describedby="pkilHelp"
+          placeholder="Тип ПКИ" required>
+        <div class="invalid-feedback">
+          Введите тип ПКИ!
+        </div>
+      </div>
+
+      <div class="input-field">
+        <input value="{{ean.vendor}}" id="vendor" name="vendor" type="text" class="form-control" aria-describedby="vendorHelp"
+          placeholder="Производитель" required>
+        <div class="invalid-feedback">
+          Введите Производителя!
+        </div>
+      </div>
+
+      <div class="input-field">
+        <input value="{{ean.model}}" id="model" name="model" type="text" class="form-control" aria-describedby="modelHelp"
+          placeholder="Модель" required>
+        <div class="invalid-feedback">
+          Введите Модель!
+        </div>
+      </div>
+
+      <div class="input-field">
+        <input value="{{ean.country}}" id="country" name="country" type="text" class="form-control" placeholder="Страна производства" required>
+        <div class="invalid-feedback">
+          Введите страну!
+        </div>
+      </div>
+
+     
+      <div id="pki_sp_table1"></div>      
+      <div id="pki_sp_table2"></div>
+
+      <div class="mb-3" style="text-align: left;">
+        <input type="button" id="add-row" class="add-row btn btn-outline-primary" value="Добавить строку">
+        <input type="button" id="delete-row" class="delete-row btn btn-outline-danger" value="Удалить строку">
+        <input type="button" id="copy_table" class="delete-row btn btn-outline-success" value="Копировать таблицу">
+      </div>
+  
+      <input type="hidden" name="_csrf" value="{{csrf}}">
+      <button type="submit" class="btn btn-outline-success">Сохранить</button>
+      <input type="button" value="Назад" class="btn btn-outline-primary" onclick="window.location='/equipment';">
+      
+    </form>
+  </div>
+</div>
+
+
+<script>
+  $(document).ready(function () {    
+    let ean_id = `{{ean.id}}`
+    load_table_sp(ean_id)
+    document.getElementById("ean_code").focus()
+    $("#add-row").click(function () {
+      $("#sp_unit, #sp_unit1").find('input[name="record"]').each(function () {
+        if ($(this).is(":checked")) {
+          let checkedRow = $(this).parents("tr")
+          let newRow = document.createElement("tr")
+
+          let chCell = newRow.insertCell(-1)
+          chCell.innerHTML = "<input type='checkbox' name='record'>"
+          chCell.className = "record"
+
+          let nameCell = newRow.insertCell(-1)
+          nameCell.className = "name"
+          nameCell.id = "name"
+          nameCell.contentEditable = "true"
+
+          let vendorCell = newRow.insertCell(-1)
+          vendorCell.className = "vendor"
+          vendorCell.id = "vendor"
+          vendorCell.contentEditable = "true"
+
+          let modelCell = newRow.insertCell(-1)
+          modelCell.className = "model"
+          modelCell.id = "model"
+          modelCell.contentEditable = "true"
+
+          let quantityCell = newRow.insertCell(-1)
+          quantityCell.innerHTML = "1"
+          quantityCell.className = "quantity"
+          quantityCell.id = "quantity"
+          quantityCell.contentEditable = "true"
+
+          let serial_numberCell = newRow.insertCell(-1)
+          serial_numberCell.className = "serial_number"
+          serial_numberCell.id = "serial_number"
+          serial_numberCell.contentEditable = "true"
+
+          $(newRow).insertAfter(checkedRow)
+        }
+      })
+  })
+
+  $("#delete-row").click(function () {
+    $("#sp_unit, #sp_unit1").find('input[name="record"]').each(function () {
+      if ($(this).is(":checked")) {
+        $(this).parents("tr").remove();
+      }
+    })
+  })
+
+  $("#copy_table").click(function () {
+    $("#pki_sp_table2").empty()
+    $("#sp_unit").clone().appendTo("#pki_sp_table2").attr('id', 'sp_unit1')
+
+  })
+
+  })
+
+  $('form').submit(function () {
+let id = $('#id').val()
+    let ean_code = $('#ean_code').val()
+    let type_pki = $('#type_pki').val()    
+    let vendor = $("#vendor").val()
+    let model = $("#model").val()
+    let country = $("#country").val()
+
+
+
+
+    let sp_unit = []
+    let n = 0
+    let name_temp = ''
+    $('#pki_sp_table1 tr').each(function (i) {
+      name_temp = $(this).find(".name").text()
+      n += 1
+    })
+    // формирование POST запроса для таблицы СП
+    if (n != 1 && name_temp != '') {
+      $('#pki_sp_table1 tr').each(function (i) {
+        if (i != 0) {
+          let name = $(this).find(".name").text()
+          let vendor = $(this).find(".vendor").text()
+          let model = $(this).find(".model").text()
+          let quantity = $(this).find(".quantity").text()
+          let serial_number = $(this).find(".serial_number").text()
+          sp_unit.push({
+            i: i,
+            name: name,
+            vendor: vendor,
+            model: model,
+            quantity: quantity,
+            serial_number: serial_number
+          })
+        }        
+      })
+    }
+
+    let sp_unit1 = []
+    n = 0
+    name_temp = ''
+    $('#pki_sp_table2 tr').each(function (i) {
+      name_temp = $(this).find(".name").text()
+      n += 1
+    })
+    // формирование POST запроса для таблицы СП
+    if (n != 1 && name_temp != '') {
+      $('#pki_sp_table2 tr').each(function (i) {
+        if (i != 0) {
+          let name = $(this).find(".name").text()
+          let vendor = $(this).find(".vendor").text()
+          let model = $(this).find(".model").text()
+          let quantity = $(this).find(".quantity").text()
+          let serial_number = $(this).find(".serial_number").text()
+          sp_unit1.push({
+            i: i,
+            name: name,
+            vendor: vendor,
+            model: model,
+            quantity: quantity,
+            serial_number: serial_number
+          })
+        }        
+      })
+    }
+   
+
+    $.ajax({
+      url: "/equipment/edit",
+      type: "POST",
+      headers: {
+        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      },
+      data: {
+        id: id,
+        ean_code: ean_code,
+        type_pki: type_pki,
+        vendor: vendor,
+        model: model,
+        country: country,        
+        sp_unit: sp_unit,
+        sp_unit1: sp_unit1
+      },
+    })
+  })
+
+  
+
+</script>

@@ -1,0 +1,140 @@
+<script src="/equipment.js"></script>
+<h1>Добавление оборудования</h1>
+
+<div class="wrapper fadeInDown">
+  <div id="formContentSP">
+    <div class="error_message">
+      {{#if insertError}}
+      <p class="alert alert-danger mt-1">{{insertError}}</p>
+      <audio src="/sounds/S20759.mp3" autoplay="autoplay"></audio>
+      {{/if}}
+    </div>
+
+    <form id="add" action="/equipment" method="GET" class="needs-validation" novalidate>
+
+      <div class="input-field">
+        <input id="ean_code" name="ean_code" type="text" class="form-control" aria-describedby="eanlHelp"
+          placeholder="Штрих-код" required>
+        <div class="invalid-feedback">
+          Введите Штрих-код!
+        </div>
+      </div>
+
+      <div class="input-field">
+        <input id="type_pki" name="type_pki" type="text" class="form-control" aria-describedby="pkilHelp"
+          placeholder="Тип ПКИ" required>
+        <div class="invalid-feedback">
+          Введите тип ПКИ!
+        </div>
+      </div>
+
+      <div class="input-field">
+        <input id="vendor" name="vendor" type="text" class="form-control" aria-describedby="vendorHelp"
+          placeholder="Производитель" required>
+        <div class="invalid-feedback">
+          Введите Производителя!
+        </div>
+      </div>
+
+      <div class="input-field">
+        <input id="model" name="model" type="text" class="form-control" aria-describedby="modelHelp"
+          placeholder="Модель" required>
+        <div class="invalid-feedback">
+          Введите Модель!
+        </div>
+      </div>
+
+      <div class="input-field">
+        <input id="country" name="country" type="text" class="form-control" placeholder="Страна производства" required>
+        <div class="invalid-feedback">
+          Введите страну!
+        </div>
+      </div>
+
+      <span>Таблица1</span>
+      <div id="pki_sp_table1"></div>
+
+      
+      <div id="pki_sp_table2"></div>
+
+      <div class="mb-3" style="text-align: left;">
+        <input type="button" id="add-row" class="add-row btn btn-outline-primary" value="Добавить строку">
+        <input type="button" id="delete-row" class="delete-row btn btn-outline-danger" value="Удалить строку">
+        <input type="button" id="copy_table" class="delete-row btn btn-outline-success" value="Копировать таблицу">
+      </div>
+  
+      <input type="hidden" name="_csrf" value="{{csrf}}">
+      {{!-- <input type="hidden" name="hidd_serial" id="hidd_serial" class="form-control" value="" required> --}}
+      <button type="submit" class="btn btn-outline-success">Добавить оборудование</button>
+      <input type="button" value="Назад" class="btn btn-outline-primary" onclick="window.location='/equipment';">
+    </form>
+  </div>
+</div>
+
+
+<script>
+  $(document).ready(function () {
+    
+    CreateTable1SP()
+    document.getElementById("ean_code").focus()
+    $("#add-row").click(function () {
+      $("#sp_unit, #sp_unit1").find('input[name="record"]').each(function () {
+        if ($(this).is(":checked")) {
+          let checkedRow = $(this).parents("tr")
+          let newRow = document.createElement("tr")
+
+          let chCell = newRow.insertCell(-1)
+          chCell.innerHTML = "<input type='checkbox' name='record'>"
+          chCell.className = "record"
+
+          let nameCell = newRow.insertCell(-1)
+          nameCell.className = "name"
+          nameCell.id = "name"
+          nameCell.contentEditable = "true"
+
+          let vendorCell = newRow.insertCell(-1)
+          vendorCell.className = "vendor"
+          vendorCell.id = "vendor"
+          vendorCell.contentEditable = "true"
+
+          let modelCell = newRow.insertCell(-1)
+          modelCell.className = "model"
+          modelCell.id = "model"
+          modelCell.contentEditable = "true"
+
+          let quantityCell = newRow.insertCell(-1)
+          quantityCell.innerHTML = "1"
+          quantityCell.className = "quantity"
+          quantityCell.id = "quantity"
+          quantityCell.contentEditable = "true"
+
+          let serial_numberCell = newRow.insertCell(-1)
+          serial_numberCell.className = "serial_number"
+          serial_numberCell.id = "serial_number"
+          serial_numberCell.contentEditable = "true"
+
+          $(newRow).insertAfter(checkedRow)
+        }
+      })
+  })
+
+  $("#delete-row").click(function () {
+    $("#sp_unit, #sp_unit1").find('input[name="record"]').each(function () {
+      if ($(this).is(":checked")) {
+        $(this).parents("tr").remove();
+      }
+    })
+  })
+
+
+  $("#copy_table").click(function () {
+    $("#pki_sp_table2").empty()
+    $("#sp_unit").clone().appendTo("#pki_sp_table2").attr('id', 'sp_unit1')
+
+  })
+
+  })
+
+  
+
+</script>
