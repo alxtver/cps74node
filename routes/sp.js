@@ -31,11 +31,17 @@ router.post("/search", auth, async (req, res) => {
 
 	let pkis
 	if ((!req.body.q && selectedType == '...') || (!req.body.q && !selectedType)) {
-		pkis = await Pki.find({
-			part: selected
-		}).sort({
-			type_pki: 1
-		})
+		pkis = await Pki.find({part: selected}).sort({type_pki: 1})
+
+		// for (const pki of pkis) {
+		// 	if (!pki.viborka) {
+		// 		if(pki.ean_code) {
+		// 			ean = await EAN.findOne({ean_code: pki.ean_code})
+		// 			console.log(ean);
+		// 		}
+		// 	}			
+		// }
+
 	} else if (!req.body.q && selectedType != '...') {
 		pkis = await Pki.find({
 			part: selected,
@@ -44,11 +50,7 @@ router.post("/search", auth, async (req, res) => {
 			type_pki: 1
 		})
 	} else if (req.body.q == '...' && selectedType == '...') {
-		pkis = await Pki.find({
-			part: selected
-		}).sort({
-			type_pki: 1
-		})
+		pkis = await Pki.find({part: selected}).sort({type_pki: 1})		
 	} else if (req.body.q == selectedType) {
 		pkis = await Pki.find({
 			part: selected,

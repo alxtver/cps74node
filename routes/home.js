@@ -59,6 +59,16 @@ router.get('/script', authAdmin, async (req, res) => {
   //   }    
   // })
 
+  // скрипт для добавления штрихкода
+  // const pki = await PKI.updateMany({type_pki: 'Монитор'}, { ean_code: '4713147229000' })
+  // console.log(pki.n)
+  // console.log(pki.nModified)
+
+  // скрипт для добавления поля выборка
+  // const pki = await PKI.updateMany({}, { viborka: false })
+  // console.log(pki.n)
+  // console.log(pki.nModified)
+
 
   // скрипт импорта ПКИ из CSV файла
   // const appDir = path.dirname(require.main.filename)

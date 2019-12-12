@@ -33,12 +33,18 @@ const pki = new Schema({
   number_machine: String,
   ean_code: String,
   szz1: String,
-  sp_unit: Array,
+  sp_unit: Array,  
   
   created: {
     type: Date,
     default: () => Date.now() + 3*60*60*1000 //время МСК
+  },
+
+  viborka: {
+    type: Boolean,
+    default: false
   }
+
 })
 
 

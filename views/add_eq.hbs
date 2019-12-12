@@ -50,11 +50,8 @@
           Введите страну!
         </div>
       </div>
-
-      <span>Таблица1</span>
-      <div id="pki_sp_table1"></div>
-
       
+      <div id="pki_sp_table1"></div>
       <div id="pki_sp_table2"></div>
 
       <div class="mb-3" style="text-align: left;">
@@ -62,7 +59,7 @@
         <input type="button" id="delete-row" class="delete-row btn btn-outline-danger" value="Удалить строку">
         <input type="button" id="copy_table" class="delete-row btn btn-outline-success" value="Копировать таблицу">
       </div>
-  
+
       <input type="hidden" name="_csrf" value="{{csrf}}">
       {{!-- <input type="hidden" name="hidd_serial" id="hidd_serial" class="form-control" value="" required> --}}
       <button type="submit" class="btn btn-outline-success">Добавить оборудование</button>
@@ -74,7 +71,7 @@
 
 <script>
   $(document).ready(function () {
-    
+
     CreateTable1SP()
     document.getElementById("ean_code").focus()
     $("#add-row").click(function () {
@@ -113,28 +110,31 @@
           serial_numberCell.id = "serial_number"
           serial_numberCell.contentEditable = "true"
 
+          let szz2Cell = newRow.insertCell(-1)
+          szz2Cell.innerHTML = '1'
+          szz2Cell.className = "szz2"
+          szz2Cell.id = "szz2"
+          szz2Cell.contentEditable = "true"
+
           $(newRow).insertAfter(checkedRow)
         }
       })
-  })
+    })
 
-  $("#delete-row").click(function () {
-    $("#sp_unit, #sp_unit1").find('input[name="record"]').each(function () {
-      if ($(this).is(":checked")) {
-        $(this).parents("tr").remove();
-      }
+    $("#delete-row").click(function () {
+      $("#sp_unit, #sp_unit1").find('input[name="record"]').each(function () {
+        if ($(this).is(":checked")) {
+          $(this).parents("tr").remove();
+        }
+      })
+    })
+
+
+    $("#copy_table").click(function () {
+      $("#pki_sp_table2").empty()
+      $("#sp_unit").clone().appendTo("#pki_sp_table2").attr('id', 'sp_unit1')
     })
   })
 
-
-  $("#copy_table").click(function () {
-    $("#pki_sp_table2").empty()
-    $("#sp_unit").clone().appendTo("#pki_sp_table2").attr('id', 'sp_unit1')
-
-  })
-
-  })
-
   
-
 </script>

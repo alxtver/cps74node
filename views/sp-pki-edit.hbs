@@ -7,7 +7,6 @@
     <div>{{pki.type_pki}} {{pki.vendor}} {{pki.model}} № {{pki.serial_number}}</div>
     <div>Страна производитель: {{pki.country}}, тема: {{pki.part}}</div>
     <hr>
-
     <div class="input-group input-group-sm mb-1 padd_l_r">
       <div class="input-group-prepend">
         <span class="input-group-text" id="ean_span">Штрих-код</span>
@@ -22,14 +21,14 @@
       <input value="{{pki.szz1}}" placeholder="СЗЗ Тип 1" id="szz1" type="text" class="form-control"
         aria-label="Default" aria-describedby="ean_span">
     </div>
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" id="viborka">
+      <label class="form-check-label" for="viborka">Выборка</label>
+    </div>
     <form id="edit" action="/sp">
       <input hidden="true" id="id" name="id" type="text" class="form-control" value="{{pki.id}}" required>
       <div id="pki_sp_table"></div>
-      <div class="mb-3" style="text-align: left;">
-        <input type="button" id="add-row" class="add-row btn btn-outline-primary" value="Добавить строку">
-        <input type="button" id="delete-row" class="delete-row btn btn-outline-danger" value="Удалить строку">
-        
-      </div>
+    
       <input type="hidden" name="_csrf" value="{{csrf}}">
       <div class="mt-5">
         <button type="submit" class="btn btn-outline-success">Сохранить</button>
@@ -42,62 +41,6 @@
 <script>
   $(document).ready(function () {
     let pki_id = `{{pki.id}}`
-    load_table_sp(pki_id)
-    
-    $("#add-row").click(function () {
-    $("#sp_unit").find('input[name="record"]').each(function () {
-      if ($(this).is(":checked")) {
-        let checkedRow = $(this).parents("tr")
-        let newRow = document.createElement("tr")
-
-        let chCell = newRow.insertCell(-1)
-        chCell.innerHTML = "<input type='checkbox' name='record'>"
-        chCell.className = "record"
-
-        let nameCell = newRow.insertCell(-1)
-        nameCell.className = "name"
-        nameCell.id = "name"
-        nameCell.contentEditable = "true"
-
-        let vendorCell = newRow.insertCell(-1)
-        vendorCell.className = "vendor"
-        vendorCell.id = "vendor"
-        vendorCell.contentEditable = "true"
-
-        let modelCell = newRow.insertCell(-1)
-        modelCell.className = "model"
-        modelCell.id = "model"
-        modelCell.contentEditable = "true"
-
-        let quantityCell = newRow.insertCell(-1)
-        quantityCell.innerHTML = "1"
-        quantityCell.className = "quantity"
-        quantityCell.id = "quantity"
-        quantityCell.contentEditable = "true"
-
-        let serial_numberCell = newRow.insertCell(-1)
-        serial_numberCell.className = "serial_number"
-        serial_numberCell.id = "serial_number"
-        serial_numberCell.contentEditable = "true"
-
-        let szz2Cell = newRow.insertCell(-1)
-        szz2Cell.innerHTML = "1"
-        szz2Cell.className = "szz2"
-        szz2Cell.id = "szz2"
-        szz2Cell.contentEditable = "true"
-
-        $(newRow).insertAfter(checkedRow)
-      }
-    })
-  })
-
-  $("#delete-row").click(function () {
-    $("#sp_unit").find('input[name="record"]').each(function () {
-      if ($(this).is(":checked")) {
-        $(this).parents("tr").remove();
-      }
-    })
-  })
-  
+    load_table_sp(pki_id)  
   })
 </script>

@@ -56,8 +56,14 @@ router.post('/add', auth, async (req, res) => {
       sp_unit: sp_unit,
       sp_unit1: sp_unit1
     })
-    new_ean.save()
-
+    await new_ean.save()
+  }
+  let pkis = Pki.find({ean_code: ean_code})
+  for (const pki of pkis) {
+    if (!pki.sp_unit || pki.sp_unit.length < 1) {
+      pki.sp_unit = sp_unit1
+      pki.save()
+    }
   }
   res.redirect('/equipment')
 })
@@ -67,7 +73,8 @@ router.get('/:id/edit', auth, async (req, res) => {
 	if (!req.query.allow) {
 		return res.redirect('/')
 	}
-	const ean = await EAN.findById(req.params.id)
+  const ean = await EAN.findById(req.params.id)
+  
 	res.render('eq-edit', {
     title: `Редактировать ${ean.type_pki}`,
     part: req.session.part,
@@ -76,8 +83,7 @@ router.get('/:id/edit', auth, async (req, res) => {
 })
 
 
-router.post('/edit', auth, async (req, res) => {
-	console.log(req.body)
+router.post('/edit', auth, async (req, res) => {	
   const ean_code = req.body.ean_code
   const type_pki = req.body.type_pki
   const vendor = req.body.vendor
@@ -85,13 +91,21 @@ router.post('/edit', auth, async (req, res) => {
   const country = req.body.country
   const sp_unit = req.body.sp_unit
   const sp_unit1 = req.body.sp_unit1
-  ean = await EAN.findOneAndUpdate({ean_code: ean_code}, req.body)
+  let ean = await EAN.findOneAndUpdate({ean_code: ean_code}, req.body)
+  console.log(ean.ean_code);
+  let pkis = await Pki.find({ean_code: ean.ean_code})  
+  for (const pki of pkis) {
+    // if (!pki.sp_unit || pki.sp_unit.length < 1) {
+      console.log(ean.sp_unit1);
+      pki.sp_unit = ean.sp_unit1
+      pki.save()
+    // }
+  }
 	res.redirect('/equipment')
 })
 
 
-router.get('/sp_unit', auth, async (req, res) => {
-  console.log(req.query.id);
+router.get('/sp_unit', auth, async (req, res) => {  
   const ean = await EAN.findById(req.query.id)
   if (ean.sp_unit && ean.sp_unit.length > 0) {
     res.send(ean)
@@ -101,8 +115,7 @@ router.get('/sp_unit', auth, async (req, res) => {
 })
 
 
-router.get("/search", auth, async (req, res) => {
-  console.log(req.query.q);
+router.get("/search", auth, async (req, res) => {  
   if (req.query.q == 'null') {
     const eans = await EAN.find().limit(50).sort({created: -1})
     res.send(JSON.stringify({eans: eans}))
@@ -114,6 +127,18 @@ router.get("/search", auth, async (req, res) => {
       res.sendStatus(200)
     }
   }  
+})
+
+
+router.get('/autocomplete', auth, async (req, res) => {  
+  const types = await EAN.find().distinct('type_pki')
+  const vendors = await EAN.find().distinct('vendor')
+  const countrys = await EAN.find().distinct('country')
+  res.send(JSON.stringify({
+    types: types,
+    vendors: vendors,
+    countrys: countrys
+  }))
 })
 
 

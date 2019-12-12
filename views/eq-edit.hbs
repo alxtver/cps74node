@@ -111,6 +111,12 @@
           serial_numberCell.id = "serial_number"
           serial_numberCell.contentEditable = "true"
 
+          let szz2Cell = newRow.insertCell(-1)
+          szz2Cell.innerHTML = '1'
+          szz2Cell.className = "szz2"
+          szz2Cell.id = "szz2"
+          szz2Cell.contentEditable = "true"
+
           $(newRow).insertAfter(checkedRow)
         }
       })
@@ -159,15 +165,17 @@ let id = $('#id').val()
           let model = $(this).find(".model").text()
           let quantity = $(this).find(".quantity").text()
           let serial_number = $(this).find(".serial_number").text()
+          let szz2 = $(this).find(".szz2").text()
           sp_unit.push({
             i: i,
             name: name,
             vendor: vendor,
             model: model,
             quantity: quantity,
-            serial_number: serial_number
+            serial_number: serial_number,
+            szz2: szz2
           })
-        }        
+        }
       })
     }
 
@@ -187,13 +195,15 @@ let id = $('#id').val()
           let model = $(this).find(".model").text()
           let quantity = $(this).find(".quantity").text()
           let serial_number = $(this).find(".serial_number").text()
+          let szz2 = $(this).find(".szz2").text()
           sp_unit1.push({
             i: i,
             name: name,
             vendor: vendor,
             model: model,
             quantity: quantity,
-            serial_number: serial_number
+            serial_number: serial_number,
+            szz2: szz2
           })
         }        
       })

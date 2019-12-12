@@ -685,3 +685,12 @@ th {
 .input-group-text {
   width: 130px;
 }
+
+.ui-helper-hidden-accessible { 
+  display:none; 
+}
+
+.ui-menu {
+  background: #ffffff;
+  width: 25%;
+}

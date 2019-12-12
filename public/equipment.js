@@ -22,7 +22,7 @@ function load_table_sp(ean_id) {
 
 function CreateTable1SP() { 
   
-  let col_rus = ["", "Наименование", "Фирма", "Модель", "Количество", "Серийный номер"]
+  let col_rus = ["", "Наименование", "Фирма", "Модель", "Количество", "Серийный номер", "СЗЗ Тип2"]
 
   let table = document.createElement("table");
   table.className = "table table-sm table-bordered table-hover"
@@ -80,6 +80,12 @@ function CreateTable1SP() {
   serial_numberCell.id = "serial_number"
   serial_numberCell.contentEditable = "true"
 
+  let szz2Cell = tr.insertCell(-1)
+  szz2Cell.innerHTML = '1'
+  szz2Cell.className = "szz2"
+  szz2Cell.id = "szz2"
+  szz2Cell.contentEditable = "true"
+
   
 
   $('#add').submit(function () {
@@ -107,13 +113,15 @@ function CreateTable1SP() {
           let model = $(this).find(".model").text()
           let quantity = $(this).find(".quantity").text()
           let serial_number = $(this).find(".serial_number").text()
+          let szz2 = $(this).find(".szz2").text()
           sp_unit.push({
             i: i,
             name: name,
             vendor: vendor,
             model: model,
             quantity: quantity,
-            serial_number: serial_number
+            serial_number: serial_number,
+            szz2: szz2
           })
         }        
       })
@@ -135,13 +143,15 @@ function CreateTable1SP() {
           let model = $(this).find(".model").text()
           let quantity = $(this).find(".quantity").text()
           let serial_number = $(this).find(".serial_number").text()
+          let szz2 = $(this).find(".szz2").text()
           sp_unit1.push({
             i: i,
             name: name,
             vendor: vendor,
             model: model,
             quantity: quantity,
-            serial_number: serial_number
+            serial_number: serial_number,
+            szz2: szz2
           })
         }        
       })
@@ -170,7 +180,7 @@ function CreateTable1SP() {
 
 function CreateTableSP_EAN(ean) { 
   
-  let col_rus = ["", "Наименование", "Фирма", "Модель", "Количество", "Серийный (инв.) номер"]
+  let col_rus = ["", "Наименование", "Фирма", "Модель", "Количество", "Серийный (инв.) номер", "СЗЗ Тип2"]
 
   let table = document.createElement("table");
   table.className = "table table-sm table-bordered table-hover"
@@ -233,7 +243,15 @@ function CreateTableSP_EAN(ean) {
     serial_numberCell.innerHTML = unit.serial_number
   }
   serial_numberCell.contentEditable = "true"
-  }  
+
+  let szz2Cell = tr.insertCell(-1)
+  szz2Cell.innerHTML = '1'
+  szz2Cell.className = "szz2"
+  szz2Cell.id = "szz2"
+  szz2Cell.contentEditable = "true"
+  }
+
+  
 
   table = document.createElement("table");
   table.className = "table table-sm table-bordered table-hover"
@@ -297,6 +315,11 @@ function CreateTableSP_EAN(ean) {
   }
   serial_numberCell.contentEditable = "true"
 
+  let szz2Cell = tr.insertCell(-1)
+  szz2Cell.innerHTML = '1'
+  szz2Cell.className = "szz2"
+  szz2Cell.id = "szz2"
+  szz2Cell.contentEditable = "true"
   }
 }
 
@@ -411,3 +434,28 @@ function searchEANCode(q) {
     }
   })
 }
+
+
+$(function() {
+  $.ajax({
+    url: "/equipment/autocomplete",
+    method: "GET",
+    headers: {
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    },
+    success: function (data) {
+      const types = JSON.parse(data).types
+      const vendors = JSON.parse(data).vendors
+      const countrys = JSON.parse(data).countrys
+      $( "#vendor" ).autocomplete({
+        source: vendors      
+      })
+      $( "#type_pki" ).autocomplete({
+        source: types      
+      })
+      $( "#country" ).autocomplete({
+        source: countrys      
+      })
+    }
+  })
+})
