@@ -94,20 +94,144 @@ router.post('/edit', auth, async (req, res) => {
   await EAN.findOneAndUpdate({ean_code: ean_code}, req.body)
   let ean = await EAN.findOne({ean_code: ean_code})
   //console.log(ean.ean_code);
-  let pkis = await Pki.find({part: req.session.part, ean_code: ean.ean_code})  
+  let pkis = await Pki.find({part: req.session.part, ean_code: ean.ean_code}) 
+
   for (const pki of pkis) {
-     //if (!pki.sp_unit || pki.sp_unit.length < 1) {
-      //console.log(ean.sp_unit1);
-      if (!pki.viborka) {
-        pki.sp_unit = ean.sp_unit1   
-      } else {
-        pki.sp_unit = ean.sp_unit
-      }
+      let sp_units = []
+      if (!pki.viborka) {        
+        if (pki.sp_unit.length <= ean.sp_unit1.length) {
+          for (let i = 0; i < ean.sp_unit1.length; i++) {
+            if (pki.sp_unit[i]) {
+              if (ean.sp_unit[i].name == pki.sp_unit[i].name) {                
+                let n = i              
+                let name = pki.sp_unit[i].name                
+                let vendor = ean.sp_unit1[i].vendor
+                let model = ean.sp_unit1[i].model
+                let quantity = ean.sp_unit1[i].quantity
+                let serial_number = pki.sp_unit[i].serial_number                
+                let szz2 = ean.sp_unit1[i].szz2
+                sp_units.push({
+                  i: n,
+                  name: name,
+                  vendor: vendor,
+                  model: model,
+                  quantity: quantity,
+                  serial_number: serial_number,
+                  szz2: szz2
+                })
+              } else {
+                let n = i              
+                let name = ean.sp_unit1[i].name
+                let vendor = ean.sp_unit1[i].vendor
+                let model = ean.sp_unit1[i].model
+                let quantity = ean.sp_unit1[i].quantity
+                let serial_number = ean.sp_unit1[i].serial_number
+                let szz2 = ean.sp_unit1[i].szz2
+                sp_units.push({
+                  i: n,
+                  name: name,
+                  vendor: vendor,
+                  model: model,
+                  quantity: quantity,
+                  serial_number: serial_number,
+                  szz2: szz2
+                })
+              }
+            } else {
+                let n = i              
+                let name = ean.sp_unit1[i].name
+                let vendor = ean.sp_unit1[i].vendor
+                let model = ean.sp_unit1[i].model
+                let quantity = ean.sp_unit1[i].quantity
+                let serial_number = ean.sp_unit1[i].serial_number
+                let szz2 = ean.sp_unit1[i].szz2
+                sp_units.push({
+                  i: n,
+                  name: name,
+                  vendor: vendor,
+                  model: model,
+                  quantity: quantity,
+                  serial_number: serial_number,
+                  szz2: szz2
+                })
+            }                                 
+          }          
+        }
         
-      pki.save(function () {
+        pki.sp_unit = sp_units
+        pki.save(function () {
+        console.log(pki.type_pki + ' изменен');
+      }) 
+      } else {      
+        if (pki.sp_unit.length <= ean.sp_unit.length) {
+          for (let i = 0; i < ean.sp_unit.length; i++) {
+            if (pki.sp_unit[i]) {
+              if (ean.sp_unit[i].name == pki.sp_unit[i].name) {                
+                let n = i              
+                let name = pki.sp_unit[i].name                
+                let vendor = ean.sp_unit[i].vendor
+                let model = ean.sp_unit[i].model
+                let quantity = ean.sp_unit[i].quantity
+                let serial_number = pki.sp_unit[i].serial_number                
+                let szz2 = ean.sp_unit[i].szz2
+                sp_units.push({
+                  i: n,
+                  name: name,
+                  vendor: vendor,
+                  model: model,
+                  quantity: quantity,
+                  serial_number: serial_number,
+                  szz2: szz2
+                })
+              } else {
+                let n = i              
+                let name = ean.sp_unit[i].name
+                let vendor = ean.sp_unit[i].vendor
+                let model = ean.sp_unit[i].model
+                let quantity = ean.sp_unit[i].quantity
+                let serial_number = ean.sp_unit[i].serial_number
+                let szz2 = ean.sp_unit[i].szz2
+                sp_units.push({
+                  i: n,
+                  name: name,
+                  vendor: vendor,
+                  model: model,
+                  quantity: quantity,
+                  serial_number: serial_number,
+                  szz2: szz2
+                })
+              }
+            } else {
+                let n = i              
+                let name = ean.sp_unit[i].name
+                let vendor = ean.sp_unit[i].vendor
+                let model = ean.sp_unit[i].model
+                let quantity = ean.sp_unit[i].quantity
+                let serial_number = ean.sp_unit[i].serial_number
+                let szz2 = ean.sp_unit[i].szz2
+                sp_units.push({
+                  i: n,
+                  name: name,
+                  vendor: vendor,
+                  model: model,
+                  quantity: quantity,
+                  serial_number: serial_number,
+                  szz2: szz2
+                })
+            }                                 
+          }          
+        }
+        
+        pki.sp_unit = sp_units
+        pki.save(function () {
         console.log(pki.type_pki + ' изменен');
       })
-    // }
+      }
+        
+      // pki.save(function () {
+      //   console.log(pki.type_pki + ' изменен');
+      // })
+   
   }
 	res.redirect('/equipment')
 })
