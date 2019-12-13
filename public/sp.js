@@ -207,7 +207,7 @@ function CreateTableFromJSON(data) {
         szz1Cell.id = "szz1"
 
         let szz2Cell = tr.insertCell(-1)
-        szz2Cell.innerHTML = unit.szz2_number
+        szz2Cell.innerHTML = unit.szz2
         szz2Cell.dataset.id = data[i]._id
         szz2Cell.className = "szz2"
         szz2Cell.id = "szz2"
@@ -415,7 +415,7 @@ function CreateTableSP() {
           model: model,
           quantity: quantity,
           serial_number: serial_number,
-          szz2_number: szz2
+          szz2: szz2
         })
       })
     }
@@ -437,7 +437,8 @@ function CreateTableSP() {
   })
 }
 
-function CreateTableSP_PKI(pki) { 
+function CreateTableSP_PKI(pki) {
+
   
   let col_rus = ["", "Наименование", "Фирма", "Модель", "Количество", "Серийный (инв.) номер", "СЗЗ Тип 2"]
 
@@ -502,7 +503,7 @@ function CreateTableSP_PKI(pki) {
   serial_numberCell.contentEditable = "true"
 
   let szz2Cell = tr.insertCell(-1)
-  szz2Cell.innerHTML = unit.szz2_number
+  szz2Cell.innerHTML = unit.szz2
   szz2Cell.className = "szz2"
   szz2Cell.id = "szz2"
   szz2Cell.contentEditable = "true"
@@ -513,6 +514,7 @@ function CreateTableSP_PKI(pki) {
     let id = $('#id').val()
     let ean_code = $('#ean_code').val()
     let szz1 = $('#szz1').val()
+    let viborka = $('#viborka').prop("checked")
 
     let sp_unit = []
     let n = 0
@@ -540,11 +542,10 @@ function CreateTableSP_PKI(pki) {
           model: model,
           quantity: quantity,
           serial_number: serial_number,
-          szz2_number: szz2
+          szz2: szz2
         })
       })
     }
-
 
     $.ajax({
       url: "/sp/edit",
@@ -556,11 +557,156 @@ function CreateTableSP_PKI(pki) {
         id: id,
         ean_code: ean_code,
         szz1: szz1,
-        sp_unit: sp_unit
+        sp_unit: sp_unit,
+        viborka: viborka
       },
     })
   })
 }
+
+function load_table_sp(pki_id) {
+  $.ajax({
+    url: "/sp/sp_unit",
+    method: "GET",
+    headers: {
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    },
+    data: {
+      id: pki_id,
+    },
+    success: function (data) {
+      if (data == 'OK'){
+        CreateTableSP()
+      } else {
+        CreateTableSP_PKI(data)
+      }
+    }
+  })
+}
+
+
+
+
+function load_table_viborka(pki_id, viborka) {
+  $.ajax({
+    url: "/sp/viborka",
+    method: "GET",
+    headers: {
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    },
+    data: {
+      id: pki_id,
+      viborka: viborka
+    },
+    success: function (data) {
+      CreateTable_EAN(data)
+    }
+  })
+}
+
+
+function CreateTable_EAN(ean) {
+  
+  let col_rus = ["", "Наименование", "Фирма", "Модель", "Количество", "Серийный (инв.) номер", "СЗЗ Тип 2"]
+
+  let table = document.createElement("table");
+  table.className = "table table-sm table-bordered table-hover"
+  table.id = "sp_unit"
+  // Заголовок таблицы
+  let tr = table.insertRow(-1)
+  let thead = table.createTHead()
+  thead.className = "thead-dark"
+  for (let i = 0; i < col_rus.length; i++) {
+    let th = document.createElement("th")
+    //th.rowSpan = 2
+    // th.className = "thead-dark"
+    th.innerHTML = col_rus[i]
+    tr.appendChild(th)
+    thead.appendChild(tr)
+  }
+
+  const divContainer = document.getElementById("pki_sp_table");
+  divContainer.innerHTML = "";
+  divContainer.appendChild(table);
+
+  let tableRef = document.getElementById('pki_sp_table').getElementsByTagName('tbody')[0]
+
+  for (const unit of ean) {
+    tr = tableRef.insertRow(-1)
+
+  let chCell = tr.insertCell(-1)
+  chCell.innerHTML = "<input type='checkbox' name='record'>"
+  chCell.className = "record"
+
+  let nameCell = tr.insertCell(-1)
+  nameCell.className = "name"
+  nameCell.innerHTML = unit.name
+  nameCell.id = "name"
+  nameCell.contentEditable = "true"
+
+  let vendorCell = tr.insertCell(-1)
+  vendorCell.className = "vendor"
+  vendorCell.innerHTML = unit.vendor
+  vendorCell.id = "vendor"
+  vendorCell.contentEditable = "true"
+
+  let modelCell = tr.insertCell(-1)
+  modelCell.className = "model"
+  modelCell.innerHTML = unit.model
+  modelCell.id = "model"
+  modelCell.contentEditable = "true"
+
+  let quantityCell = tr.insertCell(-1)
+  quantityCell.innerHTML = unit.quantity
+  quantityCell.className = "quantity"
+  quantityCell.id = "quantity"
+  quantityCell.contentEditable = "true"
+
+  let serial_numberCell = tr.insertCell(-1)
+  serial_numberCell.className = "serial_number"
+  serial_numberCell.innerHTML = unit.serial_number
+  serial_numberCell.id = "serial_number"
+  serial_numberCell.contentEditable = "true"
+
+  let szz2Cell = tr.insertCell(-1)
+  szz2Cell.innerHTML = unit.szz2
+  szz2Cell.className = "szz2"
+  szz2Cell.id = "szz2"
+  szz2Cell.contentEditable = "true"
+  }
+} 
+
+$(document).on('keypress', '#ean_code', function (e) {  
+  let ean = $(this).val()
+  let pki_id = $('#pki_id').val()
+  let viborka
+  if ($('#viborka').is(':checked') == true) {
+    viborka = true
+  } else {
+    viborka = false
+  }
+  if (e.which == 13) {      
+    $.ajax({
+      url: "/sp/check_ean",
+      method: "GET",
+      headers: {
+        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      },
+      data: {
+        ean: ean,
+        viborka: viborka,
+        pki_id: pki_id
+      },
+      success: function (data) {
+        if (data != "OK") {
+          CreateTable_EAN(data)
+        } else {
+          CreateTableSP()
+        }
+      }
+    }) 
+  }
+})
 
 function CreateTableSP_EAN(ean) { 
   
@@ -687,48 +833,3 @@ function CreateTableSP_EAN(ean) {
     })
   })
 }
-
-function load_table_sp(pki_id) {
-  $.ajax({
-    url: "/sp/sp_unit",
-    method: "GET",
-    headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-    },
-    data: {
-      id: pki_id,
-    },
-    success: function (data) {
-      if (data == 'OK'){
-        CreateTableSP()
-      } else if (data.serial_number) {
-        CreateTableSP_PKI(data)
-      } else {
-        CreateTableSP_EAN(data)
-      }
-    }
-  })
-}
-
-$(document).on('keypress', '#ean_code', function (e) {  
-  let ean = $(this).val()
-  if (e.which == 13) {      
-    $.ajax({
-      url: "/sp/check_ean",
-      method: "GET",
-      headers: {
-        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-      },
-      data: {
-        ean: ean,
-      },
-      success: function (data) {
-        if (data != "OK") {
-          CreateTableSP_EAN(data)
-        } else {
-          CreateTableSP()
-        }
-      }
-    }) 
-  }
-})

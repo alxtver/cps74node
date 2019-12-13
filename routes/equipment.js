@@ -91,14 +91,22 @@ router.post('/edit', auth, async (req, res) => {
   const country = req.body.country
   const sp_unit = req.body.sp_unit
   const sp_unit1 = req.body.sp_unit1
-  let ean = await EAN.findOneAndUpdate({ean_code: ean_code}, req.body)
-  console.log(ean.ean_code);
-  let pkis = await Pki.find({ean_code: ean.ean_code})  
+  await EAN.findOneAndUpdate({ean_code: ean_code}, req.body)
+  let ean = await EAN.findOne({ean_code: ean_code})
+  //console.log(ean.ean_code);
+  let pkis = await Pki.find({part: req.session.part, ean_code: ean.ean_code})  
   for (const pki of pkis) {
-    // if (!pki.sp_unit || pki.sp_unit.length < 1) {
-      console.log(ean.sp_unit1);
-      pki.sp_unit = ean.sp_unit1
-      pki.save()
+     //if (!pki.sp_unit || pki.sp_unit.length < 1) {
+      //console.log(ean.sp_unit1);
+      if (!pki.viborka) {
+        pki.sp_unit = ean.sp_unit1   
+      } else {
+        pki.sp_unit = ean.sp_unit
+      }
+        
+      pki.save(function () {
+        console.log(pki.type_pki + ' изменен');
+      })
     // }
   }
 	res.redirect('/equipment')

@@ -30,6 +30,7 @@
       <div id="pki_sp_table"></div>
     
       <input type="hidden" name="_csrf" value="{{csrf}}">
+      <input type="hidden" id="pki_id" value="{{pki._id}}">
       <div class="mt-5">
         <button type="submit" class="btn btn-outline-success">Сохранить</button>
         <input type="button" value="Назад" class="btn btn-outline-primary" onclick="window.location='/sp';">
@@ -39,8 +40,21 @@
 </div>
 
 <script>
-  $(document).ready(function () {
+  $(document).ready(function () {    
+    let viborka = `{{pki.viborka}}`
+    if (viborka == 'true'){
+      $('#viborka').prop('checked', true)      
+    }
+
     let pki_id = `{{pki.id}}`
-    load_table_sp(pki_id)  
+    load_table_sp(pki_id)
+
+    $('#viborka').click(function(){
+      if ($(this).is(':checked')){
+        load_table_viborka(pki_id, true)
+      } else {
+        load_table_viborka(pki_id, false)
+      }
+    })    
   })
 </script>
