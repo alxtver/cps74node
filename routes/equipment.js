@@ -95,7 +95,7 @@ router.post('/edit', auth, async (req, res) => {
   let ean = await EAN.findOne({ean_code: ean_code})
   //console.log(ean.ean_code);
   let pkis = await Pki.find({part: req.session.part, ean_code: ean.ean_code}) 
-
+ 
   for (const pki of pkis) {
       let sp_units = []
       if (!pki.viborka) {        
@@ -156,12 +156,7 @@ router.post('/edit', auth, async (req, res) => {
                 })
             }                                 
           }          
-        }
-        
-        pki.sp_unit = sp_units
-        pki.save(function () {
-        console.log(pki.type_pki + ' изменен');
-      }) 
+        } 
       } else {      
         if (pki.sp_unit.length <= ean.sp_unit.length) {
           for (let i = 0; i < ean.sp_unit.length; i++) {
@@ -222,15 +217,13 @@ router.post('/edit', auth, async (req, res) => {
           }          
         }
         
-        pki.sp_unit = sp_units
-        pki.save(function () {
-        console.log(pki.type_pki + ' изменен');
-      })
+        
       }
         
-      // pki.save(function () {
-      //   console.log(pki.type_pki + ' изменен');
-      // })
+      pki.sp_unit = sp_units
+      pki.save(function () {
+      console.log(pki.type_pki + ' изменен');
+    })
    
   }
 	res.redirect('/equipment')
