@@ -45,16 +45,29 @@
     if (viborka == 'true'){
       $('#viborka').prop('checked', true)      
     }
-
     let pki_id = `{{pki.id}}`
     load_table_sp(pki_id)
-
-    $('#viborka').click(function(){
+    $('#viborka').click(function(){      
       if ($(this).is(':checked')){
         load_table_viborka(pki_id, true)
       } else {
         load_table_viborka(pki_id, false)
       }
-    })    
+    })
+  })
+
+  $(document).on('keypress', '.serial_number', function (e) {
+    let id = $(this).data("data")    
+    if (e.which == 13) {      
+      e.preventDefault()
+      //переход на одну ячейку вниз
+      next_id = Number(id) + 1
+      nextCellText = $(".serial_number[data-data='" + next_id + "']").text()
+      while (nextCellText == 'б/н' || nextCellText == 'Б/Н' || nextCellText == 'Б/н') {
+        next_id += 1
+        nextCellText = $(".serial_number[data-data='" + next_id + "']").text()           
+      }
+      $(".serial_number[data-data='" + next_id + "']").focus() 
+    }
   })
 </script>

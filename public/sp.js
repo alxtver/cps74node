@@ -130,6 +130,7 @@ function CreateTableFromJSON(data) {
     let szz1Cell = tr.insertCell(-1)
     szz1Cell.dataset.id = data[i]._id
     szz1Cell.className = "szz1"
+    szz1Cell.dataset.data = i + 1
     szz1Cell.id = "szz1"
     if (data[i].szz1) {
       szz1Cell.innerHTML = data[i].szz1
@@ -207,8 +208,7 @@ function CreateTableFromJSON(data) {
 
         let szz1Cell = tr.insertCell(-1)
         szz1Cell.innerHTML = ''
-        szz1Cell.dataset.id = data[i]._id
-        szz1Cell.className = "szz1"
+        szz1Cell.dataset.id = data[i]._id        
         szz1Cell.id = "szz1"
 
         let szz2Cell = tr.insertCell(-1)
@@ -374,16 +374,14 @@ function CreateTableSP() {
 
   let serial_numberCell = tr.insertCell(-1)
   serial_numberCell.className = "serial_number"
-  serial_numberCell.id = "serial_number"
+  serial_numberCell.id = "serial_number"  
   serial_numberCell.contentEditable = "true"
 
   let szz2Cell = tr.insertCell(-1)
   szz2Cell.innerHTML = "1"
   szz2Cell.className = "szz2"
   szz2Cell.id = "szz2"
-  szz2Cell.contentEditable = "true"
-
-  
+  szz2Cell.contentEditable = "true"  
 
   $('#edit').submit(function () {
     // get table html
@@ -466,7 +464,7 @@ function CreateTableSP_PKI(pki) {
   divContainer.appendChild(table);
 
   let tableRef = document.getElementById('pki_sp_table').getElementsByTagName('tbody')[0]
-
+  let n = 1
   for (const unit of pki.sp_unit) {
     tr = tableRef.insertRow(-1)
 
@@ -499,6 +497,7 @@ function CreateTableSP_PKI(pki) {
   serial_numberCell.className = "serial_number"
   serial_numberCell.innerHTML = unit.serial_number
   serial_numberCell.id = "serial_number"
+  serial_numberCell.dataset.data = n
   serial_numberCell.contentEditable = "true"
 
   let szz2Cell = tr.insertCell(-1)
@@ -506,6 +505,7 @@ function CreateTableSP_PKI(pki) {
   szz2Cell.className = "szz2"
   szz2Cell.id = "szz2"
   szz2Cell.contentEditable = "true"
+  n += 1
   }  
 
   $('#edit').submit(function () {
@@ -629,7 +629,7 @@ function CreateTable_EAN(ean) {
   divContainer.appendChild(table);
 
   let tableRef = document.getElementById('pki_sp_table').getElementsByTagName('tbody')[0]
-
+  let n = 1
   for (const unit of ean) {
     tr = tableRef.insertRow(-1)
 
@@ -662,6 +662,7 @@ function CreateTable_EAN(ean) {
   serial_numberCell.className = "serial_number"
   serial_numberCell.innerHTML = unit.serial_number
   serial_numberCell.id = "serial_number"
+  serial_numberCell.dataset.data = n
   serial_numberCell.contentEditable = "true"
 
   let szz2Cell = tr.insertCell(-1)
@@ -669,6 +670,7 @@ function CreateTable_EAN(ean) {
   szz2Cell.className = "szz2"
   szz2Cell.id = "szz2"
   szz2Cell.contentEditable = "true"
+  n += 1
   }
 } 
 
@@ -681,7 +683,8 @@ $(document).on('keypress', '#ean_code', function (e) {
   } else {
     viborka = false
   }
-  if (e.which == 13) {      
+  if (e.which == 13) {
+    e.preventDefault()   
     $.ajax({
       url: "/sp/check_ean",
       method: "GET",

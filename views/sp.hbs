@@ -12,6 +12,7 @@
 <div id="showData"></div>
 
 <input hidden="true" id="temp" value="0"></input>
+<input type="hidden" name="id" id="hidId">
 
 <script>
   $(document).ready(function () {
@@ -26,6 +27,16 @@
         searchPKI(blank_req)
       }
     })
+  })
+
+  $(document).on('keypress', '.szz1', function (e) {
+    let id = $(this).data("data")    
+    if (e.which == 13) {   
+      e.preventDefault()   
+      //переход на одну ячейку вниз
+      let next_id = Number(id) + 1 + ''
+      $(".szz1[data-data='" + next_id + "']").focus() 
+    }
   })
 
   $(document).on('change', '#type_select_navbar', function () {

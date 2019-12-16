@@ -99,7 +99,6 @@
       $('#hidId').val($(this).data("id"))
       $('#serial').text('Серийный номер - ' + $(this).data("serial_number"))          
     })
-
   
   $("body").on('click', '.copyBtn', function () {
     $('#hidInputCopy').val($(this).data("id"))
@@ -117,7 +116,8 @@
 
   $(document).on('keypress', '.serial_number', function (e) {
     let id = $(this).data("obj")
-    if (e.which == 13) {      
+    if (e.which == 13) {
+      e.preventDefault()    
       let id = $(this).data("id")
       let obj = $(this).data("obj")
       let unit = $(this).data("unit")

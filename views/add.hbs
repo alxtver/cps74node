@@ -79,6 +79,7 @@
   $(document).on('keypress', '#ean_code', function (e) {
     let valueEAN = $(this).val()
     if (e.which == 13) {
+      e.preventDefault()
       searchEAN(valueEAN)
     }
   })

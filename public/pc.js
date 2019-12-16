@@ -383,6 +383,7 @@ function load_data(q) {
             $(this).css("background-color", "darkgray")
           }
         })
+        
         let current_id = $("#hidd_id").val()
         let next_id = current_id.split(";")
         next_id[1] = Number(next_id[1]) + 1 + ''
