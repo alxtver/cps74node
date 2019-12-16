@@ -182,35 +182,24 @@ router.get('/:id/edit', auth, async (req, res) => {
 
 
 router.post('/edit', auth, async (req, res) => {
-	console.log(req.body);
-	const id = req.body.id	
-	const ean_code = req.body.ean_code
-	const szz1 = req.body.ssz1
-	const sp_unit = req.body.sp_unit
+	const id = req.body.id
 	await Pki.findByIdAndUpdate(id, req.body)
-
 	res.redirect('/sp')
 })
 
 
 router.get('/sp_unit', auth, async (req, res) => {
 	const pki = await Pki.findById(req.query.id)
-	if (pki.sp_unit && pki.sp_unit.length > 0) {
-		console.log("PKI!!!");
+	if (pki.sp_unit && pki.sp_unit.length > 0) {		
 		res.send(pki)
 	} else if (pki.ean_code) {
-		ean = await EAN.findOne({
-			ean_code: pki.ean_code
-		})
+		ean = await EAN.findOne({ean_code: pki.ean_code})
 		if (ean && ean.sp_unit.length > 0) {
-			console.log("EAN!!!");
 			res.send(ean)
 		} else {
-			console.log("200  1 !!!");
 			res.sendStatus(200)
 		}
 	} else {
-		console.log("200  2 !!!");
 		res.sendStatus(200)
 	}
 })
@@ -229,7 +218,6 @@ router.get('/viborka', auth, async (req, res) => {
 
 
 router.get('/check_ean', auth, async (req, res) => {
-	console.log(req.query);
 	await Pki.findByIdAndUpdate(req.query.pki_id, {ean_code: req.query.ean})
 	const ean = await EAN.findOne({ean_code: req.query.ean})
 	if (ean) {

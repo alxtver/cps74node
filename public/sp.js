@@ -146,7 +146,12 @@ function CreateTableFromJSON(data) {
     if (data[i].szz1) {
       szz2Cell.innerHTML = ''
     } else {
-      szz2Cell.innerHTML = '1'
+      if (data[i].type_pki == "Процессор") {
+        szz2Cell.innerHTML = ''
+      } else {
+        szz2Cell.innerHTML = '1'
+      }
+      
     }    
     szz2Cell.style.fontWeight = "700"
 
@@ -317,7 +322,7 @@ function changeSelectType(selectedItem) {
 
 function CreateTableSP() { 
   
-  let col_rus = ["", "Наименование", "Фирма", "Модель", "Количество", "Серийный (инв.) номер", "СЗЗ Тип 2"]
+  let col_rus = ["Наименование", "Фирма", "Модель", "Количество", "Серийный (инв.) номер", "СЗЗ Тип 2"]
 
   let table = document.createElement("table");
   table.className = "table table-sm table-bordered table-hover"
@@ -345,9 +350,6 @@ function CreateTableSP() {
 
   tr = tableRef.insertRow(-1)
 
-  let chCell = tr.insertCell(-1)
-  chCell.innerHTML = "<input type='checkbox' name='record'>"
-  chCell.className = "record"
 
   let nameCell = tr.insertCell(-1)
   nameCell.className = "name"
@@ -440,7 +442,7 @@ function CreateTableSP() {
 function CreateTableSP_PKI(pki) {
 
   
-  let col_rus = ["", "Наименование", "Фирма", "Модель", "Количество", "Серийный (инв.) номер", "СЗЗ Тип 2"]
+  let col_rus = ["Наименование", "Фирма", "Модель", "Количество", "Серийный (инв.) номер", "СЗЗ Тип 2"]
 
   let table = document.createElement("table");
   table.className = "table table-sm table-bordered table-hover"
@@ -468,9 +470,6 @@ function CreateTableSP_PKI(pki) {
   for (const unit of pki.sp_unit) {
     tr = tableRef.insertRow(-1)
 
-  let chCell = tr.insertCell(-1)
-  chCell.innerHTML = "<input type='checkbox' name='record'>"
-  chCell.className = "record"
 
   let nameCell = tr.insertCell(-1)
   nameCell.className = "name"
@@ -607,7 +606,7 @@ function load_table_viborka(pki_id, viborka) {
 
 function CreateTable_EAN(ean) {
   
-  let col_rus = ["", "Наименование", "Фирма", "Модель", "Количество", "Серийный (инв.) номер", "СЗЗ Тип 2"]
+  let col_rus = ["Наименование", "Фирма", "Модель", "Количество", "Серийный (инв.) номер", "СЗЗ Тип 2"]
 
   let table = document.createElement("table");
   table.className = "table table-sm table-bordered table-hover"
@@ -634,9 +633,6 @@ function CreateTable_EAN(ean) {
   for (const unit of ean) {
     tr = tableRef.insertRow(-1)
 
-  let chCell = tr.insertCell(-1)
-  chCell.innerHTML = "<input type='checkbox' name='record'>"
-  chCell.className = "record"
 
   let nameCell = tr.insertCell(-1)
   nameCell.className = "name"
@@ -710,7 +706,7 @@ $(document).on('keypress', '#ean_code', function (e) {
 
 function CreateTableSP_EAN(ean) { 
   
-  let col_rus = ["", "Наименование", "Фирма", "Модель", "Количество", "Серийный (инв.) номер", "СЗЗ Тип 2"]
+  let col_rus = ["Наименование", "Фирма", "Модель", "Количество", "Серийный (инв.) номер", "СЗЗ Тип 2"]
 
   let table = document.createElement("table");
   table.className = "table table-sm table-bordered table-hover"
@@ -738,47 +734,44 @@ function CreateTableSP_EAN(ean) {
   for (const unit of ean.sp_unit) {
     tr = tableRef.insertRow(-1)
 
-  let chCell = tr.insertCell(-1)
-  chCell.innerHTML = "<input type='checkbox' name='record'>"
-  chCell.className = "record"
 
-  let nameCell = tr.insertCell(-1)
-  nameCell.className = "name"
-  nameCell.innerHTML = unit.name
-  nameCell.id = "name"
-  nameCell.contentEditable = "true"
+    let nameCell = tr.insertCell(-1)
+    nameCell.className = "name"
+    nameCell.innerHTML = unit.name
+    nameCell.id = "name"
+    nameCell.contentEditable = "true"
 
-  let vendorCell = tr.insertCell(-1)
-  vendorCell.className = "vendor"
-  vendorCell.innerHTML = unit.vendor
-  vendorCell.id = "vendor"
-  vendorCell.contentEditable = "true"
+    let vendorCell = tr.insertCell(-1)
+    vendorCell.className = "vendor"
+    vendorCell.innerHTML = unit.vendor
+    vendorCell.id = "vendor"
+    vendorCell.contentEditable = "true"
 
-  let modelCell = tr.insertCell(-1)
-  modelCell.className = "model"
-  modelCell.innerHTML = unit.model
-  modelCell.id = "model"
-  modelCell.contentEditable = "true"
+    let modelCell = tr.insertCell(-1)
+    modelCell.className = "model"
+    modelCell.innerHTML = unit.model
+    modelCell.id = "model"
+    modelCell.contentEditable = "true"
 
-  let quantityCell = tr.insertCell(-1)
-  quantityCell.innerHTML = unit.quantity
-  quantityCell.className = "quantity"
-  quantityCell.id = "quantity"
-  quantityCell.contentEditable = "true"
+    let quantityCell = tr.insertCell(-1)
+    quantityCell.innerHTML = unit.quantity
+    quantityCell.className = "quantity"
+    quantityCell.id = "quantity"
+    quantityCell.contentEditable = "true"
 
-  let serial_numberCell = tr.insertCell(-1)
-  serial_numberCell.className = "serial_number"  
-  serial_numberCell.id = "serial_number"
-  if (unit.serial_number == 'б/н' || unit.serial_number == 'Б/Н' || unit.serial_number == 'Б/н') {
-    serial_numberCell.innerHTML = unit.serial_number
-  }
-  serial_numberCell.contentEditable = "true"
+    let serial_numberCell = tr.insertCell(-1)
+    serial_numberCell.className = "serial_number"  
+    serial_numberCell.id = "serial_number"
+    if (unit.serial_number == 'б/н' || unit.serial_number == 'Б/Н' || unit.serial_number == 'Б/н') {
+      serial_numberCell.innerHTML = unit.serial_number
+    }
+    serial_numberCell.contentEditable = "true"
 
-  let szz2Cell = tr.insertCell(-1)
-  szz2Cell.innerHTML = unit.szz2_number
-  szz2Cell.className = "szz2"
-  szz2Cell.id = "szz2"
-  szz2Cell.contentEditable = "true"
+    let szz2Cell = tr.insertCell(-1)
+    szz2Cell.innerHTML = unit.szz2_number
+    szz2Cell.className = "szz2"
+    szz2Cell.id = "szz2"
+    szz2Cell.contentEditable = "true"
   }  
 
 
