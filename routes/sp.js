@@ -9,6 +9,11 @@ const APKZI = require('../models/apkzi')
 const User = require('../models/user')
 const path = require('path')
 const fs = require('fs')
+const PizZip = require('pizzip')
+const Docxtemplater = require('docxtemplater')
+const http = require('http')
+
+
 
 
 router.get('/', auth, async (req, res) => {
@@ -228,8 +233,264 @@ router.get('/check_ean', auth, async (req, res) => {
 		}
 	} else {
 		res.sendStatus(200)
+	}	
+})
+
+
+router.get('/reportSPDoc', auth, async (req, res) => {
+  const appDir = path.dirname(require.main.filename)
+  const docDir = appDir + '/public/docx'
+ 
+  const pkis = await Pki.find({part: req.session.part}).sort({type_pki: 1})
+    
+  var content = fs.readFileSync(path.resolve(docDir, 'inputSP.docx'), 'binary');
+
+  var zip = new PizZip(content);
+
+  var doc = new Docxtemplater();
+  doc.loadZip(zip);
+
+  //set the templateVariables
+  doc.setData({
+      data: pkis
+  })
+
+  try {
+      // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
+      doc.render()
+  }
+  catch (error) {
+      const e = {
+          message: error.message,
+          name: error.name,
+          stack: error.stack,
+          properties: error.properties,
+      }
+      console.log(JSON.stringify({error: e}))
+      // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
+      throw error
+  }
+
+  let buf = doc.getZip().generate({type: 'nodebuffer'});
+
+  // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
+  fs.writeFileSync(path.resolve(docDir, 'outputSP.docx'), buf)
+  const file = `${docDir}/outputSP.docx`
+  const fileName = req.session.part + '.docx'
+  console.log(`Passport #${req.session.part} was formed`)
+  res.download(file, fileName)
+})
+
+
+router.get('/reportSPDoc1', auth, async (req, res) => {
+	var officegen = require('officegen')
+
+	var fs = require('fs')
+	var path = require('path')
+	
+	var docx = officegen('docx')
+	const appDir = path.dirname(require.main.filename)
+	var outDir = appDir + '/public/docx'
+	const file = `${outDir}/example_json.docx`
+	const fileName = req.session.part + '.docx'
+
+	
+	
+	docx.on('error', function(err) {
+		console.log(err)
+	})
+
+	const pkis = await Pki.find({part: req.session.part})
+	
+	var table = [
+		[
+			{
+				val: 'Нет.',
+				opts: {
+					cellColWidth: 1261,
+					b: true,
+					sz: '16',
+					shd: {
+						fill: '7F7F7F',
+						themeFill: 'text1',
+						themeFillTint: '80'
+					},
+					fontFamily: 'Avenir Book'
+				}
+			},
+			{
+				val: 'Title1',
+				opts: {
+					b: true,
+					color: 'FFFFFF',
+					align: 'right',
+					shd: {
+						fill: '92CDDC',
+						themeFill: 'text1',
+						themeFillTint: '80'
+					}
+				}
+			},
+			{
+				val: 'Title2',
+				opts: {
+					align: 'center',
+					cellColWidth: 420,
+					b: true,
+					sz: '48',
+					shd: {
+						fill: '00FF00',
+						themeFill: 'text1',
+						themeFillTint: '80'
+					}
+				}
+			}
+		],
+		[1, 'All grown-ups were once children', ''],
+		[2, 'there is no harm in putting off a piece of work until another day.', ''],
+		[3,'But when it is a matter of baobabs, that always means a catastrophe.',''],
+		[4, 'watch out for the baobabs!', 'END']
+	]
+	
+	var tableStyle = {
+		tableColWidth: 4261,
+		tableSize: 24,
+		tableColor: 'ada',
+		tableAlign: 'left',
+		tableFontFamily: 'Comic Sans MS'
 	}
 	
+	var data = [
+		[
+			{
+				align: 'right'
+			},
+			{
+				type: 'text',
+				val: 'Simple'
+			},
+			{
+				type: 'text',
+				val: ' with color',
+				opt: {
+					color: '000088'
+				}
+			},
+			{
+				type: 'text',
+				val: '  and back color.',
+				opt: {
+					color: '00ffff',
+					back: '000088'
+				}
+			},
+			{
+				type: 'linebreak'
+			},
+			{
+				type: 'text',
+				val: 'Bold + underline',
+				opt: {
+					bold: true,
+					underline: true
+				}
+			}
+		],
+		{
+			type: 'horizontalline'
+		},
+		[
+			{
+				backline: 'EDEDED'
+			},
+			{
+				type: 'text',
+				val: '  backline text1.',
+				opt: {
+					bold: true
+				}
+			},
+			{
+				type: 'text',
+				val: '  backline text2.',
+				opt: { color: '000088' }
+			}
+		],
+		{
+			type: 'text',
+			val: 'Left this text.',
+			lopt: {
+				align: 'left'
+			}
+		},
+		{
+			type: 'text',
+			val: 'Center this text.',
+			lopt: {
+				align: 'center'
+			}
+		},
+		{
+			type: 'text',
+			val: 'Right this text.',
+			lopt: {
+				align: 'right'
+			}
+		},
+		{
+			type: 'text',
+			val: 'Fonts face only.',
+			opt: {
+				font_face: 'Arial'
+			}
+		},
+		{
+			type: 'text',
+			val: 'Fonts face and size.',
+			opt: {
+				font_face: 'Arial',
+				font_size: 40
+			}
+		},
+		{
+			type: 'table',
+			val: table,
+			opt: tableStyle
+		},
+		[
+			{},
+			{
+				type: 'image',
+				
+			},
+			{
+				type: 'image',
+				
+			}
+		],
+		{
+			type: 'pagebreak'
+		},
+
+		{
+			type: 'pagebreak'
+		}
+	]
+	
+	await docx.createByJson(data)
+	
+	var out = await fs.createWriteStream(path.join(outDir, 'example_json.docx'))
+	
+	out.on('error', function(err) {
+		console.log(err)
+	})
+
+	out.on('close', function() {
+		res.download(file, fileName)		
+ })
+	
+	docx.generate(out)
+	console.log(`Passport #${req.session.part} was formed`)
 })
 
 module.exports = router
