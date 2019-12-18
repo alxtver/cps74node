@@ -5,6 +5,7 @@ const authAdmin = require('../middleware/authAdmin')
 const PKI = require('../models/pki')
 const PC = require('../models/pc')
 const User = require('../models/user')
+const APKZI = require('../models/apkzi')
 
 
 router.get('/', auth, async (req, res) => {
@@ -68,6 +69,9 @@ router.get('/script', authAdmin, async (req, res) => {
   // const pki = await PKI.updateMany({}, { viborka: false })
   // console.log(pki.n)
   // console.log(pki.nModified)
+
+  //скрипт для добавления апкзи к зипам
+
 
 
   // скрипт импорта ПКИ из CSV файла

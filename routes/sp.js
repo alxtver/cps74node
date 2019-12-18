@@ -300,23 +300,38 @@ router.get('/reportSPDoc1', auth, async (req, res) => {
 		console.log(err)
 	})
 
-	const pkis = await Pki.find({part: req.session.part})
+	let opts = {
+		cellColWidth: 1261,
+		b: true,
+		sz: '16'
+	}
 	
+	let optsSpan = {
+		cellColWidth: 1261,
+		b: true,
+		sz: '16',
+		gridSpan: 2
+	}
+
+	const pkis = await Pki.find({part: req.session.part}).sort({type_pki: 1})
+	console.log(pkis[0]);
+	let dataSP = []
+	dataSP.push([
+		{val: '№ п/п', opts: opts},
+		{val: 'Наименование', opts: opts},
+		{val: 'Фирма', opts: opts},
+		{val: 'Модель', opts: opts},
+		{val: 'Кол во', opts: opts},
+		{val: 'Серийный (инв.) номер', opts: opts},
+		{val: 'Страна', opts: opts},
+		{val: 'Проверка', opts: optsSpan},
+	])
+	console.log(dataSP);
 	var table = [
 		[
 			{
 				val: 'Нет.',
-				opts: {
-					cellColWidth: 1261,
-					b: true,
-					sz: '16',
-					shd: {
-						fill: '7F7F7F',
-						themeFill: 'text1',
-						themeFillTint: '80'
-					},
-					fontFamily: 'Avenir Book'
-				}
+				opts: opts,
 			},
 			{
 				val: 'Title1',
@@ -335,7 +350,7 @@ router.get('/reportSPDoc1', auth, async (req, res) => {
 				val: 'Title2',
 				opts: {
 					align: 'center',
-					cellColWidth: 420,
+					
 					b: true,
 					sz: '48',
 					shd: {
@@ -354,126 +369,31 @@ router.get('/reportSPDoc1', auth, async (req, res) => {
 	
 	var tableStyle = {
 		tableColWidth: 4261,
-		tableSize: 24,
-		tableColor: 'ada',
+		tableSize: 24,		
 		tableAlign: 'left',
-		tableFontFamily: 'Comic Sans MS'
+		tableFontFamily: 'Times New Roman',
+		borders: true
 	}
 	
-	var data = [
-		[
-			{
-				align: 'right'
-			},
-			{
-				type: 'text',
-				val: 'Simple'
-			},
-			{
-				type: 'text',
-				val: ' with color',
-				opt: {
-					color: '000088'
-				}
-			},
-			{
-				type: 'text',
-				val: '  and back color.',
-				opt: {
-					color: '00ffff',
-					back: '000088'
-				}
-			},
-			{
-				type: 'linebreak'
-			},
-			{
-				type: 'text',
-				val: 'Bold + underline',
-				opt: {
-					bold: true,
-					underline: true
-				}
-			}
-		],
-		{
-			type: 'horizontalline'
-		},
-		[
-			{
-				backline: 'EDEDED'
-			},
-			{
-				type: 'text',
-				val: '  backline text1.',
-				opt: {
-					bold: true
-				}
-			},
-			{
-				type: 'text',
-				val: '  backline text2.',
-				opt: { color: '000088' }
-			}
-		],
+	var data = [		
 		{
 			type: 'text',
-			val: 'Left this text.',
-			lopt: {
-				align: 'left'
-			}
-		},
-		{
-			type: 'text',
-			val: 'Center this text.',
+			val: req.session.part,
+			opt: {
+				font_face: 'Arial',
+				font_size: 16
+			},
 			lopt: {
 				align: 'center'
 			}
 		},
 		{
-			type: 'text',
-			val: 'Right this text.',
-			lopt: {
-				align: 'right'
-			}
-		},
-		{
-			type: 'text',
-			val: 'Fonts face only.',
-			opt: {
-				font_face: 'Arial'
-			}
-		},
-		{
-			type: 'text',
-			val: 'Fonts face and size.',
-			opt: {
-				font_face: 'Arial',
-				font_size: 40
-			}
+			type: 'horizontalline'
 		},
 		{
 			type: 'table',
-			val: table,
+			val: dataSP,
 			opt: tableStyle
-		},
-		[
-			{},
-			{
-				type: 'image',
-				
-			},
-			{
-				type: 'image',
-				
-			}
-		],
-		{
-			type: 'pagebreak'
-		},
-
-		{
-			type: 'pagebreak'
 		}
 	]
 	

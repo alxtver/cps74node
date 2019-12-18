@@ -292,6 +292,8 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
       pc.pc_unit[index_apkzi].type = arr_apkzi_start
       pc.pc_unit[index_apkzi].name = arr_apkzi_end
       pc.pc_unit[index_apkzi].serial_number = apkzi.zav_number
+    } else {
+      pc[unit][req.body.obj].notes = arr_apkzi_start + ' ' + arr_apkzi_end + ' ' + apkzi.zav_number
     }
 
 
