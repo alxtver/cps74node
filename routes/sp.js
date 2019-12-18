@@ -303,7 +303,15 @@ router.get('/reportSPDoc1', auth, async (req, res) => {
 	let opts = {
 		cellColWidth: 1261,
 		b: true,
-		sz: '16'
+		sz: '16',
+		rowSpan: 2
+	}
+
+	let opts1 = {
+		cellColWidth: 0,
+		b: true,
+		sz: '0',
+		rowSpan: 2
 	}
 	
 	let optsSpan = {
@@ -318,26 +326,48 @@ router.get('/reportSPDoc1', auth, async (req, res) => {
 	let dataSP = []
 	dataSP.push([
 		{val: '№ п/п', opts: opts},
+		{val: 'Наименование', opts: opts1},
+		{val: 'Фирма', opts: opts},
+		{val: 'Модель', opts: opts},
+		{val: 'Кол во', opts: opts},
+		{val: 'Серийный (инв.) номер', opts: opts},
+		{val: 'Страна', opts: optsSpan},
+		{val: '', opts: opts1},
+	],
+	[
+		{val: '№ п/п', opts: opts},
 		{val: 'Наименование', opts: opts},
 		{val: 'Фирма', opts: opts},
 		{val: 'Модель', opts: opts},
 		{val: 'Кол во', opts: opts},
 		{val: 'Серийный (инв.) номер', opts: opts},
 		{val: 'Страна', opts: opts},
-		{val: 'Проверка', opts: optsSpan},
-	])
+		{val: 'Серийный (инв.) номер', opts: opts},
+		{val: '', opts: opts1},		
+	]
+	)
 	console.log(dataSP);
 	var table = [
 		[
 			{
-				val: 'Нет.',
-				opts: opts,
+				val: 'No.',
+				opts: {
+					cellColWidth: 4261,
+					b: true,
+					sz: '48',
+					shd: {
+						fill: '7F7F7F',
+						themeFill: 'text1',
+						themeFillTint: '80'
+					},
+					fontFamily: 'Avenir Book'
+				}
 			},
 			{
 				val: 'Title1',
 				opts: {
 					b: true,
-					color: 'FFFFFF',
+					color: 'A00000',
 					align: 'right',
 					shd: {
 						fill: '92CDDC',
@@ -350,20 +380,20 @@ router.get('/reportSPDoc1', auth, async (req, res) => {
 				val: 'Title2',
 				opts: {
 					align: 'center',
-					
+					cellColWidth: 42,
 					b: true,
 					sz: '48',
 					shd: {
-						fill: '00FF00',
+						fill: '92CDDC',
 						themeFill: 'text1',
 						themeFillTint: '80'
 					}
 				}
 			}
 		],
-		[1, 'All grown-ups were once children', ''],
-		[2, 'there is no harm in putting off a piece of work until another day.', ''],
-		[3,'But when it is a matter of baobabs, that always means a catastrophe.',''],
+		[1, { val: 'I have two spans.', opts: { gridSpan: 2 } }],
+		[{ val: 'I have three spans.', opts: { gridSpan: 3 } }],
+		[{ val: 'I have two spans.', opts: { gridSpan: 2 } }, '3'],
 		[4, 'watch out for the baobabs!', 'END']
 	]
 	
