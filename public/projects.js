@@ -21,7 +21,6 @@ function load_data(q) {
         select.add(option)        
       }
       $("#serials").selectpicker("refresh")
-
     }
   })
 }
@@ -282,6 +281,22 @@ function CreateTableFromJSON(data) {
     button_passport.setAttribute("onclick", "location.href='/projects/" + elem._id + "/passportDocx'")
     button_passport.dataset.id = elem._id
     divCont.appendChild(button_passport)
+
+    let button_sbZipE = document.createElement('input')
+    button_sbZipE.type = "button"
+    button_sbZipE.className = 'btn btn-outline-primary mr-2 mb-2 ml-3 copyBtn'
+    button_sbZipE.value = 'СБ Зип'
+    button_sbZipE.setAttribute("onclick", "location.href='/projects/" + elem._id + "/zipPCEDocx'")
+    button_sbZipE.dataset.id = elem._id
+    divCont.appendChild(button_sbZipE)
+
+    let button_ZIP = document.createElement('input')
+    button_ZIP.type = "button"
+    button_ZIP.className = 'btn btn-outline-primary mr-2 mb-2 ml-3 copyBtn'
+    button_ZIP.value = 'Зип этикетка'
+    button_ZIP.setAttribute("onclick", "location.href='/projects/" + elem._id + "/zipDocx'")
+    button_ZIP.dataset.id = elem._id
+    divCont.appendChild(button_ZIP)
   }
 }
 
