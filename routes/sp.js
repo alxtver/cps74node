@@ -12,6 +12,7 @@ const fs = require('fs')
 const PizZip = require('pizzip')
 const Docxtemplater = require('docxtemplater')
 const http = require('http')
+const excel = require('excel4node')
 
 
 
@@ -30,22 +31,16 @@ router.post("/search", auth, async (req, res) => {
 	let selected = req.session.part
 	let selectedType = req.session.type
 
-	let typesList = await Pki.find({
-		part: selected
-	}).distinct('type_pki')
+	let typesList = await Pki.find({part: selected}).distinct('type_pki')
+	console.log(typesList);
 
 	let pkis
 	if ((!req.body.q && selectedType == '...') || (!req.body.q && !selectedType)) {
-		pkis = await Pki.find({part: selected}).sort({type_pki: 1})
-
-		// for (const pki of pkis) {
-		// 	if (!pki.viborka) {
-		// 		if(pki.ean_code) {
-		// 			ean = await EAN.findOne({ean_code: pki.ean_code})
-		// 			console.log(ean);
-		// 		}
-		// 	}			
-		// }
+		pkis = await Pki.find({
+			part: selected
+		}).sort({
+			type_pki: 1
+		})
 
 	} else if (!req.body.q && selectedType != '...') {
 		pkis = await Pki.find({
@@ -55,7 +50,11 @@ router.post("/search", auth, async (req, res) => {
 			type_pki: 1
 		})
 	} else if (req.body.q == '...' && selectedType == '...') {
-		pkis = await Pki.find({part: selected}).sort({type_pki: 1})		
+		pkis = await Pki.find({
+			part: selected
+		}).sort({
+			type_pki: 1
+		})
 	} else if (req.body.q == selectedType) {
 		pkis = await Pki.find({
 			part: selected,
@@ -195,10 +194,12 @@ router.post('/edit', auth, async (req, res) => {
 
 router.get('/sp_unit', auth, async (req, res) => {
 	const pki = await Pki.findById(req.query.id)
-	if (pki.sp_unit && pki.sp_unit.length > 0) {		
+	if (pki.sp_unit && pki.sp_unit.length > 0) {
 		res.send(pki)
 	} else if (pki.ean_code) {
-		ean = await EAN.findOne({ean_code: pki.ean_code})
+		ean = await EAN.findOne({
+			ean_code: pki.ean_code
+		})
 		if (ean && ean.sp_unit.length > 0) {
 			res.send(ean)
 		} else {
@@ -213,7 +214,9 @@ router.get('/sp_unit', auth, async (req, res) => {
 router.get('/viborka', auth, async (req, res) => {
 	console.log(req.query);
 	const pki = await Pki.findById(req.query.id)
-	const ean = await EAN.findOne({ean_code: pki.ean_code})
+	const ean = await EAN.findOne({
+		ean_code: pki.ean_code
+	})
 	if (req.query.viborka == 'true') {
 		res.send(ean.sp_unit)
 	} else {
@@ -223,8 +226,12 @@ router.get('/viborka', auth, async (req, res) => {
 
 
 router.get('/check_ean', auth, async (req, res) => {
-	await Pki.findByIdAndUpdate(req.query.pki_id, {ean_code: req.query.ean})
-	const ean = await EAN.findOne({ean_code: req.query.ean})
+	await Pki.findByIdAndUpdate(req.query.pki_id, {
+		ean_code: req.query.ean
+	})
+	const ean = await EAN.findOne({
+		ean_code: req.query.ean
+	})
 	if (ean) {
 		if (req.query.viborka == 'true') {
 			res.send(ean.sp_unit)
@@ -233,70 +240,77 @@ router.get('/check_ean', auth, async (req, res) => {
 		}
 	} else {
 		res.sendStatus(200)
-	}	
-})
-
-
-router.get('/reportSPDoc', auth, async (req, res) => {
-  const appDir = path.dirname(require.main.filename)
-  const docDir = appDir + '/public/docx'
- 
-  const pkis = await Pki.find({part: req.session.part}).sort({type_pki: 1})
-    
-  var content = fs.readFileSync(path.resolve(docDir, 'inputSP.docx'), 'binary');
-
-  var zip = new PizZip(content);
-
-  var doc = new Docxtemplater();
-  doc.loadZip(zip);
-
-  //set the templateVariables
-  doc.setData({
-      data: pkis
-  })
-
-  try {
-      // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
-      doc.render()
-  }
-  catch (error) {
-      const e = {
-          message: error.message,
-          name: error.name,
-          stack: error.stack,
-          properties: error.properties,
-      }
-      console.log(JSON.stringify({error: e}))
-      // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
-      throw error
-  }
-
-  let buf = doc.getZip().generate({type: 'nodebuffer'});
-
-  // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
-  fs.writeFileSync(path.resolve(docDir, 'outputSP.docx'), buf)
-  const file = `${docDir}/outputSP.docx`
-  const fileName = req.session.part + '.docx'
-  console.log(`Passport #${req.session.part} was formed`)
-  res.download(file, fileName)
+	}
 })
 
 
 router.get('/reportSPDoc1', auth, async (req, res) => {
+	const appDir = path.dirname(require.main.filename)
+	const docDir = appDir + '/public/docx'
+
+	const pkis = await Pki.find({
+		part: req.session.part
+	}).sort({
+		type_pki: 1
+	})
+
+	var content = fs.readFileSync(path.resolve(docDir, 'inputSP.docx'), 'binary');
+
+	var zip = new PizZip(content);
+
+	var doc = new Docxtemplater();
+	doc.loadZip(zip);
+
+	//set the templateVariables
+	doc.setData({
+		data: pkis
+	})
+
+	try {
+		// render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
+		doc.render()
+	} catch (error) {
+		const e = {
+			message: error.message,
+			name: error.name,
+			stack: error.stack,
+			properties: error.properties,
+		}
+		console.log(JSON.stringify({
+			error: e
+		}))
+		// The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
+		throw error
+	}
+
+	let buf = doc.getZip().generate({
+		type: 'nodebuffer'
+	});
+
+	// buf is a nodejs buffer, you can either write it to a file or do anything else with it.
+	fs.writeFileSync(path.resolve(docDir, 'outputSP.docx'), buf)
+	const file = `${docDir}/outputSP.docx`
+	const fileName = req.session.part + '.docx'
+	console.log(`Passport #${req.session.part} was formed`)
+	res.download(file, fileName)
+})
+
+
+router.get('/reportSPDoc', auth, async (req, res) => {
 	var officegen = require('officegen')
 
 	var fs = require('fs')
 	var path = require('path')
-	
+
 	var docx = officegen('docx')
 	const appDir = path.dirname(require.main.filename)
 	var outDir = appDir + '/public/docx'
 	const file = `${outDir}/example_json.docx`
 	const fileName = req.session.part + '.docx'
 
-	
-	
-	docx.on('error', function(err) {
+
+
+	docx.on('error', function (err) {
 		console.log(err)
 	})
 
@@ -307,13 +321,19 @@ router.get('/reportSPDoc1', auth, async (req, res) => {
 		rowSpan: 2
 	}
 
+	let opts3 = {
+		cellColWidth: 1,
+		b: true,
+		sz: '16',
+	}
+
 	let opts1 = {
-		cellColWidth: 0,
+		cellColWidth: 300,
 		b: true,
 		sz: '0',
 		rowSpan: 2
 	}
-	
+
 	let optsSpan = {
 		cellColWidth: 1261,
 		b: true,
@@ -321,35 +341,56 @@ router.get('/reportSPDoc1', auth, async (req, res) => {
 		gridSpan: 2
 	}
 
-	const pkis = await Pki.find({part: req.session.part}).sort({type_pki: 1})
+	const pkis = await Pki.find({
+		part: req.session.part
+	}).sort({
+		type_pki: 1
+	})
 	console.log(pkis[0]);
 	let dataSP = []
-	dataSP.push([
-		{val: '№ п/п', opts: opts},
-		{val: 'Наименование', opts: opts1},
-		{val: 'Фирма', opts: opts},
-		{val: 'Модель', opts: opts},
-		{val: 'Кол во', opts: opts},
-		{val: 'Серийный (инв.) номер', opts: opts},
-		{val: 'Страна', opts: optsSpan},
-		{val: '', opts: opts1},
-	],
-	[
-		{val: '№ п/п', opts: opts},
-		{val: 'Наименование', opts: opts},
-		{val: 'Фирма', opts: opts},
-		{val: 'Модель', opts: opts},
-		{val: 'Кол во', opts: opts},
-		{val: 'Серийный (инв.) номер', opts: opts},
-		{val: 'Страна', opts: opts},
-		{val: 'Серийный (инв.) номер', opts: opts},
-		{val: '', opts: opts1},		
-	]
+	dataSP.push([{
+				val: '№ п/п',
+				opts: opts1
+			},
+			{
+				val: 'Наименование',
+				opts: opts1
+			},
+			{
+				val: 'Фирма',
+				opts: opts1
+			},
+			{
+				val: 'Модель',
+				opts: opts1
+			},
+			{
+				val: 'Кол во',
+				opts: opts1
+			},
+			{
+				val: 'Серийный (инв.) номер',
+				opts: opts1
+			},
+			{
+				val: 'Страна',
+				opts: optsSpan
+			},
+			{
+				val: '',
+				opts: opts
+			},
+		],
+		[
+
+			{},
+			{},
+			{}
+		]
 	)
 	console.log(dataSP);
 	var table = [
-		[
-			{
+		[{
 				val: 'No.',
 				opts: {
 					cellColWidth: 4261,
@@ -391,22 +432,36 @@ router.get('/reportSPDoc1', auth, async (req, res) => {
 				}
 			}
 		],
-		[1, { val: 'I have two spans.', opts: { gridSpan: 2 } }],
-		[{ val: 'I have three spans.', opts: { gridSpan: 3 } }],
-		[{ val: 'I have two spans.', opts: { gridSpan: 2 } }, '3'],
+		[1, {
+			val: 'I have two spans.',
+			opts: {
+				gridSpan: 2
+			}
+		}],
+		[{
+			val: 'I have three spans.',
+			opts: {
+				gridSpan: 3
+			}
+		}],
+		[{
+			val: 'I have two spans.',
+			opts: {
+				gridSpan: 2
+			}
+		}, '3'],
 		[4, 'watch out for the baobabs!', 'END']
 	]
-	
+
 	var tableStyle = {
 		tableColWidth: 4261,
-		tableSize: 24,		
+		tableSize: 24,
 		tableAlign: 'left',
 		tableFontFamily: 'Times New Roman',
 		borders: true
 	}
-	
-	var data = [		
-		{
+
+	var data = [{
 			type: 'text',
 			val: req.session.part,
 			opt: {
@@ -426,21 +481,320 @@ router.get('/reportSPDoc1', auth, async (req, res) => {
 			opt: tableStyle
 		}
 	]
-	
+
 	await docx.createByJson(data)
-	
+
 	var out = await fs.createWriteStream(path.join(outDir, 'example_json.docx'))
-	
-	out.on('error', function(err) {
+
+	out.on('error', function (err) {
 		console.log(err)
 	})
 
-	out.on('close', function() {
-		res.download(file, fileName)		
- })
-	
+	out.on('close', function () {
+		res.download(file, fileName)
+	})
+
 	docx.generate(out)
 	console.log(`Passport #${req.session.part} was formed`)
+})
+
+
+router.get("/excelExport", auth, async function (req, res) {
+	const sortSelect = req.query.sortSelect
+	let workbook = new excel.Workbook()
+	// Add Worksheets to the workbook
+	let ws = workbook.addWorksheet('Sheet 1')
+	// Create a reusable style
+	let style = workbook.createStyle({
+		font: {
+			size: 11
+		},
+		border: {
+			left: {
+				style: 'thin',
+				color: 'black',
+			},
+			right: {
+				style: 'thin',
+				color: 'black',
+			},
+			top: {
+				style: 'thin',
+				color: 'black',
+			},
+			bottom: {
+				style: 'thin',
+				color: 'black',
+			},
+		}
+	})
+
+	let style1 = workbook.createStyle({
+		font: {
+			size: 11
+		},
+		border: {
+			left: {
+				style: 'thin',
+				color: 'black',
+			},
+			right: {
+				style: 'thin',
+				color: 'black',
+			},
+			top: {
+				style: 'thick',
+				color: 'black',
+			},
+			bottom: {
+				style: 'thin',
+				color: 'black',
+			},
+		}
+	})
+
+	let styleB = workbook.createStyle({
+		font: {
+			size: 11,
+			bold: true
+		},
+		border: {
+			left: {
+				style: 'thin',
+				color: 'black',
+			},
+			right: {
+				style: 'thin',
+				color: 'black',
+			},
+			top: {
+				style: 'thin',
+				color: 'black',
+			},
+			bottom: {
+				style: 'thin',
+				color: 'black',
+			},
+		}
+	})
+
+	let style1B = workbook.createStyle({
+		font: {
+			size: 11,
+			bold: true
+		},
+		border: {
+			left: {
+				style: 'thin',
+				color: 'black',
+			},
+			right: {
+				style: 'thin',
+				color: 'black',
+			},
+			top: {
+				style: 'thick',
+				color: 'black',
+			},
+			bottom: {
+				style: 'thin',
+				color: 'black',
+			},
+		}
+	})
+
+	let styleheader = workbook.createStyle({
+		font: {
+			bold: true,
+		},
+		alignment: {
+			wrapText: true,
+			horizontal: 'center',
+		},
+		border: {
+			left: {
+				style: 'thin',
+				color: 'black',
+			},
+			right: {
+				style: 'thin',
+				color: 'black',
+			},
+			top: {
+				style: 'thin',
+				color: 'black',
+			},
+			bottom: {
+				style: 'thin',
+				color: 'black',
+			},
+		}
+	})
+
+	let styleHead = workbook.createStyle({
+		font: {
+			bold: true,
+			size: 18
+		},
+	})
+
+	let pkis
+	if (!req.session.type || req.session.type == '...') {
+		pkis = await Pki.find({
+			part: req.session.part
+		}).sort({
+			type_pki: 1
+		})
+	} else {
+		pkis = await Pki.find({
+			part: req.session.part,
+			type_pki: req.session.type
+		}).sort({
+			type_pki: 1
+		})
+	}
+
+	ws.column(1).setWidth(3)
+	ws.column(2).setWidth(5)
+	ws.column(3).setWidth(30)
+	ws.column(4).setWidth(25)
+	ws.column(5).setWidth(28)
+	ws.column(6).setWidth(5)
+	ws.column(7).setWidth(28)
+	ws.column(8).setWidth(10)
+	ws.column(9).setWidth(10)
+	ws.column(10).setWidth(5)
+
+	ws.row(1).setHeight(30)
+	ws.cell(1, 2).string(req.session.part).style(styleHead)
+
+	ws.cell(2, 2, 3, 2, true).string('№ п/п').style(styleheader)
+	ws.cell(2, 3, 3, 3, true).string('Наименование').style(styleheader)
+	ws.cell(2, 4, 3, 4, true).string('Фирма').style(styleheader)
+	ws.cell(2, 5, 3, 5, true).string('Модель').style(styleheader)
+	ws.cell(2, 6, 3, 6, true).string('Кол во').style(styleheader)
+	ws.cell(2, 7, 3, 7, true).string('Серийный (инв.) номер').style(styleheader)
+	ws.cell(2, 8, 3, 8, true).string('Страна').style(styleheader)
+	ws.cell(2, 9, 2, 10, true).string('СЗЗ').style(styleheader)
+	ws.cell(3, 9).string('Тип1').style(styleheader)
+	ws.cell(3, 10).string('Тип2').style(styleheader)
+
+	ws.row(2).freeze()
+	ws.row(3).freeze()
+
+	let n = 4
+	let number = 1
+	let type = ''
+	let st = style
+	let stB = styleB
+	for (const pki of pkis) {
+		if (pki.type_pki == type) {
+			st = style
+			stB = styleB
+		} else {
+			st = style1
+			stB = style1B
+		}
+		ws.cell(n, 2).number(number).style(stB)
+		ws.cell(n, 3).string(pki.type_pki).style(stB)
+		ws.cell(n, 4).string(pki.vendor).style(st)
+		ws.cell(n, 5).string(pki.model).style(st)
+		ws.cell(n, 6).string('1').style(st)
+		ws.cell(n, 7).string(pki.serial_number).style(st)
+		ws.cell(n, 8).string(pki.country).style(st)
+		if (pki.szz1) {
+			ws.cell(n, 9).string(pki.szz1).style(st)
+			ws.cell(n, 10).string('').style(st)
+		} else {
+			ws.cell(n, 9).string('').style(st)
+			if (pki.type_pki == 'Процессор') {
+				ws.cell(n, 10).string('').style(st)
+			} else {
+				ws.cell(n, 10).string('1').style(st)
+			}
+		}
+
+		if (pki.sp_unit && pki.sp_unit.length > 0) {
+			for (const unit of pki.sp_unit) {
+				n += 1
+				ws.cell(n, 2).string('').style(style)
+				ws.cell(n, 3).string(unit.name).style(style)
+				ws.cell(n, 4).string(unit.vendor).style(style)
+				ws.cell(n, 5).string(unit.model).style(style)
+				ws.cell(n, 6).string(unit.quantity).style(style)
+				ws.cell(n, 7).string(unit.serial_number).style(style)
+				ws.cell(n, 8).string('').style(style)
+				ws.cell(n, 9).string('').style(style)
+				ws.cell(n, 10).string(unit.szz2).style(style)
+			}
+		}
+
+		type = pki.type_pki
+		n += 1
+		number += 1
+	}
+
+	const pcs = await PC.find({part: req.session.part})
+
+	let unitsWOSn = []
+	let unitsWPcSn = []
+	for (const pc of pcs) {
+		if (pc.pc_unit.length > 0) {
+			for (const unit of pc.pc_unit) {
+				if (unit.serial_number == 'б/н' || 
+						unit.serial_number == 'Б/н' ||
+						unit.serial_number == 'б/Н' ||
+						unit.serial_number == 'Б/Н')
+				{
+					unitsWOSn.push({
+						type: unit.type,
+						name: unit.name,
+						quantity: unit.quantity,
+						serial_number: unit.serial_number
+					})
+				} else if (unit.serial_number == pc.serial_number && unit.type != 'Системный блок') {
+						unitsWPcSn.push({
+							type: unit.type,
+							name: unit.name,
+							quantity: unit.quantity,
+							serial_number: unit.serial_number
+						})
+				}
+			}
+			for (const unit of pc.system_case_unit) {
+				if (unit.serial_number == 'б/н' || 
+						unit.serial_number == 'Б/н' ||
+						unit.serial_number == 'б/Н' ||
+						unit.serial_number == 'Б/Н')
+				{
+					unitsWOSn.push({
+						type: unit.type,
+						name: unit.name,
+						quantity: unit.quantity,
+						serial_number: unit.serial_number
+					})
+				} else if (unit.serial_number == pc.serial_number && unit.type != 'Системный блок') {
+						unitsWPcSn.push({
+							type: unit.type,
+							name: unit.name,
+							quantity: unit.quantity,
+							serial_number: unit.serial_number
+						})
+				}
+			}
+		}
+	}
+	console.log(unitsWPcSn);
+
+	const appDir = path.dirname(require.main.filename)
+	const docDir = appDir + '/public/docx'
+	pathToExcel = `${docDir}/excel.xlsx`
+
+	workbook.write(pathToExcel, function () {
+		console.log('PKI report xlsx generated')
+		const fileName = req.session.part + '.xlsx'
+		res.download(pathToExcel, fileName)
+	})
 })
 
 module.exports = router

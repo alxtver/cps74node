@@ -245,7 +245,7 @@ function CreateTableSP_EAN(ean) {
   serial_numberCell.contentEditable = "true"
 
   let szz2Cell = tr.insertCell(-1)
-  szz2Cell.innerHTML = '1'
+  szz2Cell.innerHTML = unit.szz2
   szz2Cell.className = "szz2"
   szz2Cell.id = "szz2"
   szz2Cell.contentEditable = "true"
@@ -270,57 +270,61 @@ function CreateTableSP_EAN(ean) {
     thead.appendChild(tr)
   }
 
-  divContainer = document.getElementById("pki_sp_table2");
-  divContainer.innerHTML = "";
-  divContainer.appendChild(table);
+  
 
-  tableRef = document.getElementById('pki_sp_table2').getElementsByTagName('tbody')[0]
+  if (ean.sp_unit1 != '') {
+    divContainer = document.getElementById("pki_sp_table2");
+    divContainer.innerHTML = "";
+    divContainer.appendChild(table);
 
-  for (const unit of ean.sp_unit1) {
-    tr = tableRef.insertRow(-1)
+    tableRef = document.getElementById('pki_sp_table2').getElementsByTagName('tbody')[0]
 
-  let chCell = tr.insertCell(-1)
-  chCell.innerHTML = "<input type='checkbox' name='record'>"
-  chCell.className = "record"
+    for (const unit of ean.sp_unit1) {
+      tr = tableRef.insertRow(-1)
 
-  let nameCell = tr.insertCell(-1)
-  nameCell.className = "name"
-  nameCell.innerHTML = unit.name
-  nameCell.id = "name"
-  nameCell.contentEditable = "true"
+      let chCell = tr.insertCell(-1)
+      chCell.innerHTML = "<input type='checkbox' name='record'>"
+      chCell.className = "record"
 
-  let vendorCell = tr.insertCell(-1)
-  vendorCell.className = "vendor"
-  vendorCell.innerHTML = unit.vendor
-  vendorCell.id = "vendor"
-  vendorCell.contentEditable = "true"
+      let nameCell = tr.insertCell(-1)
+      nameCell.className = "name"
+      nameCell.innerHTML = unit.name
+      nameCell.id = "name"
+      nameCell.contentEditable = "true"
 
-  let modelCell = tr.insertCell(-1)
-  modelCell.className = "model"
-  modelCell.innerHTML = unit.model
-  modelCell.id = "model"
-  modelCell.contentEditable = "true"
+      let vendorCell = tr.insertCell(-1)
+      vendorCell.className = "vendor"
+      vendorCell.innerHTML = unit.vendor
+      vendorCell.id = "vendor"
+      vendorCell.contentEditable = "true"
 
-  let quantityCell = tr.insertCell(-1)
-  quantityCell.innerHTML = unit.quantity
-  quantityCell.className = "quantity"
-  quantityCell.id = "quantity"
-  quantityCell.contentEditable = "true"
+      let modelCell = tr.insertCell(-1)
+      modelCell.className = "model"
+      modelCell.innerHTML = unit.model
+      modelCell.id = "model"
+      modelCell.contentEditable = "true"
 
-  let serial_numberCell = tr.insertCell(-1)
-  serial_numberCell.className = "serial_number"  
-  serial_numberCell.id = "serial_number"
-  if (unit.serial_number == 'б/н' || unit.serial_number == 'Б/Н' || unit.serial_number == 'Б/н') {
-    serial_numberCell.innerHTML = unit.serial_number
-  }
-  serial_numberCell.contentEditable = "true"
+      let quantityCell = tr.insertCell(-1)
+      quantityCell.innerHTML = unit.quantity
+      quantityCell.className = "quantity"
+      quantityCell.id = "quantity"
+      quantityCell.contentEditable = "true"
 
-  let szz2Cell = tr.insertCell(-1)
-  szz2Cell.innerHTML = '1'
-  szz2Cell.className = "szz2"
-  szz2Cell.id = "szz2"
-  szz2Cell.contentEditable = "true"
-  }
+      let serial_numberCell = tr.insertCell(-1)
+      serial_numberCell.className = "serial_number"  
+      serial_numberCell.id = "serial_number"
+      if (unit.serial_number == 'б/н' || unit.serial_number == 'Б/Н' || unit.serial_number == 'Б/н') {
+        serial_numberCell.innerHTML = unit.serial_number
+      }
+      serial_numberCell.contentEditable = "true"
+
+      let szz2Cell = tr.insertCell(-1)
+      szz2Cell.innerHTML = '1'
+      szz2Cell.className = "szz2"
+      szz2Cell.id = "szz2"
+      szz2Cell.contentEditable = "true"
+    }
+  }    
 }
 
 function load_data(q) {

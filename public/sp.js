@@ -142,8 +142,8 @@ function CreateTableFromJSON(data) {
 
     let szz2Cell = tr.insertCell(-1)
     szz2Cell.dataset.id = data[i]._id
-    szz2Cell.className = "szz1"
-    szz2Cell.id = "szz1"
+    szz2Cell.className = "szz2"
+    szz2Cell.id = "szz2"
     if (data[i].szz1) {
       szz2Cell.innerHTML = ''
     } else {
@@ -214,7 +214,6 @@ function CreateTableFromJSON(data) {
         let szz2Cell = tr.insertCell(-1)
         szz2Cell.innerHTML = unit.szz2
         szz2Cell.dataset.id = data[i]._id
-        szz2Cell.className = "szz2"
         szz2Cell.id = "szz2"
         szz2Cell.style.fontWeight = "700"
 
@@ -252,8 +251,13 @@ function edit_country(id, country) {
 }
 
 $(document).on('blur', '.szz1', function () {
-  let id = $(this).data("id")
+  let id = $(this).data("id")  
   let szz1 = $(this).text()
+  if (szz1) {
+    $(".szz2[data-id='" + id + "']").text('') 
+  } else {
+    $(".szz2[data-id='" + id + "']").text('1') 
+  }   
   edit_szz1(id, szz1)
 })
 
@@ -275,30 +279,30 @@ function edit_szz1(id, szz1) {
   })
 }
 
-function load_type_select() {
-  $.ajax({
-    url: "/sp/types",
-    method: "POST",
-    //async: false,
-    headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-    },
-    success: function (data) {
-      if (data) {
-        CreateSelectType(JSON.parse(data).parts, function () {
-          if (JSON.parse(data).reqSesPart) {
-            $("#type_select_navbar option:contains(" + JSON.parse(data).reqSesPart + ")").prop('selected', true)
-          }
-        })
-      }
-    }
-  })
-}
+// function load_type_select() {
+//   $.ajax({
+//     url: "/sp/types",
+//     method: "POST",
+//     //async: false,
+//     headers: {
+//       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+//     },
+//     success: function (data) {
+//       if (data) {
+//         CreateSelectType(JSON.parse(data).parts, function () {
+//           if (JSON.parse(data).reqSesPart) {
+//             $("#type_select_navbar option:contains(" + JSON.parse(data).reqSesPart + ")").prop('selected', true)
+//           }
+//         })
+//       }
+//     }
+//   })
+// }
 
 function CreateSelectType(data, callback) {
   $("#type_select_navbar").append($('<option value="">...</option>'));
   for (let i = 0; i < data.length; i++) {
-    $('#type_select_navbar').append('<option value="' + data[i] + '">' + data[i] + '</option>');
+    $('#type_select_navbar').append('<option value="' + data[i] + '">' + data[i] + '</option>')
   }
   callback()
 }

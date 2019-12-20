@@ -226,3 +226,31 @@ function delBtn() {
     }
   })
 }
+
+$(function() {
+  $.ajax({
+    url: "/pkis/autocomplete",
+    method: "GET",
+    headers: {
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    },
+    success: function (data) {
+      const types = JSON.parse(data).types
+      const vendors = JSON.parse(data).vendors
+      const countrys = JSON.parse(data).countrys
+      const parts = JSON.parse(data).parts
+      $( "#vendor" ).autocomplete({
+        source: vendors      
+      })
+      $( "#type_pki" ).autocomplete({
+        source: types      
+      })
+      $( "#country" ).autocomplete({
+        source: countrys      
+      })
+      $( "#part" ).autocomplete({
+        source: parts
+      })
+    }
+  })
+})

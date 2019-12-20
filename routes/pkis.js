@@ -2,6 +2,7 @@ const {Router} = require('express')
 const Pki = require('../models/pki')
 const PC = require('../models/pc')
 const Part = require('../models/part')
+const Country = require('../models/country')
 const EAN = require('../models/ean')
 const auth = require('../middleware/auth')
 const router = Router()
@@ -370,6 +371,20 @@ router.get("/excelImport", auth, async function (req, res) {
     const fileName = req.session.part + '.xlsx'
     res.download(pathToExcel, fileName)
   })
+})
+
+
+router.get('/autocomplete', auth, async (req, res) => {
+  const types = await Pki.find().distinct('type_pki')
+  const vendors = await Pki.find().distinct('vendor')
+  const countrys = await Country.find().distinct('country')
+  const parts = await Part.find().distinct('part')
+  res.send(JSON.stringify({
+    types: types,
+    vendors: vendors,
+    countrys: countrys,
+    parts: parts
+  }))
 })
 
 module.exports = router

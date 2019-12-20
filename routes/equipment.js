@@ -100,16 +100,25 @@ router.post('/edit', auth, async (req, res) => {
   const sp_unit = req.body.sp_unit
   const sp_unit1 = req.body.sp_unit1
 
-  await EAN.findOneAndUpdate({
-    ean_code: ean_code
-  }, req.body)
-  let ean = await EAN.findOne({
-    ean_code: ean_code
-  })
-  let pkis = await Pki.find({
-    part: req.session.part,
-    ean_code: ean.ean_code
-  })
+  //console.log(req.body.sp_unit1.length);
+  if (req.body.sp_unit1) {
+    await EAN.findOneAndUpdate({ean_code: ean_code}, req.body)
+  } else {
+    await EAN.findOneAndUpdate({ean_code: ean_code},
+       {
+         ean_code: ean_code,
+         type_pki: type_pki,
+         vendor: vendor,
+         model: model,
+         country: country,
+         sp_unit: sp_unit,
+         sp_unit1: ''
+       })
+  }
+  
+  //await EAN.findOneAndUpdate({ean_code: ean_code}, req.body)
+  let ean = await EAN.findOne({ean_code: ean_code})
+  let pkis = await Pki.find({part: req.session.part,ean_code: ean.ean_code})
 
   for (const pki of pkis) {
     let sp_units = []
@@ -160,10 +169,10 @@ router.post('/edit', auth, async (req, res) => {
         }
       }
     }
-
     pki.sp_unit = sp_units
     pki.save()
   }
+
   res.redirect('/equipment')
 })
 

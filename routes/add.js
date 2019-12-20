@@ -18,8 +18,9 @@ router.get('/', auth, (req, res) => {
 
 router.post('/', auth, async (req, res) => {
   let serial_number = req.body.serial_number
+  let ean
   if (req.body.ean_code) {
-    const ean = await EAN.findOne({ean_code: req.body.ean_code})
+    ean = await EAN.findOne({ean_code: req.body.ean_code})
     if (!ean) {
       const new_ean = new EAN({
         ean_code: req.body.ean_code,
@@ -39,8 +40,7 @@ router.post('/', auth, async (req, res) => {
     let regex = /SN\w*/g
     if (serial_number.match(regex)) {
       serial_number = serial_number.match(regex)[0]
-    }
-    
+    }    
   }
 
   const candidate = await Pki.findOne({
@@ -48,17 +48,32 @@ router.post('/', auth, async (req, res) => {
     part: req.body.part
   })
 
+  let pki
   if (!candidate) {
-    const pki = new Pki({
-      type_pki: req.body.type_pki.trim(),
-      vendor: req.body.vendor.trim(),
-      model: req.body.model.trim(),
-      serial_number: serial_number,
-      part: req.body.part.trim(),
-      country: req.body.country.trim(),
-      ean_code: req.body.ean_code.trim()
-    })
-
+    if (ean && ean.sp_unit1) {
+        pki = new Pki({
+        type_pki: req.body.type_pki.trim(),
+        vendor: req.body.vendor.trim(),
+        model: req.body.model.trim(),
+        serial_number: serial_number,
+        part: req.body.part.trim(),
+        country: req.body.country.trim(),
+        ean_code: req.body.ean_code.trim(),
+        sp_unit: ean.sp_unit1
+      })
+  
+    } else {
+        pki = new Pki({
+        type_pki: req.body.type_pki.trim(),
+        vendor: req.body.vendor.trim(),
+        model: req.body.model.trim(),
+        serial_number: serial_number,
+        part: req.body.part.trim(),
+        country: req.body.country.trim(),
+        ean_code: req.body.ean_code.trim()
+      })  
+    }
+    
     if (!(await Country.findOne({
         country: req.body.country.trim()
       }))) {
