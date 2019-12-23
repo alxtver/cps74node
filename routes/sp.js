@@ -1,4 +1,6 @@
-const {Router} = require('express')
+const {
+	Router
+} = require('express')
 const router = Router()
 const auth = require('../middleware/auth')
 const authAdmin = require('../middleware/authAdmin')
@@ -31,7 +33,9 @@ router.post("/search", auth, async (req, res) => {
 	let selected = req.session.part
 	let selectedType = req.session.type
 
-	let typesList = await Pki.find({part: selected}).distinct('type_pki')
+	let typesList = await Pki.find({
+		part: selected
+	}).distinct('type_pki')
 	console.log(typesList);
 
 	let pkis
@@ -734,57 +738,117 @@ router.get("/excelExport", auth, async function (req, res) {
 		number += 1
 	}
 
-	const pcs = await PC.find({part: req.session.part})
-
+	const pcs = await PC.find({
+		part: req.session.part
+	})
 	let unitsWOSn = []
 	let unitsWPcSn = []
 	for (const pc of pcs) {
-		if (pc.pc_unit.length > 0) {
-			for (const unit of pc.pc_unit) {
-				if (unit.serial_number == 'б/н' || 
-						unit.serial_number == 'Б/н' ||
-						unit.serial_number == 'б/Н' ||
-						unit.serial_number == 'Б/Н')
-				{
-					unitsWOSn.push({
+		for (const unit of pc.pc_unit) {
+			if (unit.serial_number == 'б/н' ||
+				unit.serial_number == 'Б/н' ||
+				unit.serial_number == 'б/Н' ||
+				unit.serial_number == 'Б/Н') {
+				unitsWOSn.push({
+					type: unit.type,
+					name: unit.name,
+					quantity: unit.quantity,
+					serial_number: unit.serial_number
+				})
+			} else if (unit.serial_number == pc.serial_number && unit.type != 'Системный блок' && unit.type != 'Корпус') {
+					unitsWPcSn.push({
 						type: unit.type,
 						name: unit.name,
 						quantity: unit.quantity,
 						serial_number: unit.serial_number
 					})
-				} else if (unit.serial_number == pc.serial_number && unit.type != 'Системный блок') {
-						unitsWPcSn.push({
-							type: unit.type,
-							name: unit.name,
-							quantity: unit.quantity,
-							serial_number: unit.serial_number
-						})
-				}
 			}
-			for (const unit of pc.system_case_unit) {
-				if (unit.serial_number == 'б/н' || 
-						unit.serial_number == 'Б/н' ||
-						unit.serial_number == 'б/Н' ||
-						unit.serial_number == 'Б/Н')
-				{
-					unitsWOSn.push({
-						type: unit.type,
-						name: unit.name,
-						quantity: unit.quantity,
-						serial_number: unit.serial_number
-					})
-				} else if (unit.serial_number == pc.serial_number && unit.type != 'Системный блок') {
-						unitsWPcSn.push({
-							type: unit.type,
-							name: unit.name,
-							quantity: unit.quantity,
-							serial_number: unit.serial_number
-						})
-				}
+		}
+		for (const unit of pc.system_case_unit) {
+			if (unit.serial_number == 'б/н' ||
+				unit.serial_number == 'Б/н' ||
+				unit.serial_number == 'б/Н' ||
+				unit.serial_number == 'Б/Н') {
+				unitsWOSn.push({
+					type: unit.type,
+					name: unit.name,
+					quantity: unit.quantity,
+					serial_number: unit.serial_number
+				})
+			} else if (unit.serial_number == pc.serial_number && unit.type != 'Системный блок' && unit.type != 'Корпус') {
+				unitsWPcSn.push({
+					type: unit.type,
+					name: unit.name,
+					quantity: unit.quantity,
+					serial_number: unit.serial_number
+				})
 			}
 		}
 	}
-	console.log(unitsWPcSn);
+
+	let sumUnitsWOSn = []
+	let arr = []
+
+	for (const un of unitsWOSn) {
+		if (sumUnitsWOSn[un.type + ' ' + un.name]) {
+			sumUnitsWOSn[un.type + ' ' + un.name].quantity = parseInt(sumUnitsWOSn[un.type + ' ' + un.name].quantity) + parseInt(un.quantity)
+		} else {
+			arr.push(un.type + ' ' + un.name)
+			sumUnitsWOSn[un.type + ' ' + un.name] = {
+				type: un.type,
+				name: un.name,
+				quantity: un.quantity,
+				serial_number: un.serial_number
+			}
+		}
+	}
+
+
+
+
+// выгрузка в отчет комплектухи c номерами машин
+for (const un of unitsWPcSn) {
+	if (un.type == type) {
+		st = style
+		stB = styleB
+	} else {
+		st = style1
+		stB = style1B
+	}
+	let name = un.name.split(' ')
+	let vendor = name.splice(0, 1).join(' ')
+	let model = name.join(' ')
+	ws.cell(n, 2).number(number).style(stB)
+	ws.cell(n, 3).string(un.type).style(stB)
+	ws.cell(n, 4).string(vendor).style(st)
+	ws.cell(n, 5).string(model).style(st)
+	ws.cell(n, 6).string(un.quantity).style(st)
+	ws.cell(n, 7).string(un.serial_number).style(st)
+	ws.cell(n, 8).string('').style(st)
+	ws.cell(n, 9).string('').style(st)
+	ws.cell(n, 10).string(un.quantity).style(st)
+	n += 1
+	number += 1
+	type = un.type
+}
+
+// выгрузка в отчет комплектухи без номеров
+	for (let i = 0; i < arr.length; i++) {
+		let name = sumUnitsWOSn[arr[i]].name.split(' ')
+		let vendor = name.splice(0, 1).join(' ')
+		let model = name.join(' ')
+		ws.cell(n, 2).number(number).style(style1B)
+		ws.cell(n, 3).string(sumUnitsWOSn[arr[i]].type).style(style1B)
+		ws.cell(n, 4).string(vendor).style(style1)
+		ws.cell(n, 5).string(model).style(style1)
+		ws.cell(n, 6).string(sumUnitsWOSn[arr[i]].quantity.toString()).style(style1)
+		ws.cell(n, 7).string(sumUnitsWOSn[arr[i]].serial_number).style(style1)
+		ws.cell(n, 8).string('').style(style1)
+		ws.cell(n, 9).string('').style(style1)
+		ws.cell(n, 10).string(sumUnitsWOSn[arr[i]].quantity.toString()).style(style1)
+		n += 1
+		number += 1
+	}
 
 	const appDir = path.dirname(require.main.filename)
 	const docDir = appDir + '/public/docx'

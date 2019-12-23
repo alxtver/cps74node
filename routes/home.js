@@ -70,7 +70,38 @@ router.get('/script', authAdmin, async (req, res) => {
   // console.log(pki.n)
   // console.log(pki.nModified)
 
-  //скрипт для добавления апкзи к зипам
+
+  //скрипт для изменения пки у пс
+
+  // let pcs = await PC.find({part: req.session.part})
+  // let n = 0
+  // for (const pc of pcs) {
+  //   if (pc.system_case_unit && pc.system_case_unit[2]) {
+  //     console.log(n);
+  //     n += 1
+  //     pc.system_case_unit[2].name = 'Intel E97378-001'
+      
+  //     console.log(pc._id);
+  //     pc_copy = await PC.findById(pc.id)
+  //     pc_copy.system_case_unit = pc.system_case_unit
+  //     await pc_copy.save()
+  //   }    
+  // }
+
+  // let pcs = await PC.find({part: req.session.part})
+  // let n = 0
+  // for (const pc of pcs) {
+  //   if (pc.system_case_unit && pc.system_case_unit[0]) {
+  //     console.log(n);
+  //     n += 1
+  //     pc.system_case_unit[0].type = 'Корпус'
+      
+  //     console.log(pc._id);
+  //     pc_copy = await PC.findById(pc.id)
+  //     pc_copy.system_case_unit = pc.system_case_unit
+  //     await pc_copy.save()
+  //   }    
+  // }
 
 
 
