@@ -279,25 +279,25 @@ function edit_szz1(id, szz1) {
   })
 }
 
-// function load_type_select() {
-//   $.ajax({
-//     url: "/sp/types",
-//     method: "POST",
-//     //async: false,
-//     headers: {
-//       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-//     },
-//     success: function (data) {
-//       if (data) {
-//         CreateSelectType(JSON.parse(data).parts, function () {
-//           if (JSON.parse(data).reqSesPart) {
-//             $("#type_select_navbar option:contains(" + JSON.parse(data).reqSesPart + ")").prop('selected', true)
-//           }
-//         })
-//       }
-//     }
-//   })
-// }
+function load_type_select() {
+  $.ajax({
+    url: "/sp/types",
+    method: "POST",
+    //async: false,
+    headers: {
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    },
+    success: function (data) {
+      if (data) {
+        CreateSelectType(JSON.parse(data).parts, function () {
+          if (JSON.parse(data).reqSesPart) {
+            $("#type_select_navbar option:contains(" + JSON.parse(data).reqSesPart + ")").prop('selected', true)
+          }
+        })
+      }
+    }
+  })
+}
 
 function CreateSelectType(data, callback) {
   $("#type_select_navbar").append($('<option value="">...</option>'));

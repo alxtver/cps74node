@@ -657,7 +657,8 @@ router.get("/excelExport", auth, async function (req, res) {
 	// 		type_pki: 1
 	// 	})
 	// }
-
+	
+	
 	ws.column(1).setWidth(3)
 	ws.column(2).setWidth(5)
 	ws.column(3).setWidth(30)
@@ -817,9 +818,6 @@ router.get("/excelExport", auth, async function (req, res) {
 			}
 		}
 	}
-
-
-
 
 // выгрузка в отчет комплектухи c номерами машин
 for (const un of unitsWPcSn) {
@@ -1055,7 +1053,13 @@ router.get("/excelExport1", auth, async function (req, res) {
 				unit.serial_number != 'б/н'
 				) {
 					if (unit.apkzi != "apkzi" && unit.type != 'Системный блок' && unit.serial_number != pc.serial_number) {
-						pki = await Pki.findOne({part: req.session.part, serial_number: unit.serial_number})
+						for (const pk of pkis) {
+							if (pk.serial_number == unit.serial_number) {
+								pki = pk
+								break
+							}
+						}
+					//	pki = await Pki.findOne({part: req.session.part, serial_number: unit.serial_number})
 					}					
 			}
 			
@@ -1097,7 +1101,13 @@ router.get("/excelExport1", auth, async function (req, res) {
 				unit.serial_number != 'б/Н' &&
 				unit.serial_number != 'б/н'
 				) { if (unit.serial_number != pc.serial_number || unit.type == 'Корпус') {
-					pki = await Pki.findOne({part: req.session.part, serial_number: unit.serial_number})
+					for (const pk of pkis) {
+						if (pk.serial_number == unit.serial_number) {
+							pki = pk
+							break
+						}
+					}
+					//pki = await Pki.findOne({part: req.session.part, serial_number: unit.serial_number})
 				}
 					
 			}
