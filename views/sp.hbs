@@ -2,6 +2,7 @@
 <h1>ПКИ</h1>
 <button class="btn btn-dark mb-1" onclick="location.href='/add';">Добавить ПКИ</button>
 <button id="excelImport" onclick="location.href='/sp/excelExport'" class="btn btn-outline-success mb-1">Экспорт в Excel</button>
+<button id="excelImport1" onclick="location.href='/sp/excelExport1'" class="btn btn-outline-success mb-1">Экспорт в Excel1</button>
 <div class="form-group">
   <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Поиск...">
   <select id="type_select_navbar" class="custom-select mt-2">
@@ -10,6 +11,7 @@
 </div>
 
 <div id="showData"></div>
+
 
 <input hidden="true" id="temp" value="0"></input>
 <input type="hidden" name="id" id="hidId">
@@ -27,6 +29,32 @@
         searchPKI(blank_req)
       }
     })
+
+self.addEventListener('fetch', function(event) {
+  console.log('Handling fetch event for', event.request.url);
+
+  event.respondWith(
+    caches.match(event.request).then(function(response) {
+      if (response) {
+        console.log('Found response in cache:', response);
+
+        return response;
+      }
+      console.log('No response found in cache. About to fetch from network...');
+
+      return fetch(event.request).then(function(response) {
+        console.log('Response from network is:', response);
+
+        return response;
+      }).catch(function(error) {
+        console.error('Fetching failed:', error);
+
+        throw error;
+      });
+    })
+  );
+});
+
   })
 
   $(document).on('keypress', '.szz1', function (e) {
@@ -38,8 +66,4 @@
       $(".szz1[data-data='" + next_id + "']").focus() 
     }
   })
-
-  $(document).on('change', '#type_select_navbar', function () {
-        changeSelectType($("#type_select_navbar :selected").text())
-      })
 </script>

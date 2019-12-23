@@ -36,7 +36,7 @@ router.post("/search", auth, async (req, res) => {
 	let typesList = await Pki.find({
 		part: selected
 	}).distinct('type_pki')
-	console.log(typesList);
+	
 
 	let pkis
 	if ((!req.body.q && selectedType == '...') || (!req.body.q && !selectedType)) {
@@ -216,7 +216,7 @@ router.get('/sp_unit', auth, async (req, res) => {
 
 
 router.get('/viborka', auth, async (req, res) => {
-	console.log(req.query);
+	
 	const pki = await Pki.findById(req.query.id)
 	const ean = await EAN.findOne({
 		ean_code: pki.ean_code
@@ -350,7 +350,7 @@ router.get('/reportSPDoc', auth, async (req, res) => {
 	}).sort({
 		type_pki: 1
 	})
-	console.log(pkis[0]);
+	
 	let dataSP = []
 	dataSP.push([{
 				val: '№ п/п',
@@ -392,7 +392,7 @@ router.get('/reportSPDoc', auth, async (req, res) => {
 			{}
 		]
 	)
-	console.log(dataSP);
+	
 	var table = [
 		[{
 				val: 'No.',
@@ -864,6 +864,274 @@ for (const un of unitsWPcSn) {
 		n += 1
 		number += 1
 	}
+
+	const appDir = path.dirname(require.main.filename)
+	const docDir = appDir + '/public/docx'
+	pathToExcel = `${docDir}/excel.xlsx`
+
+	workbook.write(pathToExcel, function () {
+		console.log('PKI report xlsx generated')
+		const fileName = req.session.part + '.xlsx'
+		res.download(pathToExcel, fileName)
+	})
+})
+
+
+router.get("/excelExport1", auth, async function (req, res) {
+	const sortSelect = req.query.sortSelect
+	let workbook = new excel.Workbook()
+	// Add Worksheets to the workbook
+	let ws = workbook.addWorksheet('Sheet 1')
+	// Create a reusable style
+	let style = workbook.createStyle({
+		font: {
+			size: 11
+		},
+		border: {
+			left: {
+				style: 'thin',
+				color: 'black',
+			},
+			right: {
+				style: 'thin',
+				color: 'black',
+			},
+			top: {
+				style: 'thin',
+				color: 'black',
+			},
+			bottom: {
+				style: 'thin',
+				color: 'black',
+			},
+		}
+	})
+
+	let style1 = workbook.createStyle({
+		font: {
+			size: 11
+		},
+		border: {
+			left: {
+				style: 'thin',
+				color: 'black',
+			},
+			right: {
+				style: 'thin',
+				color: 'black',
+			},
+			top: {
+				style: 'thick',
+				color: 'black',
+			},
+			bottom: {
+				style: 'thin',
+				color: 'black',
+			},
+		}
+	})
+
+	let styleB = workbook.createStyle({
+		font: {
+			size: 11,
+			bold: true
+		},
+		border: {
+			left: {
+				style: 'thin',
+				color: 'black',
+			},
+			right: {
+				style: 'thin',
+				color: 'black',
+			},
+			top: {
+				style: 'thin',
+				color: 'black',
+			},
+			bottom: {
+				style: 'thin',
+				color: 'black',
+			},
+		}
+	})
+
+	let style1B = workbook.createStyle({
+		font: {
+			size: 11,
+			bold: true
+		},
+		border: {
+			left: {
+				style: 'thin',
+				color: 'black',
+			},
+			right: {
+				style: 'thin',
+				color: 'black',
+			},
+			top: {
+				style: 'thick',
+				color: 'black',
+			},
+			bottom: {
+				style: 'thin',
+				color: 'black',
+			},
+		}
+	})
+
+	let styleheader = workbook.createStyle({
+		font: {
+			bold: true,
+		},
+		alignment: {
+			wrapText: true,
+			horizontal: 'center',
+		},
+		border: {
+			left: {
+				style: 'thin',
+				color: 'black',
+			},
+			right: {
+				style: 'thin',
+				color: 'black',
+			},
+			top: {
+				style: 'thin',
+				color: 'black',
+			},
+			bottom: {
+				style: 'thin',
+				color: 'black',
+			},
+		}
+	})
+
+	let styleHead = workbook.createStyle({
+		font: {
+			bold: true,
+			size: 18
+		},
+	})
+
+	let pkis = await Pki.find({part: req.session.part}).sort({type_pki: 1})
+	const pcs = await PC.find({part: req.session.part})
+
+
+	ws.column(1).setWidth(3)
+	ws.column(2).setWidth(30)
+	ws.column(3).setWidth(20)
+	ws.column(4).setWidth(25)
+	ws.column(5).setWidth(5)
+	ws.column(6).setWidth(25)
+
+
+	ws.row(1).setHeight(30)
+	ws.cell(1, 2).string(req.session.part).style(styleHead)
+
+	ws.cell(2, 2, 3, 2, true).string('Наименование').style(styleheader)
+	ws.cell(2, 3, 3, 3, true).string('Фирма').style(styleheader)
+	ws.cell(2, 4, 3, 4, true).string('Модель').style(styleheader)
+	ws.cell(2, 5, 3, 5, true).string('Кол во').style(styleheader)
+	ws.cell(2, 6, 3, 6, true).string('Серийный (инв.) номер').style(styleheader)
+
+	ws.row(2).freeze()
+	ws.row(3).freeze()
+	
+	let n = 4
+
+	for (const pc of pcs) {
+		ws.cell(n, 2, n, 6, true).string(pc.serial_number).style(styleheader)
+		n+=1
+		for (const unit of pc.pc_unit) {
+			let pki = ''
+				
+			if (
+				unit.serial_number != 'б/н' &&
+				unit.serial_number != 'Б/н' &&
+				unit.serial_number != 'б/Н' &&
+				unit.serial_number != 'б/н'
+				) {
+					if (unit.apkzi != "apkzi" && unit.type != 'Системный блок' && unit.serial_number != pc.serial_number) {
+						pki = await Pki.findOne({part: req.session.part, serial_number: unit.serial_number})
+					}					
+			}
+			
+			if (pki) {
+				ws.cell(n, 2).string(unit.type).style(styleB)
+				ws.cell(n, 3).string(pki.vendor).style(style)
+				ws.cell(n, 4).string(pki.model).style(style)
+				ws.cell(n, 5).string(unit.quantity).style(style)
+				ws.cell(n, 6).string(unit.serial_number).style(style)
+				n += 1
+				if (pki.sp_unit && pki.sp_unit.length > 0) {
+					for (const u of pki.sp_unit) {
+						ws.cell(n, 2).string(u.name).style(style)
+						ws.cell(n, 3).string(u.vendor).style(style)
+						ws.cell(n, 4).string(u.model).style(style)
+						ws.cell(n, 5).string(u.quantity).style(style)
+						ws.cell(n, 6).string(u.serial_number).style(style)
+						n += 1
+					}
+				}
+			} else if (!unit.apkzi && unit.type != 'Системный блок') {
+				let name = unit.name.split(' ')
+				let vendor = name.splice(0, 1).join(' ')
+				let model = name.join(' ')
+				ws.cell(n, 2).string(unit.type).style(styleB)
+				ws.cell(n, 3).string(vendor).style(style)
+				ws.cell(n, 4).string(model).style(style)
+				ws.cell(n, 5).string(unit.quantity).style(style)
+				ws.cell(n, 6).string(unit.serial_number).style(style)
+				n += 1
+			}	
+		}
+		for (const unit of pc.system_case_unit) {
+			let pki = ''
+			
+			if (
+				unit.serial_number != 'б/н' &&
+				unit.serial_number != 'Б/н' &&
+				unit.serial_number != 'б/Н' &&
+				unit.serial_number != 'б/н'
+				) { if (unit.serial_number != pc.serial_number || unit.type == 'Корпус') {
+					pki = await Pki.findOne({part: req.session.part, serial_number: unit.serial_number})
+				}
+					
+			}
+			if (pki) {
+				ws.cell(n, 2).string(unit.type).style(styleB)
+				ws.cell(n, 3).string(pki.vendor).style(style)
+				ws.cell(n, 4).string(pki.model).style(style)
+				ws.cell(n, 5).string(unit.quantity).style(style)
+				ws.cell(n, 6).string(unit.serial_number).style(style)
+				n += 1
+				if (pki.sp_unit && pki.sp_unit.length > 0) {
+					for (const u of pki.sp_unit) {
+						ws.cell(n, 2).string(u.name).style(style)
+						ws.cell(n, 3).string(u.vendor).style(style)
+						ws.cell(n, 4).string(u.model).style(style)
+						ws.cell(n, 5).string(u.quantity).style(style)
+						ws.cell(n, 6).string(u.serial_number).style(style)
+						n += 1
+					}
+				}
+			} else if (!unit.szi) {
+				let name = unit.name.split(' ')
+				let vendor = name.splice(0, 1).join(' ')
+				let model = name.join(' ')
+				ws.cell(n, 2).string(unit.type).style(styleB)
+				ws.cell(n, 3).string(vendor).style(style)
+				ws.cell(n, 4).string(model).style(style)
+				ws.cell(n, 5).string(unit.quantity).style(style)
+				ws.cell(n, 6).string(unit.serial_number).style(style)
+				n += 1				
+			}			
+		}		
+	}
+
 
 	const appDir = path.dirname(require.main.filename)
 	const docDir = appDir + '/public/docx'
