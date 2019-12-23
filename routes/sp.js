@@ -642,21 +642,21 @@ router.get("/excelExport", auth, async function (req, res) {
 		},
 	})
 
-	let pkis
-	if (!req.session.type || req.session.type == '...') {
-		pkis = await Pki.find({
-			part: req.session.part
-		}).sort({
-			type_pki: 1
-		})
-	} else {
-		pkis = await Pki.find({
-			part: req.session.part,
-			type_pki: req.session.type
-		}).sort({
-			type_pki: 1
-		})
-	}
+	let pkis = await Pki.find({part: req.session.part}).sort({type_pki: 1})
+	// if (!req.session.type || req.session.type == '...') {
+	// 	pkis = await Pki.find({
+	// 		part: req.session.part
+	// 	}).sort({
+	// 		type_pki: 1
+	// 	})
+	// } else {
+	// 	pkis = await Pki.find({
+	// 		part: req.session.part,
+	// 		type_pki: req.session.type
+	// 	}).sort({
+	// 		type_pki: 1
+	// 	})
+	// }
 
 	ws.column(1).setWidth(3)
 	ws.column(2).setWidth(5)
@@ -748,14 +748,23 @@ router.get("/excelExport", auth, async function (req, res) {
 			if (unit.serial_number == 'б/н' ||
 				unit.serial_number == 'Б/н' ||
 				unit.serial_number == 'б/Н' ||
-				unit.serial_number == 'Б/Н') {
-				unitsWOSn.push({
-					type: unit.type,
-					name: unit.name,
-					quantity: unit.quantity,
-					serial_number: unit.serial_number
-				})
-			} else if (unit.serial_number == pc.serial_number && unit.type != 'Системный блок' && unit.type != 'Корпус') {
+				unit.serial_number == 'Б/Н'
+				) {
+					if (unit.type == 'Коврик для мыши') {						
+					} else {
+						unitsWOSn.push({
+							type: unit.type,
+							name: unit.name,
+							quantity: unit.quantity,
+							serial_number: unit.serial_number
+						})
+					}				
+			} else if (
+				unit.serial_number == pc.serial_number &&
+				unit.type != 'Системный блок' &&
+				unit.type != 'Корпус' &&
+				unit.type != 'Коврик для мыши'
+				) {
 					unitsWPcSn.push({
 						type: unit.type,
 						name: unit.name,
@@ -768,14 +777,20 @@ router.get("/excelExport", auth, async function (req, res) {
 			if (unit.serial_number == 'б/н' ||
 				unit.serial_number == 'Б/н' ||
 				unit.serial_number == 'б/Н' ||
-				unit.serial_number == 'Б/Н') {
+				unit.serial_number == 'Б/Н'
+				) {
+					
 				unitsWOSn.push({
 					type: unit.type,
 					name: unit.name,
 					quantity: unit.quantity,
 					serial_number: unit.serial_number
 				})
-			} else if (unit.serial_number == pc.serial_number && unit.type != 'Системный блок' && unit.type != 'Корпус') {
+			} else if (
+				unit.serial_number == pc.serial_number &&
+				unit.type != 'Системный блок' &&
+				unit.type != 'Корпус'
+				) {
 				unitsWPcSn.push({
 					type: unit.type,
 					name: unit.name,
