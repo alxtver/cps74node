@@ -1013,7 +1013,6 @@ router.get("/excelExport1", auth, async function (req, res) {
 			size: 18
 		},
 	})
-
 	let pkis = await Pki.find({part: req.session.part}).sort({type_pki: 1})
 	const pcs = await PC.find({part: req.session.part})
 
@@ -1029,16 +1028,16 @@ router.get("/excelExport1", auth, async function (req, res) {
 	ws.row(1).setHeight(30)
 	ws.cell(1, 2).string(req.session.part).style(styleHead)
 
-	ws.cell(2, 2, 3, 2, true).string('Наименование').style(styleheader)
-	ws.cell(2, 3, 3, 3, true).string('Фирма').style(styleheader)
-	ws.cell(2, 4, 3, 4, true).string('Модель').style(styleheader)
-	ws.cell(2, 5, 3, 5, true).string('Кол во').style(styleheader)
-	ws.cell(2, 6, 3, 6, true).string('Серийный (инв.) номер').style(styleheader)
+	ws.cell(2, 2).string('Наименование').style(styleheader)
+	ws.cell(2, 3).string('Фирма').style(styleheader)
+	ws.cell(2, 4).string('Модель').style(styleheader)
+	ws.cell(2, 5).string('Кол во').style(styleheader)
+	ws.cell(2, 6).string('Серийный (инв.) номер').style(styleheader)
 
 	ws.row(2).freeze()
-	ws.row(3).freeze()
 	
-	let n = 4
+	
+	let n = 3
 
 	for (const pc of pcs) {
 		ws.cell(n, 2, n, 6, true).string(pc.serial_number).style(styleheader)
@@ -1060,7 +1059,7 @@ router.get("/excelExport1", auth, async function (req, res) {
 							}
 						}
 					//	pki = await Pki.findOne({part: req.session.part, serial_number: unit.serial_number})
-					}					
+					}				
 			}
 			
 			if (pki) {
