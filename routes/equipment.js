@@ -132,7 +132,19 @@ router.post('/edit', auth, async (req, res) => {
           }
         }
         if (pki_unit) {
-          sp_units.push(pki_unit)
+          if (pki_unit.serial_number == '') {
+            sp_units.push({
+              i: i,
+              name: pki_unit.name,
+              vendor: pki_unit.vendor,
+              model: pki_unit.model,
+              quantity: pki_unit.quantity,
+              serial_number: ean.sp_unit[i].serial_number,
+              szz2: pki_unit.szz2
+            })
+          } else {
+            sp_units.push(pki_unit)
+          }
         } else {
           sp_units.push({
             i: i,
@@ -155,7 +167,21 @@ router.post('/edit', auth, async (req, res) => {
           }
         }
         if (pki_unit) {
-          sp_units.push(pki_unit)
+          console.log(pki_unit.serial_number);
+          if (pki_unit.serial_number == '') {
+            sp_units.push({
+              i: i,
+              name: pki_unit.name,
+              vendor: pki_unit.vendor,
+              model: pki_unit.model,
+              quantity: pki_unit.quantity,
+              serial_number: ean.sp_unit[i].serial_number,
+              szz2: pki_unit.szz2
+            })
+          } else {
+            sp_units.push(pki_unit)
+          }
+          
         } else {
           sp_units.push({
             i: i,
