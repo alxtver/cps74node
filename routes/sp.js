@@ -1059,7 +1059,7 @@ router.get("/excelExport1", auth, async function (req, res) {
 							}
 						}
 					//	pki = await Pki.findOne({part: req.session.part, serial_number: unit.serial_number})
-					}				
+					}	
 			}
 			
 			if (pki) {
@@ -1079,7 +1079,7 @@ router.get("/excelExport1", auth, async function (req, res) {
 						n += 1
 					}
 				}
-			} else if (!unit.apkzi && unit.type != 'Системный блок') {
+			} else if (!unit.apkzi && unit.type != 'Системный блок' && unit.type != 'Коврик для мыши') {
 				let name = unit.name.split(' ')
 				let vendor = name.splice(0, 1).join(' ')
 				let model = name.join(' ')
