@@ -869,7 +869,7 @@ for (const un of unitsWPcSn) {
 
 	workbook.write(pathToExcel, function () {
 		console.log('PKI report xlsx generated')
-		const fileName = req.session.part + '.xlsx'
+		const fileName = 'Акт ' + req.session.part + '.xlsx'
 		res.download(pathToExcel, fileName)
 	})
 })
@@ -1148,7 +1148,7 @@ router.get("/excelExport1", auth, async function (req, res) {
 
 	workbook.write(pathToExcel, function () {
 		console.log('PKI report xlsx generated')
-		const fileName = req.session.part + '.xlsx'
+		const fileName = 'Заключение ' + req.session.part + '.xlsx'
 		res.download(pathToExcel, fileName)
 	})
 })
