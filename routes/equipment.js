@@ -132,15 +132,21 @@ router.post('/edit', auth, async (req, res) => {
           }
         }
         if (pki_unit) {
-          if (pki_unit.serial_number == '') {
+          if (
+            pki_unit.serial_number == '' ||
+            pki_unit.serial_number == 'б/н' ||
+            pki_unit.serial_number == 'Б/Н' ||
+            pki_unit.serial_number == 'Б/н' ||
+            pki_unit.serial_number == 'б/Н'
+            ) {
             sp_units.push({
               i: i,
               name: pki_unit.name,
-              vendor: pki_unit.vendor,
-              model: pki_unit.model,
-              quantity: pki_unit.quantity,
-              serial_number: ean.sp_unit[i].serial_number,
-              szz2: pki_unit.szz2
+              vendor: ean.sp_unit1[i].vendor,
+              model: ean.sp_unit1[i].model,
+              quantity: ean.sp_unit1[i].quantity,
+              serial_number: ean.sp_unit1[i].serial_number,
+              szz2: ean.sp_unit1[i].szz2
             })
           } else {
             sp_units.push(pki_unit)
@@ -166,17 +172,22 @@ router.post('/edit', auth, async (req, res) => {
             break
           }
         }
-        if (pki_unit) {
-          console.log(pki_unit.serial_number);
-          if (pki_unit.serial_number == '') {
+        if (pki_unit) {          
+          if (
+            pki_unit.serial_number == '' ||
+            pki_unit.serial_number == 'б/н' ||
+            pki_unit.serial_number == 'Б/Н' ||
+            pki_unit.serial_number == 'Б/н' ||
+            pki_unit.serial_number == 'б/Н'
+            ) {
             sp_units.push({
               i: i,
               name: pki_unit.name,
-              vendor: pki_unit.vendor,
-              model: pki_unit.model,
-              quantity: pki_unit.quantity,
+              vendor: ean.sp_unit[i].vendor,
+              model: ean.sp_unit[i].model,
+              quantity: ean.sp_unit[i].quantity,
               serial_number: ean.sp_unit[i].serial_number,
-              szz2: pki_unit.szz2
+              szz2: ean.sp_unit[i].szz2
             })
           } else {
             sp_units.push(pki_unit)
