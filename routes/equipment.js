@@ -30,13 +30,8 @@ router.get('/add', auth, (req, res) => {
 
 
 router.get('/load', auth, async (req, res) => {
-  const eans = await EAN.find().limit(50).sort({
-    created: -1
-  })
-
-  res.send(JSON.stringify({
-    eans: eans
-  }))
+  const eans = await EAN.find().limit(50).sort({created: -1})
+  res.send(JSON.stringify({eans: eans}))
 })
 
 
@@ -49,10 +44,20 @@ router.post('/add', auth, async (req, res) => {
   const sp_unit = req.body.sp_unit
   const sp_unit1 = req.body.sp_unit1
 
-  const oldEan = await EAN.findOne({
-    ean_code: ean_code
-  })
-  if (!oldEan) {
+  const oldEan = await EAN.findOne({ean_code: ean_code})
+
+  if (!oldEan && !req.body.sp_unit1) {
+    const new_ean = new EAN({
+      ean_code: ean_code,
+      type_pki: type_pki,
+      vendor: vendor,
+      model: model,
+      country: country,
+      sp_unit: sp_unit,
+      sp_unit1: sp_unit
+    })
+    await new_ean.save()
+  } else {
     const new_ean = new EAN({
       ean_code: ean_code,
       type_pki: type_pki,
@@ -64,9 +69,7 @@ router.post('/add', auth, async (req, res) => {
     })
     await new_ean.save()
   }
-  let pkis = Pki.find({
-    ean_code: ean_code
-  })
+  let pkis = Pki.find({ean_code: ean_code})
   for (const pki of pkis) {
     if (!pki.sp_unit || pki.sp_unit.length < 1) {
       pki.sp_unit = sp_unit1
@@ -98,7 +101,6 @@ router.post('/edit', auth, async (req, res) => {
   const model = req.body.model
   const country = req.body.country
   const sp_unit = req.body.sp_unit
-  const sp_unit1 = req.body.sp_unit1
 
   //console.log(req.body.sp_unit1.length);
   if (req.body.sp_unit1) {
