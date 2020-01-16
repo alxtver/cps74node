@@ -88,9 +88,7 @@ router.post('/add', auth, async (req, res) => {
 
 
 router.post("/search", auth, async function (req, res) {
-  pcs = await PC.find({
-    part: req.session.part
-  })
+  pcs = await PC.find({part: req.session.part}).sort({'created': 1})
   res.send(JSON.stringify(pcs)) // отправляем пришедший ответ обратно
 })
 
