@@ -462,7 +462,7 @@ router.get('/import', auth, async (req, res) => {
     },
   })
 
-  const allPC = await PC.find({part: part})
+  const allPC = await PC.find({part: part}).sort({'created': 1})
   
   ws.row(1).setHeight(30)
   ws.cell(1, 2).string(part).style(styleHead)

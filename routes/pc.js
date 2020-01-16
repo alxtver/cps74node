@@ -360,7 +360,8 @@ router.post('/copy', auth, async (req, res) => {
     }
     let first_part = number.slice(0, indexChar + 1)
     let second_part = number.slice(indexChar + 1)
-    return first_part + (parseInt(second_part) + 1)
+    let lenSecondPart = len(second_part)
+    return first_part + (parseInt(second_part) + 1).padStart(lenSecondPart, "0")
   }
 
   let reqSerial = req.body.serial_number
