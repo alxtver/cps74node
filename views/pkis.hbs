@@ -1,19 +1,23 @@
 <script src="/pki.js"></script>
 <h1>ПКИ</h1>
 <button class="btn btn-dark" style="margin-bottom: 1rem" onclick="location.href='/add';">Добавить ПКИ</button>
-<button id="excelImport" class="btn btn-outline-success" data-toggle="modal" data-target="#modalSort" style="margin-bottom: 1rem">Экспорт в Excel</button>
+<button id="excelImport" class="btn btn-outline-success" data-toggle="modal" data-target="#modalSort"
+  style="margin-bottom: 1rem">Экспорт в Excel</button>
+<button id="searchAndReplace" class="btn btn-outline-success" data-toggle="modal" data-target="#modalSearchAndReplace"
+  style="margin-bottom: 1rem">Поиск и замена</button>
 
-<div class="form-group">    
-    <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Поиск...">
+<div class="form-group">
+  <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Поиск...">
 </div>
 
 {{!-- модальное окно --}}
-<div class="modal fade" id="modalDel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalDel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Удалить ПКИ?</h5>
-        
+
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -24,7 +28,8 @@
         <input type="hidden" name="part" id="hidPart">
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Закрыть</button>
-          <button type="button" id="btnSubmit" onclick="delBtn()" data-dismiss="modal" class="btn btn-danger">Удалить</button>        
+          <button type="button" id="btnSubmit" onclick="delBtn()" data-dismiss="modal"
+            class="btn btn-danger">Удалить</button>
         </div>
       </form>
     </div>
@@ -36,7 +41,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="modalSortLabel">Выбор сортировки</h5>
-        
+
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
       <form method="GET" action="/pkis/excelImport">
@@ -46,9 +51,41 @@
         </select>
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-secondary" id="close" data-dismiss="modal">Назад</button>
-          <button onclick="modalHide()" class="btn btn-outline-success" id="btnSort" >Экспорт</button>
+          <button onclick="modalHide()" class="btn btn-outline-success" id="btnSort">Экспорт</button>
           {{!-- <input  type="submit" id="sbmSort" value="OK" class="btn btn-danger"> --}}
-                
+
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalSearchAndReplace" tabindex="-1" role="dialog" aria-labelledby="modalSortLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalSortLabel">Поиск и замена</h5>
+
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <form method="POST" action="/pkis/searchAndReplace">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Найти</span>
+          </div>
+          <input name="search" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Заменить на</span>
+          </div>
+          <input name="replace" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+        </div>
+        <input type="hidden" name="_csrf" value="{{csrf}}">
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" id="close" data-dismiss="modal">Назад</button>
+          <button onclick="modalHide()" class="btn btn-outline-success" id="btnSort">Поиск и замена</button>
         </div>
       </form>
     </div>
@@ -60,20 +97,20 @@
 <input hidden="true" id="temp" value="0"></input>
 
 <script>
-  function modalHide(){
-      $('#modalSort').modal('toggle')
-    }
-    $(document).ready(function() {
+  function modalHide() {
+    $('#modalSort').modal('toggle')
+  }
+  $(document).ready(function () {
     load_data()
 
-    $("body").on('click','.delBtn',function () {
+    $("body").on('click', '.delBtn', function () {
       $('#hidId').val($(this).data("id"))
-      $('#hidPart').val($(this).data("part"))     
+      $('#hidPart').val($(this).data("part"))
     })
-  
-    
 
-    $('#search').keyup(function() {
+
+
+    $('#search').keyup(function () {
       let search = $(this).val()
       let blank_req = 'null'
       if (search) {
@@ -83,41 +120,40 @@
       }
     })
 
-  $(document).on('blur', '.type', function() {
-    let id = $(this).data("id")
-    let type = $(this).text()
-    edit_type(id, type)
-  })
-  
-  $(document).on('blur', '.model', function() {
-    let id = $(this).data("id")
-    let model = $(this).text()
-    edit_model(id, model)
-  })
+    $(document).on('blur', '.type', function () {
+      let id = $(this).data("id")
+      let type = $(this).text()
+      edit_type(id, type)
+    })
 
-  $(document).on('blur', '.serial_number', function() {
-    let id = $(this).data("id")
-    let serial_number = $(this).text()
-    edit_serial_number(id, serial_number)
-  })
+    $(document).on('blur', '.model', function () {
+      let id = $(this).data("id")
+      let model = $(this).text()
+      edit_model(id, model)
+    })
 
-  $(document).on('blur', '.vendor', function() {
-    let id = $(this).data("id")
-    let vendor = $(this).text()
-    edit_vendor(id, vendor)
-  })
+    $(document).on('blur', '.serial_number', function () {
+      let id = $(this).data("id")
+      let serial_number = $(this).text()
+      edit_serial_number(id, serial_number)
+    })
 
-  $(document).on('blur', '.country', function() {
-    let id = $(this).data("id")
-    let country = $(this).text()
-    edit_country(id, country)
-  })
+    $(document).on('blur', '.vendor', function () {
+      let id = $(this).data("id")
+      let vendor = $(this).text()
+      edit_vendor(id, vendor)
+    })
 
-  $(document).on('blur', '.part', function() {
-    let id = $(this).data("id")
-    let part = $(this).text()
-    edit_part(id, part)
-  })    
-  })
+    $(document).on('blur', '.country', function () {
+      let id = $(this).data("id")
+      let country = $(this).text()
+      edit_country(id, country)
+    })
 
+    $(document).on('blur', '.part', function () {
+      let id = $(this).data("id")
+      let part = $(this).text()
+      edit_part(id, part)
+    })
+  })
 </script>

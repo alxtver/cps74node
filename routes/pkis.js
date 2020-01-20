@@ -387,4 +387,118 @@ router.get('/autocomplete', auth, async (req, res) => {
   }))
 })
 
+
+router.post('/searchAndReplace', auth, async (req, res) => {
+  let pkisByModel = await Pki.find({model: req.body.search})
+  if (pkisByModel.length > 0) {
+    for (const pki of pkisByModel) {
+      if (pki.number_machine) {
+        pc = await PC.findOne({part: pki.part, serial_number: pki.number_machine})
+        let unit = 'pc_unit'
+        for (let i in pc[unit]) {
+          if (pki.serial_number == pc[unit][i].serial_number) {
+            pc[unit][i].name = pki.vendor + " " + req.body.replace
+            pc[unit][i].type = pki.type_pki
+            break
+          }
+        }
+        unit = 'system_case_unit'
+        for (let i in pc[unit]) {
+          if (pki.serial_number == pc[unit][i].serial_number) {
+            pc[unit][i].name = pki.vendor + " " + req.body.replace
+            pc[unit][i].type = pki.type_pki
+            break
+          }
+        }
+        pcCopy = await PC.findOne({part: pki.part, serial_number: pki.number_machine})
+        pcCopy.pc_unit = pc.pc_unit
+        pcCopy.system_case_unit = pc.system_case_unit
+        pcCopy.save()        
+      }
+      pki.model = req.body.replace
+      pki.save()
+      if (pki.ean_code) {
+        let ean = await EAN.findOne({ean_code: pki.ean_code})
+        ean.model = req.body.replace
+        ean.save()
+      }
+    }
+  }
+  
+  let pkisByVendor = await Pki.find({vendor: req.body.search})
+  if (pkisByVendor.length > 0) {
+    for (const pki of pkisByVendor) {
+      if (pki.number_machine) {
+        pc = await PC.findOne({part: pki.part, serial_number: pki.number_machine})
+        let unit = 'pc_unit'
+        for (let i in pc[unit]) {
+          if (pki.serial_number == pc[unit][i].serial_number) {
+            pc[unit][i].name = req.body.replace+ " " + pki.model
+            pc[unit][i].type = pki.type_pki
+            break
+          }
+        }
+        unit = 'system_case_unit'
+        for (let i in pc[unit]) {
+          if (pki.serial_number == pc[unit][i].serial_number) {
+            pc[unit][i].name = req.body.replace+ " " + pki.model
+            pc[unit][i].type = pki.type_pki
+            break
+          }
+        }
+        pcCopy = await PC.findOne({part: pki.part, serial_number: pki.number_machine})
+        pcCopy.pc_unit = pc.pc_unit
+        pcCopy.system_case_unit = pc.system_case_unit
+        pcCopy.save()        
+      }
+      pki.vendor = req.body.replace
+      pki.save()
+      if (pki.ean_code) {
+        let ean = await EAN.findOne({ean_code: pki.ean_code})
+        ean.vendor = req.body.replace
+        ean.save()
+      }
+    }   
+  }
+  // try {
+  //   await Pki.findByIdAndUpdate(req.body.id, req.body)
+  // } catch (error) {
+  //   console.log(error)
+  // }
+  // let pki = await Pki.findById(req.body.id) 
+
+  // if (pki.number_machine) {
+  //   let pc = await PC.findOne({
+  //     part: pki.part,
+  //     serial_number: pki.number_machine
+  //   })
+  //   if (pc) {
+  //     let unit = 'pc_unit'
+  //     for (let i in pc[unit]) {
+  //       if (pki.serial_number == pc[unit][i].serial_number) {
+  //         pc[unit][i].name = pki.vendor + " " + pki.model
+  //         pc[unit][i].type = pki.type_pki
+  //         break
+  //       }
+  //     }
+  //     unit = 'system_case_unit'
+  //     for (let i in pc[unit]) {
+  //       if (pki.serial_number == pc[unit][i].serial_number) {
+  //         pc[unit][i].name = pki.vendor + " " + pki.model
+  //         pc[unit][i].type = pki.type_pki
+  //         break
+  //       }
+  //     }
+  //   }
+  //   let pc_copy = await PC.findOne({
+  //     part: pki.part,
+  //     serial_number: pki.number_machine
+  //   })
+  //   pc_copy.pc_unit = pc.pc_unit
+  //   pc_copy.system_case_unit = pc.system_case_unit
+  //   pc_copy.save()
+  // }
+  res.redirect('/pkis')
+})
+
 module.exports = router
