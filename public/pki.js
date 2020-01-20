@@ -9,7 +9,12 @@ function load_data(q) {
       q: q,
     },
     success: function (data) {
-      CreateTableFromJSON(JSON.parse(data))
+      CreateTableFromJSON(JSON.parse(data).pkis)
+      CreateSelectType(JSON.parse(data).types, function () {
+        if (JSON.parse(data).selectedType) {
+          $("#type_select_navbar option:contains(" + JSON.parse(data).selectedType + ")").prop('selected', true)
+        }
+      })
     }
   })
 }
@@ -223,6 +228,69 @@ function delBtn() {
     },
     success: function (data) {
       load_data('', data)
+    }
+  })
+}
+
+function load_type_select() {
+  $.ajax({
+    url: "/sp/types",
+    method: "POST",
+    //async: false,
+    headers: {
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    },
+    success: function (data) {
+      if (data) {
+        CreateSelectType(JSON.parse(data).parts, function () {
+          if (JSON.parse(data).reqSesPart) {
+            $("#type_select_navbar").empty();
+            $("#type_select_navbar option:contains(" + JSON.parse(data).reqSesPart + ")").prop('selected', true)
+          }
+        })
+      }
+    }
+  })
+}
+
+function CreateSelectType(data, callback) {
+  $("#type_select_navbar").append($('<option value="">...</option>'));
+  for (let i = 0; i < data.length; i++) {
+    $('#type_select_navbar').append('<option value="' + data[i] + '">' + data[i] + '</option>')
+  }
+  callback()
+}
+
+
+function changeSelectType(selectedItem) {
+  $.ajax({
+    url: "/sp/insert_type_session",
+    method: "POST",    
+    headers: {
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    },
+    data: {
+      selectedItem: selectedItem
+    },
+    success: function () {
+      $("#search").val('');
+      searchPKI(selectedItem)
+    }
+  })
+}
+
+function searchPKI(q) {
+  $.ajax({
+    url: "/pkis/search",
+    method: "POST",
+    headers: {
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    },
+    data: {
+      q: q,
+    },
+    success: function (data) {
+      CreateTableFromJSON(JSON.parse(data).pkis)
     }
   })
 }

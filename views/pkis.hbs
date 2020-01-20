@@ -6,6 +6,10 @@
 <button id="searchAndReplace" class="btn btn-outline-success" data-toggle="modal" data-target="#modalSearchAndReplace"
   style="margin-bottom: 1rem">Поиск и замена</button>
 
+<select id="type_select_navbar" class="custom-select mt-2 mb-2">
+    {{!-- <option value="part">Выберите проект</option> --}}
+</select>
+
 <div class="form-group">
   <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Поиск...">
 </div>
@@ -108,15 +112,15 @@
       $('#hidPart').val($(this).data("part"))
     })
 
-
+  
 
     $('#search').keyup(function () {
       let search = $(this).val()
       let blank_req = 'null'
       if (search) {
-        load_data(search)
+        searchPKI(search)
       } else {
-        load_data(blank_req)
+        searchPKI(blank_req)
       }
     })
 
@@ -156,4 +160,8 @@
       edit_part(id, part)
     })
   })
+
+  $(document).on('change', '#type_select_navbar', function () {	
+        changeSelectType($("#type_select_navbar :selected").text())	
+      })
 </script>
