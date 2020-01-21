@@ -92,7 +92,7 @@ router.post("/search", auth, async (req, res) => {
 
   let selected = req.session.part
   let selectedType = req.session.type
-  console.log(req.session.type);
+  
   
   let typesList = await Pki.find({
 		part: selected
@@ -456,6 +456,7 @@ router.get('/autocomplete', auth, async (req, res) => {
 
 
 router.post('/searchAndReplace', auth, async (req, res) => {
+
   let pkisByModel = await Pki.find({part: req.session.part, model: req.body.search})
   if (pkisByModel.length > 0) {
     for (const pki of pkisByModel) {
@@ -525,7 +526,8 @@ router.post('/searchAndReplace', auth, async (req, res) => {
   }
 
   let pkisByType = await Pki.find({part: req.session.part, type_pki: req.body.search})
-  if (pkisByType.length > 0) {
+  if (pkisByType.length > 0) {    
+    req.session.type = req.body.replace
     for (const pki of pkisByType) {
       if (pki.number_machine) {
         pc = await PC.findOne({part: req.session.part, serial_number: pki.number_machine})

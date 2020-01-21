@@ -15,7 +15,7 @@
 </div>
 
 {{!-- модальное окно --}}
-<div class="modal fade" id="modalDel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="modalDel" tabindex="-1" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -54,7 +54,7 @@
           <option value="byPC">По ПЭВМ</option>
         </select>
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" id="close" data-dismiss="modal">Назад</button>
+          <button type="button" class="btn btn-outline-secondary" id="close2" data-dismiss="modal">Назад</button>
           <button onclick="modalHide()" class="btn btn-outline-success" id="btnSort">Экспорт</button>
           {{!-- <input  type="submit" id="sbmSort" value="OK" class="btn btn-danger"> --}}
 
@@ -64,7 +64,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="modalSearchAndReplace" tabindex="-1" role="dialog" aria-labelledby="modalSortLabel"
+<div class="modal fade" id="modalSearchAndReplace" tabindex="-1" aria-labelledby="modalSortLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -88,22 +88,30 @@
         </div>
         <input type="hidden" name="_csrf" value="{{csrf}}">
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" id="close" data-dismiss="modal">Назад</button>
-          <button onclick="modalHide()" class="btn btn-outline-success" id="btnSort">Поиск и замена</button>
+          <button type="button" class="btn btn-outline-secondary" id="close1" data-dismiss="modal">Назад</button>
+          <button class="btn btn-outline-success"  data-dismiss="modal" id="btnSearchAndReplace">Поиск и замена</button>
         </div>
       </form>
     </div>
   </div>
 </div>
 
+
+
 <div id="showData"></div>
 
 <input hidden="true" id="temp" value="0"></input>
 
+<div  id="overlay">
+	<div class="cv-spinner">
+		<span class="spinner"></span>
+	</div>
+</div>
+
+
+
 <script>
-  function modalHide() {
-    $('#modalSort').modal('toggle')
-  }
+
   $(document).ready(function () {
     load_data()
 
@@ -164,4 +172,17 @@
   $(document).on('change', '#type_select_navbar', function () {	
         changeSelectType($("#type_select_navbar :selected").text())	
       })
+
+  jQuery(function($){
+	$(document).ajaxSend(function() {
+		$("#overlay").fadeIn(300);　
+	});
+		
+	$('#btnSearchAndReplace').click(function(){      
+      $('#modalSearchAndReplace').modal('hide');
+      $('#overlay').width('100%')
+      $('#overlay').height('100%')
+      $('#overlay').show()
+	});
+});
 </script>
