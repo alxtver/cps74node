@@ -1033,11 +1033,11 @@ router.get("/excelExport1", auth, async function (req, res) {
 	// ws.column(6).setWidth(25)
 
 	ws.column(1).setWidth(3)
-	ws.column(2).setWidth(19)
-	ws.column(3).setWidth(17.5)
-	ws.column(4).setWidth(17.4)
-	ws.column(5).setWidth(5)
-	ws.column(6).setWidth(24.8)
+	ws.column(2).setWidth(18.5)
+	ws.column(3).setWidth(16.6)
+	ws.column(4).setWidth(16.5)
+	ws.column(5).setWidth(4.6)
+	ws.column(6).setWidth(24.5)
 
 
 	ws.row(1).setHeight(30)
