@@ -505,13 +505,17 @@ router.get('/reportSPDoc', auth, async (req, res) => {
 
 router.get("/excelExport", auth, async function (req, res) {
 	const sortSelect = req.query.sortSelect
-	let workbook = new excel.Workbook()
+	let workbook = new excel.Workbook({
+		defaultFont: {
+			size: 12,
+			name: 'Times New Roman'			
+		}})
 	// Add Worksheets to the workbook
 	let ws = workbook.addWorksheet('Sheet 1')
 	// Create a reusable style
 	let style = workbook.createStyle({
 		font: {
-			size: 11
+			size: 12
 		},
 		border: {
 			left: {
@@ -535,7 +539,7 @@ router.get("/excelExport", auth, async function (req, res) {
 
 	let style1 = workbook.createStyle({
 		font: {
-			size: 11
+			size: 12
 		},
 		border: {
 			left: {
@@ -559,7 +563,7 @@ router.get("/excelExport", auth, async function (req, res) {
 
 	let styleB = workbook.createStyle({
 		font: {
-			size: 11,
+			size: 12,
 			bold: true
 		},
 		border: {
@@ -584,7 +588,7 @@ router.get("/excelExport", auth, async function (req, res) {
 
 	let style1B = workbook.createStyle({
 		font: {
-			size: 11,
+			size: 12,
 			bold: true
 		},
 		border: {
@@ -877,13 +881,17 @@ for (const un of unitsWPcSn) {
 
 router.get("/excelExport1", auth, async function (req, res) {
 	const sortSelect = req.query.sortSelect
-	let workbook = new excel.Workbook()
+	let workbook = new excel.Workbook({
+		defaultFont: {
+			size: 12,
+			name: 'Times New Roman'			
+		}})
 	// Add Worksheets to the workbook
 	let ws = workbook.addWorksheet('Sheet 1')
 	// Create a reusable style
 	let style = workbook.createStyle({
 		font: {
-			size: 11
+			size: 12
 		},
 		border: {
 			left: {
@@ -907,7 +915,7 @@ router.get("/excelExport1", auth, async function (req, res) {
 
 	let style1 = workbook.createStyle({
 		font: {
-			size: 11
+			size: 12
 		},
 		border: {
 			left: {
@@ -931,7 +939,7 @@ router.get("/excelExport1", auth, async function (req, res) {
 
 	let styleB = workbook.createStyle({
 		font: {
-			size: 11,
+			size: 12,
 			bold: true
 		},
 		border: {
@@ -956,7 +964,7 @@ router.get("/excelExport1", auth, async function (req, res) {
 
 	let style1B = workbook.createStyle({
 		font: {
-			size: 11,
+			size: 12,
 			bold: true
 		},
 		border: {
@@ -1017,12 +1025,19 @@ router.get("/excelExport1", auth, async function (req, res) {
 	const pcs = await PC.find({part: req.session.part})
 
 
+	// ws.column(1).setWidth(3)
+	// ws.column(2).setWidth(30)
+	// ws.column(3).setWidth(20)
+	// ws.column(4).setWidth(25)
+	// ws.column(5).setWidth(5)
+	// ws.column(6).setWidth(25)
+
 	ws.column(1).setWidth(3)
-	ws.column(2).setWidth(30)
-	ws.column(3).setWidth(20)
-	ws.column(4).setWidth(25)
+	ws.column(2).setWidth(19)
+	ws.column(3).setWidth(17.5)
+	ws.column(4).setWidth(17.4)
 	ws.column(5).setWidth(5)
-	ws.column(6).setWidth(25)
+	ws.column(6).setWidth(24.8)
 
 
 	ws.row(1).setHeight(30)
