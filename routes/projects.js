@@ -703,8 +703,8 @@ router.get('/:id/zipPCEDocx', auth, async (req, res) => {
   // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
   fs.writeFileSync(path.resolve(docDir, 'output.docx'), buf)
   const file = `${docDir}/output.docx`
-  const fileName = pc.serial_number + '.docx'
-  console.log(`Passport #${pc.serial_number} was formed`)
+  const fileName = pc.serial_number + '-E.docx'
+  console.log(`Zip label #${pc.serial_number} was formed`)
   res.download(file, fileName)
 })
 
@@ -752,7 +752,7 @@ router.get('/:id/zipDocx', auth, async (req, res) => {
   fs.writeFileSync(path.resolve(docDir, 'output.docx'), buf)
   const file = `${docDir}/output.docx`
   const fileName = pc.serial_number + '.docx'
-  console.log(`Passport #${pc.serial_number} was formed`)
+  console.log(`Zip label #${pc.serial_number} was formed`)
   res.download(file, fileName)
 })
 
