@@ -48,13 +48,16 @@
         
       {{/if}}
 
+      
+
+      {{#if isAuth}}
+
       {{#if isEquipment}}
           <li class="nav-item active"><a class="nav-link" href="/equipment">Оборудование</a></li>
         {{else}}
           <li class="nav-item"><a class="nav-link" href="/equipment">Оборудование</a></li>
         {{/if}}
-
-      {{#if isAuth}}
+        
         {{#if isProjects}}
          <li class="nav-item active"><a class="nav-link" href="/projects">Проекты</a></li>
         {{else}}
