@@ -346,7 +346,7 @@ function load_data(q) {
 
 function CreateTableFromJSON(data) {
 
-  let col_rus = ["#", "Наименование", "Фирма", "Модель", "Страна производства"]
+  let col_rus = ["#", 'Штрих код', "Наименование", "Фирма", "Модель", "Страна производства"]
 
   // CREATE DYNAMIC TABLE.
   let table = document.createElement("table");
@@ -376,6 +376,13 @@ function CreateTableFromJSON(data) {
     let numberCell = tr.insertCell(-1)
     numberCell.innerHTML = i + 1
     numberCell.style.fontWeight = "700"
+
+    let eanCell = tr.insertCell(-1)
+    eanCell.innerHTML = data[i].ean_code
+    eanCell.dataset.id = data[i]._id
+    eanCell.className = "ean"
+    eanCell.id = "ean"
+    eanCell.style.fontWeight = "700"
 
     let typeCell = tr.insertCell(-1)
     typeCell.innerHTML = data[i].type_pki
