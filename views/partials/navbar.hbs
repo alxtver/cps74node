@@ -45,12 +45,14 @@
           <li class="nav-item"><a class="nav-link" href="/sp">Спецпроверка</a></li>
         {{/if}}
 
-        {{#if isEquipment}}
+        
+      {{/if}}
+
+      {{#if isEquipment}}
           <li class="nav-item active"><a class="nav-link" href="/equipment">Оборудование</a></li>
         {{else}}
           <li class="nav-item"><a class="nav-link" href="/equipment">Оборудование</a></li>
         {{/if}}
-      {{/if}}
 
       {{#if isAuth}}
         {{#if isProjects}}

@@ -4,7 +4,7 @@ function load_data(q) {
     method: "POST",
     headers: {
       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-    },
+    }, 
     data: {
       q: q,
     },

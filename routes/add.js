@@ -19,6 +19,22 @@ router.get('/', auth, (req, res) => {
 router.post('/', auth, async (req, res) => {
   let serial_number = req.body.serial_number
   let ean
+  let ruLetter = false
+  
+  //Проверка на русские символы в серийнике
+  for (const letter of serial_number) {
+    let x = letter.charCodeAt(0)
+    if (x > 122) {
+      ruLetter = true      
+      break
+    }
+  }
+
+  if (ruLetter) {
+    flashErr = 'Смените раскладку клавиатуры'
+    req.flash('insertError', flashErr)
+    res.redirect('/add')
+  } else {  
   if (req.body.ean_code) {
     ean = await EAN.findOne({ean_code: req.body.ean_code})
     if (!ean) {
@@ -113,7 +129,7 @@ router.post('/', auth, async (req, res) => {
     res.redirect('/add')
   }
 
-  
+}  
 })
 
 
