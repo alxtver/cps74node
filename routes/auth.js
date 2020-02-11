@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs')
 const router = Router()
 const User = require('../models/user')
 const auth = require('../middleware/auth')
+const LOG = require('../models/logs')
 const authAdmin = require('../middleware/authAdmin')
 
 
@@ -35,7 +36,14 @@ router.get('/logout', async (req, res) => {
     } else {
         console.log(`User ${req.session.user.username} is loguot`)
     }
-    
+    let note = `User ${req.session.user.username} is loguot`
+    let log = new LOG({
+        event: 'User logout',
+        note: note,
+        user: req.session.user.username,
+        part: req.session.part
+      })
+    log.save()
     req.session.destroy(() =>{       
         res.redirect('/auth/login')
     })
@@ -58,12 +66,20 @@ router.post('/login', async (req, res) =>{
                     console.log(`User ${req.session.user.username}👑 is logged`)
                 } else {
                     console.log(`User ${req.session.user.username} is logged`)
+                    
                 }
                 req.session.save(err =>{
                     if (err) {
                         throw err
                     }
-                    res.redirect('/')
+                let note = `User ${req.session.user.username} is logged`
+                let log = new LOG({
+                    event: 'User login',
+                    note: note,
+                    user: req.session.user.username
+                })
+                log.save()
+                res.redirect('/')
                 })
             } else {
                 req.flash('loginError', 'Неверный пароль')

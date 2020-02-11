@@ -1,6 +1,7 @@
 const {Router} = require('express')
 const Apkzi = require('../models/apkzi')
 const auth = require('../middleware/auth')
+const LOG = require('../models/logs')
 const router = Router()
 
 
@@ -64,7 +65,18 @@ router.post('/edit', auth, async (req, res) => {
 router.post('/del', auth, async (req, res) => {
   const part = req.body.part
   try {    
+    const apkzi = Apkzi.findById(req.body.id)
+    let note = `APKZI ${apkzi.apkzi_name} ${apkzi.kont_name} заводской номер - ${apkzi.zav_number}, номер контроллера - ${apkzi.kontr_zav_number} удален`
+    console.log(note)
+    let log = new LOG({
+      event: 'delete APKZI',
+      note: note,
+      user: req.session.user.username,
+      part: req.session.part
+    })
+    
     await Apkzi.deleteOne({_id: req.body.id})
+    log.save()
     res.send(part)
   } catch (e) {
     console.log(e)

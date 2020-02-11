@@ -4,6 +4,7 @@ const Apkzi = require('../models/apkzi')
 const Country = require('../models/country')
 const Part = require('../models/part')
 const EAN = require('../models/ean')
+const LOG = require('../models/logs')
 const auth = require('../middleware/auth')
 const router = Router()
 
@@ -118,7 +119,16 @@ router.post('/', auth, async (req, res) => {
   
     try {
       await pki.save()
-      console.log(`PKI ${pki.type_pki} ${pki.vendor} ${pki.model} ${pki.serial_number} added to DB`)
+      const note = `PKI type - ${pki.type_pki}, vendor - ${pki.vendor}, model - ${pki.model}, SN - ${pki.serial_number}, added to DB`
+      console.log(note)
+      
+      let log = new LOG({
+        event: 'add pki',
+        note: note,
+        user: req.session.user.username,
+        part: req.session.part
+      })
+      log.save()
       res.redirect('/add')
     } catch (e) {
       console.log(e)
@@ -154,7 +164,15 @@ router.post('/apkzi', auth, async (req, res) => {
 
   try {
     await apkzi.save()
-    console.log(`APKZI ${apkzi.apkzi_name} ${apkzi.kont_name} ${apkzi.zav_number} ${apkzi.kontr_zav_number} added to DB`)
+    let note = `APKZI ${apkzi.apkzi_name} ${apkzi.kont_name} заводской номер - ${apkzi.zav_number}, номер контроллера - ${apkzi.kontr_zav_number} added to DB`
+    console.log(note)
+    let log = new LOG({
+      event: 'add APKZI',
+      note: note,
+      user: req.session.user.username,
+      part: req.session.part
+    })
+    log.save()
     res.redirect('/add/apkzi')
   } catch (e) {
     console.log(e)

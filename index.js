@@ -13,6 +13,7 @@ const pkiRoutes = require('./routes/pkis')
 const pcRoutes = require('./routes/pc')
 const authRoutes = require('./routes/auth')
 const spRoutes = require('./routes/sp')
+const logsRoutes = require('./routes/logs')
 const equipmentRoutes = require('./routes/equipment')
 const projectsRoutes = require('./routes/projects')
 const favicon = require('express-favicon')
@@ -64,6 +65,7 @@ app.use('/projects', projectsRoutes)
 app.use('/auth', authRoutes)
 app.use('/sp', spRoutes)
 app.use('/equipment', equipmentRoutes)
+app.use('/logs', logsRoutes)
 
 
 const PORT = process.env.PORT || 3000
