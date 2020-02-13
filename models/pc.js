@@ -7,8 +7,7 @@ const pc = new Schema({
         unique: true
     },
     execution: {
-        type: String,
-        required: true
+        type: String
     },
     fdsi: {
         type: String,

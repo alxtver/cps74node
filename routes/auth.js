@@ -114,6 +114,13 @@ router.post('/register', async (req, res) =>{
                 username, group, password: hashPassword
             })
             await user.save()
+            let note = `User ${username} is register`
+                let log = new LOG({
+                    event: 'User register',
+                    note: note,
+                    user: req.session.user.username
+                })
+                log.save()
             res.redirect('/auth/login')
         }
 
