@@ -35,7 +35,14 @@ router.post('/diagram', auth, async (req, res) => {
       }
     let arr = [['Проект', 'Процентное отношение']]
     for (const part of parts) {
-      let count = await PC.countDocuments({part: part})
+      let docsInPart = await PC.find({part:part})
+      let count = 0
+      for (const doc of docsInPart) {
+        let sn = doc.serial_number
+        if (!sn.includes('Z') && !sn.includes('z')) {
+          count += 1
+        }
+      }      
       arr.push([part, count])
     }
     res.send(arr)
