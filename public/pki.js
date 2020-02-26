@@ -113,8 +113,8 @@ function edit_part(id, part) {
 function CreateTableFromJSON(data) {
   // EXTRACT VALUE FOR HTML HEADER. 
   // ('Book ID', 'Book Name', 'Category' and 'Price')
-  let col = ["#", "type_pki", "vendor", "model", "serial_number", "country", "part", "number_machine", ""];
-  let col_rus = ["#", "Тип", "Производитель", "Модель", "Серийный номер", "Страна производства", "Партия", "Номер машины", ""];
+  let col = ["#", "type_pki", "vendor", "model", "serial_number", "country", "part", "number_machine"];
+  let col_rus = ["#", "Тип", "Производитель", "Модель", "Серийный номер", "Страна производства", "Номер машины", ""];
 
   // CREATE DYNAMIC TABLE.
   let table = document.createElement("table");
@@ -175,12 +175,12 @@ function CreateTableFromJSON(data) {
     countryCell.id = "country"
     countryCell.contentEditable = "true"
 
-    let partCell = tr.insertCell(-1)
-    partCell.innerHTML = data[i].part
-    partCell.dataset.id = data[i]._id
-    partCell.className = "part"
-    partCell.id = "part"
-    partCell.contentEditable = "true"
+    // let partCell = tr.insertCell(-1)
+    // partCell.innerHTML = data[i].part
+    // partCell.dataset.id = data[i]._id
+    // partCell.className = "part"
+    // partCell.id = "part"
+    // partCell.contentEditable = "true"
 
     let number_machineCell = tr.insertCell(-1)
     if (data[i].number_machine) {

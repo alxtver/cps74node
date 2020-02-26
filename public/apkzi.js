@@ -32,13 +32,12 @@ function delBtn() {
 
 
 function CreateTableFromJSON(data) {
-    let col = ["type_pki", "vendor", "model", "serial_number", "country", "part", "number_machine", ""];
+    let col = ["type_pki", "vendor", "model", "serial_number", "country", "part", "number_machine"];
     let col_rus = ["ФДШИ",
-                   "Наименование АПКЗИ",
-                   "Наименование контроллера СЗИ",
-                   "Заводской номер",
-                   "Заводской номер контроллера",
-                   "Проект",
+                   "Наим. АПКЗИ",
+                   "Наим. контроллера СЗИ",
+                   "Зав. номер",
+                   "Зав. номер контроллера",      
                    "Номер машины",
                    '']
 
@@ -95,11 +94,11 @@ function CreateTableFromJSON(data) {
         kontr_zav_numberCell.className = "kontr_zav_number"        
         kontr_zav_numberCell.contentEditable = "true"
 
-        let partCell = tr.insertCell(-1)
-        partCell.innerHTML = data[i].part
-        partCell.dataset.id = data[i]._id
-        partCell.className = "part"
-        partCell.contentEditable = "true"
+        // let partCell = tr.insertCell(-1)
+        // partCell.innerHTML = data[i].part
+        // partCell.dataset.id = data[i]._id
+        // partCell.className = "part"
+        // partCell.contentEditable = "true"
 
         let number_machineCell = tr.insertCell(-1)
         number_machineCell.dataset.id = data[i]._id
