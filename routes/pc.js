@@ -106,6 +106,7 @@ router.post("/part", async function (req, res) {
 
 router.post('/insert_serial', auth, async (req, res) => {
   //Жесть пипец!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  const selected = req.body.part
   let pc = await PC.findById(req.body.id) //ищем комп который собираемся редактировать
   let pc_copy = await PC.findById(req.body.id) //и копию....
   let serial_number = req.body.serial_number
@@ -137,6 +138,34 @@ router.post('/insert_serial', auth, async (req, res) => {
       if (pki) {
         serial_number = serial_number.match(regex)[0]
       }
+    }
+  }
+
+  // проверка на черточки в мониках DELL
+  if (!pki && serial_number.length == 20) {    
+    let modifiedSN = ''    
+    for (let i = 0; i < serial_number.length; i++) {
+      modifiedSN += serial_number[i]
+      if (i == 1 || i == 7 || i == 12 || i == 15) {
+        modifiedSN += '-'
+      }
+    }
+    
+    query = {
+			$and: [{
+					$or: [{
+							serial_number: new RegExp(modifiedSN + '.*', "i")
+						}
+					]
+				},
+				{
+					part: req.session.part
+				}
+			]
+		}
+    pki = await PKI.findOne(query)
+    if (pki) {
+      serial_number = pki.serial_number
     }
   }
 
