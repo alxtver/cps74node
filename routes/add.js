@@ -32,10 +32,11 @@ router.post('/', auth, async (req, res) => {
   }
 
   if (ruLetter) {
-    flashErr = 'Смените раскладку клавиатуры'
+    let flashErr = 'Смените раскладку клавиатуры'
     req.flash('insertError', flashErr)
     res.redirect('/add')
-  } else {  
+  } else {
+    let flashErr = false
   if (req.body.ean_code) {
     ean = await EAN.findOne({ean_code: req.body.ean_code})
     if (!ean) {
@@ -57,7 +58,19 @@ router.post('/', auth, async (req, res) => {
     let regex = /SN\w*/g
     if (serial_number.match(regex)) {
       serial_number = serial_number.match(regex)[0]
-    }    
+    }
+  }
+
+  if ((req.body.vendor == 'Dell' || req.body.vendor == 'DELL') && req.body.type_pki == 'Монитор') {
+    let modifiedSN = ''
+    flashErr = 'Не забудь потом внести ревизию в серийные номера этих мониторов!!!'
+    for (let i = 0; i < serial_number.length; i++) {
+      modifiedSN += serial_number[i]
+      if (i == 1 || i == 7 || i == 12 || i == 15) {
+        modifiedSN += '-'
+      }           
+    }
+    serial_number = modifiedSN
   }
 
   const candidate = await Pki.findOne({
@@ -129,6 +142,7 @@ router.post('/', auth, async (req, res) => {
         part: req.session.part
       })
       log.save()
+      req.flash('insertError', flashErr)
       res.redirect('/add')
     } catch (e) {
       console.log(e)

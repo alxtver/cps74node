@@ -9,12 +9,29 @@ const APKZI = require('../models/apkzi')
 
 
 router.get('/', auth, async (req, res) => {
-  countPKI = await PKI.countDocuments()
-  countPC = await PC.countDocuments()
+  let countPKI = await PKI.countDocuments()
+  let countPC = 0
+  let docsPC = await PC.find()
+  for (const doc of docsPC) {
+    let sn = doc.serial_number
+      if (!sn.includes('Z') && !sn.includes('z')) {
+        countPC += 1
+      }
+  }
+
   let dateNow = new Date()  
-  let nowYear = Date.parse(dateNow.getFullYear())  
-  countPCinYear = await PC.countDocuments({created: {$gt: nowYear}})
-  countPKIinYear = await PKI.countDocuments({created: {$gt: nowYear}})
+  let nowYear = Date.parse(dateNow.getFullYear())
+  
+  let countPCinYear = 0
+  let docsPCinYear = await PC.find({created: {$gt: nowYear}})
+  for (const doc of docsPCinYear) {
+    let sn = doc.serial_number
+      if (!sn.includes('Z') && !sn.includes('z')) {
+        countPCinYear += 1
+      }
+  }
+
+  let countPKIinYear = await PKI.countDocuments({created: {$gt: nowYear}})
   let args_devel = {
     title: 'Главная страница',
     isHome: true,
@@ -35,7 +52,14 @@ router.post('/diagram', auth, async (req, res) => {
       }
     let arr = [['Проект', 'Процентное отношение']]
     for (const part of parts) {
-      let count = await PC.countDocuments({part: part})
+      let docsInPart = await PC.find({part:part})
+      let count = 0
+      for (const doc of docsInPart) {
+        let sn = doc.serial_number
+        if (!sn.includes('Z') && !sn.includes('z')) {
+          count += 1
+        }
+      }      
       arr.push([part, count])
     }
     res.send(arr)
