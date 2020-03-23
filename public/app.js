@@ -57,7 +57,7 @@ function loadSession() {
   if (sessionStorage.getItem("type_pki")) {
     document.getElementById("serial_number").focus()
   } else {
-    document.getElementById("type_pki").focus()
+    document.getElementById("ean_code").focus()
   }
 }
 
