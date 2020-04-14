@@ -1,8 +1,8 @@
 <script src="/pc.js"></script>
 <h1>Производство</h1>
 <button class="btn btn-dark mb-2" onclick="location.href='/pc/add';">Добавить ПЭВМ</button>
-<button id="excelImport" onclick="location.href='/projects/import';" class="btn btn-outline-success mb-2" >Экспорт в Excel</button>
-
+<button id="excelImport" onclick="location.href='/projects/import';" class="btn btn-outline-success mb-2">Экспорт в Excel</button>
+<button id="testPC" onclick="testPC()" class="btn btn-outline-success mb-2" data-toggle="modal" data-target="#modalTest">Проверка</button>
 
 
 <div class="popup-wrapper">
@@ -56,7 +56,7 @@
   </div>
 </div>
 
-{{!-- модальное окно --}}
+{{!-- модальное окно удаления--}}
 <div class="modal fade" id="modalDel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -74,7 +74,34 @@
         
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Закрыть</button>
-          <button type="button" id="btnSubmit" onclick="delBtn()" data-dismiss="modal" class="btn btn-danger">Удалить</button>        
+          <button type="button" id="btnSub" onclick="delBtn()" data-dismiss="modal" class="btn btn-danger">Удалить</button>        
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+{{!-- модальное окно теста--}}
+<div class="modal fade" id="modalTest" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ModalLabel">Пороверка ПЭВМ</h5>        
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form>
+        <p id="serial"></p>
+        <div id="testData">
+          
+        </div>
+        <input type="hidden" name="_csrf" value="{{csrf}}">
+        
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Закрыть</button>          
         </div>
       </form>
     </div>

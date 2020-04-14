@@ -1,4 +1,6 @@
-const {Router} = require('express')
+const {
+  Router
+} = require('express')
 const PC = require('../models/pc')
 const PKI = require('../models/pki')
 const APKZI = require('../models/apkzi')
@@ -12,7 +14,7 @@ router.get('/', auth, async (req, res) => {
     title: 'Машины',
     isPC: true,
     part: req.session.part,
-    serial_number: req.query.serial_number    
+    serial_number: req.query.serial_number
   })
 })
 
@@ -88,13 +90,19 @@ router.post('/add', auth, async (req, res) => {
 
 
 router.post("/search", auth, async function (req, res) {
-  pcs = await PC.find({part: req.session.part}).sort({'created': 1})
+  pcs = await PC.find({
+    part: req.session.part
+  }).sort({
+    'created': 1
+  })
   res.send(JSON.stringify(pcs)) // отправляем пришедший ответ обратно
 })
 
 
 router.post("/part", async function (req, res) {
-  parts = await Part.find().sort({created: -1})
+  parts = await Part.find().sort({
+    created: -1
+  })
   reqSesPart = req.session.part
   if (!req.body) return res.sendStatus(400);
   res.send(JSON.stringify({
@@ -142,27 +150,26 @@ router.post('/insert_serial', auth, async (req, res) => {
   }
 
   // проверка на черточки в мониках DELL
-  if (!pki && serial_number.length == 20) {    
-    let modifiedSN = ''    
+  if (!pki && serial_number.length == 20) {
+    let modifiedSN = ''
     for (let i = 0; i < serial_number.length; i++) {
       modifiedSN += serial_number[i]
       if (i == 1 || i == 7 || i == 12 || i == 15) {
         modifiedSN += '-'
       }
     }
-    
+
     query = {
-			$and: [{
-					$or: [{
-							serial_number: new RegExp(modifiedSN + '.*', "i")
-						}
-					]
-				},
-				{
-					part: req.session.part
-				}
-			]
-		}
+      $and: [{
+          $or: [{
+            serial_number: new RegExp(modifiedSN + '.*', "i")
+          }]
+        },
+        {
+          part: req.session.part
+        }
+      ]
+    }
     pki = await PKI.findOne(query)
     if (pki) {
       serial_number = pki.serial_number
@@ -182,7 +189,7 @@ router.post('/insert_serial', auth, async (req, res) => {
       } else {
         // если ПКИ задублировались, то чтобы при удалении одного не отвязывался другой
         // применяем цикл
-        let countPki = 0  
+        let countPki = 0
         for (let index = 0; index < pc[unit].length; index++) {
           if (pc[unit][index].serial_number == oldPki.serial_number) {
             countPki += 1
@@ -208,14 +215,18 @@ router.post('/insert_serial', auth, async (req, res) => {
   // Если ПКИ был привязан удаляем ПКИ из старой машины
   if (oldNumberMachine) {
     if (oldNumberMachine != pc.serial_number) {
-      let oldPC = await PC.findOne({serial_number: oldNumberMachine})
+      let oldPC = await PC.findOne({
+        serial_number: oldNumberMachine
+      })
       for (let index = 0; index < oldPC[unit].length; index++) {
         if (oldPC[unit][index].serial_number == pki.serial_number) {
           oldPC[unit][index].serial_number = ''
           oldPC[unit][index].name = 'Н/Д'
         }
       }
-      let newOldPC = await PC.findOne({serial_number: oldNumberMachine})
+      let newOldPC = await PC.findOne({
+        serial_number: oldNumberMachine
+      })
       newOldPC[unit] = oldPC[unit]
       await newOldPC.save()
     }
@@ -578,6 +589,38 @@ router.post('/delete', auth, async (req, res) => {
     _id: req.body.id
   })
   res.sendStatus(200)
+})
+
+
+router.post('/test', auth, async (req, res) => {
+  const pcs = await PC.find({
+    part: req.session.part
+  })
+  let serials = []
+  let results = []
+  for (const pc of pcs) {
+    var status = 'ok'
+    if (pc.pc_unit.length > 0) {
+      for (const unit of pc.pc_unit) {
+        if (unit.name == '' && unit.type != 'Системный блок' || unit.name == 'Н/Д' || unit.serial_number == '') {
+          status = 'not ok!'
+        }
+      }
+    }
+    if (pc.system_case_unit.length > 0) {
+      for (const unit of pc.system_case_unit) {
+        if (unit.type == '' || unit.name == '' || unit.name == 'Н/Д' || unit.serial_number == '') {
+          status = 'not ok!'
+        }
+      }
+    }
+    serials.push(pc.serial_number)
+    results.push(status)
+  }  
+  res.send(JSON.stringify({
+    serials: serials,
+    results: results
+  }))
 })
 
 

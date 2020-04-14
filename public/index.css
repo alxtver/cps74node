@@ -730,3 +730,10 @@ th {
 	display:none;
 }
 
+.cellOK {
+  background-color: PaleGreen;
+}
+
+.cellNotOK {
+  background-color: DeepPink;
+}

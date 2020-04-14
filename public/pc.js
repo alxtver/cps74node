@@ -383,7 +383,7 @@ function load_data(q) {
             $(this).css("background-color", "darkgray")
           }
         })
-        
+
         let current_id = $("#hidd_id").val()
         let next_id = current_id.split(";")
         next_id[1] = Number(next_id[1]) + 1 + ''
@@ -398,19 +398,19 @@ function load_data(q) {
         }
       })
 
-      let select = document.getElementById("serials")      
+      let select = document.getElementById("serials")
       for (const d of JSON.parse(data)) {
         let option = document.createElement("option")
         option.value = d.serial_number
-        option.text = d.serial_number        
-        select.add(option)        
+        option.text = d.serial_number
+        select.add(option)
       }
       $("#serials").selectpicker("refresh")
 
       if (q) {
         const serial_number_id = '#' + q
         $('html, body').animate({
-          scrollTop: $(serial_number_id).offset().top-70
+          scrollTop: $(serial_number_id).offset().top - 70
         }, 500)
       }
     }
@@ -1253,6 +1253,46 @@ function delBtn() {
     },
     success: function (data) {
       load_data()
+    }
+  })
+}
+
+function testPC() {
+  $("#testData").val('dsfsdfdffsdf')
+  $.ajax({
+    url: "/pc/test",
+    method: "POST",
+    headers: {
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    },
+    success: function (data) {
+      let serials = JSON.parse(data).serials
+      let results = JSON.parse(data).results
+      let divContainer = document.getElementById('testData')
+      divContainer.innerHTML = ""
+      let table = document.createElement("table");
+      table.className = "table table-sm table-bordered table-hover pctable"
+      for (let i = 0; i < serials.length; i++) {
+        let tr = table.insertRow(-1) // TABLE ROW.
+        let td = document.createElement("td")
+        if (results[i] == 'ok') {
+          td.className = 'cellOK'
+        } else {
+          td.className = 'cellNotOK'
+        }
+        td.innerHTML = serials[i]        
+        tr.appendChild(td)
+        td = document.createElement("td")
+        if (results[i] == 'ok') {
+          td.className = 'cellOK'
+        } else {
+          td.className = 'cellNotOK'
+        }
+        td.innerHTML = results[i]        
+        tr.appendChild(td)      
+      }
+      
+      divContainer.appendChild(table)
     }
   })
 }
