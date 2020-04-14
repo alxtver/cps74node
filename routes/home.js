@@ -6,6 +6,7 @@ const PKI = require('../models/pki')
 const PC = require('../models/pc')
 const User = require('../models/user')
 const APKZI = require('../models/apkzi')
+const Part = require('../models/part')
 
 
 router.get('/', auth, async (req, res) => {
@@ -151,6 +152,65 @@ router.get('/script', authAdmin, async (req, res) => {
   //   await pkiNew.save()
   // }
 
+
+  // скрипт разделения лот 10,11 (2020) на два лота
+  let pcs = await PC.find({part: 'ЛОТ 10,11(2020)'})
+  const new_part10 = new Part({part: 'ЛОТ 10(2020)'})
+  const new_part11 = new Part({part: 'ЛОТ 11(2020)'})
+  new_part10.save()
+  new_part11.save()
+  console.log(pcs.length);
+  for (const pc of pcs) {
+    if (pc.serial_number.includes('-049-')) {
+      console.log(pc.serial_number)
+      console.log('изменен на ЛОТ 10(2020)')
+      pc.part = 'ЛОТ 10(2020)'
+      await pc.save()
+    } else {
+      console.log(pc.serial_number)
+      console.log('изменен на ЛОТ 11(2020)')
+      pc.part = 'ЛОТ 11(2020)'
+      await pc.save()
+    }
+  }
+  let pkis = await PKI.find({part: 'ЛОТ 10,11(2020)'})
+  for (const pki of pkis) {
+    if (!pki.number_machine) {
+      pki.part = 'ЛОТ 10(2020)'
+      await pki.save()
+      console.log(pki.type_pki + ' ' + pki.vendor + ' ' + pki.model + ' изменен на ЛОТ 10(2020)')      
+    } else if (pki.serial_number.includes('-049-')){
+      pki.part = 'ЛОТ 10(2020)'
+      await pki.save()
+      console.log(pki.type_pki + ' ' + pki.vendor + ' ' + pki.model + ' изменен на ЛОТ 10(2020)')
+    } else if (pki.number_machine.includes('-049-')){
+      pki.part = 'ЛОТ 10(2020)'
+      await pki.save()
+      console.log(pki.type_pki + ' ' + pki.vendor + ' ' + pki.model + ' изменен на ЛОТ 10(2020)')
+    } else if (pki.serial_number.includes('-050-')){
+      pki.part = 'ЛОТ 11(2020)'
+      await pki.save()
+      console.log(pki.type_pki + ' ' + pki.vendor + ' ' + pki.model + ' изменен на ЛОТ 10(2020)')
+    } else {
+      pki.part = 'ЛОТ 11(2020)'
+      await pki.save()
+      console.log(pki.type_pki + ' ' + pki.vendor + ' ' + pki.model + ' изменен на ЛОТ 10(2020)')
+    }
+  }
+  let apkzis = await APKZI.find({part: 'ЛОТ 10,11(2020)'})
+  for (const apkzi of apkzis) {
+    if (apkzi.number_machine.includes('-049-')) {
+      console.log(apkzi.number_machine)
+      console.log('изменен на ЛОТ 10(2020)')
+      apkzi.part = 'ЛОТ 10(2020)'
+      await apkzi.save()
+    } else {
+      console.log('АПКЗИ с машины с номером ' + apkzi.number_machine + ' изменен на ЛОТ 11(2020)')
+      apkzi.part = 'ЛОТ 11(2020)'
+      await apkzi.save()
+    }
+  }
+  Part.deleteOne({part: 'ЛОТ 10,11(2020)'}, function (err) {});  
   res.send('Скрипт отработал!')
 })
 
