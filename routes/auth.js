@@ -32,11 +32,11 @@ router.get('/register', authAdmin, async (req, res) => {
 
 router.get('/logout', async (req, res) => { 
     if (req.session.user.username == 'Kalinin') {
-        console.log(`User ${req.session.user.username}👑 is loguot`)
+        console.log(`User ${req.session.user.username}👑 is logout`)
     } else {
-        console.log(`User ${req.session.user.username} is loguot`)
+        console.log(`User ${req.session.user.username} is logout`)
     }
-    let note = `User ${req.session.user.username} is loguot`
+    let note = `User ${req.session.user.username} is logout`
     let log = new LOG({
         event: 'User logout',
         note: note,
