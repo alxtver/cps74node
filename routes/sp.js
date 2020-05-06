@@ -1022,7 +1022,7 @@ router.get("/excelExport1", auth, async function (req, res) {
 		},
 	})
 	let pkis = await Pki.find({part: req.session.part}).sort({type_pki: 1})
-	const pcs = await PC.find({part: req.session.part})
+	const pcs = await PC.find({part: req.session.part}).sort({'created': 1})
 
 
 	// ws.column(1).setWidth(3)
