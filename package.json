@@ -24,7 +24,7 @@
     "excel4node": "^1.7.2",
     "express": "^4.17.1",
     "express-favicon": "^2.0.1",
-    "express-handlebars": "^3.1.0",
+    "express-handlebars": "=3.1.0",
     "express-session": "^1.17.0",
     "mongoose": "^5.9.9",
     "npm": "^6.13.6",
@@ -33,6 +33,7 @@
     "uuid": "^3.4.0"
   },
   "devDependencies": {
+    "handlebars": "^4.7.6",
     "nodemon": "^1.19.4"
   }
 }
