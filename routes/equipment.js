@@ -84,6 +84,9 @@ router.get('/:id/edit', auth, async (req, res) => {
   if (!req.query.allow) {
     return res.redirect('/')
   }
+  console.log('!!!!!!!!!!!!!!!!!!!!!')
+  console.log(req.params.id)
+  console.log('!!!!!!!!!!!!!!!!!!!!!')
   const ean = await EAN.findById(req.params.id)
 
   res.render('eq-edit', {
