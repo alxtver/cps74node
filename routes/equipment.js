@@ -84,15 +84,18 @@ router.get('/:id/edit', auth, async (req, res) => {
   if (!req.query.allow) {
     return res.redirect('/')
   }
+  const id = req.params.id
   console.log('!!!!!!!!!!!!!!!!!!!!!')
-  console.log(req.params.id)
+  console.log(id)
+  const ean = await EAN.findById(id)
+  console.log(ean)
   console.log('!!!!!!!!!!!!!!!!!!!!!')
-  const ean = await EAN.findById(req.params.id)
+  
 
   res.render('eq-edit', {
     title: `Редактировать ${ean.type_pki}`,
     part: req.session.part,
-    ean
+    ean: ean
   })
 })
 
