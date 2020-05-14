@@ -43,7 +43,7 @@ router.get('/:id/edit', auth, async (req, res) => {
   if (!req.query.allow) {
     return res.redirect('/')
   }
-  const apkzi = await Apkzi.findById(req.params.id)
+  const apkzi = await Apkzi.findById(req.params.id).lean()
   res.render('apkzi-edit', {
     title: `Редактировать ${apkzi.zav_number}`,
     apkzi
@@ -52,6 +52,7 @@ router.get('/:id/edit', auth, async (req, res) => {
 
 router.post('/edit', auth, async (req, res) => {
   const apkzi = await Apkzi.findByIdAndUpdate(req.body.id, req.body)
+  console.log(req.body)
   await Apkzi.find().distinct('part', function (error, part) {
     res.render('apkzi', {
       title: 'АПКЗИ',

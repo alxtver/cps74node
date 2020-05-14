@@ -63,16 +63,17 @@
   
       <input type="hidden" name="_csrf" value="{{csrf}}">
       <button type="submit" class="btn btn-outline-success">Сохранить</button>
-      <input type="button" value="Назад" class="btn btn-outline-primary" onclick="window.location='/equipment';">
-      
+      <input type="button" value="Назад" class="btn btn-outline-primary" onclick="window.location='/equipment';">      
     </form>
   </div>
 </div>
 
 
 <script>
-  $(document).ready(function () {    
-    let ean_id = `{{ean.id}}`
+  $(document).ready(function () {
+    let decodedEan = decodeURIComponent("{{{encodedEan}}}")
+    let jsonObj = JSON.parse(decodedEan)
+    let ean_id = jsonObj._id
     load_table_sp(ean_id)
     document.getElementById("ean_code").focus()
     $("#add-row").click(function () {

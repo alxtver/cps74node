@@ -323,8 +323,7 @@ function changeSelectType(selectedItem) {
   })
 }
 
-function CreateTableSP() { 
-  
+function CreateTableSP() {  
   let col_rus = ["Наименование", "Фирма", "Модель", "Количество", "Серийный (инв.) номер", "СЗЗ Тип 2"]
 
   let table = document.createElement("table");
@@ -442,7 +441,6 @@ function CreateTableSP() {
 
 function CreateTableSP_PKI(pki) {
 
-  
   let col_rus = ["Наименование", "Фирма", "Модель", "Количество", "Серийный (инв.) номер", "СЗЗ Тип 2"]
 
   let table = document.createElement("table");
@@ -585,8 +583,6 @@ function load_table_sp(pki_id) {
     }
   })
 }
-
-
 
 
 function load_table_viborka(pki_id, viborka) {

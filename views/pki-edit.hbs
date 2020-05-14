@@ -1,10 +1,9 @@
-<h1>Редактировать {{pki.vendor}} {{pki.model}}</h1>
+<h2>Редактировать {{pki.vendor}} {{pki.model}}</h2>
 
 <div class="wrapper fadeInDown">
   <div id="formContent">
-    <!-- Tabs Titles -->
 
-    <form action="/pkis/edit" method="POST" class="needs-validation pki-form" novalidate>
+    <form action="/pkis/edit" method="POST" class="needs-validation" novalidate>
 
       <div class="input-field">
         <input id="type_pki" name="type_pki" type="text" class="form-control" aria-describedby="pkilHelp"
@@ -63,12 +62,16 @@
       </div>
 
       <div class="input-field">
-        <input hidden="true" id="_id" name="_id" type="text" class="form-control" value="{{pki.id}}" required>
+        <input type="hidden" name="id" value="{{pki._id}}">
+        
       </div>
 
       <input type="hidden" name="_csrf" value="{{csrf}}">
 
       <button type="submit" class="btn btn-outline-success">Сохранить</button>
+      
     </form>
+
+
   </div>
 </div>

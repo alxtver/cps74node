@@ -379,7 +379,7 @@ router.get('/:id/edit', auth, async (req, res) => {
   if (!req.query.allow) {
     return res.redirect('/')
   }
-  const pc = await PC.findById(req.params.id)
+  const pc = await PC.findById(req.params.id).lean()
 
   res.render('pc-edit', {
     title: `Редактирование ${pc.serial_number}`,

@@ -31,7 +31,7 @@ router.get('/:id/edit', auth, async (req, res) => {
   if (!req.query.allow) {
     return res.redirect('/')
   }
-  const pki = await Pki.findById(req.params.id)
+  const pki = await Pki.findById(req.params.id).lean()
   res.render('pki-edit', {
     title: `Редактировать ${pki.type_pki}`,
     pki
@@ -40,7 +40,8 @@ router.get('/:id/edit', auth, async (req, res) => {
 
 
 router.post('/edit', auth, async (req, res) => {
-  await Pki.findByIdAndUpdate(req.body._id, req.body)
+  console.log(req.body)
+  await Pki.findByIdAndUpdate(req.body.id, req.body)
   res.redirect('/pkis')
 })
 

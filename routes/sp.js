@@ -180,11 +180,12 @@ router.get('/:id/edit', auth, async (req, res) => {
 	if (!req.query.allow) {
 		return res.redirect('/')
 	}
-	const pki = await Pki.findById(req.params.id)
+	const pki = await Pki.findById(req.params.id).lean()
 	res.render('sp-pki-edit', {
 		title: `Редактировать ${pki.type_pki}`,
 		part: req.session.part,
-		pki
+		pki: pki,
+		encodedPki : encodeURIComponent(JSON.stringify(pki))
 	})
 })
 
@@ -197,13 +198,11 @@ router.post('/edit', auth, async (req, res) => {
 
 
 router.get('/sp_unit', auth, async (req, res) => {
-	const pki = await Pki.findById(req.query.id)
+	const pki = await Pki.findById(req.query.id).lean()
 	if (pki.sp_unit && pki.sp_unit.length > 0) {
 		res.send(pki)
 	} else if (pki.ean_code) {
-		ean = await EAN.findOne({
-			ean_code: pki.ean_code
-		})
+		ean = await EAN.findOne({ean_code: pki.ean_code})
 		if (ean && ean.sp_unit.length > 0) {
 			res.send(ean)
 		} else {

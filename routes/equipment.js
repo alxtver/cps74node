@@ -43,7 +43,6 @@ router.post('/add', auth, async (req, res) => {
   const country = req.body.country
   const sp_unit = req.body.sp_unit
   const sp_unit1 = req.body.sp_unit1
-
   const oldEan = await EAN.findOne({ean_code: ean_code})
 
   if (!oldEan && !req.body.sp_unit1) {
@@ -84,19 +83,18 @@ router.get('/:id/edit', auth, async (req, res) => {
   if (!req.query.allow) {
     return res.redirect('/')
   }
-  const id = req.params.id
-  console.log('!!!!!!!!!!!!!!!!!!!!!')
-  console.log(id)
-  const ean = await EAN.findById(id)
-  console.log(ean)
-  console.log('!!!!!!!!!!!!!!!!!!!!!')
-  
-
-  res.render('eq-edit', {
-    title: `Редактировать ${ean.type_pki}`,
-    part: req.session.part,
-    ean: ean
-  })
+  try {
+    const id = req.params.id
+    const ean = await EAN.findById(id).lean()
+    res.render('eq-edit', {
+      title: `Редактировать ${ean.type_pki}`,
+      part: req.session.part,
+      ean: ean,
+      encodedEan : encodeURIComponent(JSON.stringify(ean))
+    })
+  } catch (error) {
+    next(error)
+  }  
 })
 
 
@@ -107,8 +105,6 @@ router.post('/edit', auth, async (req, res) => {
   const model = req.body.model
   const country = req.body.country
   const sp_unit = req.body.sp_unit
-
-  //console.log(req.body.sp_unit1.length);
   if (req.body.sp_unit1) {
     await EAN.findOneAndUpdate({ean_code: ean_code}, req.body)
   } else {

@@ -41,11 +41,13 @@
 
 <script>
   $(document).ready(function () {    
-    let viborka = `{{pki.viborka}}`
+    let decodedPki = decodeURIComponent("{{{encodedPki}}}")
+    let jsonObj = JSON.parse(decodedPki)
+    let viborka = jsonObj.viborka    
     if (viborka == 'true'){
       $('#viborka').prop('checked', true)      
     }
-    let pki_id = `{{pki.id}}`
+    let pki_id = jsonObj._id
     load_table_sp(pki_id)
     $('#viborka').click(function(){      
       if ($(this).is(':checked')){

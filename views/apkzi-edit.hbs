@@ -3,7 +3,7 @@
 <div class="wrapper fadeInDown">
   <div id="formContent">
 
-    <form action="/apkzi/edit" method="POST" class="needs-validation" novalidate>
+  <form action="/apkzi/edit" method="POST" class="needs-validation" novalidate>
 
   <div class="input-field">
     <input id="fdsi" name="fdsi" type="text"  value="{{apkzi.fdsi}}" class="form-control" aria-describedby="modelHelp" placeholder="ФДШИ" required>
@@ -48,7 +48,6 @@
   </div>
 
   <input type="hidden" name="id" value="{{apkzi._id}}">
-  
  
   <input type="hidden" name="_csrf" value="{{csrf}}">
   <button type="submit" class="btn btn-outline-success">Редактировать АПКЗИ</button>
