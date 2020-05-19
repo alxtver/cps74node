@@ -191,8 +191,15 @@ router.get('/:id/edit', auth, async (req, res) => {
 
 
 router.post('/edit', auth, async (req, res) => {
+	console.log(req.body)
 	const id = req.body.id
 	await Pki.findByIdAndUpdate(id, req.body)
+	let pki = await Pki.findById(id)
+	if (req.body.ean_code != '' && pki.sp_unit.length == 0) {
+		let ean = await EAN.find({ean_code: req.body.ean_code})
+		pki.sp_unit = ean.sp_unit
+		await pki.save()
+	}
 	res.redirect('/sp')
 })
 

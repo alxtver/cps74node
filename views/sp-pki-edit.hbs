@@ -26,11 +26,11 @@
       <label class="form-check-label" for="viborka">Выборка</label>
     </div>
     <form id="edit" action="/sp">
-      <input hidden="true" id="id" name="id" type="text" class="form-control" value="{{pki.id}}" required>
+      <input hidden="true" id="id" name="id" type="text" class="form-control" value="{{pki._id}}">
       <div id="pki_sp_table"></div>
     
       <input type="hidden" name="_csrf" value="{{csrf}}">
-      <input type="hidden" id="pki_id" value="{{pki._id}}">
+      <input type="hidden" name="id" id="pki_id" value="{{pki._id}}">
       <div class="mt-5">
         <button type="submit" class="btn btn-outline-success">Сохранить</button>
         <input type="button" value="Назад" class="btn btn-outline-primary" onclick="window.location='/sp';">
