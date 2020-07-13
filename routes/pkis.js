@@ -457,7 +457,6 @@ router.get('/autocomplete', auth, async (req, res) => {
 
 
 router.post('/searchAndReplace', auth, async (req, res) => {
-
   let pkisByModel = await Pki.find({part: req.session.part, model: req.body.search})
   if (pkisByModel.length > 0) {
     for (const pki of pkisByModel) {

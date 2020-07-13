@@ -6,12 +6,16 @@
   <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Штрих-код">
 </div>
 
+<select id="type_select_navbar" class="custom-select mt-2 mb-2"></select>
+
 <div id="showData"></div>
 
 <script>
   $(document).ready(function () {
     load_data()
-
+  $(document).on('change', '#type_select_navbar', function () {	
+        load_data($("#type_select_navbar :selected").text())	
+      })
     $('#search').keyup(function () {
       let search = $(this).val()
       let blank_req = 'null'

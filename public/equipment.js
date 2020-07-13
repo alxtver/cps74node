@@ -339,6 +339,11 @@ function load_data(q) {
     },
     success: function (data) {      
       CreateTableFromJSON(JSON.parse(data).eans)
+      CreateSelectType(JSON.parse(data).types, function () {
+        if (JSON.parse(data).selectedType) {
+          $("#type_select_navbar option:contains(" + JSON.parse(data).selectedType + ")").prop('selected', true)
+        }
+      })
     }
   })
 }
@@ -470,3 +475,34 @@ $(function() {
     }
   })
 })
+
+
+function load_type_select() {
+  $.ajax({
+    url: "/sp/types",
+    method: "POST",
+    //async: false,
+    headers: {
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    },
+    success: function (data) {
+      console.log(data)
+      if (data) {
+        CreateSelectType(JSON.parse(data).parts, function () {
+          if (JSON.parse(data).reqSesPart) {
+            $("#type_select_navbar").empty();
+            $("#type_select_navbar option:contains(" + JSON.parse(data).reqSesPart + ")").prop('selected', true)
+          }
+        })
+      }
+    }
+  })
+}
+
+function CreateSelectType(data, callback) {
+  $("#type_select_navbar").append($('<option value="">...</option>'));
+  for (let i = 0; i < data.length; i++) {
+    $('#type_select_navbar').append('<option value="' + data[i] + '">' + data[i] + '</option>')
+  }
+  callback()
+}

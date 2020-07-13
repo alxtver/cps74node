@@ -30,8 +30,20 @@ router.get('/add', auth, (req, res) => {
 
 
 router.get('/load', auth, async (req, res) => {
-  const eans = await EAN.find().limit(50).sort({created: -1})
-  res.send(JSON.stringify({eans: eans}))
+  console.log(req.query.q)
+  let type = req.query.q
+  console.log(type)
+  let eans
+  if (!type || type == '...') {
+    eans = await EAN.find().limit(50).sort({created: -1})
+  } else {
+    eans = await EAN.find({type_pki: req.query.q}).sort({created: -1})
+  }
+  const typesList = await EAN.find().distinct('type_pki')
+  res.send(JSON.stringify({
+    eans: eans,
+    types: typesList
+  }))
 })
 
 
