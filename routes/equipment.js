@@ -30,9 +30,7 @@ router.get('/add', auth, (req, res) => {
 
 
 router.get('/load', auth, async (req, res) => {
-  console.log(req.query.q)
   let type = req.query.q
-  console.log(type)
   let eans
   if (!type || type == '...') {
     eans = await EAN.find().limit(50).sort({created: -1})
