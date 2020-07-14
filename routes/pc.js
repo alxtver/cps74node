@@ -215,20 +215,18 @@ router.post('/insert_serial', auth, async (req, res) => {
   // Если ПКИ был привязан удаляем ПКИ из старой машины
   if (oldNumberMachine) {
     if (oldNumberMachine != pc.serial_number) {
-      let oldPC = await PC.findOne({
-        serial_number: oldNumberMachine
-      })
-      for (let index = 0; index < oldPC[unit].length; index++) {
-        if (oldPC[unit][index].serial_number == pki.serial_number) {
-          oldPC[unit][index].serial_number = ''
-          oldPC[unit][index].name = 'Н/Д'
+      let oldPC = await PC.findOne({serial_number: oldNumberMachine})
+      if (oldPC) {
+        for (let index = 0; index < oldPC[unit].length; index++) {
+          if (oldPC[unit][index].serial_number == pki.serial_number) {
+            oldPC[unit][index].serial_number = ''
+            oldPC[unit][index].name = 'Н/Д'
+          }
         }
+        let newOldPC = await PC.findOne({serial_number: oldNumberMachine})
+        newOldPC[unit] = oldPC[unit]
+        await newOldPC.save()
       }
-      let newOldPC = await PC.findOne({
-        serial_number: oldNumberMachine
-      })
-      newOldPC[unit] = oldPC[unit]
-      await newOldPC.save()
     }
   }
 
@@ -544,6 +542,7 @@ router.post('/pc_edit', auth, async (req, res) => {
 
 router.post('/pc_update', auth, async (req, res) => {
   const pc = await PC.findById(req.body.id)
+  const serialNumber = pc.serial_number  
   pc.part = req.body.part
   pc.fdsi = req.body.fdsi
   pc.serial_number = req.body.serial_number
@@ -551,23 +550,32 @@ router.post('/pc_update', auth, async (req, res) => {
   pc.execution = req.body.execution
   pc.attachment = req.body.attachment
   pc.back_color = req.body.color
-  newPCUnit = []
-  newSystemCaseUnit = []
+  let newPCUnit = []
+  let newSystemCaseUnit = []
   // добавление объектов в массив pc_unit
   const pc_unit = req.body.pc_unit
-  json_pc = JSON.parse(pc_unit)
+  let json_pc = JSON.parse(pc_unit)
   for (let i = 0; i < json_pc.length; i++) {
     newPCUnit.push(json_pc[i]);
   }
   // добавление объектов в массив system_case_unit
   const system_case_unit = req.body.system_case_unit
-  json_system = JSON.parse(system_case_unit)
+  let json_system = JSON.parse(system_case_unit)
   for (let i = 0; i < json_system.length; i++) {
     newSystemCaseUnit.push(json_system[i])
   }
   pc.pc_unit = newPCUnit
   pc.system_case_unit = newSystemCaseUnit
   await pc.save()
+  // изменение привязки ПКИ при изменении серийника машины
+  if (serialNumber != req.body.serial_number) {
+    await PKI.updateMany({
+      part: pc.part,
+      number_machine: serialNumber
+    }, {
+      number_machine: req.body.serial_number
+    })
+  }
 })
 
 
