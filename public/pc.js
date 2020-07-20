@@ -735,7 +735,11 @@ function TableEditPcUnit(pc) {
     quantityCell.contentEditable = "true"
 
     let serial_numberCell = tr.insertCell(-1)
-    serial_numberCell.innerHTML = arr_pc_unit[j].serial_number
+    let sn = arr_pc_unit[j].serial_number
+    serial_numberCell.innerHTML = sn
+    if (sn == pc.serial_number) {
+      serial_numberCell.dataset.number_machine = 'numberMachine'
+    }
     serial_numberCell.dataset.id = pc._id
     serial_numberCell.dataset.obj = j
     serial_numberCell.dataset.unit = 'pc_unit'
@@ -835,7 +839,11 @@ function TableEditSystemCase(pc) {
     quantityCell.contentEditable = "true"
 
     let serial_numberCell = tr.insertCell(-1)
-    serial_numberCell.innerHTML = arr_system_case_unit[j].serial_number
+    let sn = arr_system_case_unit[j].serial_number
+    serial_numberCell.innerHTML = sn
+    if (sn == pc.serial_number) {
+      serial_numberCell.dataset.number_machine = 'numberMachine'
+    }
     serial_numberCell.dataset.id = pc._id
     serial_numberCell.dataset.obj = j
     serial_numberCell.dataset.unit = 'system_case_unit'
@@ -1120,7 +1128,6 @@ function edit_serial_number(id, obj, unit, serial_number) {
       })
     }
   })
-
 }
 
 

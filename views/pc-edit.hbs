@@ -167,4 +167,16 @@
       //    }
     })
   })
+
+  $('#serial_number').keyup(function() {
+      let sn = `{{pc.serial_number}}`
+      let search = $(this).val()
+      let numbers = document.getElementsByClassName('serial_number')
+      for (const number of numbers) {
+        if (number.dataset.number_machine) {
+          number.innerHTML = search
+        }
+      }
+    })
+
 </script>
