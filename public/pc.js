@@ -1131,8 +1131,6 @@ function edit_serial_number(id, obj, unit, serial_number) {
 }
 
 
-
-
 function edit_serial_number_apkzi(id, obj, unit, serial_number) {
   $.ajax({
     url: "/pc/insert_serial_apkzi",
@@ -1202,11 +1200,17 @@ function UpdateCells(pc, how, callback) {
       }
       $(".serial_number[data-data='" + next_id.join(';') + "']").focus()
 
-      //TextToSpeech      
-      let row = $(".serial_number[data-data='" + next_id.join(';') + "']").parent()[0]
-      let textToSpeech = row.innerText.split('	')[1]
-      const ut = new SpeechSynthesisUtterance(textToSpeech);
-      speechSynthesis.speak(ut);
+      //TextToSpeech
+      if (sessionStorage.getItem("sound") === 'on') {
+        let row = $(".serial_number[data-data='" + next_id.join(';') + "']").parent()[0]
+        let textToSpeech = row.innerText.split('	')[1]
+        const ut = new SpeechSynthesisUtterance(textToSpeech)
+        ut.lang = 'ru-RU'
+        ut.rate = 1.1
+        // ut.pitch = 1
+        speechSynthesis.speak(ut)
+      }
+      
 
       $("td.serial_number").each(function () {
         if (!$(this).text()) {
@@ -1309,4 +1313,21 @@ function testPC() {
       divContainer.appendChild(table)
     }
   })
+}
+
+function setSoundSessionOn() {  
+  sessionStorage.setItem("sound", "on")
+  document.getElementById("soundOff").hidden = true
+  document.getElementById("soundOn").hidden = false
+}
+
+function setSoundSessionOff() {  
+  sessionStorage.setItem("sound", "off")
+  document.getElementById("soundOff").hidden = false
+  document.getElementById("soundOn").hidden = true
+  speechSynthesis.cancel()
+}
+
+function getSoundSession() {  
+  sessionStorage.getItem("sound")
 }
