@@ -1197,9 +1197,16 @@ function UpdateCells(pc, how, callback) {
       nextCellText = $(".serial_number[data-data='" + next_id.join(';') + "']").text()
       while (nextCellText == 'б/н' || nextCellText == 'Б/Н') {
         next_id[1] = Number(next_id[1]) + 1 + ''
+
         nextCellText = $(".serial_number[data-data='" + next_id.join(';') + "']").text()
       }
       $(".serial_number[data-data='" + next_id.join(';') + "']").focus()
+
+      //TextToSpeech      
+      let row = $(".serial_number[data-data='" + next_id.join(';') + "']").parent()[0]
+      let textToSpeech = row.innerText.split('	')[1]
+      const ut = new SpeechSynthesisUtterance(textToSpeech);
+      speechSynthesis.speak(ut);
 
       $("td.serial_number").each(function () {
         if (!$(this).text()) {
