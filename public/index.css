@@ -737,3 +737,15 @@ th {
 .cellNotOK {
   background-color: DeepPink;
 }
+
+.soundButton {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+}
+
+.soundButtonSlash {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+}
