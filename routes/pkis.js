@@ -39,8 +39,7 @@ router.get('/:id/edit', auth, async (req, res) => {
 })
 
 
-router.post('/edit', auth, async (req, res) => {
-  console.log(req.body)
+router.post('/edit', auth, async (req, res) => {  
   await Pki.findByIdAndUpdate(req.body.id, req.body)
   res.redirect('/pkis')
 })

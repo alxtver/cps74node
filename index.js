@@ -16,6 +16,7 @@ const spRoutes = require('./routes/sp')
 const logsRoutes = require('./routes/logs')
 const equipmentRoutes = require('./routes/equipment')
 const projectsRoutes = require('./routes/projects')
+const countriesRoutes = require('./routes/countries')
 const favicon = require('express-favicon')
 const varMiddleware = require('./middleware/variables')
 const userMiddleware = require('./middleware/user')
@@ -66,6 +67,7 @@ app.use('/auth', authRoutes)
 app.use('/sp', spRoutes)
 app.use('/equipment', equipmentRoutes)
 app.use('/logs', logsRoutes)
+app.use('/countries', countriesRoutes)
 
 
 const PORT = process.env.PORT || 3000

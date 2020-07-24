@@ -1,0 +1,29 @@
+<h2></h2>
+
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+
+    <form action="/countries/edit" method="POST" class="needs-validation" novalidate>
+
+      <div class="input-field">
+        <input id="country" name="country" type="text" class="form-control" aria-describedby="pkilHelp"
+          placeholder="Страна производитель" value="{{country.country}}" required>
+        <div class="invalid-feedback">
+          Введите страну!
+        </div>
+      </div>
+
+      <div class="input-field">
+        <input type="hidden" name="id" value="{{country._id}}">
+        
+      </div>
+
+      <input type="hidden" name="_csrf" value="{{csrf}}">
+
+      <button type="submit" class="btn btn-outline-success">Сохранить</button>
+      
+    </form>
+
+
+  </div>
+</div>

@@ -34,6 +34,17 @@
           {{else}}
             <li class="nav-item"><a class="nav-link" href="/pc">Производство</a></li>
           {{/if}}
+          <li class="nav-item dropdown">
+            {{#if isEquipment}}
+              <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">БД</a>
+            {{else}}
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">БД</a>
+            {{/if}}
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="/equipment">БД Штрихкоды</a>
+              <a class="dropdown-item" href="/countries">БД Страны</a>
+             </div>
+          </li>          
         {{/if}}
       {{/if}}
 
@@ -44,20 +55,17 @@
         {{else}}
           <li class="nav-item"><a class="nav-link" href="/sp">Спецпроверка</a></li>
         {{/if}}
-
+        {{#if isEquipment}}
+          <li class="nav-item active"><a class="nav-link" href="/equipment">Оборудование</a></li>
+        {{else}}
+          <li class="nav-item"><a class="nav-link" href="/equipment">Оборудование</a></li>
+        {{/if}}
         
       {{/if}}
 
       
 
       {{#if isAuth}}
-
-      {{#if isEquipment}}
-          <li class="nav-item active"><a class="nav-link" href="/equipment">Оборудование</a></li>
-        {{else}}
-          <li class="nav-item"><a class="nav-link" href="/equipment">Оборудование</a></li>
-        {{/if}}
-        
         {{#if isProjects}}
          <li class="nav-item active"><a class="nav-link" href="/projects">Проекты</a></li>
         {{else}}
