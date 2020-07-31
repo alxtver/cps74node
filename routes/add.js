@@ -45,8 +45,9 @@ router.post('/', auth, async (req, res) => {
        ruToEnSN += l
      }     
    }
+   serial_number = ruToEnSN
   }
-  serial_number = ruToEnSN
+  
 
   // if (ruLetter) {
   //   let flashErr = 'Смените раскладку клавиатуры'

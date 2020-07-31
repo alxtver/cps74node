@@ -28,6 +28,7 @@
     "express-handlebars": "^4.0.4",
     "express-session": "^1.17.1",
     "mongoose": "^5.9.25",
+    "node-fetch": "^2.6.0",
     "npm": "^6.14.7",
     "officegen": "^0.6.4",
     "pizzip": "^3.0.6",
