@@ -1,6 +1,4 @@
-const {
-  Router
-} = require('express')
+const {Router} = require('express')
 const Pki = require('../models/pki')
 const Apkzi = require('../models/apkzi')
 const Country = require('../models/country')
@@ -9,6 +7,8 @@ const EAN = require('../models/ean')
 const LOG = require('../models/logs')
 const auth = require('../middleware/auth')
 const router = Router()
+const snModifer = require('./foo/snModifer')
+// import {snModifer} from './foo/snModifer'
 
 router.get('/', auth, (req, res) => {
   res.render('add', {
@@ -21,157 +21,111 @@ router.get('/', auth, (req, res) => {
 
 router.post('/', auth, async (req, res) => {
   let serial_number = req.body.serial_number
+  let vendor = req.body.vendor
   let ean
-  let ruLetter = false
-
-  //Проверка на русские символы в серийнике
-  for (const letter of serial_number) {
-    let x = letter.charCodeAt(0)
-    if (x > 122) {
-      ruLetter = true
-      break
-    }
-  }
+  let eanCode = req.body.ean_code
+  let typePki = req.body.type_pki
   
-  let ruToEnSN = ''
-  if (ruLetter) {
-   const ruLet =  'ЙЦУКЕНГШЩЗФЫВАПРОЛДЯЧСМИТЬ'
-   const engLet = 'QWERTYUIOPASDFGHJKLZXCVBNM'
-   for (const l of serial_number.toUpperCase()) {
-     ind = ruLet.indexOf(l)
-     if (ind >= 0) {
-      ruToEnSN += engLet[ind]
-     } else {
-       ruToEnSN += l
-     }     
-   }
-   serial_number = ruToEnSN
-  }
-  
-
-  // if (ruLetter) {
-  //   let flashErr = 'Смените раскладку клавиатуры'
-  //   req.flash('insertError', flashErr)
-  //   res.redirect('/add')
-  // } else {
-    let flashErr = false
-    if (req.body.ean_code) {
-      ean = await EAN.findOne({
-        ean_code: req.body.ean_code
-      })
-      if (!ean) {
-        const new_ean = new EAN({
-          ean_code: req.body.ean_code,
-          type_pki: req.body.type_pki,
-          vendor: req.body.vendor,
-          model: req.body.model,
-          country: req.body.country
-        })
-        new_ean.save()
-      }
-      if (req.body.ean_code == '4718390028172') {
-        serial_number = serial_number.split(' ').reverse().join(' ')
-      }
-    }
-
-    if (req.body.vendor == 'Gigabyte' || req.body.vendor == 'GIGABYTE') {
-      let regex = /SN\w*/g
-      if (serial_number.match(regex)) {
-        serial_number = serial_number.match(regex)[0]
-      }
-    }
-
-    if ((req.body.vendor == 'Dell' || req.body.vendor == 'DELL') && req.body.type_pki == 'Монитор') {
-      let modifiedSN = ''
-      flashErr = 'Не забудь потом внести ревизию в серийные номера этих мониторов!!!'
-      for (let i = 0; i < serial_number.length; i++) {
-        modifiedSN += serial_number[i]
-        if (i == 1 || i == 7 || i == 12 || i == 15) {
-          modifiedSN += '-'
-        }
-      }
-      serial_number = modifiedSN
-    }
-
-    const candidate = await Pki.findOne({
-      serial_number: serial_number,
-      part: req.body.part
+  if (req.body.ean_code) {
+    ean = await EAN.findOne({
+      ean_code: req.body.ean_code
     })
+    if (!ean) {
+      const new_ean = new EAN({
+        ean_code: req.body.ean_code,
+        type_pki: req.body.type_pki,
+        vendor: req.body.vendor,
+        model: req.body.model,
+        country: req.body.country
+      })
+      new_ean.save()
+    }
+  }
+  
+  // модифицирование серийников в зависимости от условий
+  let snMod = snModifer(serial_number, vendor, eanCode, typePki)
+  serial_number = snMod.SN
+  let flashErr = snMod.flash
+  
+  const candidate = await Pki.findOne({
+    serial_number: serial_number,
+    part: req.body.part
+  })
 
-    let pki
-    if (!candidate) {
-      if (ean && ean.sp_unit1) {
-        pki = new Pki({
-          type_pki: req.body.type_pki.trim(),
-          vendor: req.body.vendor.trim(),
-          model: req.body.model.trim(),
-          serial_number: serial_number,
-          part: req.body.part.trim(),
-          country: req.body.country.trim(),
-          ean_code: req.body.ean_code.trim(),
-          sp_unit: ean.sp_unit1
-        })
+  let pki
+  if (!candidate) {
+    if (ean && ean.sp_unit1) {
+      pki = new Pki({
+        type_pki: req.body.type_pki.trim(),
+        vendor: req.body.vendor.trim(),
+        model: req.body.model.trim(),
+        serial_number: serial_number,
+        part: req.body.part.trim(),
+        country: req.body.country.trim(),
+        ean_code: req.body.ean_code.trim(),
+        sp_unit: ean.sp_unit1
+      })
 
-      } else {
-        pki = new Pki({
-          type_pki: req.body.type_pki.trim(),
-          vendor: req.body.vendor.trim(),
-          model: req.body.model.trim(),
-          serial_number: serial_number,
-          part: req.body.part.trim(),
-          country: req.body.country.trim(),
-          ean_code: req.body.ean_code.trim()
-        })
-      }
-
-      if (!(await Country.findOne({
-          country: req.body.country.trim()
-        }))) {
-        const country = new Country({
-          country: req.body.country.trim()
-        })
-        try {
-          await country.save()
-        } catch (error) {
-          console.log(error)
-        }
-      }
-
-      if (!(await Part.findOne({
-          part: req.body.part.trim()
-        }))) {
-        const part = new Part({
-          part: req.body.part.trim()
-        })
-        try {
-          await part.save()
-        } catch (error) {
-          console.log(error)
-        }
-      }
-
-      try {
-        await pki.save()
-        const note = `PKI type - ${pki.type_pki}, vendor - ${pki.vendor}, model - ${pki.model}, SN - ${pki.serial_number}, added to DB`
-        console.log(note)
-
-        let log = new LOG({
-          event: 'add pki',
-          note: note,
-          user: req.session.user.username,
-          part: req.session.part
-        })
-        log.save()
-        req.flash('insertError', flashErr)
-        res.redirect('/add')
-      } catch (e) {
-        console.log(e)
-      }
     } else {
-      flashErr = candidate.type_pki + ' с таким серийным номером существует в ' + candidate.part
+      pki = new Pki({
+        type_pki: req.body.type_pki.trim(),
+        vendor: req.body.vendor.trim(),
+        model: req.body.model.trim(),
+        serial_number: serial_number,
+        part: req.body.part.trim(),
+        country: req.body.country.trim(),
+        ean_code: req.body.ean_code.trim()
+      })
+    }
+
+    if (!(await Country.findOne({
+        country: req.body.country.trim()
+      }))) {
+      const country = new Country({
+        country: req.body.country.trim()
+      })
+      try {
+        await country.save()
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    if (!(await Part.findOne({
+        part: req.body.part.trim()
+      }))) {
+      const part = new Part({
+        part: req.body.part.trim()
+      })
+      try {
+        await part.save()
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    try {
+      await pki.save()
+      const note = `PKI type - ${pki.type_pki}, vendor - ${pki.vendor}, model - ${pki.model}, SN - ${pki.serial_number}, added to DB`
+      console.log(note)
+
+      let log = new LOG({
+        event: 'add pki',
+        note: note,
+        user: req.session.user.username,
+        part: req.session.part
+      })
+      log.save()
       req.flash('insertError', flashErr)
       res.redirect('/add')
+    } catch (e) {
+      console.log(e)
     }
+  } else {
+    flashErr = candidate.type_pki + ' с таким серийным номером существует в ' + candidate.part
+    req.flash('insertError', flashErr)
+    res.redirect('/add')
+  }
 
   // }
 })

@@ -1,0 +1,61 @@
+function snModifer(serialNumber, vendor, eanCode, typePKI) {
+  //Проверка на русские символы в серийнике
+  for (const letter of serialNumber) {
+    let codeOfLetter = letter.charCodeAt(0)
+    if (codeOfLetter > 122) {
+      let ruToEnSN = ''
+      const ruLet = 'ЙЦУКЕНГШЩЗФЫВАПРОЛДЯЧСМИТЬ'
+      const engLet = 'QWERTYUIOPASDFGHJKLZXCVBNM'
+      for (const l of serialNumber.toUpperCase()) {
+        ind = ruLet.indexOf(l)
+        if (ind >= 0) {
+          ruToEnSN += engLet[ind]
+        } else {
+          ruToEnSN += l
+        }
+      }
+      serialNumber = ruToEnSN
+      break
+    }
+  }
+  // приводы i-Has
+  if (eanCode == '4718390028172') {
+    let modifiedSN = serialNumber.split(' ').reverse().join(' ')
+    return {
+      SN: modifiedSN,
+      flash: false
+    }
+  }
+  // серийники Gigabite
+  if (vendor == 'Gigabyte' || vendor == 'GIGABYTE') {
+    let regex = /SN\w*/g
+    if (serialNumber.match(regex)) {
+      let modifiedSN = serialNumber.match(regex)[0]
+      return {
+        SN: modifiedSN,
+        flash: false
+      }
+    }
+  }
+  // мониторы DELL
+  if ((vendor == 'Dell' || vendor == 'DELL') && typePKI == 'Монитор') {
+    let modifiedSN = ''
+    flashErr = 'Не забудь потом внести ревизию в серийные номера этих мониторов!!!'
+    for (let i = 0; i < serialNumber.length; i++) {
+      modifiedSN += serialNumber[i]
+      if (i == 1 || i == 7 || i == 12 || i == 15) {
+        modifiedSN += '-'
+      }
+    }
+    return {
+      SN: modifiedSN,
+      flash: flashErr
+    }
+  }
+  return {
+    SN: serialNumber,
+    flash: false
+  }
+}
+
+module.exports = snModifer
