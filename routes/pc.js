@@ -7,6 +7,7 @@ const APKZI = require('../models/apkzi')
 const Part = require('../models/part')
 const auth = require('../middleware/auth')
 const router = Router()
+const snReModifer = require('./foo/snReModifer')
 
 
 router.get('/', auth, async (req, res) => {
@@ -124,57 +125,64 @@ router.post('/insert_serial', auth, async (req, res) => {
     serial_number: serial_number
   })
 
-  // проверка на гребаные сидюки два запроса вместо одного
   if (!pki) {
-    pki = await PKI.findOne({
-      part: pc.part,
-      serial_number: serial_number.split(' ').reverse().join(' ')
-    })
-    if (pki) {
-      serial_number = serial_number.split(' ').reverse().join(' ')
-    }
+    let snReMod = await snReModifer(serial_number, pc.part)
+    serial_number = snReMod.SN
+    pki = snReMod.pki
   }
+  
 
-  // проверка на левый серийник Gigabyte
-  if (!pki) {
-    let regex = /SN\w*/g
-    if (serial_number.match(regex)) {
-      pki = await PKI.findOne({
-        part: pc.part,
-        serial_number: serial_number.match(regex)[0]
-      })
-      if (pki) {
-        serial_number = serial_number.match(regex)[0]
-      }
-    }
-  }
+  // // проверка на гребаные сидюки два запроса вместо одного
+  // if (!pki) {
+  //   pki = await PKI.findOne({
+  //     part: pc.part,
+  //     serial_number: serial_number.split(' ').reverse().join(' ')
+  //   })
+  //   if (pki) {
+  //     serial_number = serial_number.split(' ').reverse().join(' ')
+  //   }
+  // }
 
-  // проверка на черточки в мониках DELL
-  if (!pki && serial_number.length == 20) {
-    let modifiedSN = ''
-    for (let i = 0; i < serial_number.length; i++) {
-      modifiedSN += serial_number[i]
-      if (i == 1 || i == 7 || i == 12 || i == 15) {
-        modifiedSN += '-'
-      }
-    }
+  // // проверка на левый серийник Gigabyte
+  // if (!pki) {
+  //   let regex = /SN\w*/g
+  //   if (serial_number.match(regex)) {
+  //     pki = await PKI.findOne({
+  //       part: pc.part,
+  //       serial_number: serial_number.match(regex)[0]
+  //     })
+  //     if (pki) {
+  //       serial_number = serial_number.match(regex)[0]
+  //     }
+  //   }
+  // }
 
-    query = {
-      $and: [{
-          $or: [{
-            serial_number: new RegExp(modifiedSN + '.*', "i")
-          }]
-        },
-        {
-          part: req.session.part
-        }
-      ]
-    }
-    pki = await PKI.findOne(query)
-    if (pki) {
-      serial_number = pki.serial_number
-    }
-  }
+  // // проверка на черточки в мониках DELL
+  // if (!pki && serial_number.length == 20) {
+  //   let modifiedSN = ''
+  //   for (let i = 0; i < serial_number.length; i++) {
+  //     modifiedSN += serial_number[i]
+  //     if (i == 1 || i == 7 || i == 12 || i == 15) {
+  //       modifiedSN += '-'
+  //     }
+  //   }
+
+  //   query = {
+  //     $and: [{
+  //         $or: [{
+  //           serial_number: new RegExp(modifiedSN + '.*', "i")
+  //         }]
+  //       },
+  //       {
+  //         part: req.session.part
+  //       }
+  //     ]
+  //   }
+  //   pki = await PKI.findOne(query)
+  //   if (pki) {
+  //     serial_number = pki.serial_number
+  //   }
+  // }
 
   let oldPki // ПКИ который раньше был на этом месте  
   if (pc[unit][req.body.obj].serial_number) {

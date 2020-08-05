@@ -1110,14 +1110,19 @@ function edit_serial_number(id, obj, unit, serial_number) {
     },
     success: function (pc) {
       let oldNumberMachine = JSON.parse(pc).oldNumberMachine
+      const pcSN = JSON.parse(pc).pc.serial_number
       if (oldNumberMachine) {
-        $(".popup-checkbox").prop('checked', true)
-        let msg_txt = 'Серийник был привязан к машине с номером ' + oldNumberMachine
-        $("#oldNumber").text(msg_txt)
-        var audio = {};
-        audio["alert"] = new Audio();
-        audio["alert"].src = "/sounds/S20759.mp3"
-        audio["alert"].play()
+        if (oldNumberMachine != pcSN) {
+          $(".popup-checkbox").prop('checked', true)
+          let msg_txt = 'Серийник был привязан к машине с номером ' + oldNumberMachine
+          $("#oldNumber").text(msg_txt)
+          var audio = {};
+          audio["alert"] = new Audio();
+          audio["alert"].src = "/sounds/S20759.mp3"
+          audio["alert"].play()
+        } else {
+          oldNumberMachine = undefined
+        }
       }
       UpdateCells(JSON.parse(pc).pc, oldNumberMachine, function () {
         $("td.name").each(function () {

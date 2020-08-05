@@ -8,7 +8,6 @@ const LOG = require('../models/logs')
 const auth = require('../middleware/auth')
 const router = Router()
 const snModifer = require('./foo/snModifer')
-// import {snModifer} from './foo/snModifer'
 
 router.get('/', auth, (req, res) => {
   res.render('add', {
