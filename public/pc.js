@@ -1208,12 +1208,14 @@ function UpdateCells(pc, how, callback) {
       //TextToSpeech
       if (sessionStorage.getItem("sound") === 'on') {
         let row = $(".serial_number[data-data='" + next_id.join(';') + "']").parent()[0]
-        let textToSpeech = row.innerText.split('	')[1]
-        const ut = new SpeechSynthesisUtterance(textToSpeech)
-        ut.lang = 'ru-RU'
-        ut.rate = 1.1
-        // ut.pitch = 1
-        speechSynthesis.speak(ut)
+        if (row) {
+          let textToSpeech = row.innerText.split('	')[1]
+          const ut = new SpeechSynthesisUtterance(textToSpeech)
+          ut.lang = 'ru-RU'
+          ut.rate = 1.1
+          // ut.pitch = 1
+          speechSynthesis.speak(ut)  
+        }
       }
       
 
