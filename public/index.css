@@ -630,10 +630,6 @@ form {
   min-height: 450px;
 }
 
-.custom-select {
-  width: 25rem;  
-}
-
 #sortSelect {
   width: 100%;  
 }

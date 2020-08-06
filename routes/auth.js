@@ -68,7 +68,7 @@ router.post('/login', async (req, res) =>{
                     console.log(`User ${req.session.user.username} is logged`)
                     
                 }
-                req.session.save(err =>{
+                req.session.save(async err  => {
                     if (err) {
                         throw err
                     }
@@ -78,7 +78,7 @@ router.post('/login', async (req, res) =>{
                     note: note,
                     user: req.session.user.username
                 })
-                log.save()
+                await log.save()
                 res.redirect('/')
                 })
             } else {

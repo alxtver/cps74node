@@ -405,7 +405,7 @@ function load_data(q) {
         option.text = d.serial_number
         select.add(option)
       }
-      $("#serials").selectpicker("refresh")
+      // $("#serials").selectpicker("refresh")
 
       if (q) {
         const serial_number_id = '#' + q
@@ -1121,7 +1121,7 @@ function edit_serial_number(id, obj, unit, serial_number) {
           audio["alert"].src = "/sounds/S20759.mp3"
           audio["alert"].play()
         } else {
-          oldNumberMachine = undefined
+          oldNumberMachine = null
         }
       }
       UpdateCells(JSON.parse(pc).pc, oldNumberMachine, function () {

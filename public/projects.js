@@ -20,7 +20,7 @@ function load_data(q) {
         option.text = d.serial_number        
         select.add(option)        
       }
-      $("#serials").selectpicker("refresh")
+      // $("#serials").selectpicker("refresh")
     }
   })
 }
