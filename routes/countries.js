@@ -11,7 +11,8 @@ router.get('/', auth, async (req, res) => {
     let args_devel = {
       title: 'БД Страны',
       isEquipment: true,
-      countries: allCountrys
+      countries: allCountrys,
+      part: req.session.part
     }
     res.render('countries', args_devel)
   })
