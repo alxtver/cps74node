@@ -130,10 +130,7 @@
     document.getElementById("soundOn").hidden = true
   }
 
-  console.log(document.location.href.split('serial_number=')[1])
-  $('html, body').animate({
-          scrollTop: $(serial_number_id).offset().top-70
-        }, 500)
+  
 
   //пагинация
   
@@ -160,10 +157,13 @@
     loadPage(sessionPage)
   }
   
+  
+  
 })
 
   $(document).on('change', '#serials', function () {
-    let serial_number_id = '#' + $("#serials :selected").val()    
+    let serial_number_id = '#' + $("#serials :selected").val()
+    console.log(serial_number_id)
     $('html, body').animate({
           scrollTop: $(serial_number_id).offset().top-70
         }, 500)

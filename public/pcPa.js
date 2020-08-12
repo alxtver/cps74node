@@ -466,6 +466,12 @@ function loadPage(page) {
         option.text = d.serial_number
         select.add(option)
       }
+
+      let url = document.location.href
+      let serial_number_id = url.match(/[\Z\d|-]{13,14}/i)[0]
+      if (serial_number_id) {
+        $('html, body').animate({scrollTop: $('#' + serial_number_id).offset().top-70}, 500)
+      }      
     }
   })
 }

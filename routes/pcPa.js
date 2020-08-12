@@ -11,7 +11,8 @@ const snReModifer = require('./foo/snReModifer')
 
 
 router.get('/', auth, async (req, res) => {
-  const countPC = await PC.count({part: req.session.part})
+  const countPC = await PC.countDocuments({part: req.session.part})
+  // const countPC = await PC.count({part: req.session.part})
   const pages = Math.ceil(countPC/10)
   res.render('pcPa', {
     title: 'Машины',
