@@ -99,6 +99,7 @@
 
       $(document).on('change', '#part_select_navbar', function () {
         changeSelect($("#part_select_navbar :selected").text())
+        sessionStorage.removeItem('page')
       })
     </script>
   </div>
