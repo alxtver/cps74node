@@ -45,7 +45,7 @@
 <input type="hidden" id="hidd_obj" value="0">
 <input type="hidden" id="hidd_unit" value="0">
 <input type="hidden" id="pagesCount" value="{{ pages }}">
-<input type="hidden" id="pagesCount" value="{{ pcCount }}">
+<input type="hidden" id="page" value="">
 
 <!-- Modal -->
 
@@ -157,9 +157,24 @@
     loadPage(1)
   }
   // конец пагинации
-
-
 })
+
+  document.onkeydown = function(e) {
+    e = e || window.event;
+    let page = parseInt(document.getElementById('page').value)
+    let pages = parseInt(document.getElementById('pagesCount').value)
+    if (e.ctrlKey && e.keyCode == 39) {
+      if (page < pages) {
+        createPagination(parseInt(document.getElementById('page').value)+1)
+      }
+    } else if (e.ctrlKey && e.keyCode == 37) {
+        if (page > 1) {
+          createPagination(parseInt(document.getElementById('page').value)-1)
+        }
+    }
+    return true;
+  }
+
 
   $(document).on('change', '#serials', function () {
     let serial_number_id = '#' + $("#serials :selected").val()

@@ -1506,8 +1506,11 @@ function createPagination(page) {
   document.getElementById('paginationTop').innerHTML = str;
   document.getElementById('paginationBottom').innerHTML = str;
   loadPage(page, pages)
+  document.getElementById('page').value = page
   
   return str;
+
+  
 }
 
 function selectPages(pageCount) {
