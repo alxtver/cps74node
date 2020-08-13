@@ -45,6 +45,7 @@
 <input type="hidden" id="hidd_obj" value="0">
 <input type="hidden" id="hidd_unit" value="0">
 <input type="hidden" id="pagesCount" value="{{ pages }}">
+<input type="hidden" id="pagesCount" value="{{ pcCount }}">
 
 <!-- Modal -->
 
@@ -144,6 +145,10 @@
     document.getElementById("soundOn").hidden = true
   }
 
+  // включение текущего элемента в выборе количества ПЭВМ на странице
+  let pcCount = `{{pcCount}}`
+  document.getElementById('selectPages').value = pcCount
+  
   //пагинация  
   const pages = parseInt(document.getElementById('pagesCount').value)
   if (pages > 1) {
@@ -153,8 +158,6 @@
   }
   // конец пагинации
 
-
-  const serial_number = `{{serial_number}}`
 
 })
 

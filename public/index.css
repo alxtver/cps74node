@@ -693,7 +693,6 @@ th {
 .cellOK {
   background-color: PaleGreen;
 }
-
 .cellNotOK {
   background-color: DeepPink;
 }
@@ -703,7 +702,6 @@ th {
   bottom: 10px;
   right: 10px;
 }
-
 .soundButtonSlash {
   position: fixed;
   bottom: 10px;
@@ -716,7 +714,6 @@ th {
   margin: 0;
   display: flex;
   padding-bottom: 1rem;
-  
 }
 .PaUl li {
   color: #e0dada;
@@ -745,4 +742,7 @@ th {
 .PaUl li:last-child a {
   border-radius: 0 5px 5px 0;
   border-right: 1px solid #d1d5da;
+}
+#paginationBottom {
+  position: relative;
 }

@@ -15,8 +15,9 @@ router.get('/', auth, async (req, res) => {
   const countPC = await PC.countDocuments({part: req.session.part})
   let user = await User.findOne({username: req.session.user.username})
   let pages = Math.ceil(countPC/10)
+  let pcCount = user.pcCount
   if (user.pcCount) {
-    count = user.pcCount
+    let count = user.pcCount
     if (count === '1') {
       pages = countPC
     } else if (count === '5') {
@@ -34,7 +35,8 @@ router.get('/', auth, async (req, res) => {
     isPC: true,
     part: req.session.part,
     serial_number: req.query.serial_number,
-    pages: pages
+    pages: pages,
+    pcCount: pcCount
   })
 })
 
@@ -122,13 +124,12 @@ router.post("/search", auth, async function (req, res) {
   }).sort({
     'created': 1
   })
-  res.send(JSON.stringify(pcs)) // отправляем пришедший ответ обратно
+  res.send(JSON.stringify(pcs))
 })
 
 
 router.post("/pagination", auth, async function (req, res) {
   let page = parseInt(req.body.page)
-  let pages = parseInt(req.body.pages)
   let user = await User.findOne({username: req.session.user.username})
   let pcs
   if (user.pcCount) {
@@ -145,8 +146,7 @@ router.post("/pagination", auth, async function (req, res) {
       pcs = await PC.find({part: req.session.part}).sort({'created': 1})
     }
   }
-  
-  res.send(JSON.stringify(pcs)) // отправляем пришедший ответ обратно
+  res.send(JSON.stringify(pcs))
 })
 
 
@@ -172,7 +172,7 @@ router.post("/part", async function (req, res) {
   res.send(JSON.stringify({
     parts: parts,
     reqSesPart: reqSesPart
-  })) // отправляем пришедший ответ обратно
+  }))
 })
 
 
