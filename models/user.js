@@ -8,7 +8,9 @@ const User = new Schema({
     password: String,
     group: String,
     lastPart: String,
-    lastType: String
+    lastType: String,
+    lastPage: Number,
+    pcCount: String
 })
 
 module.exports = model('User', User)

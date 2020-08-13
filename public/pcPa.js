@@ -419,7 +419,7 @@ function CreateTableSystemCase() {
 //   })
 // }
 
-function loadPage(page) {
+function loadPage(page, pages) {
   $.ajax({
     url: "/pcPa/pagination",
     headers: {
@@ -427,7 +427,8 @@ function loadPage(page) {
     },
     method: "POST",
     data: {
-      page: page
+      page: page,
+      pages: pages
     },
     success: function (data) {
       CreateTableFromJSON(JSON.parse(data), function () {
@@ -468,12 +469,46 @@ function loadPage(page) {
       }
 
       let url = document.location.href
-      let serial_number_id = url.match(/[\Z\d|-]{13,14}/i)[0]
+      let serial_number_id = url.match(/[\Z\d|-]{13,14}/i)
       if (serial_number_id) {
-        $('html, body').animate({scrollTop: $('#' + serial_number_id).offset().top-70}, 500)
+        if (document.getElementById(serial_number_id)) {
+          $('html, body').animate({scrollTop: $('#' + serial_number_id[0]).offset().top-70}, 500)
+        }
       }      
     }
   })
+}
+
+function getPage() {
+  $.ajax({
+    url: "/pcPa/getPage",
+    headers: {
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    },
+    method: "GET",
+    success: function (page) {
+      document.getElementById('paginationTop').innerHTML = createPagination(page)
+      document.getElementById('paginationBottom').innerHTML = createPagination(page)
+    }
+  })
+}
+
+function setPage(page) {
+
+  if (page) {
+    $.ajax({
+      url: "/pcPa/setPage",
+      headers: {
+        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      },
+      data: {
+        page: page
+      },
+      method: "POST",
+      success: function (data) {
+      }
+    })
+  }  
 }
 
 function load_pc(id) {
@@ -1245,7 +1280,7 @@ function UpdateCells(pc, how, callback) {
     button_edit.type = 'button'
     button_edit.className = 'btn btn-outline-success mr-2 mb-2'
     button_edit.value = 'Редактировать'
-    button_edit.setAttribute("onclick", "location.href='/pc/" + pc._id + "/edit?allow=true'")
+    button_edit.setAttribute("onclick", "location.href='/pcPa/" + pc._id + "/edit?allow=true'")
     button_edit.dataset.id = pc._id
     divCont.appendChild(button_edit)
 
@@ -1401,7 +1436,7 @@ function getSoundSession() {
 
 function createPagination(page) {
   page = parseInt(page)
-  sessionStorage.setItem("page", page)
+  setPage(page)
   let pages = parseInt(document.getElementById('pagesCount').value)
   let str = '<ul class="PaUl">';
   let active;
@@ -1470,7 +1505,24 @@ function createPagination(page) {
   // Return the pagination string to be outputted in the pug templates
   document.getElementById('paginationTop').innerHTML = str;
   document.getElementById('paginationBottom').innerHTML = str;
-  loadPage(page)
+  loadPage(page, pages)
   
   return str;
+}
+
+function selectPages(pageCount) {
+  $.ajax({
+    url: "/pcPa/pageCount",
+    headers: {
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    },
+    method: "POST",
+    data: {
+      pageCount: pageCount
+    },
+    success: function (page) {
+      setPage(1)
+      document.location.href = '/pcPa'
+    }
+  })
 }

@@ -52,7 +52,6 @@ router.get('/:id/edit', auth, async (req, res) => {
 
 router.post('/edit', auth, async (req, res) => {
   const apkzi = await Apkzi.findByIdAndUpdate(req.body.id, req.body)
-  console.log(req.body)
   await Apkzi.find().distinct('part', function (error, part) {
     res.render('apkzi', {
       title: 'АПКЗИ',

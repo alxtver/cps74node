@@ -30,9 +30,9 @@
           {{/if}}
 
           {{#if isPC}}
-            <li class="nav-item active"><a class="nav-link" href="/pc">Производство</a></li>
+            <li class="nav-item active"><a class="nav-link" href="/pcPa">Производство</a></li>
           {{else}}
-            <li class="nav-item"><a class="nav-link" href="/pc">Производство</a></li>
+            <li class="nav-item"><a class="nav-link" href="/pcPa">Производство</a></li>
           {{/if}}
           <li class="nav-item dropdown">
             {{#if isEquipment}}
@@ -99,7 +99,7 @@
 
       $(document).on('change', '#part_select_navbar', function () {
         changeSelect($("#part_select_navbar :selected").text())
-        sessionStorage.removeItem('page')
+        setPage(1)
       })
     </script>
   </div>

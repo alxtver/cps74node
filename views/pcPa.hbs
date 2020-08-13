@@ -1,8 +1,21 @@
 <script src="/pcPa.js"></script>
 <h1>Производство</h1>
-<button class="btn btn-dark mb-2" onclick="location.href='/pc/add';">Добавить ПЭВМ</button>
-<button id="excelImport" onclick="location.href='/projects/import';" class="btn btn-outline-success mb-2">Экспорт в Excel</button>
-<button id="testPC" onclick="testPC()" class="btn btn-outline-success mb-2" data-toggle="modal" data-target="#modalTest">Проверка</button>
+
+<div class="input-group mb-3">
+  <button class="btn btn-outline-dark mr-1" onclick="location.href='/pcPa/add';">Добавить ПЭВМ</button>
+  <button id="excelImport" onclick="location.href='/projects/import';" class="btn btn-outline-success mr-1">Экспорт в Excel</button>
+  <button id="testPC" onclick="testPC()" class="btn btn-outline-success mr-1" data-toggle="modal" data-target="#modalTest">Проверка</button>
+  <div class="input-group-prepend">
+    <label class="input-group-text" for="selectPages">Кол-во ПЭВМ</label>
+  </div>
+  <select class="custom-select" id="selectPages">
+    <option value="1">1</option>
+    <option value="5">5</option>
+    <option value="10" selected>10</option>
+    <option value="20">20</option>
+    <option value="all">Все</option>
+  </select>
+</div>
 
 
 
@@ -20,12 +33,13 @@
   </div>
 </div>
 
-<form>
-  <input type="hidden" name="_csrf" value="{{csrf}}">
-</form>
+
 
 <div id="paginationTop"></div>
 <div id="PC"></div>
+<form>
+  <input type="hidden" name="_csrf" value="{{csrf}}">
+</form>
 <div id="paginationBottom"></div>
 <input type="hidden" id="hidd_id" value="0">
 <input type="hidden" id="hidd_obj" value="0">
@@ -130,43 +144,30 @@
     document.getElementById("soundOn").hidden = true
   }
 
-  
-
-  //пагинация
-  
+  //пагинация  
   const pages = parseInt(document.getElementById('pagesCount').value)
   if (pages > 1) {
-    var sessionPage = sessionStorage.getItem('page')
-    if (!sessionPage) {
-      document.getElementById('paginationTop').innerHTML = createPagination(1)
-      document.getElementById('paginationBottom').innerHTML = createPagination(1)
-    } else {
-      document.getElementById('paginationTop').innerHTML = createPagination(sessionPage)
-      document.getElementById('paginationBottom').innerHTML = createPagination(sessionPage)
-    }
-    
-  }   
+    getPage()
+  } else {
+    loadPage(1)
+  }
   // конец пагинации
 
 
   const serial_number = `{{serial_number}}`
- 
-  if (!sessionPage) {
-    loadPage(1)
-  } else {
-    loadPage(sessionPage)
-  }
-  
-  
-  
+
 })
 
   $(document).on('change', '#serials', function () {
     let serial_number_id = '#' + $("#serials :selected").val()
-    console.log(serial_number_id)
     $('html, body').animate({
           scrollTop: $(serial_number_id).offset().top-70
         }, 500)
+  })
+
+  $(document).on('change', '#selectPages', function () {
+    let pageCount = $("#selectPages :selected").val()
+    selectPages(pageCount)
   })
 
   $("body").on('click','.delBtn',function () {

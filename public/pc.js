@@ -904,7 +904,7 @@ function CreateTableFromJSON(data, callback) {
     button_edit.type = 'button'
     button_edit.className = 'btn btn-outline-success mr-2 mb-2'
     button_edit.value = 'Редактировать'
-    button_edit.setAttribute("onclick", "location.href='/pc/" + data[i]._id + "/edit?allow=true'")
+    button_edit.setAttribute("onclick", "location.href='/pcPa/" + data[i]._id + "/edit?allow=true'")
     button_edit.dataset.id = data[i]._id
     divCont.appendChild(button_edit)
 

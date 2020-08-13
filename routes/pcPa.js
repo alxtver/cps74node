@@ -6,14 +6,29 @@ const PKI = require('../models/pki')
 const APKZI = require('../models/apkzi')
 const Part = require('../models/part')
 const auth = require('../middleware/auth')
+const User = require('../models/user')
 const router = Router()
 const snReModifer = require('./foo/snReModifer')
 
 
 router.get('/', auth, async (req, res) => {
   const countPC = await PC.countDocuments({part: req.session.part})
-  // const countPC = await PC.count({part: req.session.part})
-  const pages = Math.ceil(countPC/10)
+  let user = await User.findOne({username: req.session.user.username})
+  let pages = Math.ceil(countPC/10)
+  if (user.pcCount) {
+    count = user.pcCount
+    if (count === '1') {
+      pages = countPC
+    } else if (count === '5') {
+      pages = Math.ceil(countPC/5)
+    } else if (count === '10') {
+      pages = Math.ceil(countPC/10)
+    } else if (count === '20') {
+      pages = Math.ceil(countPC/20)
+    } else if (count === 'all') {
+      pages = 1
+    }
+  }
   res.render('pcPa', {
     title: 'Машины',
     isPC: true,
@@ -21,6 +36,13 @@ router.get('/', auth, async (req, res) => {
     serial_number: req.query.serial_number,
     pages: pages
   })
+})
+
+router.post('/pageCount', auth, async (req, res) => {
+  let user = await User.findOne({username: req.session.user.username})
+  user.pcCount = req.body.pageCount
+  await user.save()
+  res.sendStatus(200)
 })
 
 
@@ -105,12 +127,25 @@ router.post("/search", auth, async function (req, res) {
 
 
 router.post("/pagination", auth, async function (req, res) {
-  let page = req.body.page
-  pcs = await PC.find({
-    part: req.session.part
-  }).sort({
-    'created': 1
-  }).skip(page*10-10).limit(10)
+  let page = parseInt(req.body.page)
+  let pages = parseInt(req.body.pages)
+  let user = await User.findOne({username: req.session.user.username})
+  let pcs
+  if (user.pcCount) {
+    count = user.pcCount
+    if (count === '1') {
+      pcs = await PC.find({part: req.session.part}).sort({'created': 1}).skip(page - 1).limit(1)
+    } else if (count === '5') {
+      pcs = await PC.find({part: req.session.part}).sort({'created': 1}).skip(page*5-5).limit(5)
+    } else if (count === '10') {
+      pcs = await PC.find({part: req.session.part}).sort({'created': 1}).skip(page*10-10).limit(10)
+    } else if (count === '20') {
+      pcs = await PC.find({part: req.session.part}).sort({'created': 1}).skip(page*20-20).limit(20)
+    } else if (count === 'all') {
+      pcs = await PC.find({part: req.session.part}).sort({'created': 1})
+    }
+  }
+  
   res.send(JSON.stringify(pcs)) // отправляем пришедший ответ обратно
 })
 
@@ -652,6 +687,27 @@ router.post('/test', auth, async (req, res) => {
     serials: serials,
     results: results
   }))
+})
+
+router.get('/getPage', auth, async (req, res) => {
+  const user = await User.findOne({username: req.session.user.username})
+  if (user.lastPage) {
+    res.send(JSON.stringify(user.lastPage))
+  } else {
+    res.send('1')
+  }
+})
+
+
+router.post('/setPage', auth, async (req, res) => {
+  if (req.body.page) {
+    let user = await User.findOne({username: req.session.user.username})
+    user.lastPage = req.body.page
+    await user.save()
+    res.sendStatus(200)
+  } else {
+    res.sendStatus(200)
+  }
 })
 
 
