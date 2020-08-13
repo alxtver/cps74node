@@ -721,6 +721,7 @@ th {
   display: flex;
   -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,9);
   box-shadow: 0 30px 60px 0 rgba(0,0,0,0.9);
+  border-radius: 5px 5px 5px 5px;
 }
 .PaUl li :hover{
   border: 2px solid #28a745;
