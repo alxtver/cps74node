@@ -29,6 +29,9 @@ router.get('/', auth, async (req, res) => {
     } else if (count === 'all') {
       pages = 1
     }
+  } else {
+    pages = 1
+    pcCount = 'all'
   }
   res.render('pcPa', {
     title: 'Машины',
@@ -145,6 +148,8 @@ router.post("/pagination", auth, async function (req, res) {
     } else if (count === 'all') {
       pcs = await PC.find({part: req.session.part}).sort({'created': 1})
     }
+  } else {
+    pcs = await PC.find({part: req.session.part}).sort({'created': 1})
   }
   res.send(JSON.stringify(pcs))
 })
