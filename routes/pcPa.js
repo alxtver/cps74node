@@ -18,14 +18,8 @@ router.get('/', auth, async (req, res) => {
   let pcCount = user.pcCount
   if (user.pcCount) {
     let count = user.pcCount
-    if (count === '1') {
-      pages = countPC
-    } else if (count === '5') {
-      pages = Math.ceil(countPC/5)
-    } else if (count === '10') {
-      pages = Math.ceil(countPC/10)
-    } else if (count === '20') {
-      pages = Math.ceil(countPC/20)
+    if (count === '1' || count === '5' || count === '10' || count === '20') {
+      pages = Math.ceil(countPC/parseInt(count))
     } else if (count === 'all') {
       pages = 1
     }
@@ -136,16 +130,11 @@ router.post("/pagination", auth, async function (req, res) {
   let user = await User.findOne({username: req.session.user.username})
   let pcs
   if (user.pcCount) {
-    count = user.pcCount
-    if (count === '1') {
-      pcs = await PC.find({part: req.session.part}).sort({'created': 1}).skip(page - 1).limit(1)
-    } else if (count === '5') {
-      pcs = await PC.find({part: req.session.part}).sort({'created': 1}).skip(page*5-5).limit(5)
-    } else if (count === '10') {
-      pcs = await PC.find({part: req.session.part}).sort({'created': 1}).skip(page*10-10).limit(10)
-    } else if (count === '20') {
-      pcs = await PC.find({part: req.session.part}).sort({'created': 1}).skip(page*20-20).limit(20)
-    } else if (count === 'all') {
+    let count = user.pcCount
+    if (count === '1' || count === '5' || count === '10' || count === '20') {
+      let intCount = parseInt(count)
+      pcs = await PC.find({part: req.session.part}).sort({'created': 1}).skip(page*intCount-intCount).limit(intCount)
+    }  else if (count === 'all') {
       pcs = await PC.find({part: req.session.part}).sort({'created': 1})
     }
   } else {
