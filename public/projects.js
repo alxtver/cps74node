@@ -46,7 +46,7 @@ function TablePc(pc) {
   // таблица ПЭВМ
   let table = document.createElement("table");
 
-  table.className = "table table-sm table-bordered table-hover pctable"
+  table.className = "table table-sm table-bordered table-hover table-responsive pctable"
   table.id = pc._id
 
 

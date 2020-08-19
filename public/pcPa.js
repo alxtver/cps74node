@@ -533,7 +533,7 @@ function load_pc(id) {
 function TablePc(pc) {
   // таблица ПЭВМ
   let table = document.createElement("table");
-  table.className = "table table-sm table-bordered table-hover pctable"
+  table.className = "table table-sm table-bordered table-hover table-responsive pctable"
   table.id = pc._id
 
   let tr = table.insertRow(-1) // TABLE ROW.        
@@ -756,7 +756,7 @@ function TableEditPcUnit(pc) {
 
   let table = document.createElement("table");
 
-  table.className = "table table-sm table-bordered table-hover pctable"
+  table.className = "table table-sm table-bordered table-hover table-responsive pctable"
   table.id = "pc_unit"
 
   tr = table.insertRow(-1) // TABLE ROW.        
@@ -860,7 +860,7 @@ function TableEditSystemCase(pc) {
 
   let table = document.createElement("table");
 
-  table.className = "table table-sm table-bordered table-hover pctable"
+  table.className = "table table-sm table-bordered table-hover table-responsive pctable"
   table.id = "system_case_unit"
 
   tr = table.insertRow(-1) // TABLE ROW.        
@@ -1390,7 +1390,7 @@ function testPC() {
       let divContainer = document.getElementById('testData')
       divContainer.innerHTML = ""
       let table = document.createElement("table");
-      table.className = "table table-sm table-bordered table-hover pctable"
+      table.className = "table table-sm table-bordered table-hover table-responsive pctable"
       for (let i = 0; i < serials.length; i++) {
         let tr = table.insertRow(-1) // TABLE ROW.
         let td = document.createElement("td")
@@ -1444,7 +1444,7 @@ function createPagination(page) {
   let pageCutHigh = page + 1;
   // Show the Previous button only if you are on a page other than the first
   if (page > 1) {
-    str += '<li class="page-item previous no"><a onclick="createPagination(' + (page - 1) + ')">Предыдущая</a></li>';
+    str += '<li class="page-item previous no"><a class="latest" onclick="createPagination(' + (page - 1) + ')">Предыдущая</a></li>';
   }
   // Show all the pagination elements if there are less than 6 pages total
   if (pages < 6) {
@@ -1499,7 +1499,7 @@ function createPagination(page) {
   // Show the Next button only if you are on a page other than the last
 
   if (page < pages) {
-    str += '<li class="page-item next no"><a onclick="createPagination(' + (page + 1) + ')">Следующая</a></li>';
+    str += '<li class="page-item next no"><a class="latest" onclick="createPagination(' + (page + 1) + ')">Следующая</a></li>';
   }
   str += '</ul>';
   // Return the pagination string to be outputted in the pug templates

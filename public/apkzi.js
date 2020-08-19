@@ -43,7 +43,7 @@ function CreateTableFromJSON(data) {
 
     // CREATE DYNAMIC TABLE.
     let table = document.createElement("table");
-    table.className = "table table-sm table-bordered table-hover table-striped"
+    table.className = "table table-sm table-bordered table-hover table-responsive table-striped"
 
     // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
 

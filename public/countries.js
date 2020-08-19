@@ -24,7 +24,7 @@ function load_data(q) {
   
     // CREATE DYNAMIC TABLE.
     let table = document.createElement("table");
-    table.className = "table table-sm table-bordered table-hover table-striped"
+    table.className = "table table-sm table-bordered table-hover table-responsive table-striped"
   
     // TABLE ROW.
     let thead = table.createTHead()

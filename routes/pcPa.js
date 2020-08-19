@@ -1,5 +1,5 @@
 const {
-  Router
+  Router, query
 } = require('express')
 const PC = require('../models/pc')
 const PKI = require('../models/pki')
@@ -22,6 +22,13 @@ router.get('/', auth, async (req, res) => {
       pages = Math.ceil(countPC/parseInt(count))
     } else if (count === 'all') {
       pages = 1
+    } else if (count === 'supplement') {
+      const attach = await PC.find({part: req.session.part}).distinct('attachment')
+      const attachNumbers = attach.map(function(a) {
+        return a.replace(/[^\d]/gim,'')
+      })
+      const uniqueSet = new Set(attachNumbers)
+      pages = uniqueSet.size
     }
   } else {
     pages = 1
@@ -133,9 +140,36 @@ router.post("/pagination", auth, async function (req, res) {
     let count = user.pcCount
     if (count === '1' || count === '5' || count === '10' || count === '20') {
       let intCount = parseInt(count)
-      pcs = await PC.find({part: req.session.part}).sort({'created': 1}).skip(page*intCount-intCount).limit(intCount)
+      pcs = await PC.find({
+        part: req.session.part
+      }).sort({
+        'created': 1
+      }).skip(page * intCount - intCount).limit(intCount)
     }  else if (count === 'all') {
       pcs = await PC.find({part: req.session.part}).sort({'created': 1})
+    } else if (count === 'supplement') {
+      const attach = await PC.find({part: req.session.part}).distinct('attachment')
+      const attachNumbers = attach.map(function(a) {
+        return a.replace(/[^\d]/gim,'')
+      })
+      const uniqueSet = new Set(attachNumbers)
+      const backToArray = [...uniqueSet]
+      console.log(backToArray[page-1]);
+      const query = {
+        $and: [{
+            $or: [{
+              attachment: new RegExp(backToArray[page-1] + '.*', "i")
+              }
+            ]
+          },
+          {
+            part: req.session.part
+          }
+        ]
+      }
+      pcs = await PC.find(query).sort({
+        'created': 1
+      })
     }
   } else {
     pcs = await PC.find({part: req.session.part}).sort({'created': 1})

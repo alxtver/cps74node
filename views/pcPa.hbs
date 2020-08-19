@@ -2,18 +2,19 @@
 <h1>Производство</h1>
 
 <div class="input-group mb-3">
-  <button class="btn btn-outline-dark mr-1" onclick="location.href='/pcPa/add';">Добавить ПЭВМ</button>
-  <button id="excelImport" onclick="location.href='/projects/import';" class="btn btn-outline-success mr-1">Экспорт в Excel</button>
-  <button id="testPC" onclick="testPC()" class="btn btn-outline-success mr-1" data-toggle="modal" data-target="#modalTest">Проверка</button>
+  <button class="btn btn-outline-dark mr-1 mt-1" onclick="location.href='/pcPa/add';">Добавить ПЭВМ</button>
+  <button id="excelImport" onclick="location.href='/projects/import';" class="btn btn-outline-success mr-1 mt-1">Экспорт в Excel</button>
+  <button id="testPC" onclick="testPC()" class="btn btn-outline-success mr-1 mt-1" data-toggle="modal" data-target="#modalTest">Проверка</button>
   <div class="input-group-prepend">
-    <label class="input-group-text" for="selectPages">Кол-во ПЭВМ</label>
+    <label class="input-group-text mt-1" for="selectPages">Кол-во ПЭВМ</label>
   </div>
-  <select class="custom-select" id="selectPages">
+  <select class="custom-select mt-1" id="selectPages">
     <option value="1">1</option>
     <option value="5">5</option>
     <option value="10" selected>10</option>
     <option value="20">20</option>
     <option value="all">Все</option>
+    <option value="supplement">По приложению</option>
   </select>
 </div>
 

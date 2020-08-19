@@ -439,7 +439,7 @@ function load_pc(id) {
 function TablePc(pc) {
   // таблица ПЭВМ
   let table = document.createElement("table");
-  table.className = "table table-sm table-bordered table-hover pctable"
+  table.className = "table table-sm table-bordered table-hover table-responsive pctable"
   table.id = pc._id
 
   let tr = table.insertRow(-1) // TABLE ROW.        

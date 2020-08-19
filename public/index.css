@@ -747,3 +747,12 @@ th {
 #paginationBottom {
   position: relative;
 }
+
+@media (max-width: 550px) {
+  .previous, .next, .latest, .delBtn, .soundButton {
+    display:none;
+  }
+}
+
+
+
