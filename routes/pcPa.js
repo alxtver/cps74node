@@ -154,7 +154,6 @@ router.post("/pagination", auth, async function (req, res) {
       })
       const uniqueSet = new Set(attachNumbers)
       const backToArray = [...uniqueSet]
-      console.log(backToArray[page-1]);
       const query = {
         $and: [{
             $or: [{
@@ -408,7 +407,6 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
     pc[unit][req.body.obj].type = arr_start.join(' ') //меняем имя
     // pc[unit][req.body.obj].fdsi = apkzi.fdsi
 
-    // console.log(pc.pc_unit[7]);
     let index_apkzi
     for (let index = 0; index < pc.pc_unit.length; index++) {
       if (pc.pc_unit[index].apkzi) {

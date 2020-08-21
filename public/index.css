@@ -400,8 +400,18 @@ input[type=text]:placeholder {
   padding: 30px;
   position: relative;
   padding: 0px;
-  -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,9);
+  -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0.9);
   box-shadow: 0 30px 60px 0 rgba(0,0,0,0.9);
+}
+
+.pcCard {
+  -webkit-border-radius: 10px 10px 10px 10px;
+  border-radius: 10px 10px 10px 10px;
+  background: #fff;
+  padding: 30px;
+  position: relative;
+  padding: 0px;
+  margin-bottom: 3rem;
 }
 
 .tableContent-yelow{

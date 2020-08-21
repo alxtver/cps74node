@@ -1,4 +1,6 @@
 <script src="/pcPa.js"></script>
+<script type="text/javascript" src="/lib/farbtastic/farbtastic.js"></script>
+<link rel="stylesheet" href="/lib/farbtastic/farbtastic.css" type="text/css" />
 
 <h1>Редактирование {{pc.serial_number}}</h1>
 <div class="tableContent">
@@ -43,12 +45,15 @@
     </div>
     <div id="PC"></div>
 
+    {{!-- <input type="text" id="color" name="color" value="#123456"/>
+    <div id="colorpicker"></div> --}}
   </form>
+  
 </div>
 
 <script>
   $(document).ready(function () {
-    load_pc(`{{pc._id}}`)
+    load_pc(`{{pc._id}}`)    
   })
 
 
@@ -63,7 +68,8 @@
     let arm = $('#arm').val()
     let execution = $('#execution').val()
     let attachment = $('#attachment').val()
-    let color = $("#select_color :selected").text()
+    // let color = $("#select_color :selected").text()
+    let color = document.getElementById('color').value
 
 
     //// формирование POST запроса для таблицы ПЭВМ
@@ -143,7 +149,7 @@
     })
 
     $.ajax({
-      url: "/pc/pc_update",
+      url: "/pcPa/pc_update",
       type: "POST",
       headers: {
         'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
