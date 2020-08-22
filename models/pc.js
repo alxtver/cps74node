@@ -26,7 +26,10 @@ const pc = new Schema({
         type: Date,
         default: () => Date.now() + 3*60*60*1000 //время МСК
       },
-    back_color: String,
+    back_color: {
+        type: String,
+        default: '#3d3d3d'
+    },
     attachment: String
 })
 
