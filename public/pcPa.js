@@ -1069,6 +1069,9 @@ function CreateTableEditPC(data, color) {
   divCont.appendChild(divColor)
 
   $('#colorpicker').farbtastic('#color')
+  let c = document.getElementById('color').value
+  let shadow ='0px 30px 60px ' + c
+  $('.tableContent').css('box-shadow', shadow)
 
   let button_edit = document.createElement('input')
   button_edit.type = 'submit'
@@ -1172,12 +1175,9 @@ function CreateTableEditPC(data, color) {
         notesCell.contentEditable = "true"
 
         $(newRow).insertAfter(checkedRow)
-
-
       }
     })
   })
-
 
   $('#delete-row').click(function () {
     $("#pc_unit").find('input[name="record"]').each(function () {

@@ -82,6 +82,9 @@ jQuery._farbtastic = function (container, callback) {
   fb.updateValue = function (event) {
     if (this.value && this.value != fb.color) {
       fb.setColor(this.value);
+      let c = document.getElementById('color').value
+      let shadow ='0px 30px 60px ' + c
+      $('.tableContent').css('box-shadow', shadow)
     }
   }
 
@@ -183,6 +186,9 @@ jQuery._farbtastic = function (container, callback) {
 
     // Process
     fb.mousemove(event);
+    let c = document.getElementById('color').value
+    let shadow ='0px 30px 60px ' + c
+    $('.tableContent').css('box-shadow', shadow)    
     return false;
   }
 
@@ -191,6 +197,9 @@ jQuery._farbtastic = function (container, callback) {
    */
   fb.mousemove = function (event) {
     // Get coordinates relative to color picker center
+    let c = document.getElementById('color').value
+    let shadow ='0px 30px 60px ' + c
+    $('.tableContent').css('box-shadow', shadow)
     var pos = fb.widgetCoords(event);
 
     // Set new HSL parameters
