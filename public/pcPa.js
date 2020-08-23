@@ -513,7 +513,7 @@ function setPage(page) {
 
 function load_pc(id) {
   $.ajax({
-    url: "/pc/pc_edit",
+    url: "/pcPa/pc_edit",
     headers: {
       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
     },
@@ -1202,7 +1202,7 @@ function CreateSelect(data) {
 
 function edit_serial_number(id, obj, unit, serial_number) {
   $.ajax({
-    url: "/pc/insert_serial",
+    url: "/pcPa/insert_serial",
     type: "POST",
     headers: {
       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
@@ -1243,7 +1243,7 @@ function edit_serial_number(id, obj, unit, serial_number) {
 
 function edit_serial_number_apkzi(id, obj, unit, serial_number) {
   $.ajax({
-    url: "/pc/insert_serial_apkzi",
+    url: "/pcPa/insert_serial_apkzi",
     type: "POST",
     headers: {
       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
@@ -1263,7 +1263,9 @@ function edit_serial_number_apkzi(id, obj, unit, serial_number) {
 function UpdateCells(pc, how, callback) {
   if (how) {
     // Обновление всех таблиц
-    load_data()
+    let page = document.getElementById('page').value
+    let pages = document.getElementById('pagesCount').value
+    loadPage(page, pages)
   } else {
     //Обновление только одной таблицы
     let divContainer = document.getElementById(pc._id)
@@ -1343,7 +1345,7 @@ function focusOn() {
 
 function find_serial(serial) {
   $.ajax({
-    url: "/pc/find_serial",
+    url: "/pcPa/find_serial",
     method: "POST",
     headers: {
       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
@@ -1373,7 +1375,7 @@ function klcCopy() {
 function delBtn() {
   let id = $('#hidId').val()
   $.ajax({
-    url: "/pc/delete",
+    url: "/pcPa/delete",
     method: "POST",
     headers: {
       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
@@ -1382,7 +1384,9 @@ function delBtn() {
       id: id
     },
     success: function (data) {
-      load_data()
+      let page = document.getElementById('page').value
+      let pages = document.getElementById('pagesCount').value
+      loadPage(page, pages)
     }
   })
 }
@@ -1390,7 +1394,7 @@ function delBtn() {
 function testPC() {
   $("#testData").val('dsfsdfdffsdf')
   $.ajax({
-    url: "/pc/test",
+    url: "/pcPa/test",
     method: "POST",
     headers: {
       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')

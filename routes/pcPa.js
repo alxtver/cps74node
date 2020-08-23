@@ -115,7 +115,7 @@ router.post('/add', auth, async (req, res) => {
 
   try {
     await pc.save();
-    res.redirect('/');
+    res.redirect('/')
   } catch (e) {
     console.log(e);
   }
@@ -545,11 +545,12 @@ router.post('/copy', auth, async (req, res) => {
 
       number = plusOne(number)
     }
-    res.render('pc', {
-      title: 'Машины',
-      isPC: true,
-      part: pc.part
-    })
+    res.redirect('/pcPa')
+    // res.render('pcPa', {
+    //   title: 'Машины',
+    //   isPC: true,
+    //   part: pc.part
+    // })
   } else {
     let newPC = new PC({
       serial_number: req.body.serial_number,
@@ -590,11 +591,12 @@ router.post('/copy', auth, async (req, res) => {
     }
     try {
       await newPC.save()
-      res.render('pc', {
-        title: 'Машины',
-        isPC: true,
-        part: pc.part
-      })
+      res.redirect('/pcPa')
+      // res.render('pcPa', {
+      //   title: 'Машины',
+      //   isPC: true,
+      //   part: pc.part
+      // })
     } catch (error) {
       console.log(error)
     }
