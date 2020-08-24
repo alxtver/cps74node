@@ -550,17 +550,6 @@ function TablePc(pc) {
   td.innerHTML = pc.serial_number
   td.id = pc.serial_number
   td.style.cssText = 'font-size: 1.5rem;background-color:' + pc.back_color
-  // if (pc.back_color == 'Синий') {
-  //   td.className = "serial_blue up"
-  // } else if (pc.back_color == 'Зеленый') {
-  //   td.className = "serial_green up"
-  // } else if (pc.back_color == 'Красный') {
-  //   td.className = "serial_red up"
-  // } else if (pc.back_color == 'Желтый') {
-  //   td.className = "serial_yelow up"
-  // } else {
-  //   td.className = "serial up"
-  // }
   tr.appendChild(td)
 
   td = document.createElement("td")
@@ -579,7 +568,7 @@ function TablePc(pc) {
   td = document.createElement("td")
   if (pc.attachment) {
     td.innerHTML = pc.attachment
-    td.style.cssText = 'font-size: 1.1rem;background-color:' + pc.back_color
+    td.style.cssText = 'font-size: 1.1rem;border-radius: 0px 10px 0px 0px;background-color:' + pc.back_color
   }
 
   tr.appendChild(td)
@@ -962,17 +951,6 @@ function CreateTableFromJSON(data, callback) {
     divCont.id = data[i]._id
     divCont.className = "pcCard mb-3"
     divCont.style.cssText = '-webkit-box-shadow: 0 30px 60px 0' + data[i].back_color + ';box-shadow: 0 30px 60px 0' + data[i].back_color
-    // if (data[i].back_color == 'Синий') {
-    //   divCont.className = "tableContent-blue mb-3"
-    // } else if (data[i].back_color == 'Зеленый') {
-    //   divCont.className = "tableContent-green mb-3"
-    // } else if (data[i].back_color == 'Красный') {
-    //   divCont.className = "tableContent-red mb-3"
-    // } else if (data[i].back_color == 'Желтый') {
-    //   divCont.className = "tableContent-yelow mb-3"
-    // } else {
-    //   divCont.className = "tableContent mb-3"
-    // }
     divContainer.appendChild(divCont);
     divCont.innerHTML = ""
     divCont.appendChild(table)
@@ -1064,7 +1042,6 @@ function CreateTableEditPC(data, color) {
   divCont.appendChild(colorPicker)
 
   let divColor = document.createElement('div')
-  divColor.className = 'mt-2'
   divColor.id = 'colorpicker'
   divCont.appendChild(divColor)
 

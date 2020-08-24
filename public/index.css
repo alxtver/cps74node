@@ -326,6 +326,7 @@ input[type=text]:placeholder {
 
 .table-sm {
   font-size: .8rem;
+  border-radius: 10px 10px 10px 10px;
 }
 
 .input-group-text {
@@ -414,50 +415,6 @@ input[type=text]:placeholder {
   margin-bottom: 3rem;
 }
 
-.tableContent-yelow{
-  -webkit-border-radius: 10px 10px 10px 10px;
-  border-radius: 10px 10px 10px 10px;
-  background: #fff;
-  padding: 30px;
-  position: relative;
-  padding: 0px;
-  -webkit-box-shadow: 0 30px 60px 0 rgba(255, 173, 0, 0.7);
-  box-shadow: 0 30px 60px 0 rgba(255, 173, 0, 0.9);
-}
-
-.tableContent-red {
-  -webkit-border-radius: 10px 10px 10px 10px;
-  border-radius: 10px 10px 10px 10px;
-  background: #fff;
-  padding: 30px;
-  position: relative;
-  padding: 0px;
-  -webkit-box-shadow: 0 30px 60px 0 rgba(247, 0, 129, 0.7);
-  box-shadow: 0 30px 60px 0 rgba(247, 0, 129, 0.9);
-}
-
-.tableContent-blue {
-  -webkit-border-radius: 10px 10px 10px 10px;
-  border-radius: 10px 10px 10px 10px;
-  background: #fff;
-  padding: 30px;
-  position: relative;
-  padding: 0px;
-  -webkit-box-shadow: 0 30px 60px 0 rgba(72, 13, 224, 0.7);
-  box-shadow: 0 30px 60px 0 rgba(72, 13, 224, 0.9);
-}
-
-.tableContent-green {
-  -webkit-border-radius: 10px 10px 10px 10px;
-  border-radius: 10px 10px 10px 10px;
-  background: #fff;
-  padding: 30px;
-  position: relative;
-  padding: 0px;
-  -webkit-box-shadow: 0 30px 60px 0 rgba(64, 247, 0, 0.7);
-  box-shadow: 0 30px 60px 0 rgba(64, 247, 0, 0.9);
-}
-
 .navbar {
   -webkit-box-shadow: 0 5px 10px 0 rgba(0,0,0,0.5);
   box-shadow: 0 5px 10px 0 rgba(0,0,0,0.5);
@@ -473,7 +430,10 @@ input[type=text]:placeholder {
 .pctable td {
   vertical-align: bottom;
 }
-
+.pctable {
+  border: 2px solid rgb(255 0 0 / 0%);
+  border-bottom: 1px solid;
+}
 #icon {
   width: 64px;
 }
@@ -763,13 +723,26 @@ th {
     display:none;
   }
 }
-
-
 @media (min-width: 992px) {
   .table-responsive {
     display:inline-table;
   }
 }
 
-
-
+#colorpicker {
+  visibility:hidden;
+  opacity:0;
+  height: 0px;
+  transition:visibility 1s linear,opacity 1s linear,height 0.5s ease-out;
+  list-style:none;  
+}
+#colorpicker:hover {
+  height: 195px;
+  visibility:visible;
+  opacity:1;
+}
+#color:hover~#colorpicker {
+  height: 195px;
+  visibility:visible;
+  opacity:1;
+}
