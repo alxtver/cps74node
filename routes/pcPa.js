@@ -666,7 +666,32 @@ router.post('/pc_update', auth, async (req, res) => {
 
 
 router.post('/delete', auth, async (req, res) => {
-  pc = await PC.findById(req.body.id)
+  const countPC = await PC.countDocuments({part: req.session.part}) - 1
+  const pc = await PC.findById(req.body.id)
+  const user = await User.findOne({username: req.session.user.username})
+  const pcCountOnPage = user.pcCount
+  let page = req.body.page
+  if (!page) {
+    page = 1
+  } else {
+    parseInt(page)
+  }
+  if (pcCountOnPage === '1' || pcCountOnPage === '5' || pcCountOnPage === '10' || pcCountOnPage === '20') {
+    pages = Math.ceil(countPC/parseInt(pcCountOnPage))
+  } else if (pcCountOnPage === 'all') {
+    pages = 1
+  } else if (pcCountOnPage === 'supplement') {
+    const attach = await PC.find({part: req.session.part}).distinct('attachment')
+    const attachNumbers = attach.map(function(a) {
+      return a.replace(/[^\d]/gim,'')
+    })
+    const uniqueSet = new Set(attachNumbers)
+    pages = uniqueSet.size
+  }
+  if (page > pages) {
+    --page 
+  }
+  
   await PKI.updateMany({
     part: pc.part,
     number_machine: pc.serial_number
@@ -682,7 +707,10 @@ router.post('/delete', auth, async (req, res) => {
   await PC.deleteOne({
     _id: req.body.id
   })
-  res.sendStatus(200)
+  res.send(JSON.stringify({
+    page: page,
+    pages: pages
+  }))
 })
 
 

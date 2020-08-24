@@ -1373,7 +1373,8 @@ function klcCopy() {
 }
 
 function delBtn() {
-  let id = $('#hidId').val()
+  let id = document.getElementById('hidId').value
+  let page = document.getElementById('page').value
   $.ajax({
     url: "/pcPa/delete",
     method: "POST",
@@ -1381,11 +1382,20 @@ function delBtn() {
       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
     },
     data: {
-      id: id
+      id: id,
+      page: page,
     },
     success: function (data) {
-      let page = document.getElementById('page').value
-      let pages = document.getElementById('pagesCount').value
+      let page = JSON.parse(data).page
+      let pages = JSON.parse(data).pages
+      document.getElementById('pagesCount').value = pages
+      if (pages > 1) {
+        createPagination(page)
+      } else {
+        createPagination(page)
+        document.getElementById('paginationTop').hidden = true
+        document.getElementById('paginationBottom').hidden = true
+      }      
       loadPage(page, pages)
     }
   })
