@@ -1,7 +1,7 @@
 function load_data(q) {
 
   $.ajax({
-    url: "/pc/search",
+    url: "/pcPa/search",
     method: "POST",
     headers: {
       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
@@ -11,7 +11,6 @@ function load_data(q) {
       csrf: $('meta[name="csrf"]').attr('content')
     },
     success: function (data) {
-
       CreateTableFromJSON(JSON.parse(data));
       let select = document.getElementById("serials")      
       for (const d of JSON.parse(data)) {
@@ -20,24 +19,19 @@ function load_data(q) {
         option.text = d.serial_number        
         select.add(option)        
       }
-      // $("#serials").selectpicker("refresh")
     }
   })
 }
 
 function load_part() {
   $.ajax({
-    url: "/pc/part",
+    url: "/pcPa/part",
     method: "POST",
     headers: {
       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
     },
     success: function (data) {
-
-      //$('#quote').html(data);
       CreateSelect(JSON.parse(data))
-
-      
     }
   })
 }
@@ -49,9 +43,7 @@ function TablePc(pc) {
   table.className = "table table-sm table-bordered table-hover table-responsive pctable"
   table.id = pc._id
 
-
   let tr = table.insertRow(-1) // TABLE ROW.        
-
   let td = document.createElement("td")
   td.innerHTML = 'ФДШИ.' + pc.fdsi
   td.className = "up"

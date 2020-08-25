@@ -173,7 +173,7 @@ function searchEAN(valueEAN) {
 
 function load_part_navbar() {
   $.ajax({
-    url: "/pc/part",
+    url: "/pcPa/part",
     method: "POST",
     //async: false,
     headers: {
