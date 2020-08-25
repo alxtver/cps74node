@@ -17,6 +17,7 @@ router.get('/', auth, (req, res) => {
   })
 })
 
+
 router.get('/import', auth, async (req, res) => {
   const part = req.session.part
   let workbook = new excel.Workbook()
@@ -46,7 +47,6 @@ router.get('/import', auth, async (req, res) => {
       },
     }
   })
-
   let styleBold = workbook.createStyle({
     font: {
       size: 12,
@@ -71,7 +71,6 @@ router.get('/import', auth, async (req, res) => {
       },
     }
   })
-
   let styleBoldLeft = workbook.createStyle({
     font: {
       size: 12,
@@ -120,209 +119,6 @@ router.get('/import', auth, async (req, res) => {
       },
     }
   })
-
-
-  let styleBoldColor = workbook.createStyle({
-    font: {
-      size: 14,
-      bold: true
-    },
-    fill: {
-      type: 'pattern',
-      patternType: 'solid',
-      bgColor: '#AAAAAA',
-      fgColor: '#AAAAAA',
-    },
-    border: {
-      left: {
-        style: 'thin',
-        color: 'black',
-      },
-      right: {
-        style: 'thin',
-        color: 'black',
-      },
-      top: {
-        style: 'thick',
-        color: 'black',
-      },
-      bottom: {
-        style: 'thin',
-        color: 'black',
-      },
-    }
-  })
-
-  let styleBoldColorYellow = workbook.createStyle({
-    font: {
-      size: 14,
-      bold: true
-    },
-    fill: {
-      type: 'pattern',
-      patternType: 'solid',
-      bgColor: '#f9ab05',
-      fgColor: '#F9AB05',
-    },
-    border: {
-      left: {
-        style: 'thin',
-        color: 'black',
-      },
-      right: {
-        style: 'thin',
-        color: 'black',
-      },
-      top: {
-        style: 'thick',
-        color: 'black',
-      },
-      bottom: {
-        style: 'thin',
-        color: 'black',
-      },
-    }
-  })
-
-  let styleYellow = workbook.createStyle({
-    fill: {
-      type: 'pattern',
-      patternType: 'solid',
-      bgColor: '#F9AB05',
-      fgColor: '#F9AB05',
-    }
-  })
-
-  let styleBoldColorRed = workbook.createStyle({
-    font: {
-      size: 14,
-      bold: true
-    },
-    fill: {
-      type: 'pattern',
-      patternType: 'solid',
-      bgColor: '#F94CA5',
-      fgColor: '#F94CA5',
-    },
-    border: {
-      left: {
-        style: 'thin',
-        color: 'black',
-      },
-      right: {
-        style: 'thin',
-        color: 'black',
-      },
-      top: {
-        style: 'thick',
-        color: 'black',
-      },
-      bottom: {
-        style: 'thin',
-        color: 'black',
-      },
-    }
-  })
-
-  let styleRed = workbook.createStyle({
-    fill: {
-      type: 'pattern',
-      patternType: 'solid',
-      bgColor: '#F94CA5',
-      fgColor: '#F94CA5',
-    }
-  })
-
-  let styleBoldColorGreen = workbook.createStyle({
-    font: {
-      size: 14,
-      bold: true
-    },
-    fill: {
-      type: 'pattern',
-      patternType: 'solid',
-      bgColor: '#79F94C',
-      fgColor: '#79F94C',
-    },
-    border: {
-      left: {
-        style: 'thin',
-        color: 'black',
-      },
-      right: {
-        style: 'thin',
-        color: 'black',
-      },
-      top: {
-        style: 'thick',
-        color: 'black',
-      },
-      bottom: {
-        style: 'thin',
-        color: 'black',
-      },
-    }
-  })
-
-  let styleGreen = workbook.createStyle({
-    fill: {
-      type: 'pattern',
-      patternType: 'solid',
-      bgColor: '#79F94C',
-      fgColor: '#79F94C',
-    }
-  })
-
-  let styleWhite = workbook.createStyle({
-    fill: {
-      type: 'pattern',
-      patternType: 'solid',
-      bgColor: '#FFFFFF',
-      fgColor: '#FFFFFF',
-    }
-  })
-
-
-  let styleBoldColorBlue = workbook.createStyle({
-    font: {
-      size: 14,
-      bold: true
-    },
-    fill: {
-      type: 'pattern',
-      patternType: 'solid',
-      bgColor: '#7D54E9',
-      fgColor: '#7D54E9',
-    },
-    border: {
-      left: {
-        style: 'thin',
-        color: 'black',
-      },
-      right: {
-        style: 'thin',
-        color: 'black',
-      },
-      top: {
-        style: 'thick',
-        color: 'black',
-      },
-      bottom: {
-        style: 'thin',
-        color: 'black',
-      },
-    }
-  })
-
-  let styleBlue = workbook.createStyle({
-    fill: {
-      type: 'pattern',
-      patternType: 'solid',
-      bgColor: '#7D54E9',
-      fgColor: '#7D54E9',
-    }
-  })
-
   let styleBot = workbook.createStyle({
     font: {
       size: 12
@@ -454,49 +250,68 @@ router.get('/import', auth, async (req, res) => {
       },
     }
   })
-
   let styleHead = workbook.createStyle({
     font: {
       bold: true,
       size: 18
     },
   })
-
   const allPC = await PC.find({part: part}).sort({'created': 1})
   
   ws.row(1).setHeight(30)
   ws.cell(1, 2).string(part).style(styleHead)
 
   let n = 3
-
-
   let col2width = 21
   let col3width = 23
   let col4width = 16
   let col5width = 12
   let col6width = 17
-  let col7width = 13
-
-  let firstCellColor = styleWhite
+  let col7width = 13  
 
   for (const pc of allPC) {
+    let backColor = pc.back_color
+    let styleBoldColor = workbook.createStyle({
+      font: {
+        size: 14,
+        bold: true
+      },
+      fill: {
+        type: 'pattern',
+        patternType: 'solid',
+        bgColor: backColor,
+        fgColor: backColor,
+      },
+      border: {
+        left: {
+          style: 'thin',
+          color: 'black',
+        },
+        right: {
+          style: 'thin',
+          color: 'black',
+        },
+        top: {
+          style: 'thick',
+          color: 'black',
+        },
+        bottom: {
+          style: 'thin',
+          color: 'black',
+        },
+      }
+    })
+    let styleWhite = workbook.createStyle({
+      fill: {
+        type: 'pattern',
+        patternType: 'solid',
+        bgColor: backColor,
+        fgColor: backColor,
+      }
+    })
     let stColor = styleBoldColor
-    if (pc.back_color == "Желтый") {
-      stColor = styleBoldColorYellow
-      firstCellColor = styleYellow
-    }
-    if (pc.back_color == "Зеленый") {
-      stColor = styleBoldColorGreen
-      firstCellColor = styleGreen
-    }
-    if (pc.back_color == "Синий") {
-      stColor = styleBoldColorBlue
-      firstCellColor = styleBlue
-    }
-    if (pc.back_color == "Красный") {
-      stColor = styleBoldColorRed
-      firstCellColor = styleRed
-    }
+    let firstCellColor = styleWhite
+  
     ws.cell(n, 1).string("").style(firstCellColor)
     ws.cell(n, 2).string("ФДШИ." + pc.fdsi).style(styleBotLeft)    
     ws.cell(n, 3).string(pc.serial_number).style(stColor)
@@ -588,8 +403,7 @@ router.get('/import', auth, async (req, res) => {
         ws.cell(n, 5).string('').style(styleBot1)  
         ws.cell(n, 6).string('').style(styleBot1)  
         ws.cell(n, 7).string('').style(styleBot1)  
-      }
-      
+      }      
     }
     n += 1
   }
@@ -615,17 +429,12 @@ router.get('/import', auth, async (req, res) => {
 
 router.get('/:id/passportDocx', auth, async (req, res) => {
   const appDir = path.dirname(require.main.filename)
-  const docDir = appDir + '/public/docx'
- 
-  const pc = await PC.findById(req.params.id)
-    
-  var content = fs.readFileSync(path.resolve(docDir, 'input.docx'), 'binary');
-
-  var zip = new PizZip(content);
-
-  var doc = new Docxtemplater();
-  doc.loadZip(zip);
-
+  const docDir = appDir + '/public/docx' 
+  const pc = await PC.findById(req.params.id)    
+  const content = fs.readFileSync(path.resolve(docDir, 'input.docx'), 'binary')
+  const zip = new PizZip(content)
+  let doc = new Docxtemplater()
+  doc.loadZip(zip)
   //set the templateVariables
   doc.setData({
       fdsi: pc.fdsi,
@@ -633,9 +442,7 @@ router.get('/:id/passportDocx', auth, async (req, res) => {
       pc_unit: pc.pc_unit,
       system_case_unit: pc.system_case_unit
   })
-
   try {
-      // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
       doc.render()
   }
   catch (error) {
@@ -646,12 +453,9 @@ router.get('/:id/passportDocx', auth, async (req, res) => {
           properties: error.properties,
       }
       console.log(JSON.stringify({error: e}))
-      // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
       throw error
   }
-
   let buf = doc.getZip().generate({type: 'nodebuffer'});
-
   // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
   fs.writeFileSync(path.resolve(docDir, 'output.docx'), buf)
   const file = `${docDir}/output.docx`
@@ -745,9 +549,7 @@ router.get('/:id/zipDocx', auth, async (req, res) => {
       // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
       throw error
   }
-
-  let buf = doc.getZip().generate({type: 'nodebuffer'});
-
+  let buf = doc.getZip().generate({type: 'nodebuffer'})
   // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
   fs.writeFileSync(path.resolve(docDir, 'output.docx'), buf)
   const file = `${docDir}/output.docx`
