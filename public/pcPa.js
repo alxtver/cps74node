@@ -1,8 +1,5 @@
-
-
 function CreateTablePC() {
   let col_rus = ["", "Обозначение изделия", "Наименование изделия", "Характеристика", "Количество", "Заводской номер", "Примечания"]
-
   let table = document.createElement("table");
   table.className = "table table-sm table-bordered table-hover"
   table.id = "pc_unit"
@@ -19,10 +16,9 @@ function CreateTablePC() {
     thead.appendChild(tr)
   }
 
-  const divContainer = document.getElementById("pc_unit_table");
-  divContainer.innerHTML = "";
-  divContainer.appendChild(table);
-
+  const divContainer = document.getElementById("pc_unit_table")
+  divContainer.innerHTML = ""
+  divContainer.appendChild(table)
 
   let tableRef = document.getElementById('pc_unit').getElementsByTagName('tbody')[0]
 
@@ -60,7 +56,6 @@ function CreateTablePC() {
     nameCell.id = "name"
     nameCell.contentEditable = "true"
 
-
     let quantityCell = tr.insertCell(-1)
     quantityCell.innerHTML = "1"
     quantityCell.className = "quantity"
@@ -85,8 +80,6 @@ function CreateTablePC() {
       notesCell.innerHTML = 'с кабелем питания'
     }
   }
-
-
   tr = tableRef.insertRow(-1)
   tr.className = "apkzi"
 
@@ -111,7 +104,6 @@ function CreateTablePC() {
   nameCell.id = "name"
   nameCell.contentEditable = "true"
 
-
   quantityCell = tr.insertCell(-1)
   quantityCell.innerHTML = "1"
   quantityCell.className = "quantity"
@@ -128,16 +120,13 @@ function CreateTablePC() {
   notesCell.className = "notes"
   notesCell.id = "notes"
   notesCell.contentEditable = "true"
-
 }
 
 function CreateTableSystemCase() {
   let col_rus = ["", "Обозначение изделия", "Наименование изделия", "Характеристика", "Количество", "Заводской номер", "Примечания"]
-
   let table = document.createElement("table");
   table.className = "table table-sm table-bordered table-hover"
   table.id = "system_case_unit"
-
 
   // Заголовок таблицы
   let tr = table.insertRow(-1)
@@ -145,7 +134,6 @@ function CreateTableSystemCase() {
   thead.className = "thead-dark"
   for (let i = 0; i < col_rus.length; i++) {
     let th = document.createElement("th")
-    // th.className = "thead-dark"
     th.innerHTML = col_rus[i]
     tr.appendChild(th)
     thead.appendChild(tr)
@@ -193,7 +181,6 @@ function CreateTableSystemCase() {
     nameCell.id = "name"
     nameCell.contentEditable = "true"
 
-
     let quantityCell = tr.insertCell(-1)
     quantityCell.innerHTML = "1"
     quantityCell.className = "quantity"
@@ -219,8 +206,6 @@ function CreateTableSystemCase() {
     notesCell.contentEditable = "true"
 
   }
-
-
   tr = tableRef.insertRow(-1)
 
   chCell = tr.insertCell(-1)
@@ -363,62 +348,6 @@ function CreateTableSystemCase() {
   })
 }
 
-// function load_data(q) {
-//   $.ajax({
-//     url: "/pc/search",
-//     headers: {
-//       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-//     },
-//     method: "POST",
-//     data: {
-//       q: q
-//     },
-//     success: function (data) {
-//       CreateTableFromJSON(JSON.parse(data), function () {
-//         $("td.name").each(function () {
-//           if ($(this).text() == 'Н/Д') {
-//             $(this).css("background-color", "coral")
-//           }
-//         })
-//         $("td.serial_number").each(function () {
-//           if (!$(this).text()) {
-//             $(this).css("background-color", "darkgray")
-//           }
-//         })
-
-//         let current_id = $("#hidd_id").val()
-//         let next_id = current_id.split(";")
-//         next_id[1] = Number(next_id[1]) + 1 + ''
-
-//         if ($(".popup-checkbox").is(":not(:checked)")) {
-//           $(".serial_number[data-data='" + next_id.join(';') + "']").focus()
-//           $("td.serial_number").each(function () {
-//             if (!$(this).text()) {
-//               $(this).css("background-color", "darkgray")
-//             }
-//           })
-//         }
-//       })
-
-//       let select = document.getElementById("serials")
-//       for (const d of JSON.parse(data)) {
-//         let option = document.createElement("option")
-//         option.value = d.serial_number
-//         option.text = d.serial_number
-//         select.add(option)
-//       }
-//       // $("#serials").selectpicker("refresh")
-
-//       if (q) {
-//         const serial_number_id = '#' + q
-//         $('html, body').animate({
-//           scrollTop: $(serial_number_id).offset().top - 70
-//         }, 500)
-//       }
-//     }
-//   })
-// }
-
 function loadPage(page, pages) {
   $.ajax({
     url: "/pcPa/pagination",
@@ -494,7 +423,6 @@ function getPage() {
 }
 
 function setPage(page) {
-
   if (page) {
     $.ajax({
       url: "/pcPa/setPage",
@@ -616,8 +544,6 @@ function TablePc(pc) {
     fdsiCell.innerHTML = arr_pc_unit[j].fdsi
     fdsiCell.dataset.id = pc._id
 
-
-
     let typeCell = tr.insertCell(-1)
     typeCell.innerHTML = arr_pc_unit[j].type
     typeCell.dataset.id = pc._id
@@ -647,12 +573,10 @@ function TablePc(pc) {
     serial_numberCell.dataset.data = pc._id + ';' + j + ';' + 'pc_unit'
     serial_numberCell.className = 'serial_number'
 
-
     let notesCell = tr.insertCell(-1)
     notesCell.innerHTML = arr_pc_unit[j].notes
     notesCell.innerHTML = arr_pc_unit[j].notes
     fdsiCell.dataset.id = pc._id
-
   }
 
   if (pc.system_case_unit.length > 0) {
@@ -734,9 +658,7 @@ function TablePc(pc) {
 
 function TableEditPcUnit(pc) {
   // таблица ПЭВМ
-
   let table = document.createElement("table");
-
   table.className = "table table-sm table-bordered table-hover table-responsive pctable"
   table.id = "pc_unit"
 
@@ -1020,16 +942,6 @@ function CreateTableEditPC(data, color) {
   button_del_row.value = 'Удалить строку'
   divCont.appendChild(button_del_row)
 
-  // let select_color = document.createElement('select')
-  // select_color.className = 'form-control'
-  // select_color.id = 'select_color'
-  // let colors = ['...', 'Красный', 'Синий', 'Зеленый', 'Желтый']
-  // for (const color of colors) {
-  //   let option = document.createElement("option")
-  //   option.text = color;
-  //   select_color.add(option)
-  // }
-  // divCont.appendChild(select_color)
   let br = document.createElement('br')
   divCont.appendChild(br)
   
@@ -1064,8 +976,6 @@ function CreateTableEditPC(data, color) {
   button_back.value = 'Назад'
   button_back.setAttribute("onclick", "location.href='/pcPa?part=" + data.part + "&serial_number=" + data.serial_number + "'")
   divCont.appendChild(button_back)
-
-
 
   $("#add-row").click(function () {
     $("#pc_unit").find('input[name="record"]').each(function () {
@@ -1217,7 +1127,6 @@ function edit_serial_number(id, obj, unit, serial_number) {
   })
 }
 
-
 function edit_serial_number_apkzi(id, obj, unit, serial_number) {
   $.ajax({
     url: "/pcPa/insert_serial_apkzi",
@@ -1274,8 +1183,6 @@ function UpdateCells(pc, how, callback) {
     button_edit.dataset.id = pc._id
     divCont.appendChild(button_edit)
 
-
-
     //переход на одну ячейку вниз
     let current_id = $("#hidd_id").val()
     let next_id = current_id.split(";")
@@ -1301,8 +1208,6 @@ function UpdateCells(pc, how, callback) {
           speechSynthesis.speak(ut)
         }
       }
-
-
       $("td.serial_number").each(function () {
         if (!$(this).text()) {
           $(this).css("background-color", "darkgray")
@@ -1412,7 +1317,6 @@ function testPC() {
         td.innerHTML = results[i]
         tr.appendChild(td)
       }
-
       divContainer.appendChild(table)
     }
   })
@@ -1508,11 +1412,8 @@ function createPagination(page) {
   document.getElementById('paginationTop').innerHTML = str;
   document.getElementById('paginationBottom').innerHTML = str;
   loadPage(page, pages)
-  document.getElementById('page').value = page
-  
-  return str;
-
-  
+  document.getElementById('page').value = page  
+  return str;  
 }
 
 function selectPages(pageCount) {

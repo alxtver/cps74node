@@ -736,12 +736,12 @@ th {
   transition:visibility 1s linear,opacity 1s linear,height 0.5s ease-out;
   list-style:none;  
 }
-#colorpicker:hover {
+#colorpicker:focus {
   height: 195px;
   visibility:visible;
   opacity:1;
 }
-#color:hover~#colorpicker {
+#color:focus~#colorpicker {
   height: 195px;
   visibility:visible;
   opacity:1;
