@@ -1,3 +1,6 @@
+body {
+  font-family: 'Ubuntu', sans-serif;
+}
 .nav-wrapper {
   padding: 0 2rem;
 }
