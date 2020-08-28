@@ -70,7 +70,7 @@
 
 
 <script>
-  $(document).ready(function () {
+  document.addEventListener("DOMContentLoaded", function() {
     let decodedEan = decodeURIComponent("{{{encodedEan}}}")
     let jsonObj = JSON.parse(decodedEan)
     let ean_id = jsonObj._id
@@ -215,7 +215,7 @@ let id = $('#id').val()
       url: "/equipment/edit",
       type: "POST",
       headers: {
-        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
       },
       data: {
         id: id,

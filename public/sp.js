@@ -3,7 +3,7 @@ function searchPKI(q) {
     url: "/sp/search",
     method: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       q: q,
@@ -19,7 +19,7 @@ function load_data(q) {
     url: "/sp/search",
     method: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       q: q,
@@ -240,7 +240,7 @@ function edit_country(id, country) {
     url: "/sp/edit_ajax",
     type: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       id: id,
@@ -266,7 +266,7 @@ function edit_szz1(id, szz1) {
     url: "/sp/edit_ajax",
     type: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       id: id,
@@ -285,7 +285,7 @@ function load_type_select() {
     method: "POST",
     //async: false,
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     success: function (data) {
       if (data) {
@@ -312,7 +312,7 @@ function changeSelectType(selectedItem) {
     url: "/sp/insert_type_session",
     method: "POST",    
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       selectedItem: selectedItem
@@ -427,7 +427,7 @@ function CreateTableSP() {
       url: "/sp/edit",
       type: "POST",
       headers: {
-        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
       },
       data: {
         id: id,
@@ -551,7 +551,7 @@ function CreateTableSP_PKI(pki) {
       url: "/sp/edit",
       type: "POST",
       headers: {
-        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
       },
       data: {
         id: id,
@@ -569,7 +569,7 @@ function load_table_sp(pki_id) {
     url: "/sp/sp_unit",
     method: "GET",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       id: pki_id,
@@ -590,7 +590,7 @@ function load_table_viborka(pki_id, viborka) {
     url: "/sp/viborka",
     method: "GET",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       id: pki_id,
@@ -688,7 +688,7 @@ $(document).on('keypress', '#ean_code', function (e) {
       url: "/sp/check_ean",
       method: "GET",
       headers: {
-        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
       },
       data: {
         ean: ean,
@@ -817,7 +817,7 @@ function CreateTableSP_EAN(ean) {
       url: "/sp/edit",
       type: "POST",
       headers: {
-        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
       },
       data: {
         id: id,

@@ -92,9 +92,8 @@
     </ul>
     {{/if}}
     <script>
-      $(document).ready(function () {
+      document.addEventListener("DOMContentLoaded", function() {
         load_part_navbar()
-        // load_part_session()
       })
 
       $(document).on('change', '#part_select_navbar', function () {

@@ -133,7 +133,7 @@
 
 
 <script>
-  $(document).ready(function () {
+  document.addEventListener("DOMContentLoaded", function() {
   if (!sessionStorage.getItem("sound")) {
     document.getElementById("soundOff").hidden = true
     document.getElementById("soundOn").hidden = false

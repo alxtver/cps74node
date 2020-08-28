@@ -40,7 +40,7 @@
 </div>
 
 <script>
-  $(document).ready(function () {
+  document.addEventListener("DOMContentLoaded", function() {
     let decodedPki = decodeURIComponent("{{{encodedPki}}}")
     let jsonObj = JSON.parse(decodedPki)
     let viborka = jsonObj.viborka

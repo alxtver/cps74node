@@ -11,7 +11,7 @@
 <div id="showData"></div>
 
 <script>
-  $(document).ready(function () {
+  document.addEventListener("DOMContentLoaded", function() {
     load_data()
   $(document).on('change', '#type_select_navbar', function () {	
         load_data($("#type_select_navbar :selected").text())	

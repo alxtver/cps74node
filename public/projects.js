@@ -4,7 +4,7 @@ function load_data(q) {
     url: "/pcPa/search",
     method: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       q: q,
@@ -28,7 +28,7 @@ function load_part() {
     url: "/pcPa/part",
     method: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     success: function (data) {
       CreateSelect(JSON.parse(data))

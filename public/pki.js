@@ -3,7 +3,7 @@ function load_data(q) {
     url: "/pkis/search",
     method: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     }, 
     data: {
       q: q,
@@ -25,7 +25,7 @@ function edit_type(id, type) {
     url: "/pkis/edit_ajax",
     type: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       id: id,
@@ -40,7 +40,7 @@ function edit_vendor(id, vendor) {
     url: "/pkis/edit_ajax",
     type: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       id: id,
@@ -55,7 +55,7 @@ function edit_model(id, model) {
     url: "/pkis/edit_ajax",
     type: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       id: id,
@@ -70,7 +70,7 @@ function edit_serial_number(id, serial_number) {
     url: "/pkis/edit_ajax",
     type: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       id: id,
@@ -85,7 +85,7 @@ function edit_country(id, country) {
     url: "/pkis/edit_ajax",
     type: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       id: id,
@@ -100,7 +100,7 @@ function edit_part(id, part) {
     url: "/pkis/edit_ajax",
     type: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       id: id,
@@ -220,7 +220,7 @@ function delBtn() {
     url: "/pkis/del",
     method: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       id: id,
@@ -238,7 +238,7 @@ function load_type_select() {
     method: "POST",
     //async: false,
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     success: function (data) {
       if (data) {
@@ -267,7 +267,7 @@ function changeSelectType(selectedItem) {
     url: "/sp/insert_type_session",
     method: "POST",    
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       selectedItem: selectedItem
@@ -284,7 +284,7 @@ function searchPKI(q) {
     url: "/pkis/search",
     method: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       q: q,
@@ -300,7 +300,7 @@ $(function() {
     url: "/pkis/autocomplete",
     method: "GET",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     success: function (data) {
       const types = JSON.parse(data).types

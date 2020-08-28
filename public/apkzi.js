@@ -2,7 +2,7 @@ function load_data(q, part) {
     $.ajax({
         url: "/apkzi/search",
         method: "POST",
-        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+        headers: {'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content},
         data: {
             q: q,
             part: part
@@ -14,12 +14,12 @@ function load_data(q, part) {
 }
 
 function delBtn() {
-    let id = $('#hidId').val()
-    let part = $('#hidPart').val()
+    let id = document.getElementById('hidId').value    
+    let part = document.getElementById('hidPart').value
     $.ajax({
         url: "/apkzi/del",
         method: "POST",
-        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+        headers: {'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content},
         data: {
             id: id,
             part: part
@@ -132,7 +132,7 @@ function edit_fdsi(id, fdsi) {
     $.ajax({
         url: "/apkzi/edit_ajax",
         type: "POST",
-        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+        headers: {'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content},
         data: {
             id: id,
             fdsi: fdsi
@@ -145,7 +145,7 @@ function edit_apkzi_name(id, apkzi_name) {
     $.ajax({
         url: "/apkzi/edit_ajax",
         type: "POST",
-        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+        headers: {'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content},
         data: {
             id: id,
             apkzi_name: apkzi_name
@@ -158,7 +158,7 @@ function edit_kont_name(id, kont_name) {
     $.ajax({
         url: "/apkzi/edit_ajax",
         type: "POST",
-        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+        headers: {'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content},
         data: {
             id: id,
             kont_name: kont_name
@@ -171,7 +171,7 @@ function edit_zav_number(id, zav_number) {
     $.ajax({
         url: "/apkzi/edit_ajax",
         type: "POST",
-        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+        headers: {'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content},
         data: {
             id: id,
             zav_number: zav_number
@@ -184,7 +184,7 @@ function edit_kontr_zav_number(id, kontr_zav_number) {
     $.ajax({
         url: "/apkzi/edit_ajax",
         type: "POST",
-        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+        headers: {'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content},
         data: {
             id: id,
             kontr_zav_number: kontr_zav_number
@@ -197,7 +197,7 @@ function edit_part(id, part) {
     $.ajax({
         url: "/apkzi/edit_ajax",
         type: "POST",
-        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+        headers: {'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content},
         data: {
             id: id,
             part: part
@@ -210,7 +210,7 @@ function edit_number_machine(id, number_machine) {
     $.ajax({
         url: "/apkzi/edit_ajax",
         type: "POST",
-        headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+        headers: {'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content},
         data: {
             id: id,
             number_machine: number_machine

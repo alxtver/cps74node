@@ -365,7 +365,7 @@ function load_data(q) {
   $.ajax({
     url: "/pc/search",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     method: "POST",
     data: {
@@ -421,7 +421,7 @@ function load_pc(id) {
   $.ajax({
     url: "/pc/pc_edit",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     method: "POST",
     data: {
@@ -1100,7 +1100,7 @@ function edit_serial_number(id, obj, unit, serial_number) {
     url: "/pc/insert_serial",
     type: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       id: id,
@@ -1141,7 +1141,7 @@ function edit_serial_number_apkzi(id, obj, unit, serial_number) {
     url: "/pc/insert_serial_apkzi",
     type: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       id: id,
@@ -1241,7 +1241,7 @@ function find_serial(serial) {
     url: "/pc/find_serial",
     method: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       serial: serial
@@ -1271,7 +1271,7 @@ function delBtn() {
     url: "/pc/delete",
     method: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       id: id
@@ -1288,7 +1288,7 @@ function testPC() {
     url: "/pc/test",
     method: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     success: function (data) {
       let serials = JSON.parse(data).serials

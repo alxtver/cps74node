@@ -2,22 +2,16 @@
 function addSession() {
   let field_ean_code = document.getElementById("ean_code").value
   sessionStorage.setItem("ean_code", field_ean_code)
-
   let field_type_pki = document.getElementById("type_pki").value
   sessionStorage.setItem("type_pki", field_type_pki)
-
   let field_vendor = document.getElementById("vendor").value
   sessionStorage.setItem("vendor", field_vendor)
-
   let field_model = document.getElementById("model").value
   sessionStorage.setItem("model", field_model)
-
   let field_country = document.getElementById("country").value
   sessionStorage.setItem("country", field_country)
-
   let field_part = document.getElementById("part").value
   sessionStorage.setItem("part", field_part)
-
   let field_serial_number = document.getElementById("serial_number").value
   sessionStorage.setItem("serial_number", field_serial_number)
 }
@@ -28,32 +22,26 @@ function loadSession() {
   if (sessionStorage.getItem("ean_code")) {
     field_ean_code.value = sessionStorage.getItem("ean_code")
   }
-
   let field_type_pki = document.getElementById("type_pki")
   if (sessionStorage.getItem("type_pki")) {
     field_type_pki.value = sessionStorage.getItem("type_pki")
   }
-
   let field_vendor = document.getElementById("vendor")
   if (sessionStorage.getItem("vendor")) {
     field_vendor.value = sessionStorage.getItem("vendor")
   }
-
   let field_model = document.getElementById("model")
   if (sessionStorage.getItem("model")) {
     field_model.value = sessionStorage.getItem("model")
   }
-
   let field_country = document.getElementById("country")
   if (sessionStorage.getItem("country")) {
     field_country.value = sessionStorage.getItem("country")
   }
-
   let field_part = document.getElementById("part")
   if (sessionStorage.getItem("part")) {
     field_part.value = sessionStorage.getItem("part")
   }
-
   if (sessionStorage.getItem("type_pki")) {
     document.getElementById("serial_number").focus()
   } else {
@@ -149,7 +137,7 @@ function searchEAN(valueEAN) {
     url: "/pkis/searchEAN",
     method: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content    
     },
     data: {
       valueEAN: valueEAN
@@ -157,15 +145,16 @@ function searchEAN(valueEAN) {
     success: function (data) {
       if (data != 'none') {
         ean = JSON.parse(data)
-        $('#type_pki').val(ean.type_pki)
-        $('#vendor').val(ean.vendor)
-        $('#model').val(ean.model)
-        $('#country').val(ean.country)
+        document.getElementById('type_pki').value = ean.type_pki
+        document.getElementById('vendor').value = ean.vendor
+        document.getElementById('model').value = ean.model
+        document.getElementById('country').value = ean.country
+
       } else {
-        $('#type_pki').val('')
-        $('#vendor').val('')
-        $('#model').val('')
-        $('#country').val('')
+        document.getElementById('type_pki').value = ''
+        document.getElementById('vendor').value = ''
+        document.getElementById('model').value = ''
+        document.getElementById('country').value = ''
       }
     }
   })
@@ -177,13 +166,13 @@ function load_part_navbar() {
     method: "POST",
     //async: false,
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     success: function (data) {
       if (data) {
         CreateSelectNavbar(JSON.parse(data).parts, function () {
-          if (JSON.parse(data).reqSesPart) {
-            $("#part_select_navbar option:contains(" + JSON.parse(data).reqSesPart + ")").prop('selected', true)
+          if (JSON.parse(data).currentPartId) {
+            document.getElementById('part_select_navbar').value = JSON.parse(data).currentPartId
           }
         })
       }
@@ -192,45 +181,28 @@ function load_part_navbar() {
 }
 
 function CreateSelectNavbar(data, callback) {
-  $("#part_select").append($('<option value="">...</option>'));
+  let select = document.getElementById('part_select_navbar')
   for (let i = 0; i < data.length; i++) {
-    $('#part_select_navbar').append('<option value="' + data[i]._id + '">' + data[i].part + '</option>');
+    let option = document.createElement("option")
+    option.text = data[i].part
+    option.value = data[i]._id
+    select.appendChild(option)
   }
   callback()
-}
-
-function load_part_session() {
-  $.ajax({
-    url: "/pkis/part_session",
-    method: "POST",
-    //async: false,
-    headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-    },
-    success: function (data) {
-      if (data) {
-        $("#part_select_navbar option:contains(" + data + ")").prop('selected', true)
-      }
-    }
-  })
 }
 
 function changeSelect(selectedItem) {
   $.ajax({
     url: "/insert_part_session",
     method: "POST",
-    //async: false,
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       selectedItem: selectedItem
     },
     success: function () {
-      location.reload()
-      
+      location.reload()      
     }
-
-  })
-  
+  })  
 }

@@ -352,7 +352,7 @@ function loadPage(page, pages) {
   $.ajax({
     url: "/pcPa/pagination",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     method: "POST",
     data: {
@@ -412,7 +412,7 @@ function getPage() {
   $.ajax({
     url: "/pcPa/getPage",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     method: "GET",
     success: function (page) {
@@ -427,7 +427,7 @@ function setPage(page) {
     $.ajax({
       url: "/pcPa/setPage",
       headers: {
-        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
       },
       data: {
         page: page
@@ -443,7 +443,7 @@ function load_pc(id) {
   $.ajax({
     url: "/pcPa/pc_edit",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     method: "POST",
     data: {
@@ -1092,7 +1092,7 @@ function edit_serial_number(id, obj, unit, serial_number) {
     url: "/pcPa/insert_serial",
     type: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       id: id,
@@ -1132,7 +1132,7 @@ function edit_serial_number_apkzi(id, obj, unit, serial_number) {
     url: "/pcPa/insert_serial_apkzi",
     type: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       id: id,
@@ -1230,7 +1230,7 @@ function find_serial(serial) {
     url: "/pcPa/find_serial",
     method: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       serial: serial
@@ -1261,7 +1261,7 @@ function delBtn() {
     url: "/pcPa/delete",
     method: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       id: id,
@@ -1289,7 +1289,7 @@ function testPC() {
     url: "/pcPa/test",
     method: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     success: function (data) {
       let serials = JSON.parse(data).serials
@@ -1420,7 +1420,7 @@ function selectPages(pageCount) {
   $.ajax({
     url: "/pcPa/pageCount",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     method: "POST",
     data: {

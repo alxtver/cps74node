@@ -1,16 +1,17 @@
-$(document).ready(function () {
-    load_data()
-    $("body").on('click', '.delBtn', function () {
-      $('#hidId').val($(this).data("id"))
-    })
+document.addEventListener("DOMContentLoaded", function() {
+  load_data()
+  $("body").on('click', '.delBtn', function () {
+    $('#hidId').val($(this).data("id"))
   })
+})
+
 
 function load_data(q) {
     $.ajax({
       url: "/countries/load",
       method: "GET",
       headers: {
-        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
       },
       success: function (data) {
         CreateTableFromJSON(JSON.parse(data).countries)        
@@ -82,7 +83,7 @@ function load_data(q) {
       url: "/countries/del",
       method: "POST",
       headers: {
-        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
       },
       data: {
         id: id

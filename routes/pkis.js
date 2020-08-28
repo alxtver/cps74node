@@ -225,12 +225,6 @@ router.post("/part", auth, async function (req, res) {
 })
 
 
-router.post("/part_session", async function (req, res) {
-  if (!req.session.part) return res.sendStatus(400)
-  res.send(req.session.part)
-})
-
-
 router.post("/del", auth, async (req, res) => {
   const part = req.body.part
   let pki = await Pki.findById(req.body.id)

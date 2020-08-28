@@ -3,7 +3,7 @@ function load_table_sp(ean_id) {
     url: "/equipment/sp_unit",
     method: "GET",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       id: ean_id,
@@ -162,7 +162,7 @@ function CreateTable1SP() {
       url: "/equipment/add",
       type: "POST",
       headers: {
-        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
       },
       data: {
         id: id,
@@ -332,7 +332,7 @@ function load_data(q) {
     url: "/equipment/load",
     method: "GET",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       q: q,
@@ -437,7 +437,7 @@ function searchEANCode(q) {
     url: "/equipment/search",
     method: "GET",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     data: {
       q: q,
@@ -456,7 +456,7 @@ $(function() {
     url: "/equipment/autocomplete",
     method: "GET",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     success: function (data) {
       const types = JSON.parse(data).types
@@ -482,7 +482,7 @@ function load_type_select() {
     method: "POST",
     //async: false,
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     success: function (data) {
       console.log(data)

@@ -191,14 +191,20 @@ router.get('/:id/edit', auth, async (req, res) => {
 
 
 router.post("/part", async function (req, res) {
-  parts = await Part.find().sort({
+  const parts = await Part.find().sort({
     created: -1
   })
-  reqSesPart = req.session.part
+  let currentPartId
+  for (const part of parts) {
+    if (part.part == req.session.part) {
+      currentPartId = part._id
+      break
+    }
+  }
   if (!req.body) return res.sendStatus(400);
   res.send(JSON.stringify({
     parts: parts,
-    reqSesPart: reqSesPart
+    currentPartId: currentPartId
   }))
 })
 

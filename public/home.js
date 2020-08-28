@@ -6,7 +6,7 @@ function drawChart() {
     url: "/diagram",
     type: "POST",
     headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     success: function (arr) {
       var data = google.visualization.arrayToDataTable(arr)
