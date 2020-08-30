@@ -1,3 +1,16 @@
+async function postData(url = '', data = {}) {
+  let CSRF = document.querySelector('meta[name="csrf-token"]').content
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': CSRF
+    },
+    body: JSON.stringify(data)
+  })
+  return await response.json()
+}
+
 // добавление данных в сессию браузера
 function addSession() {
   let field_ean_code = document.getElementById("ean_code").value
@@ -133,51 +146,36 @@ function loadSessionApkzi() {
 }
 
 function searchEAN(valueEAN) {
-  $.ajax({
-    url: "/pkis/searchEAN",
-    method: "POST",
-    headers: {
-      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content    
-    },
-    data: {
-      valueEAN: valueEAN
-    },
-    success: function (data) {
+  let data = {
+    valueEAN: valueEAN
+  }
+  postData('/pkis/searchEAN', data)
+    .then((data) => {
       if (data != 'none') {
-        ean = JSON.parse(data)
-        document.getElementById('type_pki').value = ean.type_pki
-        document.getElementById('vendor').value = ean.vendor
-        document.getElementById('model').value = ean.model
-        document.getElementById('country').value = ean.country
-
+        document.getElementById('type_pki').value = data.type_pki
+        document.getElementById('vendor').value = data.vendor
+        document.getElementById('model').value = data.model
+        document.getElementById('country').value = data.country
       } else {
         document.getElementById('type_pki').value = ''
         document.getElementById('vendor').value = ''
         document.getElementById('model').value = ''
         document.getElementById('country').value = ''
       }
-    }
-  })
+    })
 }
 
 function load_part_navbar() {
-  $.ajax({
-    url: "/pcPa/part",
-    method: "POST",
-    //async: false,
-    headers: {
-      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-    },
-    success: function (data) {
+  postData('/pcPa/part')
+    .then((data) => {
       if (data) {
-        CreateSelectNavbar(JSON.parse(data).parts, function () {
-          if (JSON.parse(data).currentPartId) {
-            document.getElementById('part_select_navbar').value = JSON.parse(data).currentPartId
+        CreateSelectNavbar(data.parts, function () {
+          if (data.currentPartId) {
+            document.getElementById('part_select_navbar').value = data.currentPartId
           }
         })
       }
-    }
-  })
+    })
 }
 
 function CreateSelectNavbar(data, callback) {
@@ -192,17 +190,21 @@ function CreateSelectNavbar(data, callback) {
 }
 
 function changeSelect(selectedItem) {
-  $.ajax({
-    url: "/insert_part_session",
-    method: "POST",
-    headers: {
-      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-    },
-    data: {
-      selectedItem: selectedItem
-    },
-    success: function () {
-      location.reload()      
+  let data = {
+    selectedItem: selectedItem
+  }
+  postData('/insert_part_session', data)
+    .then((data) => {
+      location.reload()
+    })
+}
+
+function setPage(page) {
+  if (page) {
+    let data = {
+      page: page
     }
-  })  
+    postData('/pcPa/setPage', data)
+      .then((data) => {})
+  }
 }

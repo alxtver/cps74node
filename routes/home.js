@@ -71,7 +71,7 @@ router.post('/diagram', auth, async (req, res) => {
 router.post("/insert_part_session", async function (req, res) {  
   await User.findByIdAndUpdate(req.session.user._id, {lastPart: req.body.selectedItem})
   req.session.part = req.body.selectedItem
-  res.sendStatus(200)
+  res.send(JSON.stringify('OK'))
 })
 
 

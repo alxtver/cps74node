@@ -765,11 +765,9 @@ router.post('/setPage', auth, async (req, res) => {
   if (req.body.page) {
     let user = await User.findOne({username: req.session.user.username})
     user.lastPage = req.body.page
-    await user.save()
-    res.sendStatus(200)
-  } else {
-    res.sendStatus(200)
+    await user.save()    
   }
+  res.status(200).json({ message: 'ok' })
 })
 
 

@@ -272,10 +272,11 @@ router.post("/del", auth, async (req, res) => {
 })
 
 router.post("/searchEAN", auth, async function (req, res) {
+  console.log(req.body)
   const ean = await EAN.findOne({
     ean_code: req.body.valueEAN
   })
-  if (!ean) return res.send('none')
+  if (!ean) return res.send(JSON.stringify('none'))
   res.send(JSON.stringify(ean)) // отправляем пришедший ответ обратно
 })
 

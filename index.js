@@ -22,8 +22,14 @@ const favicon = require('express-favicon')
 const varMiddleware = require('./middleware/variables')
 const userMiddleware = require('./middleware/user')
 const partMiddleware = require('./middleware/part')
+const bodyParser = require('body-parser')
 
 const app = express()
+
+app.use(bodyParser.urlencoded({
+  extended: true
+}))
+app.use(bodyParser.json())
 
 const config = require('./config.js')
 
