@@ -228,8 +228,8 @@ router.post('/edit', auth, async (req, res) => {
 })
 
 
-router.get('/sp_unit', auth, async (req, res) => {
-  const ean = await EAN.findById(req.query.id)
+router.post('/sp_unit', auth, async (req, res) => {
+  const ean = await EAN.findById(req.body.id)
   if (ean.sp_unit && ean.sp_unit.length > 0) {
     res.send(ean)
   } else {

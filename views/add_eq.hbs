@@ -62,7 +62,7 @@
 
       <input type="hidden" name="_csrf" value="{{csrf}}">
       {{!-- <input type="hidden" name="hidd_serial" id="hidd_serial" class="form-control" value="" required> --}}
-      <button type="submit" class="btn btn-outline-success">Добавить оборудование</button>
+      <button type="button" onclick="submitEq()" class="btn btn-outline-success">Добавить оборудование</button>
       <input type="button" value="Назад" class="btn btn-outline-primary" onclick="window.location='/equipment';">
     </form>
   </div>
@@ -71,7 +71,6 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-
     CreateTable1SP()
     document.getElementById("ean_code").focus()
     $("#add-row").click(function () {
