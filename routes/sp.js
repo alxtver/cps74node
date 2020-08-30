@@ -162,7 +162,7 @@ router.post('/edit_ajax', auth, async (req, res) => {
 	} catch (error) {
 		console.log(error)
 	}
-	res.sendStatus(200)
+	res.status(200).json({ message: 'ok' })
 })
 
 
@@ -171,7 +171,7 @@ router.post("/insert_type_session", async function (req, res) {
 		lastType: req.body.selectedItem
 	})
 	req.session.type = req.body.selectedItem
-	res.sendStatus(200)
+	res.status(200).json({ message: 'ok' })
 })
 
 
@@ -212,10 +212,10 @@ router.get('/sp_unit', auth, async (req, res) => {
 		if (ean && ean.sp_unit.length > 0) {
 			res.send(ean)
 		} else {
-			res.sendStatus(200)
+			res.status(200).json({ message: 'ok' })
 		}
 	} else {
-		res.sendStatus(200)
+		res.status(200).json({ message: 'ok' })
 	}
 })
 
@@ -248,7 +248,7 @@ router.get('/check_ean', auth, async (req, res) => {
 			res.send(ean.sp_unit1)
 		}
 	} else {
-		res.sendStatus(200)
+		res.status(200).json({ message: 'ok' })
 	}
 })
 

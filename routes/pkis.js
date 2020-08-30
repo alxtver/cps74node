@@ -84,7 +84,7 @@ router.post('/edit_ajax', auth, async (req, res) => {
     pc_copy.system_case_unit = pc.system_case_unit
     pc_copy.save()
   }
-  res.sendStatus(200)
+  res.status(200).json({ message: 'ok' })
 })
 
 

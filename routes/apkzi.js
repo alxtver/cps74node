@@ -32,7 +32,7 @@ router.post('/edit_ajax', auth, async (req, res) => {
   try {
     if (!req.body) return res.sendStatus(400)
     await Apkzi.findByIdAndUpdate(req.body.id, req.body)
-    res.sendStatus(200)    
+    res.status(200).json({ message: 'ok' })    
   } catch (error) {
     console.log(error)
   }
@@ -73,14 +73,13 @@ router.post('/del', auth, async (req, res) => {
       note: note,
       user: req.session.user.username,
       part: req.session.part
-    })
-    
+    })    
     await Apkzi.deleteOne({_id: req.body.id})
     log.save()
-    res.send(part)
+    res.send(JSON.stringify(part))
   } catch (e) {
     console.log(e)
-    res.send(part)
+    res.send(JSON.stringify(part))
   }  
 })
 

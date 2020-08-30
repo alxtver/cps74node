@@ -233,7 +233,7 @@ router.get('/sp_unit', auth, async (req, res) => {
   if (ean.sp_unit && ean.sp_unit.length > 0) {
     res.send(ean)
   } else {
-    res.sendStatus(200)
+    res.status(200).json({ message: 'ok' })
   }
 })
 
@@ -255,7 +255,7 @@ router.get("/search", auth, async (req, res) => {
         eans: eans
       }))
     } else {
-      res.sendStatus(200)
+      res.status(200).json({ message: 'ok' })
     }
   }
 })

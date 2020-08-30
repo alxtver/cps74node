@@ -604,7 +604,7 @@ router.post('/delete', auth, async (req, res) => {
   await PC.deleteOne({
     _id: req.body.id
   })
-  res.sendStatus(200)
+  res.status(200).json({ message: 'ok' })
 })
 
 

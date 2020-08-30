@@ -1,16 +1,3 @@
-async function postData(url = '', data = {}) {
-  let CSRF = document.querySelector('meta[name="csrf-token"]').content
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRF-Token': CSRF
-    },
-    body: JSON.stringify(data)
-  })
-  return await response.json()
-}
-
 // добавление данных в сессию браузера
 function addSession() {
   let field_ean_code = document.getElementById("ean_code").value
@@ -207,4 +194,22 @@ function setPage(page) {
     postData('/pcPa/setPage', data)
       .then((data) => {})
   }
+}
+
+function on(elSelector, eventName, selector, fn) {
+  var element = document.querySelector(elSelector)
+  element.addEventListener(eventName, function(event) {
+      var possibleTargets = element.querySelectorAll(selector)
+      var target = event.target
+      for (var i = 0, l = possibleTargets.length; i < l; i++) {
+          var el = target
+          var p = possibleTargets[i]
+          while(el && el !== element) {
+              if (el === p) {
+                  return fn.call(p, event)
+              }
+              el = el.parentNode
+          }
+      }
+  })
 }

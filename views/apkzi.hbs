@@ -82,12 +82,6 @@
     edit_kontr_zav_number(id, kontr_zav_number)
   })
 
-  $(document).on('blur', '.part', function () {
-    let id = $(this).data("id")
-    let part = $(this).text()
-    edit_part(id, part)
-  })
-
   $(document).on('blur', '.number_machine', function () {
     let id = $(this).data("id")
     let number_machine = $(this).text()

@@ -28,7 +28,7 @@ router.post("/del", auth, async (req, res) => {
       await Countries.deleteOne({
         _id: req.body.id
       })
-      res.sendStatus(200)
+      res.status(200).json({ message: 'ok' })
     } catch (e) {
       console.log(e)
       res.sendStatus(500)

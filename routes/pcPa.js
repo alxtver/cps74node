@@ -48,7 +48,7 @@ router.post('/pageCount', auth, async (req, res) => {
   let user = await User.findOne({username: req.session.user.username})
   user.pcCount = req.body.pageCount
   await user.save()
-  res.sendStatus(200)
+  res.status(200).json({ message: 'ok' })
 })
 
 
