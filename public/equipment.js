@@ -15,7 +15,7 @@ function load_table_sp(ean_id) {
 }
 
 function CreateTable1SP() {  
-  let col_rus = ["", "Наименование", "Фирма", "Модель", "Количество", "Серийный номер", "СЗЗ Тип2"]
+  let col_rus = ["", "Наименование", "Фирма", "Модель", "Количество", "СЗЗ Тип2"]
   let table = document.createElement("table");
   table.className = "table table-sm table-bordered table-hover"
   table.id = "sp_unit"
@@ -64,97 +64,61 @@ function CreateTable1SP() {
   quantityCell.id = "quantity"
   quantityCell.contentEditable = "true"
 
-  let serial_numberCell = tr.insertCell(-1)
-  serial_numberCell.className = "serial_number"
-  serial_numberCell.id = "serial_number"
-  serial_numberCell.contentEditable = "true"
-
   let szz2Cell = tr.insertCell(-1)
   szz2Cell.innerHTML = '1'
   szz2Cell.className = "szz2"
   szz2Cell.id = "szz2"
   szz2Cell.contentEditable = "true"  
-
-  // document.forms["add"].submit()
-  // document.getElementById('add').submit(
-    
-  // )
-  
-  // $('#add').submit(function () {
-    
-  // })
-  
 }
 
-function submitEq() {
-  // get table html
-  
-  let ean_code = document.getElementById('ean_code').value
-  let type_pki = document.getElementById('type_pki').value
-  let vendor = document.getElementById('vendor').value
-  let model = document.getElementById('model').value
-  let country = document.getElementById('country').value
-
+function submitEq() {  
+  const type_pki = document.getElementById('type_pki').value
+  const vendor = document.getElementById('vendor').value
+  const model = document.getElementById('model').value
+  const ean_code = document.getElementById('ean_code').value
+  const country = document.getElementById('country').value
+// формирование POST запроса для таблицы СП
   let sp_unit = []
-  let n = 0
-  let name_temp = ''
-  
-  $('#pki_sp_table1 tr').each(function (i) {
-    name_temp = $(this).find(".name").text()
-    n += 1
-  })
-  alert(name_temp)
-  // формирование POST запроса для таблицы СП
-  if (n != 1 && name_temp != '') {
-    $('#pki_sp_table1 tr').each(function (i) {
-      if (i != 0) {
-        let name = $(this).find(".name").text()
-        let vendor = $(this).find(".vendor").text()
-        let model = $(this).find(".model").text()
-        let quantity = $(this).find(".quantity").text()
-        let serial_number = $(this).find(".serial_number").text()
-        let szz2 = $(this).find(".szz2").text()
-        sp_unit.push({
-          i: i,
-          name: name,
-          vendor: vendor,
-          model: model,
-          quantity: quantity,
-          serial_number: serial_number,
-          szz2: szz2
-        })
-      }        
-    })
+  let table = document.getElementById('pki_sp_table1')
+  let n = table.querySelectorAll('.name').length
+  let tr = table.querySelectorAll('tr')
+  if (n > 0) {
+    for (let i = 1; i < tr.length; i++) {
+      let name = tr[i].querySelector('.name').innerHTML
+      let vendor = tr[i].querySelector('.vendor').innerHTML
+      let model = tr[i].querySelector('.model').innerHTML
+      let quantity = tr[i].querySelector('.quantity').innerHTML
+      let szz2 = tr[i].querySelector('.szz2').innerHTML
+      sp_unit.push({
+        i: i,
+        name: name,
+        vendor: vendor,
+        model: model,
+        quantity: quantity,
+        szz2: szz2
+      })
+    }
   }
-
   let sp_unit1 = []
-  n = 0
-  name_temp = ''
-  $('#pki_sp_table2 tr').each(function (i) {
-    name_temp = $(this).find(".name").text()
-    n += 1
-  })
-  // формирование POST запроса для таблицы СП
-  if (n != 1 && name_temp != '') {
-    $('#pki_sp_table2 tr').each(function (i) {
-      if (i != 0) {
-        let name = $(this).find(".name").text()
-        let vendor = $(this).find(".vendor").text()
-        let model = $(this).find(".model").text()
-        let quantity = $(this).find(".quantity").text()
-        let serial_number = $(this).find(".serial_number").text()
-        let szz2 = $(this).find(".szz2").text()
-        sp_unit1.push({
-          i: i,
-          name: name,
-          vendor: vendor,
-          model: model,
-          quantity: quantity,
-          serial_number: serial_number,
-          szz2: szz2
-        })
-      }        
-    })
+  table = document.getElementById('pki_sp_table2')
+  n = table.querySelectorAll('.name').length
+  tr = table.querySelectorAll('tr')
+  if (n > 0) {
+    for (let i = 1; i < tr.length; i++) {
+      let name = tr[i].querySelector('.name').innerHTML
+      let vendor = tr[i].querySelector('.vendor').innerHTML
+      let model = tr[i].querySelector('.model').innerHTML
+      let quantity = tr[i].querySelector('.quantity').innerHTML
+      let szz2 = tr[i].querySelector('.szz2').innerHTML
+      sp_unit1.push({
+        i: i,
+        name: name,
+        vendor: vendor,
+        model: model,
+        quantity: quantity,
+        szz2: szz2
+      })
+    }
   }
   data = {
         ean_code: ean_code,
@@ -168,16 +132,14 @@ function submitEq() {
   postData('/equipment/add', data)
     .then((data) => {
     })
-
     if (ean_code && type_pki && vendor && model && country) {
       document.forms["add"].submit()
-    }
-    
+    }    
 }
 
 function CreateTableSP_EAN(ean) { 
   
-  let col_rus = ["", "Наименование", "Фирма", "Модель", "Количество", "Серийный (инв.) номер", "СЗЗ Тип2"]
+  let col_rus = ["", "Наименование", "Фирма", "Модель", "Количество", "СЗЗ Тип2"]
 
   let table = document.createElement("table");
   table.className = "table table-sm table-bordered table-hover"
@@ -232,14 +194,6 @@ function CreateTableSP_EAN(ean) {
   quantityCell.className = "quantity"
   quantityCell.id = "quantity"
   quantityCell.contentEditable = "true"
-
-  let serial_numberCell = tr.insertCell(-1)
-  serial_numberCell.className = "serial_number"  
-  serial_numberCell.id = "serial_number"
-  if (unit.serial_number == 'б/н' || unit.serial_number == 'Б/Н' || unit.serial_number == 'Б/н') {
-    serial_numberCell.innerHTML = unit.serial_number
-  }
-  serial_numberCell.contentEditable = "true"
 
   let szz2Cell = tr.insertCell(-1)
   szz2Cell.innerHTML = unit.szz2
@@ -306,14 +260,6 @@ function CreateTableSP_EAN(ean) {
       quantityCell.className = "quantity"
       quantityCell.id = "quantity"
       quantityCell.contentEditable = "true"
-
-      let serial_numberCell = tr.insertCell(-1)
-      serial_numberCell.className = "serial_number"  
-      serial_numberCell.id = "serial_number"
-      if (unit.serial_number == 'б/н' || unit.serial_number == 'Б/Н' || unit.serial_number == 'Б/н') {
-        serial_numberCell.innerHTML = unit.serial_number
-      }
-      serial_numberCell.contentEditable = "true"
 
       let szz2Cell = tr.insertCell(-1)
       szz2Cell.innerHTML = '1'
@@ -430,7 +376,6 @@ function searchEANCode(q) {
       }
     })
 }
-
 
 $(function() {
   $.ajax({

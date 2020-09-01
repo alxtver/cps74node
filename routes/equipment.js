@@ -31,7 +31,6 @@ router.get('/add', auth, (req, res) => {
 
 router.post('/load', auth, async (req, res) => {
   let type = req.body.q
-  console.log(req.body)
   let eans
   if (!type || type == '...') {
     eans = await EAN.find().limit(50).sort({created: -1})
@@ -80,12 +79,12 @@ router.post('/add', auth, async (req, res) => {
     await new_ean.save()
   }
   let pkis = Pki.find({ean_code: ean_code})
-  for (const pki of pkis) {
-    if (!pki.sp_unit || pki.sp_unit.length < 1) {
-      pki.sp_unit = sp_unit1
-      pki.save()
+  for (let i = 0; i < pkis.length; i++) {
+    if (!pki[i].sp_unit || pki[i].sp_unit.length < 1) {
+      pki[i].sp_unit = sp_unit1
+      pki[i].save()
     }
-  }
+  }  
   res.redirect('/equipment')
 })
 
