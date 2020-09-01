@@ -4,7 +4,6 @@ function load_table_sp(ean_id) {
   }
   postData('/equipment/sp_unit', data)
     .then((data) => {
-      console.log(data);
       if (data.message == 'ok'){
         CreateTable1SP()
       } else if (data.serial_number) {
@@ -326,24 +325,14 @@ function CreateTableSP_EAN(ean) {
 }
 
 function load_data(q) {
-  $.ajax({
-    url: "/equipment/load",
-    method: "GET",
-    headers: {
-      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-    },
-    data: {
-      q: q,
-    },
-    success: function (data) {
-      CreateTableFromJSON(JSON.parse(data).eans)
-      CreateSelectType(JSON.parse(data).types, function () {
-        if (JSON.parse(data).selectedType) {
-          $("#type_select_navbar option:contains(" + JSON.parse(data).selectedType + ")").prop('selected', true)
-        }
-      })
-    }
-  })
+  let data = {
+    q: q,
+  }
+  postData('/equipment/load', data)
+    .then((data) => {
+      CreateTableFromJSON(data.eans)
+      CreateSelectType(data.types, function(){})
+    })
 }
 
 
@@ -430,22 +419,16 @@ function CreateTableFromJSON(data) {
   divContainer.appendChild(table)
 }
 
-function searchEANCode(q) {  
-  $.ajax({
-    url: "/equipment/search",
-    method: "GET",
-    headers: {
-      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-    },
-    data: {
-      q: q,
-    },
-    success: function (data) {
-      if (data != 'OK'){        
-        CreateTableFromJSON(JSON.parse(data).eans)
-      }      
-    }
-  })
+function searchEANCode(q) {
+  let data = {
+    q: q,
+  }
+  postData('/equipment/search', data)
+    .then((data) => {
+      if (data.message != 'ok') {
+        CreateTableFromJSON(data.eans)
+      }
+    })
 }
 
 
@@ -478,12 +461,10 @@ function load_type_select() {
   $.ajax({
     url: "/sp/types",
     method: "POST",
-    //async: false,
     headers: {
       'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     success: function (data) {
-      console.log(data)
       if (data) {
         CreateSelectType(JSON.parse(data).parts, function () {
           if (JSON.parse(data).reqSesPart) {

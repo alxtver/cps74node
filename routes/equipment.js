@@ -29,13 +29,14 @@ router.get('/add', auth, (req, res) => {
 })
 
 
-router.get('/load', auth, async (req, res) => {
-  let type = req.query.q
+router.post('/load', auth, async (req, res) => {
+  let type = req.body.q
+  console.log(req.body)
   let eans
   if (!type || type == '...') {
     eans = await EAN.find().limit(50).sort({created: -1})
   } else {
-    eans = await EAN.find({type_pki: req.query.q}).sort({created: -1})
+    eans = await EAN.find({type_pki: type}).sort({created: -1})
   }
   const typesList = await EAN.find().distinct('type_pki')
   res.send(JSON.stringify({
@@ -238,8 +239,8 @@ router.post('/sp_unit', auth, async (req, res) => {
 })
 
 
-router.get("/search", auth, async (req, res) => {
-  if (req.query.q == 'null') {
+router.post("/search", auth, async (req, res) => {
+  if (req.body.q == 'null') {
     const eans = await EAN.find().limit(50).sort({
       created: -1
     })
@@ -248,15 +249,11 @@ router.get("/search", auth, async (req, res) => {
     }))
   } else {
     const eans = await EAN.find({
-      ean_code: req.query.q
+      ean_code: req.body.q
     })
-    if (eans) {
-      res.send(JSON.stringify({
-        eans: eans
-      }))
-    } else {
-      res.status(200).json({ message: 'ok' })
-    }
+    res.send(JSON.stringify({
+      eans: eans
+    }))
   }
 })
 
