@@ -4,7 +4,7 @@ function load_table_sp(ean_id) {
   }
   postData('/equipment/sp_unit', data)
     .then((data) => {
-      if (data.message == 'ok'){
+      if (data.message == 'ok') {
         CreateTable1SP()
       } else if (data.serial_number) {
         CreateTableSP_PKI(data)
@@ -14,7 +14,7 @@ function load_table_sp(ean_id) {
     })
 }
 
-function CreateTable1SP() {  
+function CreateTable1SP() {
   let col_rus = ["", "Наименование", "Фирма", "Модель", "Количество", "СЗЗ Тип2"]
   let table = document.createElement("table");
   table.className = "table table-sm table-bordered table-hover"
@@ -68,16 +68,16 @@ function CreateTable1SP() {
   szz2Cell.innerHTML = '1'
   szz2Cell.className = "szz2"
   szz2Cell.id = "szz2"
-  szz2Cell.contentEditable = "true"  
+  szz2Cell.contentEditable = "true"
 }
 
-function submitEq() {  
+function submitEq() {
   const type_pki = document.getElementById('type_pki').value
   const vendor = document.getElementById('vendor').value
   const model = document.getElementById('model').value
   const ean_code = document.getElementById('ean_code').value
   const country = document.getElementById('country').value
-// формирование POST запроса для таблицы СП
+  // формирование POST запроса для таблицы СП
   let sp_unit = []
   let table = document.getElementById('pki_sp_table1')
   let n = table.querySelectorAll('.name').length
@@ -121,26 +121,23 @@ function submitEq() {
     }
   }
   data = {
-        ean_code: ean_code,
-        type_pki: type_pki,
-        vendor: vendor,
-        model: model,
-        country: country,        
-        sp_unit: sp_unit,
-        sp_unit1: sp_unit1
-      }
+    ean_code: ean_code,
+    type_pki: type_pki,
+    vendor: vendor,
+    model: model,
+    country: country,
+    sp_unit: sp_unit,
+    sp_unit1: sp_unit1
+  }
   postData('/equipment/add', data)
-    .then((data) => {
-    })
-    if (ean_code && type_pki && vendor && model && country) {
-      document.forms["add"].submit()
-    }    
+    .then((data) => {})
+  if (ean_code && type_pki && vendor && model && country) {
+    document.forms["add"].submit()
+  }
 }
 
-function CreateTableSP_EAN(ean) { 
-  
+function CreateTableSP_EAN(ean) {
   let col_rus = ["", "Наименование", "Фирма", "Модель", "Количество", "СЗЗ Тип2"]
-
   let table = document.createElement("table");
   table.className = "table table-sm table-bordered table-hover"
   table.id = "sp_unit"
@@ -167,42 +164,40 @@ function CreateTableSP_EAN(ean) {
   for (const unit of ean.sp_unit) {
     tr = tableRef.insertRow(-1)
 
-  let chCell = tr.insertCell(-1)
-  chCell.innerHTML = "<input type='checkbox' name='record'>"
-  chCell.className = "record"
+    let chCell = tr.insertCell(-1)
+    chCell.innerHTML = "<input type='checkbox' name='record'>"
+    chCell.className = "record"
 
-  let nameCell = tr.insertCell(-1)
-  nameCell.className = "name"
-  nameCell.innerHTML = unit.name
-  nameCell.id = "name"
-  nameCell.contentEditable = "true"
+    let nameCell = tr.insertCell(-1)
+    nameCell.className = "name"
+    nameCell.innerHTML = unit.name
+    nameCell.id = "name"
+    nameCell.contentEditable = "true"
 
-  let vendorCell = tr.insertCell(-1)
-  vendorCell.className = "vendor"
-  vendorCell.innerHTML = unit.vendor
-  vendorCell.id = "vendor"
-  vendorCell.contentEditable = "true"
+    let vendorCell = tr.insertCell(-1)
+    vendorCell.className = "vendor"
+    vendorCell.innerHTML = unit.vendor
+    vendorCell.id = "vendor"
+    vendorCell.contentEditable = "true"
 
-  let modelCell = tr.insertCell(-1)
-  modelCell.className = "model"
-  modelCell.innerHTML = unit.model
-  modelCell.id = "model"
-  modelCell.contentEditable = "true"
+    let modelCell = tr.insertCell(-1)
+    modelCell.className = "model"
+    modelCell.innerHTML = unit.model
+    modelCell.id = "model"
+    modelCell.contentEditable = "true"
 
-  let quantityCell = tr.insertCell(-1)
-  quantityCell.innerHTML = unit.quantity
-  quantityCell.className = "quantity"
-  quantityCell.id = "quantity"
-  quantityCell.contentEditable = "true"
+    let quantityCell = tr.insertCell(-1)
+    quantityCell.innerHTML = unit.quantity
+    quantityCell.className = "quantity"
+    quantityCell.id = "quantity"
+    quantityCell.contentEditable = "true"
 
-  let szz2Cell = tr.insertCell(-1)
-  szz2Cell.innerHTML = unit.szz2
-  szz2Cell.className = "szz2"
-  szz2Cell.id = "szz2"
-  szz2Cell.contentEditable = "true"
+    let szz2Cell = tr.insertCell(-1)
+    szz2Cell.innerHTML = unit.szz2
+    szz2Cell.className = "szz2"
+    szz2Cell.id = "szz2"
+    szz2Cell.contentEditable = "true"
   }
-
-  
 
   table = document.createElement("table");
   table.className = "table table-sm table-bordered table-hover"
@@ -214,14 +209,10 @@ function CreateTableSP_EAN(ean) {
   thead.className = "thead-dark"
   for (let i = 0; i < col_rus.length; i++) {
     let th = document.createElement("th")
-    //th.rowSpan = 2
-    // th.className = "thead-dark"
     th.innerHTML = col_rus[i]
     tr.appendChild(th)
     thead.appendChild(tr)
   }
-
-  
 
   if (ean.sp_unit1 != '') {
     divContainer = document.getElementById("pki_sp_table2");
@@ -267,7 +258,7 @@ function CreateTableSP_EAN(ean) {
       szz2Cell.id = "szz2"
       szz2Cell.contentEditable = "true"
     }
-  }    
+  }
 }
 
 function load_data(q) {
@@ -277,13 +268,11 @@ function load_data(q) {
   postData('/equipment/load', data)
     .then((data) => {
       CreateTableFromJSON(data.eans)
-      CreateSelectType(data.types, function(){})
+      CreateSelectType(data.types, function () {})
     })
 }
 
-
 function CreateTableFromJSON(data) {
-
   let col_rus = ["#", 'Штрих код', "Наименование", "Фирма", "Модель", "Страна производства"]
 
   // CREATE DYNAMIC TABLE.
@@ -341,7 +330,7 @@ function CreateTableFromJSON(data) {
     modelCell.dataset.id = data[i]._id
     modelCell.className = "model"
     modelCell.id = "model"
-    modelCell.style.fontWeight = "700"    
+    modelCell.style.fontWeight = "700"
 
     let countryCell = tr.insertCell(-1)
     countryCell.innerHTML = data[i].country
@@ -349,10 +338,10 @@ function CreateTableFromJSON(data) {
     countryCell.className = "country"
     countryCell.id = "country"
     countryCell.contentEditable = "true"
-    countryCell.style.fontWeight = "700"    
+    countryCell.style.fontWeight = "700"
 
     let buttonCell = tr.insertCell(-1)
-    let id = data[i]._id    
+    let id = data[i]._id
     let part = data[i].part
     buttonCell.innerHTML = (
       "<button class=\"btn_f\" onclick=\"location.href='/equipment/" + id + "/edit?allow=true';\"><i class=\"fa fa-pen\"></i></button>"
@@ -377,55 +366,29 @@ function searchEANCode(q) {
     })
 }
 
-$(function() {
-  $.ajax({
-    url: "/equipment/autocomplete",
-    method: "GET",
-    headers: {
-      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-    },
-    success: function (data) {
-      const types = JSON.parse(data).types
-      const vendors = JSON.parse(data).vendors
-      const countrys = JSON.parse(data).countrys
-      $( "#vendor" ).autocomplete({
-        source: vendors      
-      })
-      $( "#type_pki" ).autocomplete({
-        source: types      
-      })
-      $( "#country" ).autocomplete({
-        source: countrys      
-      })
-    }
-  })
-})
-
-
-function load_type_select() {
-  $.ajax({
-    url: "/sp/types",
-    method: "POST",
-    headers: {
-      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-    },
-    success: function (data) {
-      if (data) {
-        CreateSelectType(JSON.parse(data).parts, function () {
-          if (JSON.parse(data).reqSesPart) {
-            $("#type_select_navbar").empty();
-            $("#type_select_navbar option:contains(" + JSON.parse(data).reqSesPart + ")").prop('selected', true)
-          }
-        })
-      }
-    }
-  })
+function autoComplete() {
+  getData('/equipment/autocomplete')
+    .then((data) => {
+      const types = data.types
+      const vendors = data.vendors
+      const countrys = data.countrys
+      autocomplete(document.getElementById("vendor"), vendors)
+      autocomplete(document.getElementById("type_pki"), types)
+      autocomplete(document.getElementById("country"), countrys)
+    })
 }
 
 function CreateSelectType(data, callback) {
-  $("#type_select_navbar").append($('<option value="">...</option>'));
+  let select = document.querySelector('#type_select_navbar')
+  let option = document.createElement("option")
+  option.text = '...'
+  option.value = ''
+  select.add(option)
   for (let i = 0; i < data.length; i++) {
-    $('#type_select_navbar').append('<option value="' + data[i] + '">' + data[i] + '</option>')
+    option = document.createElement("option")
+    option.text = data[i]
+    option.value = data[i]
+    select.add(option)
   }
   callback()
 }

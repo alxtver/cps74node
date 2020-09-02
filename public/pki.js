@@ -295,30 +295,16 @@ function searchPKI(q) {
   })
 }
 
-$(function() {
-  $.ajax({
-    url: "/pkis/autocomplete",
-    method: "GET",
-    headers: {
-      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-    },
-    success: function (data) {
-      const types = JSON.parse(data).types
-      const vendors = JSON.parse(data).vendors
-      const countrys = JSON.parse(data).countrys
-      const parts = JSON.parse(data).parts
-      $( "#vendor" ).autocomplete({
-        source: vendors      
-      })
-      $( "#type_pki" ).autocomplete({
-        source: types      
-      })
-      $( "#country" ).autocomplete({
-        source: countrys      
-      })
-      $( "#part" ).autocomplete({
-        source: parts
-      })
-    }
-  })
-})
+function autoComplete() {
+  getData('/pkis/autocomplete')
+    .then((data) => {
+      const types = data.types
+      const vendors = data.vendors
+      const countrys = data.countrys
+      const parts = data.parts
+      autocomplete(document.getElementById("vendor"), vendors)
+      autocomplete(document.getElementById("type_pki"), types)
+      autocomplete(document.getElementById("country"), countrys)
+      autocomplete(document.getElementById("part"), parts)
+    })
+}
