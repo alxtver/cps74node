@@ -15,7 +15,7 @@ function search() {
 			if (data.pcs.length > 0) {
 				CreateTablePC(data.pcs, containerPC, () => {
 					let val = document.querySelector('#serial_number').value
-					var tds = document.querySelectorAll('td[data-sn="'+val+'"]')
+					var tds = document.querySelectorAll('td[data-sn="'+val.trim()+'"]')
 					for (const td of tds) {
 						td.style.background = '#91c1f5'
 					}
