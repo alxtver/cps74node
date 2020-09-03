@@ -17,7 +17,7 @@ function search() {
 					let val = document.querySelector('#serial_number').value
 					var tds = document.querySelectorAll('td[data-sn="'+val.trim()+'"]')
 					for (const td of tds) {
-						td.style.background = '#91c1f5'
+						td.style.background = 'orangered'
 					}
 					
 				})
