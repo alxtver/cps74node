@@ -7,6 +7,8 @@ function search() {
 		.then((data) => {
 			let containerPKI = document.querySelector('#resultPKI')
 			let containerPC = document.querySelector('#resultPC')
+			containerPC.innerHTML = ''
+			containerPKI.innerHTML = ''
 			if (data.pkis.length > 0) {
 				CreateTablePKI(data.pkis, containerPKI)
 			}
