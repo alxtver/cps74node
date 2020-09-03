@@ -19,12 +19,19 @@ router.get('/', auth, async (req, res) => {
 router.post('/searchPKI', auth, async (req, res) => {
   const val = req.body.val
   const pkis = await PKI.find({serial_number: val.trim()})
-  const pcs = await PC.find({serial_number: val.trim()})
-  console.log(pcs);
-  res.send(JSON.stringify({
-    pkis: pkis,
-    pcs: pcs
-  }))
+  if (pkis.length == 1 && pkis[0].number_machine) {
+    let pcs = await PC.find({serial_number: pkis[0].number_machine})
+    res.send(JSON.stringify({
+      pkis: pkis,
+      pcs: pcs
+    }))
+  } else {
+    const pcs = await PC.find({serial_number: val.trim()})
+    res.send(JSON.stringify({
+      pkis: pkis,
+      pcs: pcs
+    }))
+  }  
 })
 
 

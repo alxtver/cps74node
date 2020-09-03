@@ -13,7 +13,14 @@ function search() {
 				CreateTablePKI(data.pkis, containerPKI)
 			}
 			if (data.pcs.length > 0) {
-				CreateTablePC(data.pcs, containerPC)
+				CreateTablePC(data.pcs, containerPC, () => {
+					let val = document.querySelector('#serial_number').value
+					var tds = document.querySelectorAll('td[data-sn="'+val+'"]')
+					for (const td of tds) {
+						td.style.background = '#91c1f5'
+					}
+					
+				})
 			}
 			if (data.pkis.length == 0 && data.pcs.length == 0) {
 				containerPKI.innerHTML = 'Нет результатов...'
@@ -71,7 +78,7 @@ function CreateTablePKI(data, container) {
 	container.appendChild(table)
 }
 
-function CreateTablePC(data, container) {
+function CreateTablePC(data, container, callback) {
   container.innerHTML = ""
   for (let i = 0; i < data.length; i++) {
     table = TablePc(data[i])
@@ -82,7 +89,8 @@ function CreateTablePC(data, container) {
     container.appendChild(divCont);
     divCont.innerHTML = ""
     divCont.appendChild(table)
-  }
+	}
+	callback()
 }
 
 function TablePc(pc) {
@@ -169,41 +177,32 @@ function TablePc(pc) {
 
     let fdsiCell = tr.insertCell(-1)
     fdsiCell.innerHTML = arr_pc_unit[j].fdsi
-    fdsiCell.dataset.id = pc._id
+    fdsiCell.dataset.sn = arr_pc_unit[j].serial_number
 
     let typeCell = tr.insertCell(-1)
     typeCell.innerHTML = arr_pc_unit[j].type
-    typeCell.dataset.id = pc._id
-    typeCell.className = 'type'
-    typeCell.contentEditable = 'true'
+    typeCell.dataset.sn = arr_pc_unit[j].serial_number
 
     let nameCell = tr.insertCell(-1)
     nameCell.innerHTML = arr_pc_unit[j].name
-    nameCell.dataset.id = pc._id
-    nameCell.className = 'name'
-    nameCell.contentEditable = 'true'
+    nameCell.dataset.sn = arr_pc_unit[j].serial_number
 
     let quantityCell = tr.insertCell(-1)
     quantityCell.innerHTML = arr_pc_unit[j].quantity
-    quantityCell.dataset.id = pc._id
+    quantityCell.dataset.sn = arr_pc_unit[j].serial_number
 
     let serial_numberCell = tr.insertCell(-1)
     serial_numberCell.innerHTML = arr_pc_unit[j].serial_number
-    serial_numberCell.dataset.id = pc._id
-    serial_numberCell.dataset.obj = j
-    serial_numberCell.dataset.unit = 'pc_unit'
-    serial_numberCell.contentEditable = "true"
+    serial_numberCell.dataset.sn = arr_pc_unit[j].serial_number
     if (arr_pc_unit[j].apkzi) {
       serial_numberCell.dataset.apkzi = "apkzi"
       serial_numberCell.contentEditable = "false"
     }
-    serial_numberCell.dataset.data = pc._id + ';' + j + ';' + 'pc_unit'
-    serial_numberCell.className = 'serial_number'
 
     let notesCell = tr.insertCell(-1)
     notesCell.innerHTML = arr_pc_unit[j].notes
     notesCell.innerHTML = arr_pc_unit[j].notes
-    fdsiCell.dataset.id = pc._id
+    notesCell.dataset.sn = arr_pc_unit[j].serial_number
   }
 
   if (pc.system_case_unit.length > 0) {
@@ -246,39 +245,31 @@ function TablePc(pc) {
 
     let fdsiCell = tr.insertCell(-1)
     fdsiCell.innerHTML = arr_system_case_unit[j].fdsi
-    fdsiCell.dataset.id = pc._id
+    fdsiCell.dataset.sn = arr_system_case_unit[j].serial_number
 
     let typeCell = tr.insertCell(-1)
     typeCell.innerHTML = arr_system_case_unit[j].type
-    typeCell.dataset.id = pc._id
-    typeCell.contentEditable = 'true'
+    typeCell.dataset.sn = arr_system_case_unit[j].serial_number
 
     let nameCell = tr.insertCell(-1)
     nameCell.innerHTML = arr_system_case_unit[j].name
-    nameCell.className = 'name'
-    nameCell.dataset.id = pc._id
-    nameCell.contentEditable = 'true'
+    nameCell.dataset.sn = arr_system_case_unit[j].serial_number
+
 
     let quantityCell = tr.insertCell(-1)
     quantityCell.innerHTML = arr_system_case_unit[j].quantity
-    quantityCell.dataset.id = pc._id
+    quantityCell.dataset.sn = arr_system_case_unit[j].serial_number
 
     let serial_numberCell = tr.insertCell(-1)
     serial_numberCell.innerHTML = arr_system_case_unit[j].serial_number
-    serial_numberCell.dataset.id = pc._id
-    serial_numberCell.dataset.obj = j
-    serial_numberCell.dataset.unit = 'system_case_unit'
-    serial_numberCell.dataset.data = pc._id + ';' + j + ';' + 'system_case_unit'
+    serial_numberCell.dataset.sn = arr_system_case_unit[j].serial_number
     if (arr_system_case_unit[j].szi) {
       serial_numberCell.dataset.apkzi = 'szi'
     }
 
-    serial_numberCell.className = 'serial_number'
-    serial_numberCell.contentEditable = "true"
-
     let notesCell = tr.insertCell(-1)
     notesCell.innerHTML = arr_system_case_unit[j].notes
-    notesCell.dataset.id = pc._id
+    notesCell.dataset.sn = arr_system_case_unit[j].serial_number
   }
   return table
 }
