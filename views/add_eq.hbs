@@ -72,6 +72,7 @@
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     CreateTable1SP()
+    autoComplete()
     document.getElementById("ean_code").focus()
     $("#add-row").click(function () {
       $("#sp_unit, #sp_unit1").find('input[name="record"]').each(function () {
