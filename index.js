@@ -15,6 +15,7 @@ const pcPaRoutes = require('./routes/pcPa')
 const authRoutes = require('./routes/auth')
 const spRoutes = require('./routes/sp')
 const logsRoutes = require('./routes/logs')
+const searchRoutes = require('./routes/search')
 const equipmentRoutes = require('./routes/equipment')
 const projectsRoutes = require('./routes/projects')
 const countriesRoutes = require('./routes/countries')
@@ -76,6 +77,7 @@ app.use('/sp', spRoutes)
 app.use('/equipment', equipmentRoutes)
 app.use('/logs', logsRoutes)
 app.use('/countries', countriesRoutes)
+app.use('/search', searchRoutes)
 
 
 const PORT = process.env.PORT || 3000

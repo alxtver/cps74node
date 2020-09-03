@@ -1,0 +1,13 @@
+<script src="/search.js"></script>
+<h1>Поиск ПКИ</h1>
+<form>
+  <div class="input-field">
+    <input id="serial_number" name="serial_number" onkeyup="search()" class="form-control" aria-describedby="modelHelp"
+      placeholder="Серийный номер" required>
+    <div class="invalid-feedback">
+      Введите серийный номер!
+    </div>
+  </div>
+</form>
+<div id="resultPKI"></div>
+<div id="resultPC"></div>
