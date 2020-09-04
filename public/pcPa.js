@@ -1,27 +1,76 @@
+
+function insCell(unit, parrent, html = '', classN, id=classN, contentEditable = false, dataset) {
+  let cell = parrent.insertCell(-1)
+  cell.className = classN
+  cell.id = id
+  cell.contentEditable = contentEditable
+  cell.innerHTML = html
+  if (id == 'serial_number') {
+    if (unit == 'Системный блок' || unit == 'Сетевой фильтр' || unit == 'Гарнитура' || unit == 'Корпус') {
+      cell.className = "serial_number number_mashine"
+    } else if (unit == 'Вентилятор процессора') {
+      cell.innerHTML = 'б/н'
+    } else {
+      cell.className = "serial_number"
+    }
+  }
+  if (id == 'notes' && unit == 'Системный блок') {
+    cell.innerHTML = 'с кабелем питания'
+  }
+  if (dataset) {
+    for (const [key, value] of Object.entries(dataset)) {
+      cell.dataset[key] = value
+    }
+  }
+}
+
+function addRow() {
+  let records = document.querySelectorAll('input[name="record"]')
+  for (const rec of records) {
+    if (rec.checked) {
+      let checkedRow = rec.closest("tr")
+      let newRow = document.createElement("tr")
+      insCell('', newRow, "<input type='checkbox' name='record'>", 'record')
+      insCell('', newRow, '', 'fdsi', 'fdsi', true)
+      insCell('', newRow, '', 'type', 'type', true)
+      insCell('', newRow, '', 'name', 'name', true)
+      insCell('', newRow, '1', 'quantity', 'quantity', true)
+      insCell('', newRow, '', 'serial_number', 'serial_number', true)
+      insCell('', newRow, '', 'notes', 'notes', true)
+      checkedRow.parentNode.insertBefore(newRow, checkedRow.nextSibling)
+    }    
+  }
+}
+
+function delRow() {
+  let records = document.querySelectorAll('input[name="record"]')
+  for (const rec of records) {
+    if (rec.checked) {
+      rec.closest("tr").remove()
+    }    
+  }
+}
+
 function CreateTablePC() {
   let col_rus = ["", "Обозначение изделия", "Наименование изделия", "Характеристика", "Количество", "Заводской номер", "Примечания"]
   let table = document.createElement("table");
   table.className = "table table-sm table-bordered table-hover"
   table.id = "pc_unit"
-
   // Заголовок таблицы
   let tr = table.insertRow(-1)
   let thead = table.createTHead()
   thead.className = "thead-dark"
   for (let i = 0; i < col_rus.length; i++) {
     let th = document.createElement("th")
-    // th.className = "thead-dark"
     th.innerHTML = col_rus[i]
     tr.appendChild(th)
     thead.appendChild(tr)
   }
-
   const divContainer = document.getElementById("pc_unit_table")
   divContainer.innerHTML = ""
   divContainer.appendChild(table)
 
   let tableRef = document.getElementById('pc_unit').getElementsByTagName('tbody')[0]
-
   const complectPCUnit = [
     'Системный блок',
     'Клавиатура',
@@ -32,94 +81,25 @@ function CreateTablePC() {
     'Сетевой фильтр',
     'Гарнитура'
   ]
-
   for (const unit of complectPCUnit) {
-    tr = tableRef.insertRow(-1)
-
-    let chCell = tr.insertCell(-1)
-    chCell.innerHTML = "<input type='checkbox' name='record'>"
-    chCell.className = "record"
-
-    let fdsiCell = tr.insertCell(-1)
-    fdsiCell.className = "fdsi"
-    fdsiCell.id = "fdsi"
-    fdsiCell.contentEditable = "true"
-
-    let typeCell = tr.insertCell(-1)
-    typeCell.className = "type"
-    typeCell.id = "type"
-    typeCell.contentEditable = "true"
-    typeCell.innerHTML = unit
-
-    let nameCell = tr.insertCell(-1)
-    nameCell.className = "name"
-    nameCell.id = "name"
-    nameCell.contentEditable = "true"
-
-    let quantityCell = tr.insertCell(-1)
-    quantityCell.innerHTML = "1"
-    quantityCell.className = "quantity"
-    quantityCell.id = "quantity"
-    quantityCell.contentEditable = "true"
-
-    let serial_numberCell = tr.insertCell(-1)
-
-    serial_numberCell.id = "serial_number"
-    serial_numberCell.contentEditable = "true"
-    if (unit == 'Системный блок' || unit == 'Сетевой фильтр' || unit == 'Гарнитура') {
-      serial_numberCell.className = "serial_number number_mashine"
-    } else {
-      serial_numberCell.className = "serial_number"
-    }
-
-    let notesCell = tr.insertCell(-1)
-    notesCell.className = "notes"
-    notesCell.id = "notes"
-    notesCell.contentEditable = "true"
-    if (unit == 'Системный блок') {
-      notesCell.innerHTML = 'с кабелем питания'
-    }
-  }
+    let tr = tableRef.insertRow(-1)    
+    insCell(unit, tr, "<input type='checkbox' name='record'>", 'record')
+    insCell(unit, tr, '', 'fdsi', 'fdsi', true)
+    insCell(unit, tr, unit, 'type', 'type', true)
+    insCell(unit, tr, '', 'name', 'name', true)
+    insCell(unit, tr, '1', 'quantity', 'quantity', true)
+    insCell(unit, tr, '', 'serial_number', 'serial_number', true)
+    insCell(unit, tr, '', 'notes', 'notes', true)
+  }  
   tr = tableRef.insertRow(-1)
   tr.className = "apkzi"
-
-  chCell = tr.insertCell(-1)
-  chCell.innerHTML = "<input type='checkbox' name='record'>"
-  chCell.className = "record"
-
-  fdsiCell = tr.insertCell(-1)
-  fdsiCell.className = "fdsi"
-  fdsiCell.id = "fdsi"
-  fdsiCell.contentEditable = "true"
-
-  typeCell = tr.insertCell(-1)
-  typeCell.className = "type"
-  typeCell.id = "type"
-  typeCell.contentEditable = "true"
-  typeCell.dataset.apkzi = "apkzi"
-  typeCell.innerHTML = "АПКЗИ"
-
-  nameCell = tr.insertCell(-1)
-  nameCell.className = "name"
-  nameCell.id = "name"
-  nameCell.contentEditable = "true"
-
-  quantityCell = tr.insertCell(-1)
-  quantityCell.innerHTML = "1"
-  quantityCell.className = "quantity"
-  quantityCell.id = "quantity"
-  quantityCell.contentEditable = "true"
-
-  serial_numberCell = tr.insertCell(-1)
-  serial_numberCell.className = "serial_number"
-  serial_numberCell.id = "serial_number"
-  serial_numberCell.dataset.apkzi = "apkzi"
-  serial_numberCell.contentEditable = "true"
-
-  notesCell = tr.insertCell(-1)
-  notesCell.className = "notes"
-  notesCell.id = "notes"
-  notesCell.contentEditable = "true"
+  insCell('', tr, "<input type='checkbox' name='record'>", 'record', 'record')
+  insCell('', tr, '', 'fdsi', 'fdsi', true)
+  insCell('', tr, 'АПКЗИ', 'type', 'type', true, {'apkzi': 'apkzi'})
+  insCell('', tr, '', 'name', 'name', true)
+  insCell('', tr, '1', 'quantity', 'quantity', true)
+  insCell('', tr, '', 'serial_number', 'serial_number', true, {'apkzi': 'apkzi'})
+  insCell('', tr, '', 'notes', 'notes', true)
 }
 
 function CreateTableSystemCase() {
@@ -138,11 +118,9 @@ function CreateTableSystemCase() {
     tr.appendChild(th)
     thead.appendChild(tr)
   }
-
-  const divContainer = document.getElementById("system_case_unit_table");
-  divContainer.innerHTML = "";
-  divContainer.appendChild(table);
-
+  const divContainer = document.getElementById("system_case_unit_table")
+  divContainer.innerHTML = ""
+  divContainer.appendChild(table)
   let tableRef = document.getElementById('system_case_unit_table').getElementsByTagName('tbody')[0]
   const complectSystemCaseUnit = [
     'Корпус',
@@ -159,193 +137,22 @@ function CreateTableSystemCase() {
   ]
   for (const unit of complectSystemCaseUnit) {
     tr = tableRef.insertRow(-1)
-    tr.className = "szi"
-
-    let chCell = tr.insertCell(-1)
-    chCell.innerHTML = "<input type='checkbox' name='record'>"
-    chCell.className = "record"
-
-    let fdsiCell = tr.insertCell(-1)
-    fdsiCell.className = "fdsi"
-    fdsiCell.id = "fdsi"
-    fdsiCell.contentEditable = "true"
-
-    let typeCell = tr.insertCell(-1)
-    typeCell.className = "type"
-    typeCell.id = "type"
-    typeCell.contentEditable = "true"
-    typeCell.innerHTML = unit
-
-    let nameCell = tr.insertCell(-1)
-    nameCell.className = "name"
-    nameCell.id = "name"
-    nameCell.contentEditable = "true"
-
-    let quantityCell = tr.insertCell(-1)
-    quantityCell.innerHTML = "1"
-    quantityCell.className = "quantity"
-    quantityCell.id = "quantity"
-    quantityCell.contentEditable = "true"
-
-    let serial_numberCell = tr.insertCell(-1)
-    serial_numberCell.className = "serial_number"
-    serial_numberCell.id = "serial_number"
-    serial_numberCell.contentEditable = "true"
-    if (unit == 'Корпус') {
-      serial_numberCell.className = "serial_number number_mashine"
-    } else {
-      serial_numberCell.className = "serial_number"
-    }
-    if (unit == 'Вентилятор процессора') {
-      serial_numberCell.innerHTML = 'б/н'
-    }
-
-    let notesCell = tr.insertCell(-1)
-    notesCell.className = "notes"
-    notesCell.id = "notes"
-    notesCell.contentEditable = "true"
-
+    insCell(unit, tr, "<input type='checkbox' name='record'>", 'record')
+    insCell(unit, tr, '', 'fdsi', 'fdsi', true)
+    insCell(unit, tr, unit, 'type', 'type', true)
+    insCell(unit, tr, '', 'name', 'name', true)
+    insCell(unit, tr, '1', 'quantity', 'quantity', true)
+    insCell(unit, tr, '', 'serial_number', 'serial_number', true)
+    insCell(unit, tr, '', 'notes', 'notes', true)
   }
   tr = tableRef.insertRow(-1)
-
-  chCell = tr.insertCell(-1)
-  chCell.innerHTML = "<input type='checkbox' name='record'>"
-  chCell.className = "record"
-
-  fdsiCell = tr.insertCell(-1)
-  fdsiCell.className = "fdsi"
-  fdsiCell.id = "fdsi"
-  fdsiCell.contentEditable = "true"
-
-  typeCell = tr.insertCell(-1)
-  typeCell.className = "type"
-  typeCell.id = "type"
-  typeCell.dataset.apkzi = "szi"
-  typeCell.contentEditable = "true"
-  typeCell.innerHTML = "Контроллер СЗИ10 PCI"
-
-  nameCell = tr.insertCell(-1)
-  nameCell.className = "name"
-  nameCell.id = "name"
-  nameCell.contentEditable = "true"
-
-  quantityCell = tr.insertCell(-1)
-  quantityCell.innerHTML = "1"
-  quantityCell.className = "quantity"
-  quantityCell.id = "quantity"
-  quantityCell.contentEditable = "true"
-
-  serial_numberCell = tr.insertCell(-1)
-  serial_numberCell.className = "serial_number"
-  serial_numberCell.id = "serial_number"
-  serial_numberCell.dataset.apkzi = "szi"
-  serial_numberCell.contentEditable = "true"
-
-  notesCell = tr.insertCell(-1)
-  notesCell.className = "notes"
-  notesCell.id = "notes"
-  notesCell.contentEditable = "true"
-
-  $(".add-row").click(function () {
-    $("#pc_unit").find('input[name="record"]').each(function () {
-      if ($(this).is(":checked")) {
-        let checkedRow = $(this).parents("tr")
-        newRow = document.createElement("tr")
-
-        let checkCell = newRow.insertCell(-1)
-        checkCell.innerHTML = "<input type='checkbox' name='record'>"
-        checkCell.className = "record"
-
-        let fdsiCell = newRow.insertCell(-1)
-        fdsiCell.className = "fdsi"
-        fdsiCell.id = "fdsi"
-        fdsiCell.contentEditable = "true"
-
-        let typeCell = newRow.insertCell(-1)
-        typeCell.className = "type"
-        typeCell.id = "type"
-        typeCell.contentEditable = "true"
-
-        let nameCell = newRow.insertCell(-1)
-        nameCell.className = "name"
-        nameCell.id = "name"
-        nameCell.contentEditable = "true"
-
-        let quantityCell = newRow.insertCell(-1)
-        quantityCell.innerHTML = "1"
-        quantityCell.className = "quantity"
-        quantityCell.id = "quantity"
-        quantityCell.contentEditable = "true"
-
-        let serial_numberCell = newRow.insertCell(-1)
-        serial_numberCell.className = "serial_number"
-        serial_numberCell.id = "serial_number"
-        serial_numberCell.contentEditable = "true"
-
-        let notesCell = newRow.insertCell(-1)
-        notesCell.className = "notes"
-        notesCell.id = "notes"
-        notesCell.contentEditable = "true"
-
-        $(newRow).insertAfter(checkedRow)
-      }
-    })
-    $("#system_case_unit").find('input[name="record"]').each(function () {
-      if ($(this).is(":checked")) {
-        let checkedRow = $(this).parents("tr")
-        newRow = document.createElement("tr")
-
-        let checkCell = newRow.insertCell(-1)
-        checkCell.innerHTML = "<input type='checkbox' name='record'>"
-        checkCell.className = "record"
-
-        let fdsiCell = newRow.insertCell(-1)
-        fdsiCell.className = "fdsi"
-        fdsiCell.id = "fdsi"
-        fdsiCell.contentEditable = "true"
-
-        let typeCell = newRow.insertCell(-1)
-        typeCell.className = "type"
-        typeCell.id = "type"
-        typeCell.contentEditable = "true"
-
-        let nameCell = newRow.insertCell(-1)
-        nameCell.className = "name"
-        nameCell.id = "name"
-        nameCell.contentEditable = "true"
-
-        let quantityCell = newRow.insertCell(-1)
-        quantityCell.innerHTML = "1"
-        quantityCell.className = "quantity"
-        quantityCell.id = "quantity"
-        quantityCell.contentEditable = "true"
-
-        let serial_numberCell = newRow.insertCell(-1)
-        serial_numberCell.className = "serial_number"
-        serial_numberCell.id = "serial_number"
-        serial_numberCell.contentEditable = "true"
-
-        let notesCell = newRow.insertCell(-1)
-        notesCell.className = "notes"
-        notesCell.id = "notes"
-        notesCell.contentEditable = "true"
-
-        $(newRow).insertAfter(checkedRow)
-      }
-    })
-  })
-  $(".delete-row").click(function () {
-    $("#pc_unit").find('input[name="record"]').each(function () {
-      if ($(this).is(":checked")) {
-        $(this).parents("tr").remove();
-      }
-    })
-    $("#system_case_unit").find('input[name="record"]').each(function () {
-      if ($(this).is(":checked")) {
-        $(this).parents("tr").remove();
-      }
-    })
-  })
+  insCell('', tr, "<input type='checkbox' name='record'>", 'record', 'record')
+  insCell('', tr, '', 'fdsi', 'fdsi', true)
+  insCell('', tr, 'Контроллер СЗИ10 PCI', 'type', 'type', true, {'apkzi': 'szi'})
+  insCell('', tr, '', 'name', 'name', true)
+  insCell('', tr, '1', 'quantity', 'quantity', true)
+  insCell('', tr, '', 'serial_number', 'serial_number', true, {'apkzi': 'szi'})
+  insCell('', tr, '', 'notes', 'notes', true)
 }
 
 function loadPage(page, pages) {
@@ -455,8 +262,6 @@ function load_pc(id) {
       let colorInput = document.getElementById('color')
       colorInput.value = color
       $('#color').farbtastic('#color')
-      // $("#select_color option:contains(" + color + ")").prop('selected', true)
-
     }
   })
 }
@@ -928,19 +733,21 @@ function CreateTableEditPC(data, color) {
   divContainer.appendChild(divCont);
   divCont.appendChild(tablePCSystemCase)
 
-  let button_add_row = document.createElement('input')
-  button_add_row.type = 'button'
-  button_add_row.id = 'add-row'
-  button_add_row.className = 'btn btn-outline-primary ml-2 mr-2 mb-2'
-  button_add_row.value = 'Добавить строку'
-  divCont.appendChild(button_add_row)
+  let buttonAddRow = document.createElement('input')
+  buttonAddRow.type = 'button'
+  buttonAddRow.id = 'add-row'
+  buttonAddRow.className = 'btn btn-outline-primary ml-2 mr-2 mb-2'
+  buttonAddRow.onclick = ()=>addRow()
+  buttonAddRow.value = 'Добавить строку'
+  divCont.appendChild(buttonAddRow)
 
-  let button_del_row = document.createElement('input')
-  button_del_row.type = 'button'
-  button_del_row.id = 'delete-row'
-  button_del_row.className = 'btn btn-outline-danger ml-2 mr-2 mb-2'
-  button_del_row.value = 'Удалить строку'
-  divCont.appendChild(button_del_row)
+  let buttonDelRow = document.createElement('input')
+  buttonDelRow.type = 'button'
+  buttonDelRow.id = 'delete-row'
+  buttonDelRow.className = 'btn btn-outline-danger ml-2 mr-2 mb-2'
+  buttonDelRow.onclick = ()=>delRow()
+  buttonDelRow.value = 'Удалить строку'
+  divCont.appendChild(buttonDelRow)
 
   let br = document.createElement('br')
   divCont.appendChild(br)
@@ -976,108 +783,6 @@ function CreateTableEditPC(data, color) {
   button_back.value = 'Назад'
   button_back.setAttribute("onclick", "location.href='/pcPa?part=" + data.part + "&serial_number=" + data.serial_number + "'")
   divCont.appendChild(button_back)
-
-  $("#add-row").click(function () {
-    $("#pc_unit").find('input[name="record"]').each(function () {
-      if ($(this).is(":checked")) {
-        let checkedRow = $(this).parents("tr")
-        newRow = document.createElement("tr")
-
-        let checkCell = newRow.insertCell(-1)
-        checkCell.innerHTML = "<input type='checkbox' name='record'>"
-        checkCell.className = "record"
-
-        let fdsiCell = newRow.insertCell(-1)
-        fdsiCell.className = "fdsi"
-        fdsiCell.id = "fdsi"
-        fdsiCell.contentEditable = "true"
-
-        let typeCell = newRow.insertCell(-1)
-        typeCell.className = "type"
-        typeCell.id = "type"
-        typeCell.contentEditable = "true"
-
-        let nameCell = newRow.insertCell(-1)
-        nameCell.className = "name"
-        nameCell.id = "name"
-        nameCell.contentEditable = "true"
-
-        let quantityCell = newRow.insertCell(-1)
-        quantityCell.innerHTML = "1"
-        quantityCell.className = "quantity"
-        quantityCell.id = "quantity"
-        quantityCell.contentEditable = "true"
-
-        let serial_numberCell = newRow.insertCell(-1)
-        serial_numberCell.className = "serial_number"
-        serial_numberCell.id = "serial_number"
-        serial_numberCell.contentEditable = "true"
-
-        let notesCell = newRow.insertCell(-1)
-        notesCell.className = "notes"
-        notesCell.id = "notes"
-        notesCell.contentEditable = "true"
-
-        $(newRow).insertAfter(checkedRow)
-      }
-    })
-    $("#system_case_unit").find('input[name="record"]').each(function () {
-      if ($(this).is(":checked")) {
-        let checkedRow = $(this).parents("tr")
-        newRow = document.createElement("tr")
-
-        let checkCell = newRow.insertCell(-1)
-        checkCell.innerHTML = "<input type='checkbox' name='record'>"
-        checkCell.className = "record"
-
-        let fdsiCell = newRow.insertCell(-1)
-        fdsiCell.className = "fdsi"
-        fdsiCell.id = "fdsi"
-        fdsiCell.contentEditable = "true"
-
-        let typeCell = newRow.insertCell(-1)
-        typeCell.className = "type"
-        typeCell.id = "type"
-        typeCell.contentEditable = "true"
-
-        let nameCell = newRow.insertCell(-1)
-        nameCell.className = "name"
-        nameCell.id = "name"
-        nameCell.contentEditable = "true"
-
-        let quantityCell = newRow.insertCell(-1)
-        quantityCell.innerHTML = "1"
-        quantityCell.className = "quantity"
-        quantityCell.id = "quantity"
-        quantityCell.contentEditable = "true"
-
-        let serial_numberCell = newRow.insertCell(-1)
-        serial_numberCell.className = "serial_number"
-        serial_numberCell.id = "serial_number"
-        serial_numberCell.contentEditable = "true"
-
-        let notesCell = newRow.insertCell(-1)
-        notesCell.className = "notes"
-        notesCell.id = "notes"
-        notesCell.contentEditable = "true"
-
-        $(newRow).insertAfter(checkedRow)
-      }
-    })
-  })
-
-  $('#delete-row').click(function () {
-    $("#pc_unit").find('input[name="record"]').each(function () {
-      if ($(this).is(":checked")) {
-        $(this).parents("tr").remove()
-      }
-    })
-    $("#system_case_unit").find('input[name="record"]').each(function () {
-      if ($(this).is(":checked")) {
-        $(this).parents("tr").remove()
-      }
-    })
-  })
 }
 
 function CreateSelect(data) {

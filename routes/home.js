@@ -46,7 +46,7 @@ router.get('/', auth, async (req, res) => {
 })
 
 
-router.post('/diagram', auth, async (req, res) => {    
+router.get('/diagram', auth, async (req, res) => {    
   PC.find().distinct('part', async function (error, parts) {
     if (error) {
       res.sendStatus(400)
@@ -63,7 +63,7 @@ router.post('/diagram', auth, async (req, res) => {
       }      
       arr.push([part, count])
     }
-    res.send(arr)
+    res.send(JSON.stringify(arr))
   })  
 })
 

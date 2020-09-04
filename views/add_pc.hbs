@@ -46,8 +46,8 @@
   <div id="pc_unit_table"></div>  
 
   <div id="system_case_unit_table"></div>
-  <input type="button" class="add-row btn btn-outline-primary" value="Добавить строку">
-  <input type="button" class="delete-row btn btn-outline-danger" value="Удалить строку">
+  <input type="button" class="add-row btn btn-outline-primary" onclick="addRow()" value="Добавить строку">
+  <input type="button" class="delete-row btn btn-outline-danger" onclick="delRow()" value="Удалить строку">
 
   <input type="hidden" name="_csrf" value="{{csrf}}">
 

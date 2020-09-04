@@ -1,3 +1,4 @@
+
 function CreateTablePC() {
   let col_rus = ["", "Обозначение изделия", "Наименование изделия", "Характеристика", "Количество", "Заводской номер", "Примечания"]
 
@@ -17,10 +18,9 @@ function CreateTablePC() {
     thead.appendChild(tr)
   }
 
-  const divContainer = document.getElementById("pc_unit_table");
-  divContainer.innerHTML = "";
-  divContainer.appendChild(table);
-
+  const divContainer = document.getElementById("pc_unit_table")
+  divContainer.innerHTML = ""
+  divContainer.appendChild(table)
 
   let tableRef = document.getElementById('pc_unit').getElementsByTagName('tbody')[0]
 
@@ -58,7 +58,6 @@ function CreateTablePC() {
     nameCell.id = "name"
     nameCell.contentEditable = "true"
 
-
     let quantityCell = tr.insertCell(-1)
     quantityCell.innerHTML = "1"
     quantityCell.className = "quantity"
@@ -83,7 +82,6 @@ function CreateTablePC() {
       notesCell.innerHTML = 'с кабелем питания'
     }
   }
-
 
   tr = tableRef.insertRow(-1)
   tr.className = "apkzi"
