@@ -705,7 +705,7 @@ router.get('/getPage', auth, async (req, res) => {
   if (user.lastPage) {
     res.send(JSON.stringify(user.lastPage))
   } else {
-    res.send('1')
+    res.send(JSON.stringify('1'))
   }
 })
 

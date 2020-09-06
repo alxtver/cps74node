@@ -782,3 +782,10 @@ th {
   background-color: DodgerBlue !important; 
   color: #ffffff; 
 }
+
+.color-input {
+  /* top: 20px; */
+  background: #777;
+  border: 1px solid #fff;
+  border-radius: 5px;
+}

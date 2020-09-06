@@ -45,7 +45,7 @@ const pki = new Schema({
     default: false
   }
 
-})
+}, { versionKey: false })
 
 
 module.exports = model('Pki', pki)

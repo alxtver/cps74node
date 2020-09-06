@@ -51,6 +51,13 @@ function delRow() {
   }
 }
 
+function setColor() {
+  let c = document.getElementById('color-input').value
+  let content = document.querySelector('.tableContent')
+  let shadow ='0px 30px 60px ' + c
+  content.style.boxShadow = shadow
+}
+
 function CreateTablePC() {
   let col_rus = ["", "Обозначение изделия", "Наименование изделия", "Характеристика", "Количество", "Заводской номер", "Примечания"]
   let table = document.createElement("table");
@@ -179,21 +186,22 @@ function loadPage(page, pages) {
     .then((data) => {
       CreateTableFromJSON(data, function () {
         painting()
-        let current_id = document.getElementById('hidd_id').value
-        console.log(current_id);
-        let next_id = current_id.split(";")
-        console.log(next_id);
-        next_id[1] = Number(next_id[1]) + 1 + ''
+        // let current_id = document.getElementById('hidd_id').value
+        // console.log(current_id);
+        // let next_id = current_id.split(";")
+        // console.log(next_id);
+        // next_id[1] = Number(next_id[1]) + 1 + ''
+        // console.log(next_id[1]);
 
-        let chbox = document.getElementById('popupCheckboxOne')
-        if (!chbox.checked) {
-          $(".serial_number[data-data='" + next_id.join(';') + "']").focus()
-          $("td.serial_number").each(function () {
-            if (!$(this).text()) {
-              $(this).css("background-color", "darkgray")
-            }
-          })
-        }
+        // let chbox = document.getElementById('popupCheckboxOne')
+        // if (!chbox.checked) {
+        //   $(".serial_number[data-data='" + next_id.join(';') + "']").focus()
+        //   $("td.serial_number").each(function () {
+        //     if (!$(this).text()) {
+        //       $(this).css("background-color", "darkgray")
+        //     }
+        //   })
+        // }
       })
 
       let select = document.getElementById("serials")
@@ -211,61 +219,45 @@ function loadPage(page, pages) {
       let serial_number_id = url.match(/[\Z\d|-]{13,14}/i)
       if (serial_number_id) {
         if (document.getElementById(serial_number_id)) {
-          $('html, body').animate({scrollTop: $('#' + serial_number_id[0]).offset().top-70}, 500)
+          const el = document.getElementById(serial_number_id[0])
+          const offsetPosition = el.getBoundingClientRect().top - 70
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+        })
         }
       }
     })
 }
 
 function getPage() {
-  $.ajax({
-    url: "/pcPa/getPage",
-    headers: {
-      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-    },
-    method: "GET",
-    success: function (page) {
+  getData('/pcPa/getPage')
+    .then((page) => {
       document.getElementById('paginationTop').innerHTML = createPagination(page)
       document.getElementById('paginationBottom').innerHTML = createPagination(page)
-    }
-  })
+    })
 }
 
 function setPage(page) {
   if (page) {
-    $.ajax({
-      url: "/pcPa/setPage",
-      headers: {
-        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-      },
-      data: {
-        page: page
-      },
-      method: "POST",
-      success: function (data) {
-      }
-    })
+    let data = {
+      page: page
+    }
+    postData('/pcPa/setPage', data)
   }  
 }
 
 function load_pc(id) {
-  $.ajax({
-    url: "/pcPa/pc_edit",
-    headers: {
-      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-    },
-    method: "POST",
-    data: {
-      id: id
-    },
-    success: function (data) {
-      let color = JSON.parse(data).back_color
-      CreateTableEditPC(JSON.parse(data), color)
-      let colorInput = document.getElementById('color')
+  let data = {
+    id: id,
+  }
+  postData('/pcPa/pc_edit', data)
+    .then((data) => {
+      let color = data.back_color
+      CreateTableEditPC(data, color)
+      let colorInput = document.getElementById('color-input')
       colorInput.value = color
-      $('#color').farbtastic('#color')
-    }
-  })
+    })
 }
 
 function TablePc(pc) {
@@ -753,23 +745,25 @@ function CreateTableEditPC(data, color) {
 
   let br = document.createElement('br')
   divCont.appendChild(br)
+
+  //huebee
+  let colorInput = document.createElement('input')
+  colorInput.className = 'mt-2 color-input'
+  colorInput.id = 'color-input'
+  colorInput.value = color
+  colorInput.oninput = function() {
+    setColor()
+  }
+  divCont.appendChild(colorInput)
+
+  var hueb = new Huebee( '.color-input', {
+    notation: 'hex',
+    saturations: 2,
+    shades: 7,
+    customColors: [ '#618bd6', '#61d663', '#d6616b', '#d6d561', '#d661ba' ]
+  })
+  setColor()
   
-  let colorPicker = document.createElement('input')
-  colorPicker.className = 'mt-2'
-  colorPicker.type = 'text'
-  colorPicker.id = 'color'
-  colorPicker.name = 'color'
-  colorPicker.value = color
-  divCont.appendChild(colorPicker)
-
-  let divColor = document.createElement('div')
-  divColor.id = 'colorpicker'
-  divCont.appendChild(divColor)
-
-  $('#colorpicker').farbtastic('#color')
-  let c = document.getElementById('color').value
-  let shadow ='0px 30px 60px ' + c
-  $('.tableContent').css('box-shadow', shadow)
 
   let button_edit = document.createElement('input')
   button_edit.type = 'submit'

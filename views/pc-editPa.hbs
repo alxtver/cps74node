@@ -1,6 +1,6 @@
 <script src="/pcPa.js"></script>
-<script type="text/javascript" src="/lib/farbtastic/farbtastic.js"></script>
-<link rel="stylesheet" href="/lib/farbtastic/farbtastic.css" type="text/css" />
+<script type="text/javascript" src="/lib/huebee/huebee.pkgd.js"></script>
+<link rel="stylesheet" href="/lib/huebee/huebee.css" type="text/css"/>
 
 <h1>Редактирование {{pc.serial_number}}</h1>
 <div class="tableContent">
@@ -53,10 +53,12 @@
   document.addEventListener("DOMContentLoaded", function() {
     load_pc(`{{pc._id}}`)
   })
+  document.addEventListener('click', function(e) {
+    setColor()
+})
 
 
   $('form').submit(function () {
-
     // get table html
     let submit = document.getElementById('submit')
     let id = submit.dataset.id
@@ -66,9 +68,7 @@
     let arm = $('#arm').val()
     let execution = $('#execution').val()
     let attachment = $('#attachment').val()
-    // let color = $("#select_color :selected").text()
-    let color = document.getElementById('color').value
-
+    let color = document.getElementById('color-input').value
 
     //// формирование POST запроса для таблицы ПЭВМ
     let pc_unit = []
@@ -116,9 +116,7 @@
       let type = $(this).find(".type").text()
       let fdsi = $(this).find(".fdsi").text()
       let name = $(this).find(".name").text()
-      //убираем теги
-      //let nameTags = $(this).find(".name").html()
-      //let name = nameTags.replace(/<\/?[^>]+>/g,''))
+
       let quantity = $(this).find(".quantity").text()
       let serial_number = $(this).find(".serial_number").text()
       let notes = $(this).find(".notes").text()
@@ -164,11 +162,9 @@
         pc_unit: JSON.stringify(pc_unit),
         system_case_unit: JSON.stringify(system_case_unit)
       },
-      //    success: function (data) {
-      //        const address = '/apkzi'
-      //        document.location.href = address
-      //      
-      //    }
+          success: function (data) {
+
+          }
     })
   })
 
