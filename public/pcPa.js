@@ -155,35 +155,38 @@ function CreateTableSystemCase() {
   insCell('', tr, '', 'notes', 'notes', true)
 }
 
-function loadPage(page, pages) {
-  $.ajax({
-    url: "/pcPa/pagination",
-    headers: {
-      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-    },
-    method: "POST",
-    data: {
-      page: page,
-      pages: pages
-    },
-    success: function (data) {
-      CreateTableFromJSON(JSON.parse(data), function () {
-        $("td.name").each(function () {
-          if ($(this).text() == 'Н/Д') {
-            $(this).css("background-color", "coral")
-          }
-        })
-        $("td.serial_number").each(function () {
-          if (!$(this).text()) {
-            $(this).css("background-color", "darkgray")
-          }
-        })
+function painting() {
+  let nameCells = document.querySelectorAll('td.name')
+  let snCells = document.querySelectorAll('td.serial_number')
+  for (const cell of nameCells) {
+    if (cell.innerHTML == 'Н/Д') {
+      cell.style.backgroundColor = 'coral'
+    }
+  }
+  for (const cell of snCells) {
+    if (cell.value == '') {
+      cell.style.backgroundColor = 'darkgray'
+    }
+  }
+}
 
-        let current_id = $("#hidd_id").val()
+function loadPage(page, pages) {
+  let data = {
+    page: page,
+    pages: pages
+  }
+  postData('/pcPa/pagination', data)
+    .then((data) => {
+      CreateTableFromJSON(data, function () {
+        painting()
+        let current_id = document.getElementById('hidd_id').value
+        console.log(current_id);
         let next_id = current_id.split(";")
+        console.log(next_id);
         next_id[1] = Number(next_id[1]) + 1 + ''
 
-        if ($(".popup-checkbox").is(":not(:checked)")) {
+        let chbox = document.getElementById('popupCheckboxOne')
+        if (!chbox.checked) {
           $(".serial_number[data-data='" + next_id.join(';') + "']").focus()
           $("td.serial_number").each(function () {
             if (!$(this).text()) {
@@ -197,7 +200,7 @@ function loadPage(page, pages) {
       for (i = select.length - 1; i >= 0; i--) {
         select.remove(i)
       }
-      for (const d of JSON.parse(data)) {
+      for (const d of data) {
         let option = document.createElement("option")
         option.value = d.serial_number
         option.text = d.serial_number
@@ -210,9 +213,8 @@ function loadPage(page, pages) {
         if (document.getElementById(serial_number_id)) {
           $('html, body').animate({scrollTop: $('#' + serial_number_id[0]).offset().top-70}, 500)
         }
-      }      
-    }
-  })
+      }
+    })
 }
 
 function getPage() {
@@ -822,11 +824,7 @@ function edit_serial_number(id, obj, unit, serial_number) {
         }
       }
       UpdateCells(JSON.parse(pc).pc, oldNumberMachine, function () {
-        $("td.name").each(function () {
-          if ($(this).text() == 'Н/Д') {
-            $(this).css("background-color", "coral")
-          }
-        })
+        painting()
       })
     }
   })
@@ -889,7 +887,7 @@ function UpdateCells(pc, how, callback) {
     divCont.appendChild(button_edit)
 
     //переход на одну ячейку вниз
-    let current_id = $("#hidd_id").val()
+    let current_id = document.getElementById('hidd_id').value
     let next_id = current_id.split(";")
     next_id[1] = Number(next_id[1]) + 1 + ''
     if ($(".popup-checkbox").is(":not(:checked)")) {

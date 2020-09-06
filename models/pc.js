@@ -31,6 +31,6 @@ const pc = new Schema({
         default: '#3d3d3d'
     },
     attachment: String
-})
+}, { versionKey: false })
 
 module.exports = model('Pc', pc)
