@@ -27,7 +27,6 @@
       <form>
         <input type="hidden" name="_csrf" value="{{csrf}}">
         <input type="hidden" name="id" id="hidId">
-        <input type="hidden" name="part" id="hidPart">
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Закрыть</button>
           <button type="button" id="btnSubmit" onclick="delBtn()" data-dismiss="modal"
@@ -115,7 +114,6 @@
 
     $("body").on('click', '.delBtn', function () {
       $('#hidId').val($(this).data("id"))
-      $('#hidPart').val($(this).data("part"))
     })
 
   
@@ -133,37 +131,31 @@
     $(document).on('blur', '.type', function () {
       let id = $(this).data("id")
       let type = $(this).text()
-      edit_type(id, type)
+      editCell(id, type, 'type_pki')
     })
 
     $(document).on('blur', '.model', function () {
       let id = $(this).data("id")
       let model = $(this).text()
-      edit_model(id, model)
+      editCell(id, model, 'model')
     })
 
     $(document).on('blur', '.serial_number', function () {
       let id = $(this).data("id")
       let serial_number = $(this).text()
-      edit_serial_number(id, serial_number)
+      editCell(id, serial_number, 'serial_number')
     })
 
     $(document).on('blur', '.vendor', function () {
       let id = $(this).data("id")
       let vendor = $(this).text()
-      edit_vendor(id, vendor)
+      editCell(id, vendor, 'vendor')
     })
 
     $(document).on('blur', '.country', function () {
       let id = $(this).data("id")
       let country = $(this).text()
-      edit_country(id, country)
-    })
-
-    $(document).on('blur', '.part', function () {
-      let id = $(this).data("id")
-      let part = $(this).text()
-      edit_part(id, part)
+      editCell(id, country, 'country')
     })
   })
 

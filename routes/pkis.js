@@ -51,7 +51,7 @@ router.post('/edit_ajax', auth, async (req, res) => {
   } catch (error) {
     console.log(error)
   }
-  let pki = await Pki.findById(req.body.id) 
+  let pki = await Pki.findById(req.body.id)
 
   if (pki.number_machine) {
     let pc = await PC.findOne({
@@ -226,11 +226,12 @@ router.post("/part", auth, async function (req, res) {
 
 
 router.post("/del", auth, async (req, res) => {
-  const part = req.body.part
+  console.log(req.body);
+  const part = req.session.part
   let pki = await Pki.findById(req.body.id)
   if (pki.number_machine) {
     let pc = await PC.findOne({
-      part: pki.part,
+      part: part,
       serial_number: pki.number_machine
     })
     if (pc) {
@@ -264,10 +265,10 @@ router.post("/del", auth, async (req, res) => {
       _id: req.body.id
     })
     console.log(`PKI ${pki.type_pki} ${pki.vendor} ${pki.model} ${pki.serial_number} has been deleted`)
-    res.send(part)
+    res.status(200).json({ message: 'ok' })
   } catch (e) {
     console.log(e)
-    res.send(part)
+    res.status(200).json({ message: 'ok' })
   }
 })
 

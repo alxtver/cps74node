@@ -333,3 +333,18 @@ function autocomplete(inp, arr) {
       closeAllLists(e.target);
   });
 }
+
+function CreateSelectType(data, callback) {
+  let select = document.querySelector('#type_select_navbar')
+  let option = document.createElement("option")
+  option.text = '...'
+  option.value = ''
+  select.add(option)
+  for (let i = 0; i < data.length; i++) {
+    option = document.createElement("option")
+    option.text = data[i]
+    option.value = data[i]
+    select.add(option)
+  }
+  callback()
+}

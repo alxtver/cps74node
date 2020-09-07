@@ -20,7 +20,6 @@ function search() {
             td.style.background = 'orangered'
             td.style.fontWeight = '600'
 					}
-					
 				})
 			}
 			if (data.pkis.length == 0 && data.pcs.length == 0) {
@@ -53,27 +52,15 @@ function CreateTablePKI(data, container) {
 	}
 	let tbody = table.createTBody()
 	for (let i = 0; i < data.length; i++) {
-		tr = tbody.insertRow(-1)
-		let numberCell = tr.insertCell(-1)
-		numberCell.innerHTML = i + 1
-		let typeCell = tr.insertCell(-1)
-		typeCell.innerHTML = data[i].type_pki
-		let vendorCell = tr.insertCell(-1)
-		vendorCell.innerHTML = data[i].vendor
-		let modelCell = tr.insertCell(-1)
-		modelCell.innerHTML = data[i].model
-		let serial_numberCell = tr.insertCell(-1)
-		serial_numberCell.innerHTML = data[i].serial_number
-		let countryCell = tr.insertCell(-1)
-		countryCell.innerHTML = data[i].country
-		let number_machineCell = tr.insertCell(-1)
-		if (data[i].number_machine) {
-			number_machineCell.innerHTML = data[i].number_machine
-		} else {
-			number_machineCell.innerHTML = ''
-		}
-		let partCell = tr.insertCell(-1)
-		partCell.innerHTML = data[i].part
+    tr = tbody.insertRow(-1)
+    insCell(tr, i + 1)
+    insCell(tr, data[i].type_pki)
+    insCell(tr, data[i].vendor)
+    insCell(tr, data[i].model)
+    insCell(tr, data[i].serial_number)
+    insCell(tr, data[i].country)
+    insCell(tr, data[i].number_machine)
+    insCell(tr, data[i].part)
 	}
 	container.innerHTML = ""
 	container.appendChild(table)
@@ -100,7 +87,7 @@ function TablePc(pc) {
   table.className = "table table-sm table-bordered table-hover table-responsive pctable"
   table.id = pc._id
 
-  let tr = table.insertRow(-1) // TABLE ROW.        
+  let tr = table.insertRow(-1) // TABLE ROW.
 
   let td = document.createElement("td")
   td.innerHTML = 'ФДШИ.' + pc.fdsi
@@ -138,139 +125,48 @@ function TablePc(pc) {
   tr.appendChild(td)
 
   if (pc.pc_unit.length > 0) {
-    tr = table.insertRow(-1) // TABLE ROW.        
-
-    td = document.createElement("td")
-    td.innerHTML = 'Обозначение изделия'
-    td.className = "header"
-    tr.appendChild(td)
-
-    td = document.createElement("td")
-    td.innerHTML = 'Наименование изделия'
-    td.className = "header"
-    tr.appendChild(td)
-
-    td = document.createElement("td")
-    td.innerHTML = 'Характеристика'
-    td.className = "header"
-    tr.appendChild(td)
-
-    td = document.createElement("td")
-    td.innerHTML = 'Количество'
-    td.className = "header"
-    tr.appendChild(td)
-
-    td = document.createElement("td")
-    td.innerHTML = 'Заводской номер'
-    td.className = "header"
-    tr.appendChild(td)
-
-    td = document.createElement("td")
-    td.innerHTML = 'Примечания'
-    td.className = "header"
-    tr.appendChild(td)
+    tr = table.insertRow(-1)
+    insCell(tr, 'Обозначение изделия', 'header')
+    insCell(tr, 'Наименование изделия', 'header')
+    insCell(tr, 'Характеристика', 'header')
+    insCell(tr, 'Количество', 'header')
+    insCell(tr, 'Заводской номер', 'header')
+    insCell(tr, 'Примечания', 'header')
   }
-
-  arr_pc_unit = pc.pc_unit
-
+  let arr_pc_unit = pc.pc_unit
   for (let j = 0; j < arr_pc_unit.length; j++) {
     tr = table.insertRow(-1)
-
-    let fdsiCell = tr.insertCell(-1)
-    fdsiCell.innerHTML = arr_pc_unit[j].fdsi
-    fdsiCell.dataset.sn = arr_pc_unit[j].serial_number
-
-    let typeCell = tr.insertCell(-1)
-    typeCell.innerHTML = arr_pc_unit[j].type
-    typeCell.dataset.sn = arr_pc_unit[j].serial_number
-
-    let nameCell = tr.insertCell(-1)
-    nameCell.innerHTML = arr_pc_unit[j].name
-    nameCell.dataset.sn = arr_pc_unit[j].serial_number
-
-    let quantityCell = tr.insertCell(-1)
-    quantityCell.innerHTML = arr_pc_unit[j].quantity
-    quantityCell.dataset.sn = arr_pc_unit[j].serial_number
-
-    let serial_numberCell = tr.insertCell(-1)
-    serial_numberCell.innerHTML = arr_pc_unit[j].serial_number
-    serial_numberCell.dataset.sn = arr_pc_unit[j].serial_number
-    if (arr_pc_unit[j].apkzi) {
-      serial_numberCell.dataset.apkzi = "apkzi"
-      serial_numberCell.contentEditable = "false"
-    }
-
-    let notesCell = tr.insertCell(-1)
-    notesCell.innerHTML = arr_pc_unit[j].notes
-    notesCell.innerHTML = arr_pc_unit[j].notes
-    notesCell.dataset.sn = arr_pc_unit[j].serial_number
+    insCell(tr, arr_pc_unit[j].fdsi)
+    insCell(tr, arr_pc_unit[j].type)
+    insCell(tr, arr_pc_unit[j].name)
+    insCell(tr, arr_pc_unit[j].quantity)
+    insCell(tr, arr_pc_unit[j].serial_number)
+    insCell(tr, arr_pc_unit[j].notes)
   }
-
   if (pc.system_case_unit.length > 0) {
-    tr = table.insertRow(-1) // TABLE ROW.        
-
-    td = document.createElement("td")
-    td.innerHTML = 'Обозначение изделия'
-    td.className = "header"
-    tr.appendChild(td)
-
-    td = document.createElement("td")
-    td.innerHTML = 'Наименование изделия'
-    td.className = "header"
-    tr.appendChild(td)
-
-    td = document.createElement("td")
-    td.innerHTML = 'Характеристика'
-    td.className = "header"
-    tr.appendChild(td)
-
-    td = document.createElement("td")
-    td.innerHTML = 'Количество'
-    td.className = "header"
-    tr.appendChild(td)
-
-    td = document.createElement("td")
-    td.innerHTML = 'Заводской номер'
-    td.className = "header"
-    tr.appendChild(td)
-
-    td = document.createElement("td")
-    td.innerHTML = 'Примечания'
-    td.className = "header"
-    tr.appendChild(td)
+    tr = table.insertRow(-1)
+    insCell(tr, 'Обозначение изделия', 'header')
+    insCell(tr, 'Наименование изделия', 'header')
+    insCell(tr, 'Характеристика', 'header')
+    insCell(tr, 'Количество', 'header')
+    insCell(tr, 'Заводской номер', 'header')
+    insCell(tr, 'Примечания', 'header')
   }
-  arr_system_case_unit = pc.system_case_unit
-
+  let arr_system_case_unit = pc.system_case_unit
   for (let j = 0; j < arr_system_case_unit.length; j++) {
     tr = table.insertRow(-1)
-
-    let fdsiCell = tr.insertCell(-1)
-    fdsiCell.innerHTML = arr_system_case_unit[j].fdsi
-    fdsiCell.dataset.sn = arr_system_case_unit[j].serial_number
-
-    let typeCell = tr.insertCell(-1)
-    typeCell.innerHTML = arr_system_case_unit[j].type
-    typeCell.dataset.sn = arr_system_case_unit[j].serial_number
-
-    let nameCell = tr.insertCell(-1)
-    nameCell.innerHTML = arr_system_case_unit[j].name
-    nameCell.dataset.sn = arr_system_case_unit[j].serial_number
-
-
-    let quantityCell = tr.insertCell(-1)
-    quantityCell.innerHTML = arr_system_case_unit[j].quantity
-    quantityCell.dataset.sn = arr_system_case_unit[j].serial_number
-
-    let serial_numberCell = tr.insertCell(-1)
-    serial_numberCell.innerHTML = arr_system_case_unit[j].serial_number
-    serial_numberCell.dataset.sn = arr_system_case_unit[j].serial_number
-    if (arr_system_case_unit[j].szi) {
-      serial_numberCell.dataset.apkzi = 'szi'
-    }
-
-    let notesCell = tr.insertCell(-1)
-    notesCell.innerHTML = arr_system_case_unit[j].notes
-    notesCell.dataset.sn = arr_system_case_unit[j].serial_number
+    insCell(tr, arr_system_case_unit[j].fdsi)
+    insCell(tr, arr_system_case_unit[j].type)
+    insCell(tr, arr_system_case_unit[j].name)
+    insCell(tr, arr_system_case_unit[j].quantity)
+    insCell(tr, arr_system_case_unit[j].serial_number)
+    insCell(tr, arr_system_case_unit[j].notes)
   }
   return table
+}
+
+function insCell(parrent, html = '', classN) {
+  let cell = parrent.insertCell(-1)
+  if (classN) cell.className = classN
+  cell.innerHTML = html
 }
