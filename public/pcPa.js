@@ -1,9 +1,8 @@
-
-function insCell(unit, parrent, html = '', classN, id=classN, contentEditable = false, dataset) {
+function insCell(unit, parrent, html = '', classN, id, contentEditable, dataset) {
   let cell = parrent.insertCell(-1)
-  cell.className = classN
-  cell.id = id
-  cell.contentEditable = contentEditable
+  if (classN) cell.className = classN
+  if (id) cell.id = id
+  if (contentEditable) cell.contentEditable = contentEditable
   cell.innerHTML = html
   if (id == 'serial_number') {
     if (unit == 'Системный блок' || unit == 'Сетевой фильтр' || unit == 'Гарнитура' || unit == 'Корпус') {
@@ -38,7 +37,7 @@ function addRow() {
       insCell('', newRow, '', 'serial_number', 'serial_number', true)
       insCell('', newRow, '', 'notes', 'notes', true)
       checkedRow.parentNode.insertBefore(newRow, checkedRow.nextSibling)
-    }    
+    }
   }
 }
 
@@ -47,14 +46,14 @@ function delRow() {
   for (const rec of records) {
     if (rec.checked) {
       rec.closest("tr").remove()
-    }    
+    }
   }
 }
 
 function setColor() {
   let c = document.getElementById('color-input').value
   let content = document.querySelector('.tableContent')
-  let shadow ='0px 30px 60px ' + c
+  let shadow = '0px 30px 60px ' + c
   content.style.boxShadow = shadow
 }
 
@@ -89,7 +88,7 @@ function CreateTablePC() {
     'Гарнитура'
   ]
   for (const unit of complectPCUnit) {
-    let tr = tableRef.insertRow(-1)    
+    let tr = tableRef.insertRow(-1)
     insCell(unit, tr, "<input type='checkbox' name='record'>", 'record')
     insCell(unit, tr, '', 'fdsi', 'fdsi', true)
     insCell(unit, tr, unit, 'type', 'type', true)
@@ -97,15 +96,19 @@ function CreateTablePC() {
     insCell(unit, tr, '1', 'quantity', 'quantity', true)
     insCell(unit, tr, '', 'serial_number', 'serial_number', true)
     insCell(unit, tr, '', 'notes', 'notes', true)
-  }  
+  }
   tr = tableRef.insertRow(-1)
   tr.className = "apkzi"
   insCell('', tr, "<input type='checkbox' name='record'>", 'record', 'record')
   insCell('', tr, '', 'fdsi', 'fdsi', true)
-  insCell('', tr, 'АПКЗИ', 'type', 'type', true, {'apkzi': 'apkzi'})
+  insCell('', tr, 'АПКЗИ', 'type', 'type', true, {
+    'apkzi': 'apkzi'
+  })
   insCell('', tr, '', 'name', 'name', true)
   insCell('', tr, '1', 'quantity', 'quantity', true)
-  insCell('', tr, '', 'serial_number', 'serial_number', true, {'apkzi': 'apkzi'})
+  insCell('', tr, '', 'serial_number', 'serial_number', true, {
+    'apkzi': 'apkzi'
+  })
   insCell('', tr, '', 'notes', 'notes', true)
 }
 
@@ -155,10 +158,14 @@ function CreateTableSystemCase() {
   tr = tableRef.insertRow(-1)
   insCell('', tr, "<input type='checkbox' name='record'>", 'record', 'record')
   insCell('', tr, '', 'fdsi', 'fdsi', true)
-  insCell('', tr, 'Контроллер СЗИ10 PCI', 'type', 'type', true, {'apkzi': 'szi'})
+  insCell('', tr, 'Контроллер СЗИ10 PCI', 'type', 'type', true, {
+    'apkzi': 'szi'
+  })
   insCell('', tr, '', 'name', 'name', true)
   insCell('', tr, '1', 'quantity', 'quantity', true)
-  insCell('', tr, '', 'serial_number', 'serial_number', true, {'apkzi': 'szi'})
+  insCell('', tr, '', 'serial_number', 'serial_number', true, {
+    'apkzi': 'szi'
+  })
   insCell('', tr, '', 'notes', 'notes', true)
 }
 
@@ -171,7 +178,7 @@ function painting() {
     }
   }
   for (const cell of snCells) {
-    if (cell.value == '') {
+    if (cell.innerHTML == '') {
       cell.style.backgroundColor = 'darkgray'
     }
   }
@@ -186,22 +193,6 @@ function loadPage(page, pages) {
     .then((data) => {
       CreateTableFromJSON(data, function () {
         painting()
-        // let current_id = document.getElementById('hidd_id').value
-        // console.log(current_id);
-        // let next_id = current_id.split(";")
-        // console.log(next_id);
-        // next_id[1] = Number(next_id[1]) + 1 + ''
-        // console.log(next_id[1]);
-
-        // let chbox = document.getElementById('popupCheckboxOne')
-        // if (!chbox.checked) {
-        //   $(".serial_number[data-data='" + next_id.join(';') + "']").focus()
-        //   $("td.serial_number").each(function () {
-        //     if (!$(this).text()) {
-        //       $(this).css("background-color", "darkgray")
-        //     }
-        //   })
-        // }
       })
 
       let select = document.getElementById("serials")
@@ -224,7 +215,7 @@ function loadPage(page, pages) {
           window.scrollTo({
             top: offsetPosition,
             behavior: "smooth"
-        })
+          })
         }
       }
     })
@@ -244,7 +235,7 @@ function setPage(page) {
       page: page
     }
     postData('/pcPa/setPage', data)
-  }  
+  }
 }
 
 function load_pc(id) {
@@ -268,97 +259,45 @@ function TablePc(pc) {
 
   let tr = table.insertRow(-1) // TABLE ROW.        
 
-  let td = document.createElement("td")
-  td.innerHTML = 'ФДШИ.' + pc.fdsi
-  td.className = "up"
-  tr.appendChild(td)
-
+  insCell('', tr, 'ФДШИ.' + pc.fdsi, 'up', '', false)
   td = document.createElement("td")
   td.innerHTML = pc.serial_number
   td.id = pc.serial_number
   td.style.cssText = 'font-size: 1.5rem;background-color:' + pc.back_color
   tr.appendChild(td)
-
-  td = document.createElement("td")
-  td.innerHTML = pc.arm
-  td.className = "up"
-  tr.appendChild(td)
-
-  td = document.createElement("td")
-  td.innerHTML = pc.execution
-  td.className = "up"
-  tr.appendChild(td)
-
-  td = document.createElement("td")
-  tr.appendChild(td)
-
+  insCell('', tr, pc.arm, 'up', '', false)
+  insCell('', tr, pc.execution, 'up', '', false)
+  insCell('', tr, '', 'up', '', false)
   td = document.createElement("td")
   if (pc.attachment) {
     td.innerHTML = pc.attachment
     td.style.cssText = 'font-size: 1.1rem;border-radius: 0px 10px 0px 0px;background-color:' + pc.back_color
   }
-
   tr.appendChild(td)
-
   if (pc.pc_unit.length > 0) {
-    tr = table.insertRow(-1) // TABLE ROW.        
-
-    td = document.createElement("td")
-    td.innerHTML = 'Обозначение изделия'
-    td.className = "header"
-    tr.appendChild(td)
-
-    td = document.createElement("td")
-    td.innerHTML = 'Наименование изделия'
-    td.className = "header"
-    tr.appendChild(td)
-
-    td = document.createElement("td")
-    td.innerHTML = 'Характеристика'
-    td.className = "header"
-    tr.appendChild(td)
-
-    td = document.createElement("td")
-    td.innerHTML = 'Количество'
-    td.className = "header"
-    tr.appendChild(td)
-
-    td = document.createElement("td")
-    td.innerHTML = 'Заводской номер'
-    td.className = "header"
-    tr.appendChild(td)
-
-    td = document.createElement("td")
-    td.innerHTML = 'Примечания'
-    td.className = "header"
-    tr.appendChild(td)
+    tr = table.insertRow(-1) // TABLE ROW.
+    insCell('', tr, 'Обозначение изделия', 'header', '', false)
+    insCell('', tr, 'Наименование изделия', 'header', '', false)
+    insCell('', tr, 'Характеристика', 'header', '', false)
+    insCell('', tr, 'Количество', 'header', '', false)
+    insCell('', tr, 'Заводской номер', 'header', '', false)
+    insCell('', tr, 'Примечания', 'header', '', false)
   }
-
-  arr_pc_unit = pc.pc_unit
-
+  let arr_pc_unit = pc.pc_unit
   for (let j = 0; j < arr_pc_unit.length; j++) {
     tr = table.insertRow(-1)
-
-    let fdsiCell = tr.insertCell(-1)
-    fdsiCell.innerHTML = arr_pc_unit[j].fdsi
-    fdsiCell.dataset.id = pc._id
-
-    let typeCell = tr.insertCell(-1)
-    typeCell.innerHTML = arr_pc_unit[j].type
-    typeCell.dataset.id = pc._id
-    typeCell.className = 'type'
-    typeCell.contentEditable = 'true'
-
-    let nameCell = tr.insertCell(-1)
-    nameCell.innerHTML = arr_pc_unit[j].name
-    nameCell.dataset.id = pc._id
-    nameCell.className = 'name'
-    nameCell.contentEditable = 'true'
-
-    let quantityCell = tr.insertCell(-1)
-    quantityCell.innerHTML = arr_pc_unit[j].quantity
-    quantityCell.dataset.id = pc._id
-
+    insCell('', tr, arr_pc_unit[j].fdsi, '', '', false, {
+      'id': pc._id
+    })
+    insCell('', tr, arr_pc_unit[j].type, 'type', '', false, {
+      'id': pc._id
+    })
+    insCell('', tr, arr_pc_unit[j].name, 'name', '', false, {
+      'id': pc._id
+    })
+    insCell('', tr, arr_pc_unit[j].quantity, '', '', false, {
+      'id': pc._id
+    })
     let serial_numberCell = tr.insertCell(-1)
     serial_numberCell.innerHTML = arr_pc_unit[j].serial_number
     serial_numberCell.dataset.id = pc._id
@@ -371,70 +310,35 @@ function TablePc(pc) {
     }
     serial_numberCell.dataset.data = pc._id + ';' + j + ';' + 'pc_unit'
     serial_numberCell.className = 'serial_number'
-
-    let notesCell = tr.insertCell(-1)
-    notesCell.innerHTML = arr_pc_unit[j].notes
-    notesCell.innerHTML = arr_pc_unit[j].notes
-    fdsiCell.dataset.id = pc._id
+    insCell('', tr, arr_pc_unit[j].notes, '', '', false, {
+      'id': pc._id
+    })
   }
 
   if (pc.system_case_unit.length > 0) {
-    tr = table.insertRow(-1) // TABLE ROW.        
-
-    td = document.createElement("td")
-    td.innerHTML = 'Обозначение изделия'
-    td.className = "header"
-    tr.appendChild(td)
-
-    td = document.createElement("td")
-    td.innerHTML = 'Наименование изделия'
-    td.className = "header"
-    tr.appendChild(td)
-
-    td = document.createElement("td")
-    td.innerHTML = 'Характеристика'
-    td.className = "header"
-    tr.appendChild(td)
-
-    td = document.createElement("td")
-    td.innerHTML = 'Количество'
-    td.className = "header"
-    tr.appendChild(td)
-
-    td = document.createElement("td")
-    td.innerHTML = 'Заводской номер'
-    td.className = "header"
-    tr.appendChild(td)
-
-    td = document.createElement("td")
-    td.innerHTML = 'Примечания'
-    td.className = "header"
-    tr.appendChild(td)
+    tr = table.insertRow(-1) // TABLE ROW.
+    insCell('', tr, 'Обозначение изделия', 'header', '', false)
+    insCell('', tr, 'Наименование изделия', 'header', '', false)
+    insCell('', tr, 'Характеристика', 'header', '', false)
+    insCell('', tr, 'Количество', 'header', '', false)
+    insCell('', tr, 'Заводской номер', 'header', '', false)
+    insCell('', tr, 'Примечания', 'header', '', false)
   }
-  arr_system_case_unit = pc.system_case_unit
-
+  let arr_system_case_unit = pc.system_case_unit
   for (let j = 0; j < arr_system_case_unit.length; j++) {
     tr = table.insertRow(-1)
-
-    let fdsiCell = tr.insertCell(-1)
-    fdsiCell.innerHTML = arr_system_case_unit[j].fdsi
-    fdsiCell.dataset.id = pc._id
-
-    let typeCell = tr.insertCell(-1)
-    typeCell.innerHTML = arr_system_case_unit[j].type
-    typeCell.dataset.id = pc._id
-    typeCell.contentEditable = 'true'
-
-    let nameCell = tr.insertCell(-1)
-    nameCell.innerHTML = arr_system_case_unit[j].name
-    nameCell.className = 'name'
-    nameCell.dataset.id = pc._id
-    nameCell.contentEditable = 'true'
-
-    let quantityCell = tr.insertCell(-1)
-    quantityCell.innerHTML = arr_system_case_unit[j].quantity
-    quantityCell.dataset.id = pc._id
-
+    insCell('', tr, arr_system_case_unit[j].fdsi, '', '', false, {
+      'id': pc._id
+    })
+    insCell('', tr, arr_system_case_unit[j].type, 'type', '', false, {
+      'id': pc._id
+    })
+    insCell('', tr, arr_system_case_unit[j].name, 'name', '', false, {
+      'id': pc._id
+    })
+    insCell('', tr, arr_system_case_unit[j].quantity, '', '', false, {
+      'id': pc._id
+    })
     let serial_numberCell = tr.insertCell(-1)
     serial_numberCell.innerHTML = arr_system_case_unit[j].serial_number
     serial_numberCell.dataset.id = pc._id
@@ -444,13 +348,11 @@ function TablePc(pc) {
     if (arr_system_case_unit[j].szi) {
       serial_numberCell.dataset.apkzi = 'szi'
     }
-
     serial_numberCell.className = 'serial_number'
     serial_numberCell.contentEditable = "true"
-
-    let notesCell = tr.insertCell(-1)
-    notesCell.innerHTML = arr_system_case_unit[j].notes
-    notesCell.dataset.id = pc._id
+    insCell('', tr, arr_system_case_unit[j].notes, '', '', false, {
+      'id': pc._id
+    })
   }
   return table
 }
@@ -461,75 +363,31 @@ function TableEditPcUnit(pc) {
   table.className = "table table-sm table-bordered table-hover table-responsive pctable"
   table.id = "pc_unit"
 
-  tr = table.insertRow(-1) // TABLE ROW.        
+  let tr = table.insertRow(-1) // TABLE ROW.
+  insCell('', tr, '', 'header', '', false)
+  insCell('', tr, 'Обозначение изделия', 'header', '', false)
+  insCell('', tr, 'Наименование изделия', 'header', '', false)
+  insCell('', tr, 'Характеристика', 'header', '', false)
+  insCell('', tr, 'Количество', 'header', '', false)
+  insCell('', tr, 'Заводской номер', 'header', '', false)
+  insCell('', tr, 'Примечания', 'header', '', false)
 
-  td = document.createElement("td")
-  td.className = "header"
-  tr.appendChild(td)
-
-  td = document.createElement("td")
-  td.innerHTML = 'Обозначение изделия'
-  td.className = "header"
-  tr.appendChild(td)
-
-  td = document.createElement("td")
-  td.innerHTML = 'Наименование изделия'
-  td.className = "header"
-  tr.appendChild(td)
-
-  td = document.createElement("td")
-  td.innerHTML = 'Характеристика'
-  td.className = "header"
-  tr.appendChild(td)
-
-  td = document.createElement("td")
-  td.innerHTML = 'Количество'
-  td.className = "header"
-  tr.appendChild(td)
-
-  td = document.createElement("td")
-  td.innerHTML = 'Заводской номер'
-  td.className = "header"
-  tr.appendChild(td)
-
-  td = document.createElement("td")
-  td.innerHTML = 'Примечания'
-  td.className = "header"
-  tr.appendChild(td)
-
-  arr_pc_unit = pc.pc_unit
-
+  let arr_pc_unit = pc.pc_unit
   for (let j = 0; j < arr_pc_unit.length; j++) {
     tr = table.insertRow(-1)
-
-    let chCell = tr.insertCell(-1)
-    chCell.innerHTML = "<input type='checkbox' name='record'>"
-    chCell.className = "record"
-
-    let fdsiCell = tr.insertCell(-1)
-    fdsiCell.innerHTML = arr_pc_unit[j].fdsi
-    fdsiCell.dataset.id = pc._id
-    fdsiCell.className = 'fdsi'
-    fdsiCell.contentEditable = "true"
-
-    let typeCell = tr.insertCell(-1)
-    typeCell.innerHTML = arr_pc_unit[j].type
-    typeCell.dataset.id = pc._id
-    typeCell.className = 'type'
-    typeCell.contentEditable = "true"
-
-    let nameCell = tr.insertCell(-1)
-    nameCell.innerHTML = arr_pc_unit[j].name
-    nameCell.dataset.id = pc._id
-    nameCell.className = 'name'
-    nameCell.contentEditable = "true"
-
-    let quantityCell = tr.insertCell(-1)
-    quantityCell.innerHTML = arr_pc_unit[j].quantity
-    quantityCell.dataset.id = pc._id
-    quantityCell.className = 'quantity'
-    quantityCell.contentEditable = "true"
-
+    insCell('', tr, "<input type='checkbox' name='record'>", 'record', 'record')
+    insCell('', tr, arr_pc_unit[j].fdsi, 'fdsi', '', true, {
+      'id': pc._id
+    })
+    insCell('', tr, arr_pc_unit[j].type, 'type', '', true, {
+      'id': pc._id
+    })
+    insCell('', tr, arr_pc_unit[j].name, 'name', '', true, {
+      'id': pc._id
+    })
+    insCell('', tr, arr_pc_unit[j].quantity, 'quantity', '', true, {
+      'id': pc._id
+    })
     let serial_numberCell = tr.insertCell(-1)
     let sn = arr_pc_unit[j].serial_number
     serial_numberCell.innerHTML = sn
@@ -545,97 +403,45 @@ function TableEditPcUnit(pc) {
     }
     serial_numberCell.dataset.data = pc._id + ';' + j + ';' + 'pc_unit'
     serial_numberCell.className = 'serial_number'
-
-
-    let notesCell = tr.insertCell(-1)
-    notesCell.innerHTML = arr_pc_unit[j].notes
-    notesCell.innerHTML = arr_pc_unit[j].notes
-    notesCell.dataset.id = pc._id
-    notesCell.className = 'notes'
-    notesCell.contentEditable = "true"
+    insCell('', tr, arr_pc_unit[j].notes, 'notes', '', true, {
+      'id': pc._id
+    })
   }
   return table
 }
 
 function TableEditSystemCase(pc) {
   // таблица ПЭВМ
-
-  let table = document.createElement("table");
-
+  let table = document.createElement("table")
   table.className = "table table-sm table-bordered table-hover table-responsive pctable"
   table.id = "system_case_unit"
+  let tr = table.insertRow(-1) // TABLE ROW.        
+  insCell('', tr, '', 'header', '', false)
+  insCell('', tr, 'Обозначение изделия', 'header', '', false)
+  insCell('', tr, 'Наименование изделия', 'header', '', false)
+  insCell('', tr, 'Характеристика', 'header', '', false)
+  insCell('', tr, 'Количество', 'header', '', false)
+  insCell('', tr, 'Заводской номер', 'header', '', false)
+  insCell('', tr, 'Примечания', 'header', '', false)
 
-  tr = table.insertRow(-1) // TABLE ROW.        
-
-  td = document.createElement("td")
-  td.className = "header"
-  tr.appendChild(td)
-
-  td = document.createElement("td")
-  td.innerHTML = 'Обозначение изделия'
-  td.className = "header"
-  tr.appendChild(td)
-
-  td = document.createElement("td")
-  td.innerHTML = 'Наименование изделия'
-  td.className = "header"
-  tr.appendChild(td)
-
-  td = document.createElement("td")
-  td.innerHTML = 'Характеристика'
-  td.className = "header"
-  tr.appendChild(td)
-
-  td = document.createElement("td")
-  td.innerHTML = 'Количество'
-  td.className = "header"
-  tr.appendChild(td)
-
-  td = document.createElement("td")
-  td.innerHTML = 'Заводской номер'
-  td.className = "header"
-  tr.appendChild(td)
-
-  td = document.createElement("td")
-  td.innerHTML = 'Примечания'
-  td.className = "header"
-  tr.appendChild(td)
-
-  arr_system_case_unit = pc.system_case_unit
-
-  for (let j = 0; j < arr_system_case_unit.length; j++) {
+  let arrSystemCaseUnit = pc.system_case_unit
+  for (let j = 0; j < arrSystemCaseUnit.length; j++) {
     tr = table.insertRow(-1)
-
-    let chCell = tr.insertCell(-1)
-    chCell.innerHTML = "<input type='checkbox' name='record'>"
-    chCell.className = "record"
-
-    let fdsiCell = tr.insertCell(-1)
-    fdsiCell.innerHTML = arr_system_case_unit[j].fdsi
-    fdsiCell.dataset.id = pc._id
-    fdsiCell.className = 'fdsi'
-    fdsiCell.contentEditable = "true"
-
-    let typeCell = tr.insertCell(-1)
-    typeCell.innerHTML = arr_system_case_unit[j].type
-    typeCell.dataset.id = pc._id
-    typeCell.className = 'type'
-    typeCell.contentEditable = "true"
-
-    let nameCell = tr.insertCell(-1)
-    nameCell.innerHTML = arr_system_case_unit[j].name
-    nameCell.dataset.id = pc._id
-    nameCell.className = 'name'
-    nameCell.contentEditable = "true"
-
-    let quantityCell = tr.insertCell(-1)
-    quantityCell.innerHTML = arr_system_case_unit[j].quantity
-    quantityCell.dataset.id = pc._id
-    quantityCell.className = 'quantity'
-    quantityCell.contentEditable = "true"
-
+    insCell('', tr, "<input type='checkbox' name='record'>", 'record', 'record')
+    insCell('', tr, arrSystemCaseUnit[j].fdsi, 'fdsi', '', true, {
+      'id': pc._id
+    })
+    insCell('', tr, arrSystemCaseUnit[j].type, 'type', '', true, {
+      'id': pc._id
+    })
+    insCell('', tr, arrSystemCaseUnit[j].name, 'name', '', true, {
+      'id': pc._id
+    })
+    insCell('', tr, arrSystemCaseUnit[j].quantity, 'quantity', '', true, {
+      'id': pc._id
+    })
     let serial_numberCell = tr.insertCell(-1)
-    let sn = arr_system_case_unit[j].serial_number
+    let sn = arrSystemCaseUnit[j].serial_number
     serial_numberCell.innerHTML = sn
     if (sn == pc.serial_number) {
       serial_numberCell.dataset.number_machine = 'numberMachine'
@@ -644,18 +450,14 @@ function TableEditSystemCase(pc) {
     serial_numberCell.dataset.obj = j
     serial_numberCell.dataset.unit = 'system_case_unit'
     serial_numberCell.dataset.data = pc._id + ';' + j + ';' + 'system_case_unit'
-    if (arr_system_case_unit[j].szi) {
+    if (arrSystemCaseUnit[j].szi) {
       serial_numberCell.dataset.apkzi = 'szi'
     }
-
     serial_numberCell.className = 'serial_number'
     serial_numberCell.contentEditable = "true"
-
-    let notesCell = tr.insertCell(-1)
-    notesCell.innerHTML = arr_system_case_unit[j].notes
-    notesCell.dataset.id = pc._id
-    notesCell.className = 'notes'
-    notesCell.contentEditable = "true"
+    insCell('', tr, arrSystemCaseUnit[j].notes, 'notes', '', true, {
+      'id': pc._id
+    })
   }
   return table
 }
@@ -664,7 +466,6 @@ function CreateTableFromJSON(data, callback) {
   // CREATE DYNAMIC TABLE.
   let divContainer = document.getElementById("PC")
   divContainer.innerHTML = ""
-
   for (let i = 0; i < data.length; i++) {
     table = TablePc(data[i])
     let divContainer = document.getElementById("PC");
@@ -679,7 +480,7 @@ function CreateTableFromJSON(data, callback) {
     let button_copy = document.createElement('input')
     button_copy.type = "button"
     button_copy.className = 'btn btn-outline-primary mr-2 mb-2 ml-3 copyBtn'
-    button_copy.onchange = "klcCopy()"
+    button_copy.onchange = "clkCopy()"
     button_copy.value = 'Копировать'
     button_copy.dataset.id = data[i]._id
     button_copy.dataset.serial_number = data[i].serial_number
@@ -731,7 +532,7 @@ function CreateTableEditPC(data, color) {
   buttonAddRow.type = 'button'
   buttonAddRow.id = 'add-row'
   buttonAddRow.className = 'btn btn-outline-primary ml-2 mr-2 mb-2'
-  buttonAddRow.onclick = ()=>addRow()
+  buttonAddRow.onclick = () => addRow()
   buttonAddRow.value = 'Добавить строку'
   divCont.appendChild(buttonAddRow)
 
@@ -739,7 +540,7 @@ function CreateTableEditPC(data, color) {
   buttonDelRow.type = 'button'
   buttonDelRow.id = 'delete-row'
   buttonDelRow.className = 'btn btn-outline-danger ml-2 mr-2 mb-2'
-  buttonDelRow.onclick = ()=>delRow()
+  buttonDelRow.onclick = () => delRow()
   buttonDelRow.value = 'Удалить строку'
   divCont.appendChild(buttonDelRow)
 
@@ -751,19 +552,18 @@ function CreateTableEditPC(data, color) {
   colorInput.className = 'mt-2 color-input'
   colorInput.id = 'color-input'
   colorInput.value = color
-  colorInput.oninput = function() {
+  colorInput.oninput = function () {
     setColor()
   }
   divCont.appendChild(colorInput)
 
-  var hueb = new Huebee( '.color-input', {
+  var hueb = new Huebee('.color-input', {
     notation: 'hex',
     saturations: 2,
     shades: 7,
-    customColors: [ '#618bd6', '#61d663', '#d6616b', '#d6d561', '#d661ba' ]
+    customColors: ['#618bd6', '#61d663', '#d6616b', '#d6d561', '#d661ba']
   })
   setColor()
-  
 
   let button_edit = document.createElement('input')
   button_edit.type = 'submit'
@@ -781,34 +581,22 @@ function CreateTableEditPC(data, color) {
   divCont.appendChild(button_back)
 }
 
-function CreateSelect(data) {
-  $("#part_select").append($('<option disabled selected value="">...</option>'))
-  for (let i = 0; i < data.length; i++) {
-    $('#part_select').append('<option value="' + data[i].part + '">' + data[i].part + '</option>')
-  }
-}
-
 function edit_serial_number(id, obj, unit, serial_number) {
-  $.ajax({
-    url: "/pcPa/insert_serial",
-    type: "POST",
-    headers: {
-      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-    },
-    data: {
-      id: id,
-      obj: obj,
-      unit: unit,
-      serial_number: serial_number
-    },
-    success: function (pc) {
-      let oldNumberMachine = JSON.parse(pc).oldNumberMachine
-      const pcSN = JSON.parse(pc).pc.serial_number
+  let data = {
+    id: id,
+    obj: obj,
+    unit: unit,
+    serial_number: serial_number
+  }
+  postData('/pcPa/insert_serial', data)
+    .then((pc) => {
+      let oldNumberMachine = pc.oldNumberMachine
+      const pcSN = pc.pc.serial_number
       if (oldNumberMachine) {
         if (oldNumberMachine != pcSN) {
-          $(".popup-checkbox").prop('checked', true)
+          document.querySelector('.popup-checkbox').checked = true
           let msg_txt = 'Серийник был привязан к машине с номером ' + oldNumberMachine
-          $("#oldNumber").text(msg_txt)
+          document.getElementById('oldNumber').innerHTML = msg_txt
           var audio = {};
           audio["alert"] = new Audio();
           audio["alert"].src = "/sounds/S20759.mp3"
@@ -817,34 +605,27 @@ function edit_serial_number(id, obj, unit, serial_number) {
           oldNumberMachine = null
         }
       }
-      UpdateCells(JSON.parse(pc).pc, oldNumberMachine, function () {
+      UpdateCells(pc.pc, oldNumberMachine, function () {
         painting()
       })
-    }
-  })
+    })
 }
 
 function edit_serial_number_apkzi(id, obj, unit, serial_number) {
-  $.ajax({
-    url: "/pcPa/insert_serial_apkzi",
-    type: "POST",
-    headers: {
-      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-    },
-    data: {
-      id: id,
-      obj: obj,
-      unit: unit,
-      serial_number: serial_number
-    },
-    success: function (pc) {
-      UpdateCells(JSON.parse(pc))
-    }
-  })
+  let data = {
+    id: id,
+    obj: obj,
+    unit: unit,
+    serial_number: serial_number
+  }
+  postData('/pcPa/insert_serial_apkzi', data)
+    .then((pc) => {
+      UpdateCells(pc)
+    })
 }
 
-function UpdateCells(pc, how, callback) {
-  if (how) {
+function UpdateCells(pc, oldNumberMachine, callback) {
+  if (oldNumberMachine) {
     // Обновление всех таблиц
     let page = document.getElementById('page').value
     let pages = document.getElementById('pagesCount').value
@@ -864,7 +645,7 @@ function UpdateCells(pc, how, callback) {
     let button_copy = document.createElement('input')
     button_copy.type = "button"
     button_copy.className = 'btn btn-outline-primary mr-2 mb-2 ml-3 copyBtn'
-    button_copy.onchange = "klcCopy()"
+    button_copy.onchange = "clkCopy()"
     button_copy.value = 'Копировать'
     button_copy.dataset.id = pc._id
     button_copy.dataset.serial_number = pc.serial_number
@@ -884,32 +665,31 @@ function UpdateCells(pc, how, callback) {
     let current_id = document.getElementById('hidd_id').value
     let next_id = current_id.split(";")
     next_id[1] = Number(next_id[1]) + 1 + ''
-    if ($(".popup-checkbox").is(":not(:checked)")) {
-      nextCellText = $(".serial_number[data-data='" + next_id.join(';') + "']").text()
-      while (nextCellText == 'б/н' || nextCellText == 'Б/Н') {
-        next_id[1] = Number(next_id[1]) + 1 + ''
-
-        nextCellText = $(".serial_number[data-data='" + next_id.join(';') + "']").text()
-      }
-      $(".serial_number[data-data='" + next_id.join(';') + "']").focus()
-
-      //TextToSpeech
-      if (sessionStorage.getItem("sound") === 'on') {
-        let row = $(".serial_number[data-data='" + next_id.join(';') + "']").parent()[0]
-        if (row) {
-          let textToSpeech = row.innerText.split('	')[1]
-          const ut = new SpeechSynthesisUtterance(textToSpeech)
-          ut.lang = 'ru-RU'
-          ut.rate = 1.1
-          // ut.pitch = 1
-          speechSynthesis.speak(ut)
+    if (!document.querySelector('.popup-checkbox').checked) {
+      let nextCell = document.querySelector(".serial_number[data-data='" + next_id.join(';') + "']")
+      let nextCellText
+      if (nextCell) {
+        nextCellText = nextCell.innerHTML
+        while (nextCellText == 'б/н' || nextCellText == 'Б/Н' || nextCellText == pc.serial_number) {
+          next_id[1] = Number(next_id[1]) + 1 + ''
+          nextCell = document.querySelector(".serial_number[data-data='" + next_id.join(';') + "']")
+          nextCellText = nextCell.innerHTML
+        }
+        nextCell.focus()
+        //TextToSpeech
+        if (sessionStorage.getItem("sound") === 'on') {
+          let rows = document.querySelector(".serial_number[data-data='" + next_id.join(';') + "']").parentElement
+          let row = rows.children
+          if (row) {
+            let textToSpeech = row[1].innerText
+            const ut = new SpeechSynthesisUtterance(textToSpeech)
+            ut.lang = 'ru-RU'
+            ut.rate = 1.1
+            speechSynthesis.speak(ut)
+          }
         }
       }
-      $("td.serial_number").each(function () {
-        if (!$(this).text()) {
-          $(this).css("background-color", "darkgray")
-        }
-      })
+      painting()
     }
   }
   if (callback) {
@@ -917,56 +697,45 @@ function UpdateCells(pc, how, callback) {
   }
 }
 
-function focusOn() {
-  current_id = $("#hidd_id").val()
-  $(".serial_number[data-data='" + current_id + "']").focus()
-}
-
 function find_serial(serial) {
-  $.ajax({
-    url: "/pcPa/find_serial",
-    method: "POST",
-    headers: {
-      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-    },
-    data: {
-      serial: serial
-    },
-    success: function (data) {
+  let data = {
+    serial: serial
+  }
+  postData('/pcPa/find_serial', data)
+    .then((data) => {
       if (data) {
-        $("#inputCopy").css("background-color", "indianred")
-        $("#hidd").append('<div id="danger" style="color: indianred">Машина с таким номером существует</div>')
-        $('#btnSubmit').prop('disabled', true)
+        document.getElementById('inputCopy').style.backgroundColor = 'indianred'
+        let h = document.getElementById('hidd')
+        let d = document.createElement('div')
+        d.id = 'danger'
+        d.style.color = 'indianred'
+        d.innerHTML = 'Машина с таким номером существует'
+        h.append(d)
+        document.getElementById('btnSubmit').disabled = true
       } else {
-        $("#inputCopy").css("background-color", "white")
-        $("#danger").remove()
-        $('#btnSubmit').prop('disabled', false)
+        document.getElementById('inputCopy').style.backgroundColor = 'white'
+        document.getElementById('danger').remove()
+        document.getElementById('btnSubmit').disabled = false
       }
-    }
-  })
+    })
 }
 
-function klcCopy() {
-  $("#inputCopy").focus()
-  $('#btnSubmit').prop('disabled', true)
+function clkCopy() {
+  document.getElementById('inputCopy').focus()
+  document.getElementById('btnSubmit').disabled = true
 }
 
 function delBtn() {
   let id = document.getElementById('hidId').value
   let page = document.getElementById('page').value
-  $.ajax({
-    url: "/pcPa/delete",
-    method: "POST",
-    headers: {
-      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-    },
-    data: {
-      id: id,
-      page: page,
-    },
-    success: function (data) {
-      let page = JSON.parse(data).page
-      let pages = JSON.parse(data).pages
+  let data = {
+    id: id,
+    page: page
+  }
+  postData('/pcPa/delete', data)
+    .then((data) => {
+      let page = data.page
+      let pages = data.pages
       document.getElementById('pagesCount').value = pages
       if (pages > 1) {
         createPagination(page)
@@ -974,29 +743,22 @@ function delBtn() {
         createPagination(page)
         document.getElementById('paginationTop').hidden = true
         document.getElementById('paginationBottom').hidden = true
-      }      
+      }
       loadPage(page, pages)
-    }
-  })
+    })
 }
 
 function testPC() {
-  $("#testData").val('dsfsdfdffsdf')
-  $.ajax({
-    url: "/pcPa/test",
-    method: "POST",
-    headers: {
-      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-    },
-    success: function (data) {
-      let serials = JSON.parse(data).serials
-      let results = JSON.parse(data).results
+  getData('/pcPa/test')
+    .then((data) => {
+      let serials = data.serials
+      let results = data.results
       let divContainer = document.getElementById('testData')
       divContainer.innerHTML = ""
       let table = document.createElement("table");
       table.className = "table table-sm table-bordered table-hover table-responsive pctable"
       for (let i = 0; i < serials.length; i++) {
-        let tr = table.insertRow(-1) // TABLE ROW.
+        let tr = table.insertRow(-1)
         let td = document.createElement("td")
         if (results[i] == 'ok') {
           td.className = 'cellOK'
@@ -1015,8 +777,7 @@ function testPC() {
         tr.appendChild(td)
       }
       divContainer.appendChild(table)
-    }
-  })
+    })
 }
 
 function setSoundSessionOn() {
@@ -1035,7 +796,6 @@ function setSoundSessionOff() {
 function getSoundSession() {
   sessionStorage.getItem("sound")
 }
-
 
 function createPagination(page) {
   page = parseInt(page)
@@ -1080,7 +840,7 @@ function createPagination(page) {
     }
     // Output the indexes for pages that fall inside the range of pageCutLow
     // and pageCutHigh
-    for (let p = pageCutLow; p <= pageCutHigh ; p++) {
+    for (let p = pageCutLow; p <= pageCutHigh; p++) {
       if (p === 0) {
         p += 1;
       }
@@ -1100,32 +860,25 @@ function createPagination(page) {
     }
   }
   // Show the Next button only if you are on a page other than the last
-
   if (page < pages) {
     str += '<li class="page-item next no"><a class="latest" onclick="createPagination(' + (page + 1) + ')">Следующая</a></li>';
   }
   str += '</ul>';
   // Return the pagination string to be outputted in the pug templates
-  document.getElementById('paginationTop').innerHTML = str;
-  document.getElementById('paginationBottom').innerHTML = str;
+  document.getElementById('paginationTop').innerHTML = str
+  document.getElementById('paginationBottom').innerHTML = str
   loadPage(page, pages)
-  document.getElementById('page').value = page  
-  return str;  
+  document.getElementById('page').value = page
+  return str
 }
 
 function selectPages(pageCount) {
-  $.ajax({
-    url: "/pcPa/pageCount",
-    headers: {
-      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-    },
-    method: "POST",
-    data: {
-      pageCount: pageCount
-    },
-    success: function (page) {
+  let data = {
+    pageCount: pageCount
+  }
+  postData('/pcPa/pageCount', data)
+    .then(() => {
       setPage(1)
       document.location.href = '/pcPa'
-    }
-  })
+    })
 }

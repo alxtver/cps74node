@@ -62,9 +62,9 @@
         </button>
       </div>
       <form action="/pcPa/copy" method="post">
+      <span>Введите серийный номер новой машины или диапазон номеров через ";" (например: XXXX-XXX-0001; XXXX-XXX-0005)</span>
         <input type="hidden" name="_csrf" value="{{csrf}}">
         <div class="modal-body">
-          {{!-- <input class="danger" id="danger" type="hidden" value="Такой серийный номер существует"> --}}
           <input id="inputCopy" name="serial_number" type="text" value="" class="form-control">
           <div class="mb-2" id="hidd"></div>
         </div>
@@ -228,8 +228,6 @@
       }      
     }
   })
-
-
 
   $('#inputCopy').keyup(function () {
     let serial = $(this).val()

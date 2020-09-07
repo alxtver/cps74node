@@ -210,10 +210,6 @@ router.post("/part", async function (req, res) {
 
 
 router.post('/insert_serial', auth, async (req, res) => {
-  //Жесть пипец!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  
-  console.log(req.body);
-  
   let pc = await PC.findById(req.body.id) //ищем комп который собираемся редактировать
   let pc_copy = await PC.findById(req.body.id) //и копию....
   let serial_number = req.body.serial_number
@@ -264,7 +260,6 @@ router.post('/insert_serial', auth, async (req, res) => {
       await pki.save()
     }
   }
-
   // Если ПКИ был привязан удаляем ПКИ из старой машины
   if (oldNumberMachine) {
     if (oldNumberMachine != pc.serial_number) {
@@ -282,7 +277,6 @@ router.post('/insert_serial', auth, async (req, res) => {
       }
     }
   }
-
   // Проверяем был ли привязан ПКИ к машине и привязываем к новой машине
   if (pki) {
     if (pki.number_machine) {
@@ -307,21 +301,15 @@ router.post('/insert_serial', auth, async (req, res) => {
     pc_copy[unit] = pc[unit]
     await pc_copy.save()
   }
-
-
-
   res.send(JSON.stringify({
     pc: pc_copy,
     oldNumberMachine: oldNumberMachine
   }))
-
-
 })
 
 
 router.post('/insert_serial_apkzi', auth, async (req, res) => {
-  //Жесть пипец!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
+  console.log(req.body);
   let pc = await PC.findById(req.body.id) //ищем комп который собираемся редактировать
   let pc_copy = await PC.findById(req.body.id) //и копию....  
   let serial_number = req.body.serial_number
@@ -669,7 +657,7 @@ router.post('/delete', auth, async (req, res) => {
 })
 
 
-router.post('/test', auth, async (req, res) => {
+router.get('/test', auth, async (req, res) => {
   const pcs = await PC.find({
     part: req.session.part
   })
