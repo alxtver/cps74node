@@ -39,14 +39,13 @@ router.get('/:id/edit', auth, async (req, res) => {
 })
 
 
-router.post('/edit', auth, async (req, res) => {  
+router.post('/edit', auth, async (req, res) => {
   await Pki.findByIdAndUpdate(req.body.id, req.body)
   res.redirect('/pkis')
 })
 
 
 router.post('/edit_ajax', auth, async (req, res) => {
-  console.log(req.body);
   try {
     await Pki.findByIdAndUpdate(req.body.id, req.body)
   } catch (error) {
@@ -90,11 +89,8 @@ router.post('/edit_ajax', auth, async (req, res) => {
 
 
 router.post("/search", auth, async (req, res) => {
-  console.log(req.body);
   let selected = req.session.part
   let selectedType = req.session.type
-  
-  
   let typesList = await Pki.find({
 		part: selected
 	}).distinct('type_pki')
@@ -127,7 +123,7 @@ router.post("/search", auth, async (req, res) => {
 		}).sort({
 			type_pki: 1
 		})
-	} else if (req.body.q && req.body.q != 'null' && selectedType == '...') {
+	} else if (req.body.q  && selectedType == '...') {
 		query = {
 			$and: [{
 					$or: [{
@@ -210,7 +206,6 @@ router.post("/search", auth, async (req, res) => {
 			type_pki: 1
 		})
 	}
-  console.log(JSON.stringify(pkis));
   res.send(JSON.stringify({
 		pkis: pkis,
 		types: typesList,
@@ -227,7 +222,6 @@ router.post("/part", auth, async function (req, res) {
 
 
 router.post("/del", auth, async (req, res) => {
-  console.log(req.body);
   const part = req.session.part
   let pki = await Pki.findById(req.body.id)
   if (pki.number_machine) {
@@ -274,7 +268,6 @@ router.post("/del", auth, async (req, res) => {
 })
 
 router.post("/searchEAN", auth, async function (req, res) {
-  console.log(req.body)
   const ean = await EAN.findOne({
     ean_code: req.body.valueEAN
   })

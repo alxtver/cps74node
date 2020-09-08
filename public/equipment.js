@@ -25,8 +25,6 @@ function CreateTable1SP() {
   thead.className = "thead-dark"
   for (let i = 0; i < col_rus.length; i++) {
     let th = document.createElement("th")
-    //th.rowSpan = 2
-    // th.className = "thead-dark"
     th.innerHTML = col_rus[i]
     tr.appendChild(th)
     thead.appendChild(tr)

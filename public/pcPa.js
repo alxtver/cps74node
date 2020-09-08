@@ -257,7 +257,7 @@ function TablePc(pc) {
   table.className = "table table-sm table-bordered table-hover table-responsive pctable"
   table.id = pc._id
 
-  let tr = table.insertRow(-1) // TABLE ROW.        
+  let tr = table.insertRow(-1)
 
   insCell('', tr, 'ФДШИ.' + pc.fdsi, 'up', '', false)
   td = document.createElement("td")

@@ -35,7 +35,6 @@ router.post("/search", auth, async (req, res) => {
 	let typesList = await Pki.find({
 		part: selected
 	}).distinct('type_pki')
-	
 
 	let pkis
 	if ((!req.body.q && selectedType == '...') || (!req.body.q && !selectedType)) {
@@ -199,12 +198,12 @@ router.post('/edit', auth, async (req, res) => {
 		pki.sp_unit = ean.sp_unit
 		await pki.save()
 	}
-	res.redirect('/sp')
+	res.status(200).json({ message: 'ok' })
 })
 
 
-router.get('/sp_unit', auth, async (req, res) => {
-	const pki = await Pki.findById(req.query.id).lean()
+router.post('/sp_unit', auth, async (req, res) => {
+	const pki = await Pki.findById(req.body.id).lean()
 	if (pki.sp_unit && pki.sp_unit.length > 0) {
 		res.send(pki)
 	} else if (pki.ean_code) {
@@ -220,13 +219,12 @@ router.get('/sp_unit', auth, async (req, res) => {
 })
 
 
-router.get('/viborka', auth, async (req, res) => {
-	
-	const pki = await Pki.findById(req.query.id)
+router.post('/viborka', auth, async (req, res) => {
+	const pki = await Pki.findById(req.body.id)
 	const ean = await EAN.findOne({
 		ean_code: pki.ean_code
 	})
-	if (req.query.viborka == 'true') {
+	if (req.body.viborka == 'true') {
 		res.send(ean.sp_unit)
 	} else {
 		res.send(ean.sp_unit1)
@@ -234,15 +232,17 @@ router.get('/viborka', auth, async (req, res) => {
 })
 
 
-router.get('/check_ean', auth, async (req, res) => {
-	await Pki.findByIdAndUpdate(req.query.pki_id, {
-		ean_code: req.query.ean
+router.post('/check_ean', auth, async (req, res) => {
+	console.log(req.body);
+	await Pki.findByIdAndUpdate(req.body.pki_id, {
+		ean_code: req.body.ean
 	})
 	const ean = await EAN.findOne({
-		ean_code: req.query.ean
+		ean_code: req.body.ean
 	})
+	console.log(ean);
 	if (ean) {
-		if (req.query.viborka == 'true') {
+		if (req.body.viborka == 'true') {
 			res.send(ean.sp_unit)
 		} else {
 			res.send(ean.sp_unit1)
@@ -355,7 +355,7 @@ router.get('/reportSPDoc', auth, async (req, res) => {
 	}).sort({
 		type_pki: 1
 	})
-	
+
 	let dataSP = []
 	dataSP.push([{
 				val: '№ п/п',

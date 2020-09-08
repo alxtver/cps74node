@@ -52,7 +52,6 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-secondary" id="close2" data-dismiss="modal">Назад</button>
           <button onclick="modalHide()" class="btn btn-outline-success" id="btnSort">Экспорт</button>
-          {{!-- <input  type="submit" id="sbmSort" value="OK" class="btn btn-danger"> --}}
 
         </div>
       </form>
@@ -95,26 +94,19 @@
 <div id="showData"></div>
 
 <input hidden="true" id="temp" value="0"></input>
-<div  id="overlay">
-	<div class="cv-spinner">
-		<span class="spinner"></span>
-	</div>
-</div>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     load_data()
-    let searchInput = document.getElementById('search') 
+    let searchInput = document.getElementById('search')
     searchInput.addEventListener('keyup', (event) => {
       let query = event.target.value
-      console.log(query)
       if (query) {
         searchPKI(query)
       } else {
         searchPKI(null)
       }
     })
-
   })
 
   let typeSelect = document.getElementById('type_select_navbar')
@@ -122,16 +114,4 @@
     changeSelectType(event.target.value)
   })
 
-  jQuery(function ($) {
-    $(document).ajaxSend(function () {
-      $("#overlay").fadeIn(300);
-    });
-
-    $('#btnSearchAndReplace').click(function () {
-      $('#modalSearchAndReplace').modal('hide');
-      $('#overlay').width('100%')
-      $('#overlay').height('100%')
-      $('#overlay').show()
-    });
-  });
 </script>

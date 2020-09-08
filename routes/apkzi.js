@@ -16,7 +16,7 @@ router.get('/', auth, async (req, res) => {
 })
 
 
-router.post("/search", auth, async (req, res) => {  
+router.post("/search", auth, async (req, res) => {
   let apkzi
   if (req.body.part) {
     apkzi = await Apkzi.find({part: req.body.part}).sort([['created', -1] ])
@@ -32,7 +32,7 @@ router.post('/edit_ajax', auth, async (req, res) => {
   try {
     if (!req.body) return res.sendStatus(400)
     await Apkzi.findByIdAndUpdate(req.body.id, req.body)
-    res.status(200).json({ message: 'ok' })    
+    res.status(200).json({ message: 'ok' })
   } catch (error) {
     console.log(error)
   }

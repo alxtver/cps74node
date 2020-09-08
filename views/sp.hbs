@@ -17,37 +17,22 @@
 <input type="hidden" name="id" id="hidId">
 
 <script>
-  //let szz1Cells = document.getElementsByClassName('szz1')
-  //console.log(szz1Cells)
-  //szz1Cells.onblur = function() { console.log('blur'); }
-
-
   document.addEventListener("DOMContentLoaded", function() {
     load_data()
 
-    $('#search').keyup(function () {
-      let search = $(this).val()
-      let blank_req = 'null'
-      if (search) {
-        searchPKI(search)
+    let searchInput = document.getElementById('search')
+    searchInput.addEventListener('keyup', (event) => {
+      let query = event.target.value
+      if (query) {
+        searchPKI(query)
       } else {
-        searchPKI(blank_req)
+        searchPKI(null)
       }
     })
-
   })
 
-  $(document).on('keypress', '.szz1', function (e) {
-    let id = $(this).data("data")    
-    if (e.which == 13) {   
-      e.preventDefault()   
-      //переход на одну ячейку вниз
-      let next_id = Number(id) + 1 + ''
-      $(".szz1[data-data='" + next_id + "']").focus() 
-    }
+  let typeSelect = document.getElementById('type_select_navbar')
+  typeSelect.addEventListener('change', (event) => {
+    changeSelectType(event.target.value)
   })
-
-  $(document).on('change', '#type_select_navbar', function () {	
-        changeSelectType($("#type_select_navbar :selected").text())	
-      })
 </script>

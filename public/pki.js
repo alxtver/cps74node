@@ -88,7 +88,7 @@ function CreateTableFromJSON(data, callback) {
     btn.addEventListener('click', (event) => {
       document.getElementById('hidId').value = event.target.dataset.id
     })
-  }  
+  }
   callback()
 }
 
