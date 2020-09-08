@@ -11,7 +11,6 @@
 <div class="form-group">
   <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Поиск...">
 </div>
-
 {{!-- модальное окно --}}
 <div class="modal fade" id="modalDel" tabindex="-1" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
@@ -93,86 +92,46 @@
   </div>
 </div>
 
-
-
 <div id="showData"></div>
 
 <input hidden="true" id="temp" value="0"></input>
-
 <div  id="overlay">
 	<div class="cv-spinner">
 		<span class="spinner"></span>
 	</div>
 </div>
 
-
-
 <script>
-
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
     load_data()
-
-    $("body").on('click', '.delBtn', function () {
-      $('#hidId').val($(this).data("id"))
-    })
-
-  
-
-    $('#search').keyup(function () {
-      let search = $(this).val()
-      let blank_req = 'null'
-      if (search) {
-        searchPKI(search)
+    let searchInput = document.getElementById('search') 
+    searchInput.addEventListener('keyup', (event) => {
+      let query = event.target.value
+      console.log(query)
+      if (query) {
+        searchPKI(query)
       } else {
-        searchPKI(blank_req)
+        searchPKI(null)
       }
     })
 
-    $(document).on('blur', '.type', function () {
-      let id = $(this).data("id")
-      let type = $(this).text()
-      editCell(id, type, 'type_pki')
-    })
-
-    $(document).on('blur', '.model', function () {
-      let id = $(this).data("id")
-      let model = $(this).text()
-      editCell(id, model, 'model')
-    })
-
-    $(document).on('blur', '.serial_number', function () {
-      let id = $(this).data("id")
-      let serial_number = $(this).text()
-      editCell(id, serial_number, 'serial_number')
-    })
-
-    $(document).on('blur', '.vendor', function () {
-      let id = $(this).data("id")
-      let vendor = $(this).text()
-      editCell(id, vendor, 'vendor')
-    })
-
-    $(document).on('blur', '.country', function () {
-      let id = $(this).data("id")
-      let country = $(this).text()
-      editCell(id, country, 'country')
-    })
   })
 
-  $(document).on('change', '#type_select_navbar', function () {	
-        changeSelectType($("#type_select_navbar :selected").text())	
-      })
+  let typeSelect = document.getElementById('type_select_navbar')
+  typeSelect.addEventListener('change', (event) => {
+    changeSelectType(event.target.value)
+  })
 
-  jQuery(function($){
-	$(document).ajaxSend(function() {
-		$("#overlay").fadeIn(300);　
-	});
-		
-	$('#btnSearchAndReplace').click(function(){      
+  jQuery(function ($) {
+    $(document).ajaxSend(function () {
+      $("#overlay").fadeIn(300);
+    });
+
+    $('#btnSearchAndReplace').click(function () {
       $('#modalSearchAndReplace').modal('hide');
       $('#overlay').width('100%')
       $('#overlay').height('100%')
       $('#overlay').show()
-	});
-});
+    });
+  });
 </script>

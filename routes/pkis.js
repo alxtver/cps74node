@@ -46,6 +46,7 @@ router.post('/edit', auth, async (req, res) => {
 
 
 router.post('/edit_ajax', auth, async (req, res) => {
+  console.log(req.body);
   try {
     await Pki.findByIdAndUpdate(req.body.id, req.body)
   } catch (error) {
@@ -89,7 +90,7 @@ router.post('/edit_ajax', auth, async (req, res) => {
 
 
 router.post("/search", auth, async (req, res) => {
-
+  console.log(req.body);
   let selected = req.session.part
   let selectedType = req.session.type
   
@@ -209,7 +210,7 @@ router.post("/search", auth, async (req, res) => {
 			type_pki: 1
 		})
 	}
-
+  console.log(JSON.stringify(pkis));
   res.send(JSON.stringify({
 		pkis: pkis,
 		types: typesList,

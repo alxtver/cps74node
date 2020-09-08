@@ -1,42 +1,30 @@
 function searchPKI(q) {
-  $.ajax({
-    url: "/sp/search",
-    method: "POST",
-    headers: {
-      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-    },
-    data: {
-      q: q,
-    },
-    success: function (data) {
-      CreateTableFromJSON(JSON.parse(data).pkis)
-    }
-  })
+  let data = {
+    q: q,
+  }
+  postData('/sp/search', data)
+    .then((data) => {
+      CreateTableFromJSON(data.pkis)
+    })
 }
 
 function load_data(q) {
-  $.ajax({
-    url: "/sp/search",
-    method: "POST",
-    headers: {
-      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-    },
-    data: {
-      q: q,
-    },
-    success: function (data) {
-      CreateTableFromJSON(JSON.parse(data).pkis)
-      CreateSelectType(JSON.parse(data).types, function () {
-        if (JSON.parse(data).selectedType) {
-          $("#type_select_navbar option:contains(" + JSON.parse(data).selectedType + ")").prop('selected', true)
+  let data = {
+    q: q,
+  }
+  postData('/sp/search', data)
+    .then((data) => {
+      console.log('object');
+      CreateTableFromJSON(data.pkis)
+      CreateSelectType(data.types, function () {
+        if (data.selectedType) {
+          document.getElementById('type_select_navbar').value = data.selectedType
         }
       })
-    }
-  })
+    })
 }
 
 function CreateTableFromJSON(data) {
-
   let col_rus = ["#", "Наименование", "Фирма", "Модель", "Количество", "Серийный номер", "Страна производства"]
 
   // CREATE DYNAMIC TABLE.
@@ -208,7 +196,8 @@ function CreateTableFromJSON(data) {
 
         let szz1Cell = tr.insertCell(-1)
         szz1Cell.innerHTML = ''
-        szz1Cell.dataset.id = data[i]._id        
+        szz1Cell.dataset.id = data[i]._id
+        szz1Cell.onblur = test()
         szz1Cell.id = "szz1"
 
         let szz2Cell = tr.insertCell(-1)
@@ -229,25 +218,9 @@ function CreateTableFromJSON(data) {
   divContainer.appendChild(table)
 }
 
-$(document).on('blur', '.country', function () {
-  let id = $(this).data("id")
-  let country = $(this).text()
-  edit_country(id, country)
-})
-
-function edit_country(id, country) {
-  $.ajax({
-    url: "/sp/edit_ajax",
-    type: "POST",
-    headers: {
-      'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-    },
-    data: {
-      id: id,
-      country: country
-    },
-    dataType: "text",
-  })
+function test() {
+  console.log('ываывааыв');
+  return false
 }
 
 $(document).on('blur', '.szz1', function () {
@@ -827,4 +800,17 @@ function CreateTableSP_EAN(ean) {
       },
     })
   })
+}
+
+function insCell(parrent, html = '', classN, id, contentEditable, dataset) {
+  let cell = parrent.insertCell(-1)
+  if (classN) cell.className = classN
+  if (id) cell.id = id
+  if (contentEditable) cell.contentEditable = contentEditable
+  cell.innerHTML = html
+  if (dataset) {
+    for (const [key, value] of Object.entries(dataset)) {
+      cell.dataset[key] = value
+    }
+  }
 }

@@ -1,10 +1,22 @@
+function blur() {
+  let tds = document.querySelectorAll('.type_pki,.vendor,.model,.serial_number,.country')
+  for (const td of tds) {
+    td.addEventListener("blur", function (event) {
+      let id  = event.target.dataset.id
+      let value = event.target.innerHTML
+      let className = event.target.className
+      editCell(id, value, className)
+    }, true)
+  }
+}
+
 function load_data(q) {
   let data = {
     q: q,
   }
   postData('/pkis/search', data)
     .then((data) => {
-      CreateTableFromJSON(data.pkis)
+      CreateTableFromJSON(data.pkis, () => blur())
       CreateSelectType(data.types, function () {
         if (data.selectedType) {
           document.getElementById('type_select_navbar').value = data.selectedType
@@ -21,7 +33,7 @@ function editCell(id, value, field) {
   postData('/pkis/edit_ajax', data)
 }
 
-function CreateTableFromJSON(data) {
+function CreateTableFromJSON(data, callback) {
   let col_rus = ["#", "Тип", "Производитель", "Модель", "Серийный номер", "Страна производства", "Номер машины", ""];
   // CREATE DYNAMIC TABLE.
   let table = document.createElement("table");
@@ -41,7 +53,7 @@ function CreateTableFromJSON(data) {
   for (let i = 0; i < data.length; i++) {
     tr = tbody.insertRow(-1)
     insCell(tr, i + 1, '')
-    insCell(tr, data[i].type_pki, 'type', '', true, {
+    insCell(tr, data[i].type_pki, 'type_pki', '', true, {
       'id': data[i]._id
     })
     insCell(tr, data[i].vendor, 'vendor', '', true, {
@@ -61,7 +73,7 @@ function CreateTableFromJSON(data) {
     let part = data[i].part
     let html = (
       "<button class=\"btn_f\" onclick=\"location.href='/pkis/" + id + "/edit?allow=true';\"><i class=\"fa fa-pen\"></i></button>" +
-      "<button class=\"btn_d delBtn\" data-id=\'" + id + "'\ data-part=\'" + part + "'\ data-toggle=\"modal\" data-target=\"#modalDel\"><i class=\"fa fa-trash\"></i></button>"
+      "<button class=\"btn_d delBtn\" data-id=\'" + id + "'\ data-part=\'" + part + "'\ data-toggle=\"modal\" data-target=\"#modalDel\"><i data-id=\'" + id + "'\ class=\"fa fa-trash\"></i></button>"
     )
     insCell(tr, html, 'buttons')
   }
@@ -69,6 +81,15 @@ function CreateTableFromJSON(data) {
   divContainer.innerHTML = ""
   divContainer.className = "tableContent"
   divContainer.appendChild(table)
+
+  //событие по клику на кнопку удалить
+  let delBtns = document.querySelectorAll('.delBtn')
+  for (const btn of delBtns) {
+    btn.addEventListener('click', (event) => {
+      document.getElementById('hidId').value = event.target.dataset.id
+    })
+  }  
+  callback()
 }
 
 function delBtn() {
@@ -99,7 +120,7 @@ function searchPKI(q) {
   }
   postData('/pkis/search', data)
     .then((data) => {
-      CreateTableFromJSON(data.pkis)
+      CreateTableFromJSON(data.pkis, () => blur())
     })
 }
 
