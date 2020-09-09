@@ -17,7 +17,7 @@
   })
 
   $(document).on('change', '#serials', function () {
-    let serial_number_id = '#' + $("#serials :selected").val()    
+    let serial_number_id = '#' + $("#serials :selected").val()
     $('html, body').animate({
           scrollTop: $(serial_number_id).offset().top-70
         }, 500)

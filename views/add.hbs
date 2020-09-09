@@ -1,5 +1,5 @@
 <script src="/pki.js"></script>
-<h1>Добавить ПКИ</h1> 
+<h1>Добавить ПКИ</h1>
 
 <div class="wrapper fadeInDown">
   <div id="formContent">
@@ -48,7 +48,8 @@
       </div>
 
       <div class="input-field">
-        <input id="part" name="part" type="text" value="{{part}}" class="form-control" placeholder="Название партии" required>
+        <input id="part" name="part" type="text" value="{{part}}" class="form-control" placeholder="Название партии"
+          required>
         <div class="invalid-feedback">
           Введите название партии!
         </div>
@@ -61,26 +62,23 @@
           Введите серийный номер!
         </div>
       </div>
-  
+
       <input type="hidden" name="_csrf" value="{{csrf}}">
-      {{!-- <input type="hidden" name="hidd_serial" id="hidd_serial" class="form-control" value="" required> --}}
       <button type="submit" onclick="return addSession();" class="btn btn-primary btn-dark mb-2">Добавить ПКИ</button>
     </form>
   </div>
 </div>
 
 <script type="text/javascript">
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
     loadSession()
     autoComplete()
+    let eanInput = document.getElementById('ean_code')
+    eanInput.addEventListener("keypress", function (e) {
+      if (e.keyCode == 13) {
+        e.preventDefault()
+        searchEAN(eanInput.value)
+      }
+    })
   })
-
-  $(document).on('keypress', '#ean_code', function (e) {
-    let valueEAN = $(this).val()
-    if (e.which == 13) {
-      e.preventDefault()
-      searchEAN(valueEAN)
-    }
-  })
-
 </script>

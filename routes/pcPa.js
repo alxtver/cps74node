@@ -115,7 +115,7 @@ router.post('/add', auth, async (req, res) => {
 
   try {
     await pc.save();
-    res.redirect('/')
+    res.status(200).json({ message: 'ok' })
   } catch (e) {
     console.log(e);
   }

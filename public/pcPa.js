@@ -156,6 +156,7 @@ function CreateTableSystemCase() {
     insCell(unit, tr, '', 'notes', 'notes', true)
   }
   tr = tableRef.insertRow(-1)
+  tr.className = 'apkzi'
   insCell('', tr, "<input type='checkbox' name='record'>", 'record', 'record')
   insCell('', tr, '', 'fdsi', 'fdsi', true)
   insCell('', tr, 'Контроллер СЗИ10 PCI', 'type', 'type', true, {
@@ -881,4 +882,102 @@ function selectPages(pageCount) {
       setPage(1)
       document.location.href = '/pcPa'
     })
+}
+
+function submitFormAddPc() {
+  const formAddPC = document.querySelector('form')
+  formAddPC.addEventListener('submit', (e) => {
+    e.preventDefault()
+    const part = document.getElementById('part').value
+    const fdsi = document.getElementById('fdsi').value
+    const serial_number = document.getElementById('serial_number').value
+    const arm = document.getElementById('arm').value
+    const execution = document.getElementById('execution').value
+    const attachment = document.getElementById('attachment').value
+    // формирование POST запроса для таблицы ПЭВМ
+    let pc_unit = []
+    const pcUnitTr = document.querySelectorAll('#pc_unit tr')
+    pcUnitTr.forEach((tr, i) => {
+      if (i == 0) return true
+      let fdsi = tr.querySelector('.fdsi').innerText
+      let type = tr.querySelector('.type').innerText
+      let name = tr.querySelector('.name').innerText
+      let quantity = tr.querySelector('.quantity').innerText
+      let serial_number = tr.querySelector('.serial_number').innerText
+      let notes = tr.querySelector('.notes').innerText
+      if (tr.className == 'apkzi') {
+        pc_unit.push({
+          i: i,
+          fdsi: fdsi,
+          type: type,
+          name: name,
+          quantity: quantity,
+          serial_number: serial_number,
+          notes: notes,
+          apkzi: "apkzi"
+        })
+      } else {
+        pc_unit.push({
+          i: i,
+          fdsi: fdsi,
+          type: type,
+          name: name,
+          quantity: quantity,
+          serial_number: serial_number,
+          notes: notes
+        })
+      }
+    })
+    // формирование POST запроса для таблицы системный блок
+    let system_case_unit = []
+    const systemCaseUnitTr = document.querySelectorAll('#system_case_unit tr')
+    systemCaseUnitTr.forEach((tr, i) => {
+      if (i == 0) return true
+      let fdsi = tr.querySelector('.fdsi').innerText
+      let type = tr.querySelector('.type').innerText
+      let name = tr.querySelector('.name').innerText
+      let quantity = tr.querySelector('.quantity').innerText
+      let serial_number = tr.querySelector('.serial_number').innerText
+      let notes = tr.querySelector('.notes').innerText
+      if (tr.className == 'apkzi') {
+        system_case_unit.push({
+          i: i,
+          fdsi: fdsi,
+          type: type,
+          name: name,
+          quantity: quantity,
+          serial_number: serial_number,
+          notes: notes,
+          apkzi: "szi"
+        })
+      } else {
+        system_case_unit.push({
+          i: i,
+          fdsi: fdsi,
+          type: type,
+          name: name,
+          quantity: quantity,
+          serial_number: serial_number,
+          notes: notes
+        })
+      }
+    })
+
+    let data = {
+      part: part,
+      fdsi: fdsi,
+      serial_number: serial_number,
+      arm: arm,
+      execution: execution,
+      attachment: attachment,
+      pc_unit: JSON.stringify(pc_unit),
+      system_case_unit: JSON.stringify(system_case_unit)
+    }
+    postData('/pcPa/add', data)
+    .then((data) => {
+      if (data.message == 'ok') {
+        window.location='/pcPa'
+      }
+    })
+  })
 }
