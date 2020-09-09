@@ -90,7 +90,7 @@ router.post('/edit_ajax', auth, async (req, res) => {
 
 router.post("/search", auth, async (req, res) => {
   let selected = req.session.part
-  let selectedType = req.session.type
+  let selectedType = (req.session.type) ? req.session.type : '...'
   let typesList = await Pki.find({
 		part: selected
 	}).distinct('type_pki')

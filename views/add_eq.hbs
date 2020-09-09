@@ -50,18 +50,17 @@
           Введите страну!
         </div>
       </div>
- 
+
       <div id="pki_sp_table1"></div>
       <div id="pki_sp_table2"></div>
 
       <div class="mb-3" style="text-align: left;">
-        <input type="button" id="add-row" class="add-row btn btn-outline-primary" value="Добавить строку">
-        <input type="button" id="delete-row" class="delete-row btn btn-outline-danger" value="Удалить строку">
+        <input type="button" id="add-row" onclick="addRow()" class="add-row btn btn-outline-primary" value="Добавить строку">
+        <input type="button" id="delete-row" onclick="delRow()" class="delete-row btn btn-outline-danger" value="Удалить строку">
         <input type="button" id="copy_table" class="delete-row btn btn-outline-success" value="Копировать таблицу">
       </div>
 
       <input type="hidden" name="_csrf" value="{{csrf}}">
-      {{!-- <input type="hidden" name="hidd_serial" id="hidd_serial" class="form-control" value="" required> --}}
       <button type="button" onclick="submitEq()" class="btn btn-outline-success">Добавить оборудование</button>
       <input type="button" value="Назад" class="btn btn-outline-primary" onclick="window.location='/equipment';">
     </form>
@@ -74,60 +73,21 @@
     CreateTable1SP()
     autoComplete()
     document.getElementById("ean_code").focus()
-    $("#add-row").click(function () {
-      $("#sp_unit, #sp_unit1").find('input[name="record"]').each(function () {
-        if ($(this).is(":checked")) {
-          let checkedRow = $(this).parents("tr")
-          let newRow = document.createElement("tr")
 
-          let chCell = newRow.insertCell(-1)
-          chCell.innerHTML = "<input type='checkbox' name='record'>"
-          chCell.className = "record"
-
-          let nameCell = newRow.insertCell(-1)
-          nameCell.className = "name"
-          nameCell.id = "name"
-          nameCell.contentEditable = "true"
-
-          let vendorCell = newRow.insertCell(-1)
-          vendorCell.className = "vendor"
-          vendorCell.id = "vendor"
-          vendorCell.contentEditable = "true"
-
-          let modelCell = newRow.insertCell(-1)
-          modelCell.className = "model"
-          modelCell.id = "model"
-          modelCell.contentEditable = "true"
-
-          let quantityCell = newRow.insertCell(-1)
-          quantityCell.innerHTML = "1"
-          quantityCell.className = "quantity"
-          quantityCell.id = "quantity"
-          quantityCell.contentEditable = "true"
-
-          let szz2Cell = newRow.insertCell(-1)
-          szz2Cell.innerHTML = '1'
-          szz2Cell.className = "szz2"
-          szz2Cell.id = "szz2"
-          szz2Cell.contentEditable = "true"
-
-          $(newRow).insertAfter(checkedRow)
-        }
+    let inputs = document.querySelectorAll('#ean_code, #type_pki, #vendor, #model, #country')
+    for (input of inputs) {
+      input.addEventListener('keypress', (event) => {
+        event.target.style.borderColor="#ced4da";
+        event.target.style.backgroundColor="#fff";
       })
-    })
-
-    $("#delete-row").click(function () {
-      $("#sp_unit, #sp_unit1").find('input[name="record"]').each(function () {
-        if ($(this).is(":checked")) {
-          $(this).parents("tr").remove();
-        }
-      })
-    })
-
-    $("#copy_table").click(function () {
-      $("#pki_sp_table2").empty()
-      $("#sp_unit").clone().appendTo("#pki_sp_table2").attr('id', 'sp_unit1')
+    }
+    let copyTableButton = document.getElementById('copy_table')
+    copyTableButton.addEventListener('click', () => {
+      let table2 = document.getElementById('pki_sp_table2')
+      table2.innerHTML = ''
+      table2.innerHTML = document.getElementById('pki_sp_table1').innerHTML
+      table2.id = 'pki_sp_table2'
+      document.querySelector('#pki_sp_table2 #sp_unit').id = 'sp_unit1'
     })
   })
-
 </script>

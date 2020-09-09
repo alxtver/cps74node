@@ -69,12 +69,45 @@ function CreateTable1SP() {
   szz2Cell.contentEditable = "true"
 }
 
+function validate(input) {
+  input.style.borderColor="#f57e7e";
+  input.style.backgroundColor="#f1f1ae";
+  input.style.borderWidth=2;
+}
+
 function submitEq() {
-  const type_pki = document.getElementById('type_pki').value
-  const vendor = document.getElementById('vendor').value
-  const model = document.getElementById('model').value
-  const ean_code = document.getElementById('ean_code').value
-  const country = document.getElementById('country').value
+  const type_pkiInput = document.getElementById('type_pki')
+  const vendorInput = document.getElementById('vendor')
+  const modelInput = document.getElementById('model')
+  const ean_codeInput = document.getElementById('ean_code')
+  const countryInput = document.getElementById('country')
+
+  const type_pki = type_pkiInput.value
+  const vendor = vendorInput.value
+  const model = modelInput.value
+  const ean_code = ean_codeInput.value
+  const country = countryInput.value
+  if (!ean_codeInput.value) {
+    validate(ean_codeInput)
+    return false
+  }
+  if (!type_pkiInput.value) {
+    validate(type_pkiInput)
+    return false
+  }
+  if (!vendorInput.value) {
+    validate(vendorInput)
+    return false
+  }
+  if (!modelInput.value) {
+    validate(modelInput)
+    return false
+  }
+  if (!countryInput.value) {
+    validate(countryInput)
+    return false
+  }
+
   // формирование POST запроса для таблицы СП
   let sp_unit = []
   let table = document.getElementById('pki_sp_table1')
@@ -376,3 +409,53 @@ function autoComplete() {
     })
 }
 
+function addRow() {
+  let records = document.querySelectorAll('input[name="record"]')
+  for (const rec of records) {
+    if (rec.checked) {
+      let checkedRow = rec.closest("tr")
+      let newRow = document.createElement("tr")
+      insCell('', newRow, "<input type='checkbox' name='record'>", 'record')
+      insCell('', newRow, '', 'name', '', true)
+      insCell('', newRow, '', 'vendor', '', true)
+      insCell('', newRow, '', 'model', '', true)
+      insCell('', newRow, '1', 'quantity', '', true)
+      insCell('', newRow, '1', 'szz2', '', true)
+      checkedRow.parentNode.insertBefore(newRow, checkedRow.nextSibling)
+    }
+  }
+}
+
+function delRow() {
+  let records = document.querySelectorAll('input[name="record"]')
+  for (const rec of records) {
+    if (rec.checked) {
+      rec.closest("tr").remove()
+    }
+  }
+}
+
+function insCell(unit, parrent, html = '', classN, id, contentEditable, dataset) {
+  let cell = parrent.insertCell(-1)
+  if (classN) cell.className = classN
+  if (id) cell.id = id
+  if (contentEditable) cell.contentEditable = contentEditable
+  cell.innerHTML = html
+  if (id == 'serial_number') {
+    if (unit == 'Системный блок' || unit == 'Сетевой фильтр' || unit == 'Гарнитура' || unit == 'Корпус') {
+      cell.className = "serial_number number_mashine"
+    } else if (unit == 'Вентилятор процессора') {
+      cell.innerHTML = 'б/н'
+    } else {
+      cell.className = "serial_number"
+    }
+  }
+  if (id == 'notes' && unit == 'Системный блок') {
+    cell.innerHTML = 'с кабелем питания'
+  }
+  if (dataset) {
+    for (const [key, value] of Object.entries(dataset)) {
+      cell.dataset[key] = value
+    }
+  }
+}

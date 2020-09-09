@@ -51,7 +51,7 @@
             {{else}}
               <li class="nav-item"><a class="nav-link" href="/search">Поиск</a></li>
             {{/if}}
-          </li>          
+          </li>
         {{/if}}
       {{/if}}
 
@@ -67,12 +67,9 @@
         {{else}}
           <li class="nav-item"><a class="nav-link" href="/equipment">Оборудование</a></li>
         {{/if}}
-        
+
       {{/if}}
-
-      
-
-      {{#if isAuth}}
+    {{#if isAuth}}
         {{#if isProjects}}
          <li class="nav-item active"><a class="nav-link" href="/projects">Проекты</a></li>
         {{else}}
@@ -98,16 +95,17 @@
       </select>
     </ul>
     {{/if}}
-    <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        load_part_navbar()
-      })
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+load_part_navbar()
+})
 
-      $(document).on('change', '#part_select_navbar', function () {
-        changeSelect($("#part_select_navbar :selected").text())
-        setPage(1)
-      })
-    </script>
+let partSelect = document.getElementById('part_select_navbar')
+partSelect.addEventListener('change', (event) => {
+changeSelect(partSelect.options[partSelect.selectedIndex].innerHTML)
+setPage(1)
+})
+</script>
   </div>
 
 </nav>
