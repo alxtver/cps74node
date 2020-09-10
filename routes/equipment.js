@@ -206,7 +206,6 @@ router.post('/edit', auth, async (req, res) => {
           } else {
             sp_units.push(pki_unit)
           }
-          
         } else {
           sp_units.push({
             i: i,
@@ -239,7 +238,7 @@ router.post('/sp_unit', auth, async (req, res) => {
 
 
 router.post("/search", auth, async (req, res) => {
-  if (req.body.q == 'null') {
+  if (!req.body.q) {
     const eans = await EAN.find().limit(50).sort({
       created: -1
     })

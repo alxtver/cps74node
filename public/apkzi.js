@@ -1,3 +1,23 @@
+function blur() {
+  let tds = document.querySelectorAll('.fdsi,.apkzi_name,.kont_name,.zav_number,.kontr_zav_number')
+  for (const td of tds) {
+    td.addEventListener("blur", function (event) {
+      let id  = event.target.dataset.id
+      let value = event.target.innerHTML
+      let className = event.target.className
+      editCell(id, value, className)
+    }, true)
+  }
+}
+
+// Редактирование ячеек таблицы АПКЗИ
+function editCell(id, value, field) {
+  let data = new Object()
+  data.id = id
+  data[field] = value
+  postData('/apkzi/edit_ajax', data)
+}
+
 function load_data(q, part) {
   data = {
     q: q,
@@ -5,7 +25,9 @@ function load_data(q, part) {
   }
   postData('/apkzi/search', data)
     .then((data) => {
-      CreateTableFromJSON(data)
+      CreateTableFromJSON(data, () => {
+        blur()
+      })
     })
 }
 
@@ -22,8 +44,7 @@ function delBtn() {
     })
 }
 
-
-function CreateTableFromJSON(data) {
+function CreateTableFromJSON(data, callback) {
   let col = ["type_pki", "vendor", "model", "serial_number", "country", "part", "number_machine"];
   let col_rus = ["ФДШИ",
     "Наим. АПКЗИ",
@@ -33,13 +54,9 @@ function CreateTableFromJSON(data) {
     "Номер машины",
     ''
   ]
-
   // CREATE DYNAMIC TABLE.
-  let table = document.createElement("table");
+  let table = document.createElement("table")
   table.className = "table table-sm table-bordered table-hover table-responsive table-striped"
-
-  // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
-
   // TABLE ROW.
   let thead = table.createTHead()
   let tr = thead.insertRow(-1)
@@ -51,7 +68,6 @@ function CreateTableFromJSON(data) {
     tr.appendChild(th);
     thead.appendChild(tr)
   }
-
   // Заполнение таблицы
   let tbody = table.createTBody()
   for (let i = 0; i < data.length; i++) {
@@ -90,7 +106,6 @@ function CreateTableFromJSON(data) {
     let number_machineCell = tr.insertCell(-1)
     number_machineCell.dataset.id = data[i]._id
     number_machineCell.className = "number_machine"
-    number_machineCell.contentEditable = "true"
     if (data[i].number_machine) {
       number_machineCell.innerHTML = data[i].number_machine
     } else {
@@ -106,70 +121,17 @@ function CreateTableFromJSON(data) {
       "<button class=\"btn_d delBtn\" data-id=\'" + id + "'\ data-part=\'" + part + "'\ data-toggle=\"modal\" data-target=\"#modalDel\"><i class=\"fa fa-trash\"></i></button>"
     )
   }
-
   const divContainer = document.getElementById("showData")
   divContainer.innerHTML = ""
   divContainer.className = "tableContent"
   divContainer.appendChild(table)
-}
 
-// Редактирование ячеек таблицы ПКИ
-function edit_fdsi(id, fdsi) {
-  data = {
-    id: id,
-    fdsi: fdsi
-  }
-  postData('/apkzi/edit_ajax', data)
-    .then((data) => {      
+  //событие по клику на кнопку удалить
+  let delBtns = document.querySelectorAll('.delBtn')
+  for (const btn of delBtns) {
+    btn.addEventListener('click', (event) => {
+      document.getElementById('hidId').value = event.target.dataset.id
     })
-}
-
-function edit_apkzi_name(id, apkzi_name) {
-  data = {
-    id: id,
-    apkzi_name: apkzi_name
   }
-  postData('/apkzi/edit_ajax', data)
-    .then((data) => {      
-    })
-}
-
-function edit_kont_name(id, kont_name) {
-  data = {
-    id: id,
-    kont_name: kont_name
-  }
-  postData('/apkzi/edit_ajax', data)
-    .then((data) => {      
-    })
-}
-
-function edit_zav_number(id, zav_number) {
-  data = {
-    id: id,
-    zav_number: zav_number
-  }
-  postData('/apkzi/edit_ajax', data)
-    .then((data) => {      
-    })
-}
-
-function edit_kontr_zav_number(id, kontr_zav_number) {
-  data = {
-    id: id,
-    kontr_zav_number: kontr_zav_number
-  }
-  postData('/apkzi/edit_ajax', data)
-    .then((data) => {      
-    })
-}
-
-function edit_number_machine(id, number_machine) {
-  data = {
-    id: id,
-    number_machine: number_machine
-  }
-  postData('/apkzi/edit_ajax', data)
-    .then((data) => {      
-    })
+  callback()
 }

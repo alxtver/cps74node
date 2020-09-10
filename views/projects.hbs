@@ -12,14 +12,22 @@
 <input type="hidden" id="hidd_unit" value="0">
 
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
     load_data()
   })
 
-  $(document).on('change', '#serials', function () {
-    let serial_number_id = '#' + $("#serials :selected").val()
-    $('html, body').animate({
-          scrollTop: $(serial_number_id).offset().top-70
-        }, 500)
+  function getBodyScrollTop() {
+    return self.pageYOffset || (document.documentElement && document.documentElement.scrollTop) || (document.body && document.body.scrollTop);
+  }
+  const snSelect = document.getElementById('serials')
+  snSelect.addEventListener('change', (e) => {
+    let snId = snSelect.value
+    const el = document.getElementById(snId)
+    let scrTop = getBodyScrollTop()
+    const offsetPosition = scrTop + el.getBoundingClientRect().top - 70
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: "smooth"
+    })
   })
 </script>

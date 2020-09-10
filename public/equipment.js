@@ -70,9 +70,9 @@ function CreateTable1SP() {
 }
 
 function validate(input) {
-  input.style.borderColor="#f57e7e";
-  input.style.backgroundColor="#f1f1ae";
-  input.style.borderWidth=2;
+  input.style.borderColor = "#f57e7e";
+  input.style.backgroundColor = "#f1f1ae";
+  input.style.borderWidth = 2;
 }
 
 function submitEq() {
@@ -160,10 +160,20 @@ function submitEq() {
     sp_unit: sp_unit,
     sp_unit1: sp_unit1
   }
-  postData('/equipment/add', data)
-    .then((data) => {})
-  if (ean_code && type_pki && vendor && model && country) {
-    document.forms["add"].submit()
+  if (document.forms["add"]) {
+    postData('/equipment/add', data)
+      .then(() => {})
+    if (ean_code && type_pki && vendor && model && country) {
+      document.forms["add"].submit()
+    }
+  }
+
+  if (document.forms["edit"]) {
+    postData('/equipment/edit', data)
+      .then(() => {})
+    if (ean_code && type_pki && vendor && model && country) {
+      document.forms["edit"].submit()
+    }
   }
 }
 
@@ -179,8 +189,6 @@ function CreateTableSP_EAN(ean) {
   thead.className = "thead-dark"
   for (let i = 0; i < col_rus.length; i++) {
     let th = document.createElement("th")
-    //th.rowSpan = 2
-    // th.className = "thead-dark"
     th.innerHTML = col_rus[i]
     tr.appendChild(th)
     thead.appendChild(tr)

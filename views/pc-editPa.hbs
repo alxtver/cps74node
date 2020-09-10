@@ -46,137 +46,27 @@
     <div id="PC"></div>
 
   </form>
-  
+
 </div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
     load_pc(`{{pc._id}}`)
   })
-  document.addEventListener('click', function(e) {
+  document.addEventListener('click', function (e) {
     setColor()
-})
-
-
-  $('form').submit(function () {
-    // get table html
-    let submit = document.getElementById('submit')
-    let id = submit.dataset.id
-    let part = $('#part').val()
-    let fdsi = $('#fdsi').val()
-    let serial_number = $('#serial_number').val()
-    let arm = $('#arm').val()
-    let execution = $('#execution').val()
-    let attachment = $('#attachment').val()
-    let color = document.getElementById('color-input').value
-
-    //// формирование POST запроса для таблицы ПЭВМ
-    let pc_unit = []
-    $('#pc_unit tr').each(function (i) {
-      if (i == 0) {
-        return true
-      }
-      let fdsi = $(this).find(".fdsi").text()
-      let type = $(this).find(".type").text()
-      let name = $(this).find(".name").text()
-      let quantity = $(this).find(".quantity").text()
-      let serial_number = $(this).find(".serial_number").text()
-      let notes = $(this).find(".notes").text()
-
-      if ($(this).find(".serial_number").data("apkzi")) {
-        pc_unit.push({
-          i: i,
-          fdsi: fdsi,
-          type: type,
-          name: name,
-          quantity: quantity,
-          serial_number: serial_number,
-          notes: notes,
-          apkzi: "apkzi"
-        })
-      } else {
-        pc_unit.push({
-          i: i,
-          fdsi: fdsi,
-          type: type,
-          name: name,
-          quantity: quantity,
-          serial_number: serial_number,
-          notes: notes
-        })
-      }
-    })
-
-    // формирование POST запроса для таблицы системный блок
-    let system_case_unit = []
-    $('#system_case_unit tr').each(function (i) {
-      if (i == 0) {
-        return true
-      }
-      let type = $(this).find(".type").text()
-      let fdsi = $(this).find(".fdsi").text()
-      let name = $(this).find(".name").text()
-
-      let quantity = $(this).find(".quantity").text()
-      let serial_number = $(this).find(".serial_number").text()
-      let notes = $(this).find(".notes").text()
-      if ($(this).find(".serial_number").data("apkzi")) {
-        system_case_unit.push({
-          i: i,
-          fdsi: fdsi,
-          type: type,
-          name: name,
-          quantity: quantity,
-          serial_number: serial_number,
-          notes: notes,
-          szi: "szi"
-        })
-      } else {
-        system_case_unit.push({
-          i: i,
-          fdsi: fdsi,
-          type: type,
-          name: name,
-          quantity: quantity,
-          serial_number: serial_number,
-          notes: notes
-        })
-      }
-    })
-
-    $.ajax({
-      url: "/pcPa/pc_update",
-      type: "POST",
-      headers: {
-        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-      },
-      data: {
-        id: id,
-        part: part,
-        fdsi: fdsi,
-        serial_number: serial_number,
-        arm: arm,
-        execution: execution,
-        attachment: attachment,
-        color: color,
-        pc_unit: JSON.stringify(pc_unit),
-        system_case_unit: JSON.stringify(system_case_unit)
-      },
-          success: function (data) {
-
-          }
-    })
   })
 
-  $('#serial_number').keyup(function() {
-      let sn = `{{pc.serial_number}}`
-      let search = $(this).val()
-      let numbers = document.getElementsByClassName('serial_number')
-      for (const number of numbers) {
-        if (number.dataset.number_machine) {
-          number.innerHTML = search
-        }
+  const snInput = document.getElementById('serial_number')
+  snInput.addEventListener('keyup', (e) => {
+    const sn = e.target.value
+    const numbers = document.getElementsByClassName('serial_number')
+    for (const number of numbers) {
+      if (number.dataset.number_machine) {
+        number.innerHTML = sn
       }
-    })
+    }
+  })
+
 
 </script>

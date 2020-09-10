@@ -110,7 +110,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="ModalLabel">Пороверка ПЭВМ</h5>        
+        <h5 class="modal-title" id="ModalLabel">Пороверка ПЭВМ</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -118,11 +118,9 @@
       <form>
         <p id="serial"></p>
         <div id="testData">
-          
+
         </div>
         <input type="hidden" name="_csrf" value="{{csrf}}">
-        
-        
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Закрыть</button>          
         </div>
@@ -134,55 +132,61 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-  if (!sessionStorage.getItem("sound")) {
-    document.getElementById("soundOff").hidden = true
-    document.getElementById("soundOn").hidden = false
-    setSoundSessionOn()
-  } else if (sessionStorage.getItem("sound") == 'on') {
-    document.getElementById("soundOff").hidden = true
-    document.getElementById("soundOn").hidden = false
-  } else {
-    document.getElementById("soundOff").hidden = false
-    document.getElementById("soundOn").hidden = true
-  }
+    if (!sessionStorage.getItem("sound")) {
+      document.getElementById("soundOff").hidden = true
+      document.getElementById("soundOn").hidden = false
+      setSoundSessionOn()
+    } else if (sessionStorage.getItem("sound") == 'on') {
+      document.getElementById("soundOff").hidden = true
+      document.getElementById("soundOn").hidden = false
+    } else {
+      document.getElementById("soundOff").hidden = false
+      document.getElementById("soundOn").hidden = true
+    }
 
-  // включение текущего элемента в выборе количества ПЭВМ на странице
-  let pcCount = `{{pcCount}}`
-  document.getElementById('selectPages').value = pcCount
-  
-  //пагинация  
-  const pages = parseInt(document.getElementById('pagesCount').value)
-  if (pages > 1) {
-    getPage()
-  } else {
-    loadPage(1)
-  }
-  // конец пагинации
-})
+    // включение текущего элемента в выборе количества ПЭВМ на странице
+    let pcCount = `{{pcCount}}`
+    document.getElementById('selectPages').value = pcCount
+    //пагинация
+    const pages = parseInt(document.getElementById('pagesCount').value)
+    if (pages > 1) {
+      getPage()
+    } else {
+      loadPage(1)
+    }
 
-  document.onkeydown = function(e) {
+    function getBodyScrollTop() {
+      return self.pageYOffset || (document.documentElement && document.documentElement.scrollTop) || (document.body && document.body.scrollTop);
+    }
+    // конец пагинации
+    const snSelect = document.getElementById('serials')
+    snSelect.addEventListener('change', (e) => {
+      let snId = snSelect.value
+      const el = document.getElementById(snId)
+      let scrTop = getBodyScrollTop()
+      const offsetPosition = scrTop + el.getBoundingClientRect().top - 70
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      })
+    })
+  })
+
+  document.onkeydown = function (e) {
     e = e || window.event;
     let page = parseInt(document.getElementById('page').value)
     let pages = parseInt(document.getElementById('pagesCount').value)
     if (e.ctrlKey && e.keyCode == 39) {
       if (page < pages) {
-        createPagination(parseInt(document.getElementById('page').value)+1)
+        createPagination(parseInt(document.getElementById('page').value) + 1)
       }
     } else if (e.ctrlKey && e.keyCode == 37) {
-        if (page > 1) {
-          createPagination(parseInt(document.getElementById('page').value)-1)
-        }
+      if (page > 1) {
+        createPagination(parseInt(document.getElementById('page').value) - 1)
+      }
     }
     return true;
   }
-
-
-  $(document).on('change', '#serials', function () {
-    let serial_number_id = '#' + $("#serials :selected").val()
-    $('html, body').animate({
-          scrollTop: $(serial_number_id).offset().top-70
-        }, 500)
-  })
 
   $(document).on('change', '#selectPages', function () {
     let pageCount = $("#selectPages :selected").val()
@@ -193,7 +197,7 @@
       $('#hidId').val($(this).data("id"))
       $('#serial').text('Серийный номер - ' + $(this).data("serial_number"))          
     })
-  
+
   $("body").on('click', '.copyBtn', function () {
     $('#hidInputCopy').val($(this).data("id"))
     $('#inputCopy').val($(this).data("serial_number"))
@@ -225,7 +229,7 @@
         edit_serial_number_apkzi(id, obj, unit, serial_number)
       } else {
         edit_serial_number(id, obj, unit, serial_number)
-      }      
+      }
     }
   })
 

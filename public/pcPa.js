@@ -98,7 +98,7 @@ function CreateTablePC() {
     insCell(unit, tr, '', 'notes', 'notes', true)
   }
   tr = tableRef.insertRow(-1)
-  tr.className = "apkzi"
+  tr.className = 'apkzi'
   insCell('', tr, "<input type='checkbox' name='record'>", 'record', 'record')
   insCell('', tr, '', 'fdsi', 'fdsi', true)
   insCell('', tr, 'АПКЗИ', 'type', 'type', true, {
@@ -375,7 +375,10 @@ function TableEditPcUnit(pc) {
 
   let arr_pc_unit = pc.pc_unit
   for (let j = 0; j < arr_pc_unit.length; j++) {
-    tr = table.insertRow(-1)
+    let tr = table.insertRow(-1)
+    if (arr_pc_unit[j].apkzi) {
+      tr.className = 'apkzi'
+    }
     insCell('', tr, "<input type='checkbox' name='record'>", 'record', 'record')
     insCell('', tr, arr_pc_unit[j].fdsi, 'fdsi', '', true, {
       'id': pc._id
@@ -416,7 +419,7 @@ function TableEditSystemCase(pc) {
   let table = document.createElement("table")
   table.className = "table table-sm table-bordered table-hover table-responsive pctable"
   table.id = "system_case_unit"
-  let tr = table.insertRow(-1) // TABLE ROW.        
+  let tr = table.insertRow(-1) // TABLE ROW.
   insCell('', tr, '', 'header', '', false)
   insCell('', tr, 'Обозначение изделия', 'header', '', false)
   insCell('', tr, 'Наименование изделия', 'header', '', false)
@@ -428,6 +431,9 @@ function TableEditSystemCase(pc) {
   let arrSystemCaseUnit = pc.system_case_unit
   for (let j = 0; j < arrSystemCaseUnit.length; j++) {
     tr = table.insertRow(-1)
+    if (arrSystemCaseUnit[j].szi) {
+      tr.className = 'apkzi'
+    }
     insCell('', tr, "<input type='checkbox' name='record'>", 'record', 'record')
     insCell('', tr, arrSystemCaseUnit[j].fdsi, 'fdsi', '', true, {
       'id': pc._id
@@ -567,10 +573,11 @@ function CreateTableEditPC(data, color) {
   setColor()
 
   let button_edit = document.createElement('input')
-  button_edit.type = 'submit'
+  button_edit.type = 'button'
   button_edit.className = 'btn btn-outline-success mt-2 save_button'
   button_edit.value = 'Сохранить изменения'
-  button_edit.id = "submit"
+  button_edit.id = "edit"
+  button_edit.onclick = () => submitPC()
   button_edit.dataset.id = data._id
   divCont.appendChild(button_edit)
 
@@ -661,6 +668,16 @@ function UpdateCells(pc, oldNumberMachine, callback) {
     button_edit.setAttribute("onclick", "location.href='/pcPa/" + pc._id + "/edit?allow=true'")
     button_edit.dataset.id = pc._id
     divCont.appendChild(button_edit)
+
+    let button_del = document.createElement('input')
+    button_del.type = 'button'
+    button_del.className = 'btn btn-outline-danger mr-2 mb-2 delBtn float-right'
+    button_del.value = 'Удалить'
+    button_del.dataset.id = pc._id
+    button_del.dataset.serial_number = pc.serial_number
+    button_del.dataset.target = '#modalDel'
+    button_del.dataset.toggle = 'modal'
+    divCont.appendChild(button_del)
 
     //переход на одну ячейку вниз
     let current_id = document.getElementById('hidd_id').value
@@ -948,7 +965,7 @@ function submitFormAddPc() {
           quantity: quantity,
           serial_number: serial_number,
           notes: notes,
-          apkzi: "szi"
+          szi: "szi"
         })
       } else {
         system_case_unit.push({
@@ -962,7 +979,6 @@ function submitFormAddPc() {
         })
       }
     })
-
     let data = {
       part: part,
       fdsi: fdsi,
@@ -974,10 +990,146 @@ function submitFormAddPc() {
       system_case_unit: JSON.stringify(system_case_unit)
     }
     postData('/pcPa/add', data)
-    .then((data) => {
-      if (data.message == 'ok') {
-        window.location='/pcPa'
+    .then((res) => {
+      if (res.message == 'ok') {
+        window.location = "/pcPa?part=" + data.part + "&serial_number=" + data.serial_number + "'"
       }
     })
+  })
+}
+
+function submitPC() {
+  const editBtn = document.getElementById('edit')
+  const id = editBtn.dataset.id
+  const partInput = document.getElementById('part')
+  const fdsiInput = document.getElementById('fdsi')
+  const snInput = document.getElementById('serial_number')
+  const armInput = document.getElementById('arm')
+  const executionInput = document.getElementById('execution')
+  const attachmentInput = document.getElementById('attachment')
+  const colorInput = document.getElementById('color-input')
+
+  const part = partInput.value
+  const fdsi = fdsiInput.value
+  const serial_number = snInput.value
+  const arm = armInput.value
+  const execution = executionInput.value
+  const attachment = attachmentInput.value
+  const color = colorInput.value
+
+  console.log(id, part, fdsi, serial_number, arm, execution, attachment, color);
+
+  if (!partInput.value) {
+    validate(partInput)
+    return false
+  }
+  if (!fdsiInput.value) {
+    validate(fdsiInput)
+    return false
+  }
+  if (!snInput.value) {
+    validate(snInput)
+    return false
+  }
+  if (!armInput.value) {
+    validate(armInput)
+    return false
+  }
+  if (!executionInput.value) {
+    validate(executionInput)
+    return false
+  }
+  if (!attachmentInput.value) {
+    validate(attachmentInput)
+    return false
+  }
+  // формирование POST запроса для таблицы ПЭВМ
+  let pc_unit = []
+  let table = document.getElementById('pc_unit')
+  let n = table.querySelectorAll('.type').length
+  let tr = table.querySelectorAll('tr')
+  const pcUnitTr = document.querySelectorAll('#pc_unit tr')
+    pcUnitTr.forEach((tr, i) => {
+      if (i == 0) return true
+      let fdsi = tr.querySelector('.fdsi').innerText
+      let type = tr.querySelector('.type').innerText
+      let name = tr.querySelector('.name').innerText
+      let quantity = tr.querySelector('.quantity').innerText
+      let serial_number = tr.querySelector('.serial_number').innerText
+      let notes = tr.querySelector('.notes').innerText
+      if (tr.className == 'apkzi') {
+        pc_unit.push({
+          i: i,
+          fdsi: fdsi,
+          type: type,
+          name: name,
+          quantity: quantity,
+          serial_number: serial_number,
+          notes: notes,
+          apkzi: "apkzi"
+        })
+      } else {
+        pc_unit.push({
+          i: i,
+          fdsi: fdsi,
+          type: type,
+          name: name,
+          quantity: quantity,
+          serial_number: serial_number,
+          notes: notes
+        })
+      }
+    })
+  // формирование POST запроса для таблицы системный блок
+  let system_case_unit = []
+  const systemCaseUnitTr = document.querySelectorAll('#system_case_unit tr')
+  systemCaseUnitTr.forEach((tr, i) => {
+    if (i == 0) return true
+    let fdsi = tr.querySelector('.fdsi').innerText
+    let type = tr.querySelector('.type').innerText
+    let name = tr.querySelector('.name').innerText
+    let quantity = tr.querySelector('.quantity').innerText
+    let serial_number = tr.querySelector('.serial_number').innerText
+    let notes = tr.querySelector('.notes').innerText
+    if (tr.className == 'apkzi') {
+      system_case_unit.push({
+        i: i,
+        fdsi: fdsi,
+        type: type,
+        name: name,
+        quantity: quantity,
+        serial_number: serial_number,
+        notes: notes,
+        szi: "szi"
+      })
+    } else {
+      system_case_unit.push({
+        i: i,
+        fdsi: fdsi,
+        type: type,
+        name: name,
+        quantity: quantity,
+        serial_number: serial_number,
+        notes: notes
+      })
+    }
+  })
+  const data = {
+    id: id,
+    part: part,
+    fdsi: fdsi,
+    serial_number: serial_number,
+    arm: arm,
+    execution: execution,
+    attachment: attachment,
+    color: color,
+    pc_unit: JSON.stringify(pc_unit),
+    system_case_unit: JSON.stringify(system_case_unit)
+  }
+  postData('/pcPa/pc_update', data)
+  .then((res) => {
+    if (res.message == 'ok') {
+      window.location = "/pcPa?part=" + data.part + "&serial_number=" + data.serial_number + "'"
+    }
   })
 }

@@ -11,18 +11,19 @@
 <div id="showData"></div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
     load_data()
-  $(document).on('change', '#type_select_navbar', function () {	
-        load_data($("#type_select_navbar :selected").text())	
-      })
-    $('#search').keyup(function () {
-      let search = $(this).val()
-      let blank_req = 'null'
-      if (search) {
-        searchEANCode(search)
+    let selectType = document.getElementById('type_select_navbar')
+    selectType.addEventListener('change', (e)=> {
+      load_data(e.target.value)
+    })
+    let searchInput = document.getElementById('search')
+    searchInput.addEventListener('keyup', (event) => {
+      let query = event.target.value
+      if (query) {
+        searchEANCode(query)
       } else {
-        searchEANCode(blank_req)
+        searchEANCode(null)
       }
     })
   })

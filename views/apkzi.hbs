@@ -3,8 +3,6 @@
 
 <button class="btn btn-dark" style="margin-bottom: 1rem" onclick="location.href='/add/apkzi';">Добавить АПКЗИ</button>
 
-
-
 {{!-- модальное окно --}}
 <div class="modal fade" id="modalDel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
@@ -17,7 +15,6 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      
       <form>
         <input type="hidden" name="_csrf" value="{{csrf}}">
         <input type="hidden" name="id" id="hidId">
@@ -31,61 +28,9 @@
     </div>
   </div>
 </div>
-
 <div id="showData"></div>
-
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     load_data()
   })
-
-  $("body").on('click', '.delBtn', function () {
-    $('#hidId').val($(this).data("id"))
-    $('#hidPart').val($(this).data("part"))
-  })
-
-  $(document).on('change', '#part_select', function () {
-    let search = $('#search').val()
-    if (search == '') {
-      search = 'null'
-    }
-    load_data(search, $("#part_select :selected").text())
-  })
-
-  $(document).on('blur', '.fdsi', function () {
-    let id = $(this).data("id")
-    let fdsi = $(this).text()
-    edit_fdsi(id, fdsi)
-  })
-
-  $(document).on('blur', '.apkzi_name', function () {
-    let id = $(this).data("id")
-    let apkzi_name = $(this).text()
-    edit_apkzi_name(id, apkzi_name)
-  })
-
-  $(document).on('blur', '.kont_name', function () {
-    let id = $(this).data("id")
-    let kont_name = $(this).text()
-    edit_kont_name(id, kont_name)
-  })
-
-  $(document).on('blur', '.zav_number', function () {
-    let id = $(this).data("id")
-    let zav_number = $(this).text()
-    edit_zav_number(id, zav_number)
-  })
-
-  $(document).on('blur', '.kontr_zav_number', function () {
-    let id = $(this).data("id")
-    let kontr_zav_number = $(this).text()
-    edit_kontr_zav_number(id, kontr_zav_number)
-  })
-
-  $(document).on('blur', '.number_machine', function () {
-    let id = $(this).data("id")
-    let number_machine = $(this).text()
-    edit_number_machine(id, number_machine)
-  })
-
 </script>
