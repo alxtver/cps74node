@@ -185,6 +185,46 @@ function painting() {
   }
 }
 
+function buttons() {
+  // обработчик кнопки удаления ПЭВМ
+  let delButtons = document.querySelectorAll('.delBtn')
+  for (const but of delButtons) {
+    but.addEventListener('click', (e) => {
+      document.getElementById('hidId').value = e.target.dataset.id
+      document.getElementById('serial').innerHTML = 'Серийный номер - ' + e.target.dataset.serial_number
+    })
+  }
+  // обработчик кнопки копирования ПЭВМ
+  let copyButtons = document.querySelectorAll('.copyBtn')
+  for (const but of copyButtons) {
+    but.addEventListener('click', (e) => {
+      document.getElementById('hidInputCopy').value = e.target.dataset.id
+      document.getElementById('inputCopy').value = e.target.dataset.serial_number
+    })
+  }
+  //обработчик ячеек серийных номеров
+  const serials = document.querySelectorAll('.serial_number')
+  for (let sn of serials) {
+    sn.addEventListener('keypress', function (e) {
+      if (e.keyCode == 13) {
+        e.preventDefault()
+        const id = e.target.dataset.id
+        const obj = e.target.dataset.obj
+        const unit = e.target.dataset.unit
+        const serial_number = e.target.innerText
+        const data_hidd = e.target.dataset.data
+        const data_apkzi = e.target.dataset.apkzi
+        document.getElementById('hidd_id').value = data_hidd
+        if (data_apkzi) {
+          edit_serial_number_apkzi(id, obj, unit, serial_number)
+        } else {
+          edit_serial_number(id, obj, unit, serial_number)
+        }
+      }
+    })
+  }
+}
+
 function loadPage(page, pages) {
   let data = {
     page: page,
@@ -194,6 +234,8 @@ function loadPage(page, pages) {
     .then((data) => {
       CreateTableFromJSON(data, function () {
         painting()
+        buttons()
+
       })
 
       let select = document.getElementById("serials")
@@ -615,6 +657,7 @@ function edit_serial_number(id, obj, unit, serial_number) {
       }
       UpdateCells(pc.pc, oldNumberMachine, function () {
         painting()
+        buttons()
       })
     })
 }
@@ -724,15 +767,18 @@ function find_serial(serial) {
       if (data) {
         document.getElementById('inputCopy').style.backgroundColor = 'indianred'
         let h = document.getElementById('hidd')
-        let d = document.createElement('div')
-        d.id = 'danger'
-        d.style.color = 'indianred'
-        d.innerHTML = 'Машина с таким номером существует'
-        h.append(d)
+        let danger = document.getElementById('danger')
+        if (!danger) {
+          let d = document.createElement('div')
+          d.id = 'danger'
+          d.style.color = 'indianred'
+          d.innerHTML = 'Машина с таким номером существует'
+          h.append(d)
+        }
         document.getElementById('btnSubmit').disabled = true
       } else {
         document.getElementById('inputCopy').style.backgroundColor = 'white'
-        document.getElementById('danger').remove()
+        if (document.getElementById('danger')) document.getElementById('danger').remove()
         document.getElementById('btnSubmit').disabled = false
       }
     })
@@ -990,11 +1036,11 @@ function submitFormAddPc() {
       system_case_unit: JSON.stringify(system_case_unit)
     }
     postData('/pcPa/add', data)
-    .then((res) => {
-      if (res.message == 'ok') {
-        window.location = "/pcPa?part=" + data.part + "&serial_number=" + data.serial_number + "'"
-      }
-    })
+      .then((res) => {
+        if (res.message == 'ok') {
+          window.location = "/pcPa?part=" + data.part + "&serial_number=" + data.serial_number + "'"
+        }
+      })
   })
 }
 
@@ -1049,37 +1095,37 @@ function submitPC() {
   let n = table.querySelectorAll('.type').length
   let tr = table.querySelectorAll('tr')
   const pcUnitTr = document.querySelectorAll('#pc_unit tr')
-    pcUnitTr.forEach((tr, i) => {
-      if (i == 0) return true
-      let fdsi = tr.querySelector('.fdsi').innerText
-      let type = tr.querySelector('.type').innerText
-      let name = tr.querySelector('.name').innerText
-      let quantity = tr.querySelector('.quantity').innerText
-      let serial_number = tr.querySelector('.serial_number').innerText
-      let notes = tr.querySelector('.notes').innerText
-      if (tr.className == 'apkzi') {
-        pc_unit.push({
-          i: i,
-          fdsi: fdsi,
-          type: type,
-          name: name,
-          quantity: quantity,
-          serial_number: serial_number,
-          notes: notes,
-          apkzi: "apkzi"
-        })
-      } else {
-        pc_unit.push({
-          i: i,
-          fdsi: fdsi,
-          type: type,
-          name: name,
-          quantity: quantity,
-          serial_number: serial_number,
-          notes: notes
-        })
-      }
-    })
+  pcUnitTr.forEach((tr, i) => {
+    if (i == 0) return true
+    let fdsi = tr.querySelector('.fdsi').innerText
+    let type = tr.querySelector('.type').innerText
+    let name = tr.querySelector('.name').innerText
+    let quantity = tr.querySelector('.quantity').innerText
+    let serial_number = tr.querySelector('.serial_number').innerText
+    let notes = tr.querySelector('.notes').innerText
+    if (tr.className == 'apkzi') {
+      pc_unit.push({
+        i: i,
+        fdsi: fdsi,
+        type: type,
+        name: name,
+        quantity: quantity,
+        serial_number: serial_number,
+        notes: notes,
+        apkzi: "apkzi"
+      })
+    } else {
+      pc_unit.push({
+        i: i,
+        fdsi: fdsi,
+        type: type,
+        name: name,
+        quantity: quantity,
+        serial_number: serial_number,
+        notes: notes
+      })
+    }
+  })
   // формирование POST запроса для таблицы системный блок
   let system_case_unit = []
   const systemCaseUnitTr = document.querySelectorAll('#system_case_unit tr')
@@ -1127,9 +1173,9 @@ function submitPC() {
     system_case_unit: JSON.stringify(system_case_unit)
   }
   postData('/pcPa/pc_update', data)
-  .then((res) => {
-    if (res.message == 'ok') {
-      window.location = "/pcPa?part=" + data.part + "&serial_number=" + data.serial_number + "'"
-    }
-  })
+    .then((res) => {
+      if (res.message == 'ok') {
+        window.location = "/pcPa?part=" + data.part + "&serial_number=" + data.serial_number + "'"
+      }
+    })
 }
