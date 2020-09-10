@@ -155,16 +155,12 @@
       loadPage(1)
     }
 
-    function getBodyScrollTop() {
-      return self.pageYOffset || (document.documentElement && document.documentElement.scrollTop) || (document.body && document.body.scrollTop);
-    }
     // конец пагинации
     const snSelect = document.getElementById('serials')
     snSelect.addEventListener('change', (e) => {
       let snId = snSelect.value
       const el = document.getElementById(snId)
-      let scrTop = getBodyScrollTop()
-      const offsetPosition = scrTop + el.getBoundingClientRect().top - 70
+      const offsetPosition = window.pageYOffset + el.getBoundingClientRect().top - 70
       window.scrollTo({
         top: offsetPosition,
         behavior: "smooth"
