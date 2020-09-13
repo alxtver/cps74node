@@ -1,6 +1,7 @@
 body {
   font-family: 'Ubuntu', sans-serif;
 }
+
 .nav-wrapper {
   padding: 0 2rem;
 }
@@ -123,7 +124,7 @@ h2_boot {
   border-radius: 10px 10px 10px 10px;
   background: #fff;
   padding: 30px;
-  width: 95%;  
+  width: 95%;
   position: relative;
   padding: 0px;
   -webkit-box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.9);
@@ -153,13 +154,14 @@ h2.active {
   border-bottom: 2px solid #5fbae9;
 }
 
-input[type=text], input[type=password] {
+input[type=text],
+input[type=password] {
   /* background-color: #f6f6f6; */
-  
-  
+
+
   /* padding: 15px 32px; */
   text-align: center;
-  
+
   /* display: inline-block; */
   /* font-size: 16px; */
   /* margin: 5px; */
@@ -404,8 +406,8 @@ input[type=text]:placeholder {
   padding: 30px;
   position: relative;
   padding: 0px;
-  -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0.9);
-  box-shadow: 0 30px 60px 0 rgba(0,0,0,0.9);
+  -webkit-box-shadow: 0 30px 60px 0 rgba(0, 0, 0.9);
+  box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.9);
 }
 
 .pcCard {
@@ -419,8 +421,8 @@ input[type=text]:placeholder {
 }
 
 .navbar {
-  -webkit-box-shadow: 0 5px 10px 0 rgba(0,0,0,0.5);
-  box-shadow: 0 5px 10px 0 rgba(0,0,0,0.5);
+  -webkit-box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.5);
 }
 
 .header {
@@ -433,10 +435,12 @@ input[type=text]:placeholder {
 .pctable td {
   vertical-align: bottom;
 }
+
 .pctable {
   border: 2px solid rgb(255 0 0 / 0%);
   border-bottom: 1px solid;
 }
+
 #icon {
   width: 64px;
 }
@@ -448,7 +452,7 @@ input[type=text]:placeholder {
 
 #ean_code {
   background: #dad2d2;
-  
+
 }
 
 .save_button {
@@ -457,7 +461,7 @@ input[type=text]:placeholder {
 
 form {
   padding: 1rem;
-  
+
 }
 
 .padd {
@@ -466,7 +470,7 @@ form {
 }
 
 .btn {
-  transition: color .9s ease-in-out,background-color .5s ease-in-out,border-color .5s ease-in-out,box-shadow .5s ease-in-out;
+  transition: color .9s ease-in-out, background-color .5s ease-in-out, border-color .5s ease-in-out, box-shadow .5s ease-in-out;
 }
 
 .error_message {
@@ -474,7 +478,8 @@ form {
 }
 
 
-.popup-checkbox, .popup {
+.popup-checkbox,
+.popup {
   display: none;
 }
 
@@ -534,14 +539,14 @@ form {
   position: absolute;
   float: right;
   top: -5px;
-  right: 8px;  
+  right: 8px;
   font-size: 1.5rem;
   font-weight: 700;
   color: #000;
   text-shadow: 0 1px 0 #fff;
-  opacity: .5;  
+  opacity: .5;
   cursor: pointer;
-}  
+}
 
 .popup-closer:hover {
   color: #000;
@@ -549,33 +554,34 @@ form {
   opacity: .75;
 }
 
-.popup-checkbox:checked + .popup {
+.popup-checkbox:checked+.popup {
   opacity: 1;
   display: block;
 }
 
 .chart {
-  width: 100%; 
+  width: 100%;
   min-height: 450px;
 }
 
 #sortSelect {
-  width: 100%;  
+  width: 100%;
 }
 
 .blacklstHead {
   font-size: 1.5rem;
 }
+
 .blacklst {
   font-size: 2rem;
-  background-color: #3d3d3d;  
-  min-height: 150px;  
+  background-color: #3d3d3d;
+  min-height: 150px;
   color: #cccccc;
   border-radius: .5rem;
 }
 
 .blacklstHead p {
-  font-style: oblique;  
+  font-style: oblique;
 }
 
 .blacklst p {
@@ -583,12 +589,13 @@ form {
   margin-top: 3rem;
 }
 
-.tinyText_right {  
+.tinyText_right {
   margin: -28px auto;
   font-size: 1rem;
   text-align: right;
 }
-.tinyText_left {  
+
+.tinyText_left {
   margin: -28px auto;
   font-size: 1rem;
   text-align: left;
@@ -604,15 +611,15 @@ th {
 
 .padd_l_r {
   padding-left: 1rem;
-  padding-right: 1rem;  
+  padding-right: 1rem;
 }
 
 .input-group-text {
   width: 130px;
 }
 
-.ui-helper-hidden-accessible { 
-  display:none; 
+.ui-helper-hidden-accessible {
+  display: none;
 }
 
 .ui-menu {
@@ -629,43 +636,20 @@ th {
 }
 
 
-#overlay{	
-	position: fixed;
-  top: 0;
-  left: 0;
-	z-index: 100;
-	width: 1%;
-	height: 1%;
-	display: none;
-	background: rgba(0,0,0,0.6);
+@keyframes sp-anime {
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-.cv-spinner {
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;  
-}
-.spinner {
-	width: 40px;
-	height: 40px;
-	border: 4px #ddd solid;
-	border-top: 4px #2e93e6 solid;
-	border-radius: 50%;
-	animation: sp-anime 0.8s infinite linear;
-}
-@keyframes sp-anime {
-	100% { 
-		transform: rotate(360deg); 
-	}
-}
-.is-hide{
-	display:none;
+.is-hide {
+  display: none;
 }
 
 .cellOK {
   background-color: PaleGreen;
 }
+
 .cellNotOK {
   background-color: DeepPink;
 }
@@ -675,6 +659,7 @@ th {
   bottom: 10px;
   right: 10px;
 }
+
 .soundButtonSlash {
   position: fixed;
   bottom: 10px;
@@ -688,17 +673,20 @@ th {
   display: flex;
   padding-bottom: 1rem;
 }
+
 .PaUl li {
   color: #e0dada;
   /* background-color: #3d3d3d; */
   display: flex;
-  -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,9);
-  box-shadow: 0 30px 60px 0 rgba(0,0,0,0.9);
+  -webkit-box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 9);
+  box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.9);
   border-radius: 5px 5px 5px 5px;
 }
-.PaUl li :hover{
+
+.PaUl li :hover {
   border: 2px solid #28a745;
 }
+
 .PaUl li a {
   background-color: #3d3d3d;
   padding: 5px 10px;
@@ -706,54 +694,67 @@ th {
   border-right: 0;
   cursor: pointer;
 }
+
 .PaUl li.active a {
   color: #3d3d3d;
   background-color: #28a745;
 }
+
 .PaUl li:first-child a {
   border-radius: 5px 0 0 5px;
 }
+
 .PaUl li:last-child a {
   border-radius: 0 5px 5px 0;
   border-right: 1px solid #d1d5da;
 }
+
 #paginationBottom {
   position: relative;
 }
 
 @media (max-width: 550px) {
-  .previous, .next, .latest, .delBtn, .soundButton {
-    display:none;
+
+  .previous,
+  .next,
+  .latest,
+  .delBtn,
+  .soundButton {
+    display: none;
   }
 }
+
 @media (min-width: 992px) {
   .table-responsive {
-    display:inline-table;
+    display: inline-table;
   }
 }
 
 #colorpicker {
-  visibility:hidden;
-  opacity:0;
+  visibility: hidden;
+  opacity: 0;
   height: 0px;
-  transition:visibility 1s linear,opacity 1s linear,height 0.5s ease-out;
-  list-style:none;  
+  transition: visibility 1s linear, opacity 1s linear, height 0.5s ease-out;
+  list-style: none;
 }
+
 #colorpicker:focus {
   height: 195px;
-  visibility:visible;
-  opacity:1;
+  visibility: visible;
+  opacity: 1;
 }
+
 #color:focus~#colorpicker {
   height: 195px;
-  visibility:visible;
-  opacity:1;
+  visibility: visible;
+  opacity: 1;
 }
 
 .autocomplete {
   position: relative;
   display: inline-block;
 }
+
 .autocomplete-items {
   position: absolute;
   border: 1px solid #838383;
@@ -766,21 +767,24 @@ th {
   right: 0;
   font-size: 0.8rem;
 }
+
 .autocomplete-items div {
   padding: 1px;
   cursor: pointer;
-  background-color: #3d3d3d; 
+  background-color: #3d3d3d;
   color: #fff;
   border-bottom: 1px solid #d4d4d4;
 }
+
 /*when hovering an item:*/
 .autocomplete-items div:hover {
-  background-color: DodgerBlue; 
+  background-color: DodgerBlue;
 }
+
 /*when navigating through the items using the arrow keys:*/
 .autocomplete-active {
-  background-color: DodgerBlue !important; 
-  color: #ffffff; 
+  background-color: DodgerBlue !important;
+  color: #ffffff;
 }
 
 .color-input {
@@ -788,4 +792,87 @@ th {
   background: #777;
   border: 1px solid #fff;
   border-radius: 5px;
+}
+
+.spinner {
+  margin: 100px auto;
+  width: 50px;
+  height: 40px;
+  text-align: center;
+  font-size: 10px;
+}
+
+
+#overlay {
+  position: fixed;
+  display: block;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.70);
+  z-index: 1021;
+  cursor: pointer;
+}
+
+.spinner>div {
+  background-color: white;
+  margin-top: 20rem;
+  height: 100%;
+  width: 6px;
+  display: inline-block;
+
+
+  -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+  animation: sk-stretchdelay 1.2s infinite ease-in-out;
+}
+
+.spinner .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+
+.spinner .rect3 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+.spinner .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+.spinner .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+
+@-webkit-keyframes sk-stretchdelay {
+
+  0%,
+  40%,
+  100% {
+    -webkit-transform: scaleY(0.4)
+  }
+
+  20% {
+    -webkit-transform: scaleY(1.0)
+  }
+}
+
+@keyframes sk-stretchdelay {
+
+  0%,
+  40%,
+  100% {
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }
+
+  20% {
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
 }

@@ -12,6 +12,8 @@ function load_data(q) {
         option.text = d.serial_number
         select.add(option)
       }
+      let overlay = document.getElementById('overlay')
+      overlay.style.display = 'none'
     })
 }
 

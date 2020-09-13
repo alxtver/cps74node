@@ -107,7 +107,6 @@ function submitEq() {
     validate(countryInput)
     return false
   }
-
   // формирование POST запроса для таблицы СП
   let sp_unit = []
   let table = document.getElementById('pki_sp_table1')

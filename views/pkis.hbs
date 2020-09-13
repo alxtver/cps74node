@@ -12,8 +12,7 @@
   <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Поиск...">
 </div>
 {{!-- модальное окно --}}
-<div class="modal fade" id="modalDel" tabindex="-1" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
+<div class="modal fade" id="modalDel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -59,8 +58,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="modalSearchAndReplace" tabindex="-1" aria-labelledby="modalSortLabel"
-  aria-hidden="true">
+<div class="modal fade" id="modalSearchAndReplace" tabindex="-1" aria-labelledby="modalSortLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -73,18 +71,20 @@
           <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-default">Найти</span>
           </div>
-          <input name="search" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+          <input name="search" type="text" class="form-control" aria-label="Default"
+            aria-describedby="inputGroup-sizing-default">
         </div>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-default">Заменить на</span>
           </div>
-          <input name="replace" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+          <input name="replace" type="text" class="form-control" aria-label="Default"
+            aria-describedby="inputGroup-sizing-default">
         </div>
         <input type="hidden" name="_csrf" value="{{csrf}}">
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-secondary" id="close1" data-dismiss="modal">Назад</button>
-          <button class="btn btn-outline-success"  data-dismiss="modal" id="btnSearchAndReplace">Поиск и замена</button>
+          <button class="btn btn-outline-success" data-dismiss="modal" id="btnSearchAndReplace">Поиск и замена</button>
         </div>
       </form>
     </div>
@@ -94,6 +94,16 @@
 <div id="showData"></div>
 
 <input hidden="true" id="temp" value="0"></input>
+
+<div id="overlay">
+  <div class="spinner " id="spinner">
+    <div class="rect1"></div>
+    <div class="rect2"></div>
+    <div class="rect3"></div>
+    <div class="rect4"></div>
+    <div class="rect5"></div>
+  </div>
+</div>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
@@ -111,6 +121,8 @@
 
   let typeSelect = document.getElementById('type_select_navbar')
   typeSelect.addEventListener('change', (event) => {
+    let overlay = document.getElementById('overlay')
+    overlay.style.display = 'block'
     changeSelectType(event.target.value)
   })
 

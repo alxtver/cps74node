@@ -1,7 +1,8 @@
 <script src="/projects.js"></script>
 
 <h1>Проекты</h1>
-<button id="excelImport" onclick="location.href='/projects/import';" class="btn btn-outline-success mb-2">Экспорт в Excel</button>
+<button id="excelImport" onclick="location.href='/projects/import';" class="btn btn-outline-success mb-2">Экспорт в
+  Excel</button>
 <form>
   <input type="hidden" name="_csrf" value="{{csrf}}">
 </form>
@@ -11,6 +12,15 @@
 <input type="hidden" id="hidd_obj" value="0">
 <input type="hidden" id="hidd_unit" value="0">
 
+<div id="overlay">
+  <div class="spinner " id="spinner">
+    <div class="rect1"></div>
+    <div class="rect2"></div>
+    <div class="rect3"></div>
+    <div class="rect4"></div>
+    <div class="rect5"></div>
+  </div>
+</div>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     load_data()

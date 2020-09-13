@@ -2,7 +2,7 @@ function blur() {
   let tds = document.querySelectorAll('.type_pki,.vendor,.model,.serial_number,.country')
   for (const td of tds) {
     td.addEventListener("blur", function (event) {
-      let id  = event.target.dataset.id
+      let id = event.target.dataset.id
       let value = event.target.innerHTML
       let className = event.target.className
       editCell(id, value, className)
@@ -22,6 +22,8 @@ function load_data(q) {
           document.getElementById('type_select_navbar').value = data.selectedType
         }
       })
+      let overlay = document.getElementById('overlay')
+      overlay.style.display = 'none'
     })
 }
 
@@ -121,6 +123,7 @@ function searchPKI(q) {
   postData('/pkis/search', data)
     .then((data) => {
       CreateTableFromJSON(data.pkis, () => blur())
+      document.getElementById('overlay').style.display = 'none'
     })
 }
 

@@ -235,7 +235,8 @@ function loadPage(page, pages) {
       CreateTableFromJSON(data, function () {
         painting()
         buttons()
-
+        let overlay = document.getElementById('overlay')
+        overlay.style.display = 'none'
       })
 
       let select = document.getElementById("serials")
