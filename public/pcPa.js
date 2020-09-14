@@ -1045,6 +1045,12 @@ function submitFormAddPc() {
   })
 }
 
+function validate(input) {
+  input.style.borderColor = "#f57e7e";
+  input.style.backgroundColor = "#f1f1ae";
+  input.style.borderWidth = 2;
+}
+
 function submitPC() {
   const editBtn = document.getElementById('edit')
   const id = editBtn.dataset.id
@@ -1064,37 +1070,18 @@ function submitPC() {
   const attachment = attachmentInput.value
   const color = colorInput.value
 
-  console.log(id, part, fdsi, serial_number, arm, execution, attachment, color);
-
   if (!partInput.value) {
     validate(partInput)
     return false
   }
-  if (!fdsiInput.value) {
-    validate(fdsiInput)
-    return false
-  }
+
   if (!snInput.value) {
     validate(snInput)
     return false
   }
-  if (!armInput.value) {
-    validate(armInput)
-    return false
-  }
-  if (!executionInput.value) {
-    validate(executionInput)
-    return false
-  }
-  if (!attachmentInput.value) {
-    validate(attachmentInput)
-    return false
-  }
+
   // формирование POST запроса для таблицы ПЭВМ
   let pc_unit = []
-  let table = document.getElementById('pc_unit')
-  let n = table.querySelectorAll('.type').length
-  let tr = table.querySelectorAll('tr')
   const pcUnitTr = document.querySelectorAll('#pc_unit tr')
   pcUnitTr.forEach((tr, i) => {
     if (i == 0) return true

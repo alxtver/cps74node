@@ -812,13 +812,13 @@ th {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.70);
+  background-color: rgba(255, 255, 255, 0.7);
   z-index: 1021;
   cursor: pointer;
 }
 
 .spinner>div {
-  background-color: white;
+  background-color: #3d3d3d;
   margin-top: 20rem;
   height: 100%;
   width: 6px;
