@@ -64,10 +64,11 @@
       </div>
 
       <input type="hidden" name="_csrf" value="{{csrf}}">
-      <button type="submit" onclick="return addSession();" class="btn btn-primary btn-dark mb-2">Добавить ПКИ</button>
+      <button type="submit" onclick="addSession()" class="btn btn-primary btn-dark mb-2">Добавить ПКИ</button>
     </form>
   </div>
 </div>
+<div id="snBar" class="snBar"></div>
 
 <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", function () {

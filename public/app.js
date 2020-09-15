@@ -1,3 +1,14 @@
+function snList(arr) {
+  let cont = document.getElementById('snBar')
+  for (let i = 0; i < arr.length; i++) {
+    let p = document.createElement('p')
+    p.innerHTML = arr[i]
+    p.style.opacity = 1 / (i + 2)
+    p.style.fontWeight = 700
+    cont.appendChild(p)
+  }
+}
+
 // добавление данных в сессию браузера
 function addSession() {
   let field_ean_code = document.getElementById("ean_code").value
@@ -12,8 +23,18 @@ function addSession() {
   sessionStorage.setItem("country", field_country)
   let field_part = document.getElementById("part").value
   sessionStorage.setItem("part", field_part)
+
   let field_serial_number = document.getElementById("serial_number").value
-  sessionStorage.setItem("serial_number", field_serial_number)
+  if (field_serial_number) {
+    sessionStorage.getItem('snList')
+    let array = sessionStorage.getItem('snList')
+    let snArr = array.split(',')
+    if (snArr.length > 10) {
+      snArr.pop()
+    }
+    snArr.unshift(field_serial_number)
+    sessionStorage.setItem('snList', snArr)
+  }
 }
 
 // выгрузка данных из сессии браузера
@@ -47,6 +68,11 @@ function loadSession() {
   } else {
     document.getElementById("ean_code").focus()
   }
+  let array = sessionStorage.getItem('snList')
+  if (array) {
+    snList(array.split(','))
+  }
+
 }
 
 //валидация формы добавления и редактирования ПКИ

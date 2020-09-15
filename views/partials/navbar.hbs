@@ -16,66 +16,68 @@
       {{/if}}
 
       {{#if admin}}
-        {{#if isAuth}}
-          {{#if isPkis}}
-            <li class="nav-item active"><a class="nav-link" href="/pkis">ПКИ</a></li>
-          {{else}}
-            <li class="nav-item"><a class="nav-link" href="/pkis">ПКИ</a></li>
-          {{/if}}
+      {{#if isAuth}}
+      {{#if isPkis}}
+      <li class="nav-item active"><a class="nav-link" href="/pkis">ПКИ</a></li>
+      {{else}}
+      <li class="nav-item"><a class="nav-link" href="/pkis">ПКИ</a></li>
+      {{/if}}
 
-          {{#if isApkzi}}
-            <li class="nav-item active"><a class="nav-link" href="/apkzi">АПКЗИ</a></li>
-          {{else}}
-            <li class="nav-item"><a class="nav-link" href="/apkzi">АПКЗИ</a></li>
-          {{/if}}
+      {{#if isApkzi}}
+      <li class="nav-item active"><a class="nav-link" href="/apkzi">АПКЗИ</a></li>
+      {{else}}
+      <li class="nav-item"><a class="nav-link" href="/apkzi">АПКЗИ</a></li>
+      {{/if}}
 
-          {{#if isPC}}
-            <li class="nav-item active"><a class="nav-link" href="/pcPa">Производство</a></li>
-          {{else}}
-            <li class="nav-item"><a class="nav-link" href="/pcPa">Производство</a></li>
-          {{/if}}
-          <li class="nav-item dropdown">
-            {{#if isEquipment}}
-              <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">БД</a>
-            {{else}}
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">БД</a>
-            {{/if}}
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="/equipment">БД Штрихкоды</a>
-              <a class="dropdown-item" href="/countries">БД Страны</a>
-             </div>
-          </li>
-          <li class="nav-item ">
-            {{#if isSearch}}
-              <li class="nav-item active"><a class="nav-link" href="/search">Поиск</a></li>
-            {{else}}
-              <li class="nav-item"><a class="nav-link" href="/search">Поиск</a></li>
-            {{/if}}
-          </li>
+      {{#if isPC}}
+      <li class="nav-item active"><a class="nav-link" href="/pcPa">Производство</a></li>
+      {{else}}
+      <li class="nav-item"><a class="nav-link" href="/pcPa">Производство</a></li>
+      {{/if}}
+      <li class="nav-item dropdown">
+        {{#if isEquipment}}
+        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">БД</a>
+        {{else}}
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">БД</a>
         {{/if}}
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/equipment">БД Штрихкоды</a>
+          <a class="dropdown-item" href="/countries">БД Страны</a>
+        </div>
+      </li>
+      <li class="nav-item ">
+        {{#if isSearch}}
+      <li class="nav-item active"><a class="nav-link" href="/search">Поиск</a></li>
+      {{else}}
+      <li class="nav-item"><a class="nav-link" href="/search">Поиск</a></li>
+      {{/if}}
+      </li>
+      {{/if}}
       {{/if}}
 
 
       {{#if sp}}
-        {{#if isSP}}
-          <li class="nav-item active"><a class="nav-link" href="/sp">Спецпроверка</a></li>
-        {{else}}
-          <li class="nav-item"><a class="nav-link" href="/sp">Спецпроверка</a></li>
-        {{/if}}
-        {{#if isEquipment}}
-          <li class="nav-item active"><a class="nav-link" href="/equipment">Оборудование</a></li>
-        {{else}}
-          <li class="nav-item"><a class="nav-link" href="/equipment">Оборудование</a></li>
-        {{/if}}
+      {{#if isSP}}
+      <li class="nav-item active"><a class="nav-link" href="/sp">Спецпроверка</a></li>
+      {{else}}
+      <li class="nav-item"><a class="nav-link" href="/sp">Спецпроверка</a></li>
+      {{/if}}
+      {{#if isEquipment}}
+      <li class="nav-item active"><a class="nav-link" href="/equipment">Оборудование</a></li>
+      {{else}}
+      <li class="nav-item"><a class="nav-link" href="/equipment">Оборудование</a></li>
+      {{/if}}
 
       {{/if}}
-    {{#if isAuth}}
-        {{#if isProjects}}
-         <li class="nav-item active"><a class="nav-link" href="/projects">Проекты</a></li>
-        {{else}}
-          <li class="nav-item"><a class="nav-link" href="/projects">Проекты</a></li>
-        {{/if}}
-         <li class="nav-item"><a class="nav-link" href="/auth/logout">Выйти</a></li>
+      {{#if isAuth}}
+      {{#if isProjects}}
+      <li class="nav-item active"><a class="nav-link" href="/projects">Проекты</a></li>
+      {{else}}
+      <li class="nav-item"><a class="nav-link" href="/projects">Проекты</a></li>
+      {{/if}}
+      <li class="nav-item"><a class="nav-link" href="/auth/logout">Выйти</a></li>
       {{else}}
 
       {{/if}}
@@ -90,21 +92,20 @@
       {{#if isProjects}}
       <select class="selectpicker custom-select mr-2" id="serials" data-live-search="true"></select>
       {{/if}}
-      <select id="part_select_navbar" class="custom-select">
-        {{!-- <option value="part">Выберите проект</option> --}}
-      </select>
+      <select id="part_select_navbar" class="custom-select"></select>
     </ul>
     {{/if}}
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-load_part_navbar()
-})
-let partSelect = document.getElementById('part_select_navbar')
-partSelect.addEventListener('change', (event) => {
-changeSelect(partSelect.options[partSelect.selectedIndex].innerHTML)
-setPage(1)
-})
-</script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        load_part_navbar()
+      })
+
+      let partSelect = document.getElementById('part_select_navbar')
+      partSelect.addEventListener('change', (event) => {
+        changeSelect(partSelect.options[partSelect.selectedIndex].innerHTML)
+        setPage(1)
+      })
+    </script>
   </div>
 
 </nav>

@@ -876,3 +876,11 @@ th {
     -webkit-transform: scaleY(1.0);
   }
 }
+
+.snBar {
+  position: fixed;
+  top: 70px;
+  right: 5px;
+  text-align-last: right;
+  height: 100%;
+}
