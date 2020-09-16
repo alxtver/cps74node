@@ -1,14 +1,10 @@
-const {Router} = require('express')
+const {
+  Router
+} = require('express')
 const router = Router()
 const auth = require('../middleware/auth')
-const authAdmin = require('../middleware/authAdmin')
 const Pki = require('../models/pki')
 const EAN = require('../models/ean')
-const PC = require('../models/pc')
-const APKZI = require('../models/apkzi')
-const User = require('../models/user')
-const path = require('path')
-const fs = require('fs')
 
 
 router.get('/', auth, async (req, res) => {
@@ -33,9 +29,15 @@ router.post('/load', auth, async (req, res) => {
   let type = req.body.q
   let eans
   if (!type || type == '...') {
-    eans = await EAN.find().limit(50).sort({created: -1})
+    eans = await EAN.find().limit(50).sort({
+      created: -1
+    })
   } else {
-    eans = await EAN.find({type_pki: type}).sort({created: -1})
+    eans = await EAN.find({
+      type_pki: type
+    }).sort({
+      created: -1
+    })
   }
   const typesList = await EAN.find().distinct('type_pki')
   res.send(JSON.stringify({
@@ -53,7 +55,9 @@ router.post('/add', auth, async (req, res) => {
   const country = req.body.country
   const sp_unit = req.body.sp_unit
   const sp_unit1 = req.body.sp_unit1
-  const oldEan = await EAN.findOne({ean_code: ean_code})
+  const oldEan = await EAN.findOne({
+    ean_code: ean_code
+  })
 
   if (!oldEan && !req.body.sp_unit1) {
     const new_ean = new EAN({
@@ -78,13 +82,15 @@ router.post('/add', auth, async (req, res) => {
     })
     await new_ean.save()
   }
-  let pkis = Pki.find({ean_code: ean_code})
+  let pkis = Pki.find({
+    ean_code: ean_code
+  })
   for (let i = 0; i < pkis.length; i++) {
     if (!pki[i].sp_unit || pki[i].sp_unit.length < 1) {
       pki[i].sp_unit = sp_unit1
       pki[i].save()
     }
-  }  
+  }
   res.redirect('/equipment')
 })
 
@@ -100,11 +106,11 @@ router.get('/:id/edit', auth, async (req, res) => {
       title: `Редактировать ${ean.type_pki}`,
       part: req.session.part,
       ean: ean,
-      encodedEan : encodeURIComponent(JSON.stringify(ean))
+      encodedEan: encodeURIComponent(JSON.stringify(ean))
     })
   } catch (error) {
     next(error)
-  }  
+  }
 })
 
 
@@ -116,23 +122,31 @@ router.post('/edit', auth, async (req, res) => {
   const country = req.body.country
   const sp_unit = req.body.sp_unit
   if (req.body.sp_unit1) {
-    await EAN.findOneAndUpdate({ean_code: ean_code}, req.body)
+    await EAN.findOneAndUpdate({
+      ean_code: ean_code
+    }, req.body)
   } else {
-    await EAN.findOneAndUpdate({ean_code: ean_code},
-       {
-         ean_code: ean_code,
-         type_pki: type_pki,
-         vendor: vendor,
-         model: model,
-         country: country,
-         sp_unit: sp_unit,
-         sp_unit1: ''
-       })
+    await EAN.findOneAndUpdate({
+      ean_code: ean_code
+    }, {
+      ean_code: ean_code,
+      type_pki: type_pki,
+      vendor: vendor,
+      model: model,
+      country: country,
+      sp_unit: sp_unit,
+      sp_unit1: ''
+    })
   }
-  
+
   //await EAN.findOneAndUpdate({ean_code: ean_code}, req.body)
-  let ean = await EAN.findOne({ean_code: ean_code})
-  let pkis = await Pki.find({part: req.session.part,ean_code: ean.ean_code})
+  let ean = await EAN.findOne({
+    ean_code: ean_code
+  })
+  let pkis = await Pki.find({
+    part: req.session.part,
+    ean_code: ean.ean_code
+  })
 
   for (const pki of pkis) {
     let sp_units = []
@@ -152,7 +166,7 @@ router.post('/edit', auth, async (req, res) => {
             pki_unit.serial_number == 'Б/Н' ||
             pki_unit.serial_number == 'Б/н' ||
             pki_unit.serial_number == 'б/Н'
-            ) {
+          ) {
             sp_units.push({
               i: i,
               name: pki_unit.name,
@@ -186,14 +200,14 @@ router.post('/edit', auth, async (req, res) => {
             break
           }
         }
-        if (pki_unit) {          
+        if (pki_unit) {
           if (
             pki_unit.serial_number == '' ||
             pki_unit.serial_number == 'б/н' ||
             pki_unit.serial_number == 'Б/Н' ||
             pki_unit.serial_number == 'Б/н' ||
             pki_unit.serial_number == 'б/Н'
-            ) {
+          ) {
             sp_units.push({
               i: i,
               name: pki_unit.name,
@@ -232,7 +246,9 @@ router.post('/sp_unit', auth, async (req, res) => {
   if (ean.sp_unit && ean.sp_unit.length > 0) {
     res.send(ean)
   } else {
-    res.status(200).json({ message: 'ok' })
+    res.status(200).json({
+      message: 'ok'
+    })
   }
 })
 

@@ -153,3 +153,95 @@ function insCell(parrent, html = '', classN, id, contentEditable, dataset) {
     }
   }
 }
+
+function validate(input) {
+  input.style.borderColor = "#f57e7e";
+  input.style.backgroundColor = "#f1f1ae";
+  input.style.borderWidth = 2;
+}
+
+function addPkiSubmit() {
+  document.getElementById('error_message').style.display = 'none'
+
+  const ean_code = document.getElementById("ean_code").value
+  const type_pki = document.getElementById("type_pki").value
+  const vendor = document.getElementById("vendor").value
+  const model = document.getElementById("model").value
+  const country = document.getElementById("country").value
+  const part = document.getElementById("part").value
+  const serial_number = document.getElementById("serial_number").value
+  sessionStorage.setItem("ean_code", ean_code)
+  sessionStorage.setItem("type_pki", type_pki)
+  sessionStorage.setItem("vendor", vendor)
+  sessionStorage.setItem("model", model)
+  sessionStorage.setItem("country", country)
+  sessionStorage.setItem("part", part)
+
+  if (!type_pki) {
+    validate(document.getElementById("type_pki"))
+    return false
+  }
+  if (!vendor) {
+    validate(document.getElementById("vendor"))
+    return false
+  }
+  if (!model) {
+    validate(document.getElementById("model"))
+    return false
+  }
+  if (!country) {
+    validate(document.getElementById("country"))
+    return false
+  }
+  if (!part) {
+    validate(document.getElementById("part"))
+    return false
+  }
+  if (!serial_number) {
+    validate(document.getElementById("serial_number"))
+    return false
+  }
+  document.getElementById("serial_number").value = ''
+  if (serial_number) {
+    sessionStorage.getItem('snList')
+    let array = sessionStorage.getItem('snList')
+    let snArr = []
+    if (array && array.length > 0) {
+      snArr = array.split(',')
+    }
+    if (snArr.length > 10) {
+      snArr.pop()
+    }
+    snArr.unshift(serial_number)
+    sessionStorage.setItem('snList', snArr)
+  }
+  let data = {
+    ean_code,
+    type_pki,
+    vendor,
+    model,
+    country,
+    part,
+    serial_number
+  }
+  postData('/add', data)
+    .then((data) => {
+      if (data.status == 'snExists') {
+        document.getElementById('sound').play()
+        document.getElementById('error_message').style.display = 'block'
+        document.getElementById("serial_number").value = serial_number
+        document.getElementById('alert').innerHTML = data.flashErr
+      } else if (data.status == 'ok') {
+        if (data.flashErr) {
+          document.getElementById('sound').play()
+          document.getElementById('error_message').style.display = 'block'
+          document.getElementById('alert').innerHTML = data.flashErr
+        }
+        document.getElementById("serial_number").value = ''
+      }
+      let array = sessionStorage.getItem('snList')
+      if (array) {
+        snList(array.split(','))
+      }
+    })
+}

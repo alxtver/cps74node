@@ -3,12 +3,9 @@
 
 <div class="wrapper fadeInDown">
   <div id="formContent">
-    <div class="error_message">
-      {{#if insertError}}
-      <p class="alert alert-danger mt-1">{{insertError}}</p>
-      <audio src="/sounds/S20759.mp3" autoplay="autoplay"></audio>
-
-      {{/if}}
+    <div id="error_message" class="error_message">
+      <p id="alert" class="alert alert-danger mt-1"></p>
+      <audio id="sound" src="/sounds/alert.mp3"></audio>
     </div>
     <form action="/add" method="POST" autocomplete="off" class="needs-validation" novalidate>
       <div class="input-field">
@@ -64,7 +61,7 @@
       </div>
 
       <input type="hidden" name="_csrf" value="{{csrf}}">
-      <button type="submit" onclick="addSession()" class="btn btn-primary btn-dark mb-2">Добавить ПКИ</button>
+      <button type="button" onclick="addPkiSubmit()" class="btn btn-primary btn-dark mb-2">Добавить ПКИ</button>
     </form>
   </div>
 </div>
@@ -81,5 +78,19 @@
         searchEAN(eanInput.value)
       }
     })
+    let snInput = document.getElementById('serial_number')
+    snInput.addEventListener("keypress", function (e) {
+      if (e.keyCode == 13) {
+        addPkiSubmit()
+      }
+    })
+
+    let inputs = document.querySelectorAll('#type_pki, #vendor, #model, #country, #part, #serial_number')
+    for (input of inputs) {
+      input.addEventListener('keyup', (event) => {
+        event.target.style.borderColor = "#ced4da"
+        event.target.style.backgroundColor = "#fff"
+      })
+    }
   })
 </script>

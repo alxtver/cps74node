@@ -1,10 +1,12 @@
 function snList(arr) {
   let cont = document.getElementById('snBar')
+  cont.innerHTML = ''
   for (let i = 0; i < arr.length; i++) {
     let p = document.createElement('p')
     p.innerHTML = arr[i]
     p.style.opacity = 1 / (i + 2)
     p.style.fontWeight = 700
+    p.className = 'noneSelect'
     cont.appendChild(p)
   }
 }
@@ -28,7 +30,10 @@ function addSession() {
   if (field_serial_number) {
     sessionStorage.getItem('snList')
     let array = sessionStorage.getItem('snList')
-    let snArr = array.split(',')
+    let snArr = []
+    if (array && array.length > 0) {
+      snArr = array.split(',')
+    }
     if (snArr.length > 10) {
       snArr.pop()
     }
@@ -72,7 +77,6 @@ function loadSession() {
   if (array) {
     snList(array.split(','))
   }
-
 }
 
 //валидация формы добавления и редактирования ПКИ
@@ -169,6 +173,7 @@ function searchEAN(valueEAN) {
         document.getElementById('vendor').value = data.vendor
         document.getElementById('model').value = data.model
         document.getElementById('country').value = data.country
+        document.getElementById('serial_number').focus()
       } else {
         document.getElementById('type_pki').value = ''
         document.getElementById('vendor').value = ''

@@ -1,4 +1,6 @@
-const {Router} = require('express')
+const {
+  Router
+} = require('express')
 const Pki = require('../models/pki')
 const Apkzi = require('../models/apkzi')
 const Country = require('../models/country')
@@ -19,12 +21,13 @@ router.get('/', auth, (req, res) => {
 })
 
 router.post('/', auth, async (req, res) => {
+  console.log(req.body);
   let serial_number = req.body.serial_number
   let vendor = req.body.vendor
   let ean
   let eanCode = req.body.ean_code
   let typePki = req.body.type_pki
-  
+
   if (req.body.ean_code) {
     ean = await EAN.findOne({
       ean_code: req.body.ean_code
@@ -40,12 +43,11 @@ router.post('/', auth, async (req, res) => {
       new_ean.save()
     }
   }
-  
   // модифицирование серийников в зависимости от условий
   let snMod = snModifer(serial_number, vendor, eanCode, typePki)
   serial_number = snMod.SN
   let flashErr = snMod.flash
-  
+
   const candidate = await Pki.findOne({
     serial_number: serial_number,
     part: req.body.part
@@ -116,17 +118,21 @@ router.post('/', auth, async (req, res) => {
       })
       log.save()
       req.flash('insertError', flashErr)
-      res.redirect('/add')
+      res.send(JSON.stringify({
+        status: 'ok',
+        flashErr: flashErr
+      }))
     } catch (e) {
       console.log(e)
     }
   } else {
     flashErr = candidate.type_pki + ' с таким серийным номером существует в ' + candidate.part
     req.flash('insertError', flashErr)
-    res.redirect('/add')
+    res.send(JSON.stringify({
+      status: 'snExists',
+      flashErr: flashErr
+    }))
   }
-
-  // }
 })
 
 
