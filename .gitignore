@@ -95,3 +95,4 @@ public/docx/output.docx
 public/docx/excel.xlsx
 package-lock.json
 .DS_Store
+Dockerfile
