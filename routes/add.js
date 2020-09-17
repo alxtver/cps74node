@@ -21,7 +21,6 @@ router.get('/', auth, (req, res) => {
 })
 
 router.post('/', auth, async (req, res) => {
-  console.log(req.body);
   let serial_number = req.body.serial_number
   let vendor = req.body.vendor
   let ean
