@@ -162,6 +162,7 @@ function validate(input) {
 
 function addPkiSubmit() {
   document.getElementById('error_message').style.display = 'none'
+  document.getElementById("formContent").style.boxShadow = '0 13px 16px 0 rgba(0, 0, 0, 0.9)'
 
   const ean_code = document.getElementById("ean_code").value
   const type_pki = document.getElementById("type_pki").value
@@ -243,5 +244,6 @@ function addPkiSubmit() {
       if (array) {
         snList(array.split(','))
       }
+      document.getElementById("formContent").style.boxShadow = '0 30px 60px 0 rgba(0, 0, 0, 0.9)'
     })
 }
