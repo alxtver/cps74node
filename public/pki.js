@@ -229,7 +229,7 @@ function addPkiSubmit() {
       if (data.status == 'snExists') {
         document.getElementById('sound').play()
         document.getElementById('error_message').style.display = 'block'
-        document.getElementById("serial_number").value = serial_number
+        // document.getElementById("serial_number").value = serial_number
         document.getElementById('alert').innerHTML = data.flashErr
       } else if (data.status == 'ok') {
         if (data.flashErr) {
@@ -237,7 +237,7 @@ function addPkiSubmit() {
           document.getElementById('error_message').style.display = 'block'
           document.getElementById('alert').innerHTML = data.flashErr
         }
-        document.getElementById("serial_number").value = ''
+        // document.getElementById("serial_number").value = ''
       }
       let array = sessionStorage.getItem('snList')
       if (array) {
