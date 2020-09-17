@@ -650,7 +650,7 @@ function edit_serial_number(id, obj, unit, serial_number) {
           document.getElementById('oldNumber').innerHTML = msg_txt
           var audio = {};
           audio["alert"] = new Audio();
-          audio["alert"].src = "/sounds/S20759.mp3"
+          audio["alert"].src = "/sounds/alert.mp3"
           audio["alert"].play()
         } else {
           oldNumberMachine = null

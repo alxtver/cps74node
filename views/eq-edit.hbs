@@ -6,40 +6,41 @@
     <div class="error_message">
       {{#if insertError}}
       <p class="alert alert-danger mt-1">{{insertError}}</p>
-      <audio src="/sounds/S20759.mp3" autoplay="autoplay"></audio>
+      <audio src="/sounds/alert.mp3" autoplay="autoplay"></audio>
       {{/if}}
     </div>
     <form id="edit" action="/equipment" class="needs-validation" novalidate>
       <div class="input-field">
-        <input value="{{ean.ean_code}}" id="ean_code" name="ean_code" type="text" class="form-control" aria-describedby="eanlHelp"
-          placeholder="Штрих-код" disabled required>
+        <input value="{{ean.ean_code}}" id="ean_code" name="ean_code" type="text" class="form-control"
+          aria-describedby="eanlHelp" placeholder="Штрих-код" disabled required>
         <div class="invalid-feedback">
           Введите Штрих-код!
         </div>
       </div>
       <div class="input-field">
-        <input value="{{ean.type_pki}}" id="type_pki" name="type_pki" type="text" class="form-control" aria-describedby="pkilHelp"
-          placeholder="Тип ПКИ" required>
+        <input value="{{ean.type_pki}}" id="type_pki" name="type_pki" type="text" class="form-control"
+          aria-describedby="pkilHelp" placeholder="Тип ПКИ" required>
         <div class="invalid-feedback">
           Введите тип ПКИ!
         </div>
       </div>
       <div class="input-field">
-        <input value="{{ean.vendor}}" id="vendor" name="vendor" type="text" class="form-control" aria-describedby="vendorHelp"
-          placeholder="Производитель" required>
+        <input value="{{ean.vendor}}" id="vendor" name="vendor" type="text" class="form-control"
+          aria-describedby="vendorHelp" placeholder="Производитель" required>
         <div class="invalid-feedback">
           Введите Производителя!
         </div>
       </div>
       <div class="input-field">
-        <input value="{{ean.model}}" id="model" name="model" type="text" class="form-control" aria-describedby="modelHelp"
-          placeholder="Модель" required>
+        <input value="{{ean.model}}" id="model" name="model" type="text" class="form-control"
+          aria-describedby="modelHelp" placeholder="Модель" required>
         <div class="invalid-feedback">
           Введите Модель!
         </div>
       </div>
       <div class="input-field">
-        <input value="{{ean.country}}" id="country" name="country" type="text" class="form-control" placeholder="Страна производства" required>
+        <input value="{{ean.country}}" id="country" name="country" type="text" class="form-control"
+          placeholder="Страна производства" required>
         <div class="invalid-feedback">
           Введите страну!
         </div>
@@ -47,8 +48,10 @@
       <div id="pki_sp_table1"></div>
       <div id="pki_sp_table2"></div>
       <div class="mb-3" style="text-align: left;">
-        <input type="button" onclick="addRow()" id="add-row" class="add-row btn btn-outline-primary" value="Добавить строку">
-        <input type="button" onclick="delRow()" id="delete-row" class="delete-row btn btn-outline-danger" value="Удалить строку">
+        <input type="button" onclick="addRow()" id="add-row" class="add-row btn btn-outline-primary"
+          value="Добавить строку">
+        <input type="button" onclick="delRow()" id="delete-row" class="delete-row btn btn-outline-danger"
+          value="Удалить строку">
         <input type="button" id="copy_table" class="delete-row btn btn-outline-success" value="Копировать таблицу">
       </div>
       <input type="hidden" name="_csrf" value="{{csrf}}">
@@ -59,7 +62,7 @@
 </div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
     let decodedEan = decodeURIComponent("{{{encodedEan}}}")
     let jsonObj = JSON.parse(decodedEan)
     let ean_id = jsonObj._id

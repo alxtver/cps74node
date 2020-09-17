@@ -6,7 +6,7 @@
     <div class="error_message">
       {{#if insertError}}
       <p class="alert alert-danger mt-1">{{insertError}}</p>
-      <audio src="/sounds/S20759.mp3" autoplay="autoplay"></audio>
+      <audio src="/sounds/alert.mp3" autoplay="autoplay"></audio>
       {{/if}}
     </div>
 
@@ -55,8 +55,10 @@
       <div id="pki_sp_table2"></div>
 
       <div class="mb-3" style="text-align: left;">
-        <input type="button" id="add-row" onclick="addRow()" class="add-row btn btn-outline-primary" value="Добавить строку">
-        <input type="button" id="delete-row" onclick="delRow()" class="delete-row btn btn-outline-danger" value="Удалить строку">
+        <input type="button" id="add-row" onclick="addRow()" class="add-row btn btn-outline-primary"
+          value="Добавить строку">
+        <input type="button" id="delete-row" onclick="delRow()" class="delete-row btn btn-outline-danger"
+          value="Удалить строку">
         <input type="button" id="copy_table" class="delete-row btn btn-outline-success" value="Копировать таблицу">
       </div>
 
@@ -69,7 +71,7 @@
 
 
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
     CreateTable1SP()
     autoComplete()
     document.getElementById("ean_code").focus()
@@ -77,8 +79,8 @@
     let inputs = document.querySelectorAll('#ean_code, #type_pki, #vendor, #model, #country')
     for (input of inputs) {
       input.addEventListener('keypress', (event) => {
-        event.target.style.borderColor="#ced4da";
-        event.target.style.backgroundColor="#fff";
+        event.target.style.borderColor = "#ced4da";
+        event.target.style.backgroundColor = "#fff";
       })
     }
     let copyTableButton = document.getElementById('copy_table')
