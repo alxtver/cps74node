@@ -735,11 +735,17 @@ function UpdateCells(pc, oldNumberMachine, callback) {
         while (nextCellText == 'б/н' || nextCellText == 'Б/Н' || nextCellText == pc.serial_number) {
           next_id[1] = Number(next_id[1]) + 1 + ''
           nextCell = document.querySelector(".serial_number[data-data='" + next_id.join(';') + "']")
+          if (!nextCell) {
+            break
+          }
           nextCellText = nextCell.innerHTML
         }
-        nextCell.focus()
+        if (nextCell) {
+          nextCell.focus()
+        }
+        
         //TextToSpeech
-        if (sessionStorage.getItem("sound") === 'on') {
+        if (sessionStorage.getItem("sound") === 'on' && nextCell) {
           let rows = document.querySelector(".serial_number[data-data='" + next_id.join(';') + "']").parentElement
           let row = rows.children
           if (row) {
