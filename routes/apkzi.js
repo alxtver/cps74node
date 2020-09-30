@@ -65,7 +65,6 @@ router.post('/edit', auth, async (req, res) => {
 router.post('/del', auth, async (req, res) => {
   const part = req.session.part
   const id = req.body.id
-  console.log(req.body);
   try {
     const apkzi = await Apkzi.findById(id.trim())
     let note = `APKZI ${apkzi.apkzi_name} ${apkzi.kont_name} заводской номер - ${apkzi.zav_number}, номер контроллера - ${apkzi.kontr_zav_number} удален`
