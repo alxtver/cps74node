@@ -63,9 +63,11 @@ router.post('/edit', auth, async (req, res) => {
 })
 
 router.post('/del', auth, async (req, res) => {
-  const part = req.body.part
-  try {    
-    const apkzi = Apkzi.findById(req.body.id)
+  const part = req.session.part
+  const id = req.body.id
+  console.log(req.body);
+  try {
+    const apkzi = await Apkzi.findById(id.trim())
     let note = `APKZI ${apkzi.apkzi_name} ${apkzi.kont_name} заводской номер - ${apkzi.zav_number}, номер контроллера - ${apkzi.kontr_zav_number} удален`
     console.log(note)
     let log = new LOG({
@@ -74,7 +76,7 @@ router.post('/del', auth, async (req, res) => {
       user: req.session.user.username,
       part: req.session.part
     })    
-    await Apkzi.deleteOne({_id: req.body.id})
+    await Apkzi.deleteOne({_id: id})
     log.save()
     res.send(JSON.stringify(part))
   } catch (e) {

@@ -100,7 +100,7 @@ function CreateTableFromJSON(data, callback) {
     let kontr_zav_numberCell = tr.insertCell(-1)
     kontr_zav_numberCell.innerHTML = data[i].kontr_zav_number
     kontr_zav_numberCell.dataset.id = data[i]._id
-    kontr_zav_numberCell.className = "kontr_zav_number"
+    kontr_zav_numberCell.className = "kontr_zav_number" 
     kontr_zav_numberCell.contentEditable = "true"
 
     let number_machineCell = tr.insertCell(-1)
@@ -118,7 +118,7 @@ function CreateTableFromJSON(data, callback) {
     buttonCell.dataset.id = id
     buttonCell.innerHTML = (
       "<button class=\"btn_f\" onclick=\"location.href='/apkzi/" + id + "/edit?allow=true';\"><i class=\"fa fa-pen\"></i></button>" +
-      "<button class=\"btn_d delBtn\" data-id=\'" + id + "'\ data-part=\'" + part + "'\ data-toggle=\"modal\" data-target=\"#modalDel\"><i class=\"fa fa-trash\"></i></button>"
+      "<button class=\"btn_d delBtn\" data-id=\'" + id + "'\ data-part=\'" + part + "'\ data-toggle=\"modal\" data-target=\"#modalDel\"><i data-id=\'" + id + "'\ class=\"fa fa-trash\"></i></button>"
     )
   }
   const divContainer = document.getElementById("showData")

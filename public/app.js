@@ -105,9 +105,11 @@ function plusOne(number) {
       indexChar = index
     }
   }
-  let first_part = number.slice(0, indexChar + 1)
-  let second_part = number.slice(indexChar + 1)
-  return first_part + (parseInt(second_part) + 1)
+  let firstPart = number.slice(0, indexChar + 1)
+  let secondPart = number.slice(indexChar + 1)
+  const lengthSecondPart = secondPart.length
+  const secondPartPlusOne = parseInt(secondPart) + 1
+  return firstPart + secondPartPlusOne.toString().padStart(lengthSecondPart, '0')
 }
 
 
