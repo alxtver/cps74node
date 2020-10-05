@@ -185,46 +185,6 @@ function painting() {
   }
 }
 
-function buttons() {
-  // обработчик кнопки удаления ПЭВМ
-  let delButtons = document.querySelectorAll('.delBtn')
-  for (const but of delButtons) {
-    but.addEventListener('click', (e) => {
-      document.getElementById('hidId').value = e.target.dataset.id
-      document.getElementById('serial').innerHTML = 'Серийный номер - ' + e.target.dataset.serial_number
-    })
-  }
-  // обработчик кнопки копирования ПЭВМ
-  let copyButtons = document.querySelectorAll('.copyBtn')
-  for (const but of copyButtons) {
-    but.addEventListener('click', (e) => {
-      document.getElementById('hidInputCopy').value = e.target.dataset.id
-      document.getElementById('inputCopy').value = e.target.dataset.serial_number
-    })
-  }
-  //обработчик ячеек серийных номеров
-  const serials = document.querySelectorAll('.serial_number')
-  for (let sn of serials) {
-    sn.addEventListener('keypress', function (e) {
-      if (e.keyCode == 13) {
-        e.preventDefault()
-        const id = e.target.dataset.id
-        const obj = e.target.dataset.obj
-        const unit = e.target.dataset.unit
-        const serial_number = e.target.innerText
-        const data_hidd = e.target.dataset.data
-        const data_apkzi = e.target.dataset.apkzi
-        document.getElementById('hidd_id').value = data_hidd
-        if (data_apkzi) {
-          edit_serial_number_apkzi(id, obj, unit, serial_number)
-        } else {
-          edit_serial_number(id, obj, unit, serial_number)
-        }
-      }
-    })
-  }
-}
-
 function loadPage(page, pages) {
   let data = {
     page: page,
@@ -354,6 +314,23 @@ function TablePc(pc) {
     }
     serial_numberCell.dataset.data = pc._id + ';' + j + ';' + 'pc_unit'
     serial_numberCell.className = 'serial_number'
+    serial_numberCell.addEventListener('keypress', function (e) {
+      if (e.keyCode == 13) {
+        e.preventDefault()
+        const id = e.target.dataset.id
+        const obj = e.target.dataset.obj
+        const unit = e.target.dataset.unit
+        const serial_number = e.target.innerText
+        const data_hidd = e.target.dataset.data
+        const data_apkzi = e.target.dataset.apkzi
+        document.getElementById('hidd_id').value = data_hidd
+        if (data_apkzi) {
+          edit_serial_number_apkzi(id, obj, unit, serial_number)
+        } else {
+          edit_serial_number(id, obj, unit, serial_number)
+        }
+      }
+    })
     insCell('', tr, arr_pc_unit[j].notes, '', '', false, {
       'id': pc._id
     })
@@ -394,6 +371,23 @@ function TablePc(pc) {
     }
     serial_numberCell.className = 'serial_number'
     serial_numberCell.contentEditable = "true"
+    serial_numberCell.addEventListener('keypress', function (e) {
+      if (e.keyCode == 13) {
+        e.preventDefault()
+        const id = e.target.dataset.id
+        const obj = e.target.dataset.obj
+        const unit = e.target.dataset.unit
+        const serial_number = e.target.innerText
+        const data_hidd = e.target.dataset.data
+        const data_apkzi = e.target.dataset.apkzi
+        document.getElementById('hidd_id').value = data_hidd
+        if (data_apkzi) {
+          edit_serial_number_apkzi(id, obj, unit, serial_number)
+        } else {
+          edit_serial_number(id, obj, unit, serial_number)
+        }
+      }
+    })
     insCell('', tr, arr_system_case_unit[j].notes, '', '', false, {
       'id': pc._id
     })
@@ -536,6 +530,10 @@ function CreateTableFromJSON(data, callback) {
     button_copy.dataset.serial_number = data[i].serial_number
     button_copy.dataset.toggle = 'modal'
     button_copy.dataset.target = '#modalCopy'
+    button_copy.addEventListener('click', (e) => {
+      document.getElementById('hidInputCopy').value = e.target.dataset.id
+      document.getElementById('inputCopy').value = e.target.dataset.serial_number
+    })
     divCont.appendChild(button_copy)
 
     let button_edit = document.createElement('input')
@@ -554,6 +552,10 @@ function CreateTableFromJSON(data, callback) {
     button_del.dataset.serial_number = data[i].serial_number
     button_del.dataset.target = '#modalDel'
     button_del.dataset.toggle = 'modal'
+    button_del.addEventListener('click', (e) => {
+      document.getElementById('hidId').value = e.target.dataset.id
+      document.getElementById('serial').innerHTML = 'Серийный номер - ' + e.target.dataset.serial_number
+    })
     divCont.appendChild(button_del)
   }
   callback()
@@ -657,7 +659,6 @@ function edit_serial_number(id, obj, unit, serial_number) {
         }
       }
       UpdateCells(pc.pc, oldNumberMachine, function () {
-        painting()
         buttons()
       })
     })
@@ -682,6 +683,7 @@ function UpdateCells(pc, oldNumberMachine, callback) {
     let page = document.getElementById('page').value
     let pages = document.getElementById('pagesCount').value
     loadPage(page, pages)
+    painting()
   } else {
     //Обновление только одной таблицы
     let divContainer = document.getElementById(pc._id)
@@ -703,6 +705,10 @@ function UpdateCells(pc, oldNumberMachine, callback) {
     button_copy.dataset.serial_number = pc.serial_number
     button_copy.dataset.toggle = 'modal'
     button_copy.dataset.target = '#modalCopy'
+    button_copy.addEventListener('click', (e) => {
+      document.getElementById('hidInputCopy').value = e.target.dataset.id
+      document.getElementById('inputCopy').value = e.target.dataset.serial_number
+    })
     divCont.appendChild(button_copy)
 
     let button_edit = document.createElement('input')
@@ -721,6 +727,10 @@ function UpdateCells(pc, oldNumberMachine, callback) {
     button_del.dataset.serial_number = pc.serial_number
     button_del.dataset.target = '#modalDel'
     button_del.dataset.toggle = 'modal'
+    button_del.addEventListener('click', (e) => {
+      document.getElementById('hidId').value = e.target.dataset.id
+      document.getElementById('serial').innerHTML = 'Серийный номер - ' + e.target.dataset.serial_number
+    })
     divCont.appendChild(button_del)
 
     //переход на одну ячейку вниз
@@ -743,7 +753,6 @@ function UpdateCells(pc, oldNumberMachine, callback) {
         if (nextCell) {
           nextCell.focus()
         }
-        
         //TextToSpeech
         if (sessionStorage.getItem("sound") === 'on' && nextCell) {
           let rows = document.querySelector(".serial_number[data-data='" + next_id.join(';') + "']").parentElement
