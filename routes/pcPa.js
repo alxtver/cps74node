@@ -1,5 +1,5 @@
 const {
-  Router, query
+  Router
 } = require('express')
 const PC = require('../models/pc')
 const PKI = require('../models/pki')
@@ -12,20 +12,26 @@ const snReModifer = require('./foo/snReModifer')
 
 
 router.get('/', auth, async (req, res) => {
-  const countPC = await PC.countDocuments({part: req.session.part})
-  let user = await User.findOne({username: req.session.user.username})
-  let pages = Math.ceil(countPC/10)
+  const countPC = await PC.countDocuments({
+    part: req.session.part
+  })
+  let user = await User.findOne({
+    username: req.session.user.username
+  })
+  let pages = Math.ceil(countPC / 10)
   let pcCount = user.pcCount
   if (user.pcCount) {
     let count = user.pcCount
     if (count === '1' || count === '5' || count === '10' || count === '20') {
-      pages = Math.ceil(countPC/parseInt(count))
+      pages = Math.ceil(countPC / parseInt(count))
     } else if (count === 'all') {
       pages = 1
     } else if (count === 'supplement') {
-      const attach = await PC.find({part: req.session.part}).distinct('attachment')
-      const attachNumbers = attach.map(function(a) {
-        return a.replace(/[^\d]/gim,'')
+      const attach = await PC.find({
+        part: req.session.part
+      }).distinct('attachment')
+      const attachNumbers = attach.map(function (a) {
+        return a.replace(/[^\d]/gim, '')
       })
       const uniqueSet = new Set(attachNumbers)
       pages = uniqueSet.size
@@ -45,10 +51,14 @@ router.get('/', auth, async (req, res) => {
 })
 
 router.post('/pageCount', auth, async (req, res) => {
-  let user = await User.findOne({username: req.session.user.username})
+  let user = await User.findOne({
+    username: req.session.user.username
+  })
   user.pcCount = req.body.pageCount
   await user.save()
-  res.status(200).json({ message: 'ok' })
+  res.status(200).json({
+    message: 'ok'
+  })
 })
 
 
@@ -116,7 +126,9 @@ router.post('/add', auth, async (req, res) => {
   console.log(json_pc, json_system);
   try {
     await pc.save();
-    res.status(200).json({ message: 'ok' })
+    res.status(200).json({
+      message: 'ok'
+    })
   } catch (e) {
     console.log(e);
   }
@@ -135,7 +147,9 @@ router.post("/search", auth, async function (req, res) {
 
 router.post("/pagination", auth, async function (req, res) {
   let page = parseInt(req.body.page)
-  let user = await User.findOne({username: req.session.user.username})
+  let user = await User.findOne({
+    username: req.session.user.username
+  })
   let pcs
   if (user.pcCount) {
     let count = user.pcCount
@@ -146,21 +160,26 @@ router.post("/pagination", auth, async function (req, res) {
       }).sort({
         'created': 1
       }).skip(page * intCount - intCount).limit(intCount)
-    }  else if (count === 'all') {
-      pcs = await PC.find({part: req.session.part}).sort({'created': 1})
+    } else if (count === 'all') {
+      pcs = await PC.find({
+        part: req.session.part
+      }).sort({
+        'created': 1
+      })
     } else if (count === 'supplement') {
-      const attach = await PC.find({part: req.session.part}).distinct('attachment')
-      const attachNumbers = attach.map(function(a) {
-        return a.replace(/[^\d]/gim,'')
+      const attach = await PC.find({
+        part: req.session.part
+      }).distinct('attachment')
+      const attachNumbers = attach.map(function (a) {
+        return a.replace(/[^\d]/gim, '')
       })
       const uniqueSet = new Set(attachNumbers)
       const backToArray = [...uniqueSet]
       const query = {
         $and: [{
             $or: [{
-              attachment: new RegExp(backToArray[page-1] + '.*', "i")
-              }
-            ]
+              attachment: new RegExp(backToArray[page - 1] + '.*', "i")
+            }]
           },
           {
             part: req.session.part
@@ -172,7 +191,11 @@ router.post("/pagination", auth, async function (req, res) {
       })
     }
   } else {
-    pcs = await PC.find({part: req.session.part}).sort({'created': 1})
+    pcs = await PC.find({
+      part: req.session.part
+    }).sort({
+      'created': 1
+    })
   }
   res.send(JSON.stringify(pcs))
 })
@@ -264,7 +287,9 @@ router.post('/insert_serial', auth, async (req, res) => {
   // Если ПКИ был привязан удаляем ПКИ из старой машины
   if (oldNumberMachine) {
     if (oldNumberMachine != pc.serial_number) {
-      let oldPC = await PC.findOne({serial_number: oldNumberMachine})
+      let oldPC = await PC.findOne({
+        serial_number: oldNumberMachine
+      })
       if (oldPC) {
         for (let index = 0; index < oldPC[unit].length; index++) {
           if (oldPC[unit][index].serial_number == pki.serial_number) {
@@ -272,7 +297,9 @@ router.post('/insert_serial', auth, async (req, res) => {
             oldPC[unit][index].name = 'Н/Д'
           }
         }
-        let newOldPC = await PC.findOne({serial_number: oldNumberMachine})
+        let newOldPC = await PC.findOne({
+          serial_number: oldNumberMachine
+        })
         newOldPC[unit] = oldPC[unit]
         await newOldPC.save()
       }
@@ -310,7 +337,6 @@ router.post('/insert_serial', auth, async (req, res) => {
 
 
 router.post('/insert_serial_apkzi', auth, async (req, res) => {
-  console.log(req.body);
   let pc = await PC.findById(req.body.id) //ищем комп который собираемся редактировать
   let pc_copy = await PC.findById(req.body.id) //и копию....
   let serial_number = req.body.serial_number
@@ -410,7 +436,10 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
     newOldPC[unit] = oldPC[unit]
     newOldPC.save()
   }
-  res.send(JSON.stringify(pc_copy))
+  res.send(JSON.stringify({
+    pc: pc_copy,
+    oldNumberMachine: oldNumberMachine
+  }))
 })
 
 
@@ -601,14 +630,20 @@ router.post('/pc_update', auth, async (req, res) => {
       number_machine: req.body.serial_number
     })
   }
-  res.status(200).json({ message: 'ok' })
+  res.status(200).json({
+    message: 'ok'
+  })
 })
 
 
 router.post('/delete', auth, async (req, res) => {
-  const countPC = await PC.countDocuments({part: req.session.part}) - 1
+  const countPC = await PC.countDocuments({
+    part: req.session.part
+  }) - 1
   const pc = await PC.findById(req.body.id)
-  const user = await User.findOne({username: req.session.user.username})
+  const user = await User.findOne({
+    username: req.session.user.username
+  })
   const pcCountOnPage = user.pcCount
   let page = req.body.page
   if (!page) {
@@ -617,13 +652,15 @@ router.post('/delete', auth, async (req, res) => {
     parseInt(page)
   }
   if (pcCountOnPage === '1' || pcCountOnPage === '5' || pcCountOnPage === '10' || pcCountOnPage === '20') {
-    pages = Math.ceil(countPC/parseInt(pcCountOnPage))
+    pages = Math.ceil(countPC / parseInt(pcCountOnPage))
   } else if (pcCountOnPage === 'all') {
     pages = 1
   } else if (pcCountOnPage === 'supplement') {
-    const attach = await PC.find({part: req.session.part}).distinct('attachment')
-    const attachNumbers = attach.map(function(a) {
-      return a.replace(/[^\d]/gim,'')
+    const attach = await PC.find({
+      part: req.session.part
+    }).distinct('attachment')
+    const attachNumbers = attach.map(function (a) {
+      return a.replace(/[^\d]/gim, '')
     })
     const uniqueSet = new Set(attachNumbers)
     pages = uniqueSet.size
@@ -685,7 +722,9 @@ router.get('/test', auth, async (req, res) => {
 })
 
 router.get('/getPage', auth, async (req, res) => {
-  const user = await User.findOne({username: req.session.user.username})
+  const user = await User.findOne({
+    username: req.session.user.username
+  })
   if (user.lastPage) {
     res.send(JSON.stringify(user.lastPage))
   } else {
@@ -696,11 +735,15 @@ router.get('/getPage', auth, async (req, res) => {
 
 router.post('/setPage', auth, async (req, res) => {
   if (req.body.page) {
-    let user = await User.findOne({username: req.session.user.username})
+    let user = await User.findOne({
+      username: req.session.user.username
+    })
     user.lastPage = req.body.page
     await user.save()
   }
-  res.status(200).json({ message: 'ok' })
+  res.status(200).json({
+    message: 'ok'
+  })
 })
 
 

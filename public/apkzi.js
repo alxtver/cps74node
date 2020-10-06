@@ -2,7 +2,7 @@ function blur() {
   let tds = document.querySelectorAll('.fdsi,.apkzi_name,.kont_name,.zav_number,.kontr_zav_number')
   for (const td of tds) {
     td.addEventListener("blur", function (event) {
-      let id  = event.target.dataset.id
+      let id = event.target.dataset.id
       let value = event.target.innerHTML
       let className = event.target.className
       editCell(id, value, className)
@@ -46,7 +46,9 @@ function delBtn() {
 
 function CreateTableFromJSON(data, callback) {
   let col = ["type_pki", "vendor", "model", "serial_number", "country", "part", "number_machine"];
-  let col_rus = ["ФДШИ",
+  let col_rus = [
+    "№",
+    "ФДШИ",
     "Наим. АПКЗИ",
     "Наим. контроллера СЗИ",
     "Зав. номер",
@@ -72,6 +74,9 @@ function CreateTableFromJSON(data, callback) {
   let tbody = table.createTBody()
   for (let i = 0; i < data.length; i++) {
     tr = tbody.insertRow(-1)
+
+    let numberCell = tr.insertCell(-1)
+    numberCell.innerHTML = parseInt(i) + 1
 
     let fdsiCell = tr.insertCell(-1)
     fdsiCell.innerHTML = data[i].fdsi
@@ -100,7 +105,7 @@ function CreateTableFromJSON(data, callback) {
     let kontr_zav_numberCell = tr.insertCell(-1)
     kontr_zav_numberCell.innerHTML = data[i].kontr_zav_number
     kontr_zav_numberCell.dataset.id = data[i]._id
-    kontr_zav_numberCell.className = "kontr_zav_number" 
+    kontr_zav_numberCell.className = "kontr_zav_number"
     kontr_zav_numberCell.contentEditable = "true"
 
     let number_machineCell = tr.insertCell(-1)

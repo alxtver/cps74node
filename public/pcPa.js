@@ -520,42 +520,7 @@ function CreateTableFromJSON(data, callback) {
     divCont.innerHTML = ""
     divCont.appendChild(table)
 
-    let button_copy = document.createElement('input')
-    button_copy.type = "button"
-    button_copy.className = 'btn btn-outline-primary mr-2 mb-2 ml-3 copyBtn'
-    button_copy.onchange = "clkCopy()"
-    button_copy.value = 'Копировать'
-    button_copy.dataset.id = data[i]._id
-    button_copy.dataset.serial_number = data[i].serial_number
-    button_copy.dataset.toggle = 'modal'
-    button_copy.dataset.target = '#modalCopy'
-    button_copy.addEventListener('click', (e) => {
-      document.getElementById('hidInputCopy').value = e.target.dataset.id
-      document.getElementById('inputCopy').value = e.target.dataset.serial_number
-    })
-    divCont.appendChild(button_copy)
-
-    let button_edit = document.createElement('input')
-    button_edit.type = 'button'
-    button_edit.className = 'btn btn-outline-success mr-2 mb-2'
-    button_edit.value = 'Редактировать'
-    button_edit.setAttribute("onclick", "location.href='/pcPa/" + data[i]._id + "/edit?allow=true'")
-    button_edit.dataset.id = data[i]._id
-    divCont.appendChild(button_edit)
-
-    let button_del = document.createElement('input')
-    button_del.type = 'button'
-    button_del.className = 'btn btn-outline-danger mr-2 mb-2 delBtn float-right'
-    button_del.value = 'Удалить'
-    button_del.dataset.id = data[i]._id
-    button_del.dataset.serial_number = data[i].serial_number
-    button_del.dataset.target = '#modalDel'
-    button_del.dataset.toggle = 'modal'
-    button_del.addEventListener('click', (e) => {
-      document.getElementById('hidId').value = e.target.dataset.id
-      document.getElementById('serial').innerHTML = 'Серийный номер - ' + e.target.dataset.serial_number
-    })
-    divCont.appendChild(button_del)
+    buttons(divCont, data[i])
   }
   callback()
 }
@@ -633,6 +598,24 @@ function CreateTableEditPC(data, color) {
   divCont.appendChild(button_back)
 }
 
+function flashAlert(data) {
+  let oldNumberMachine = data.oldNumberMachine
+  const pcSN = data.pc.serial_number
+  if (oldNumberMachine) {
+    if (oldNumberMachine != pcSN) {
+      document.querySelector('.popup-checkbox').checked = true
+      const msg_txt = 'Серийник был привязан к машине с номером ' + oldNumberMachine
+      document.getElementById('oldNumber').innerHTML = msg_txt
+      const audio = {};
+      audio["alert"] = new Audio();
+      audio["alert"].src = "/sounds/alert.mp3"
+      audio["alert"].play()
+    } else {
+      oldNumberMachine = null
+    }
+  }
+}
+
 function edit_serial_number(id, obj, unit, serial_number) {
   let data = {
     id: id,
@@ -641,24 +624,11 @@ function edit_serial_number(id, obj, unit, serial_number) {
     serial_number: serial_number
   }
   postData('/pcPa/insert_serial', data)
-    .then((pc) => {
-      let oldNumberMachine = pc.oldNumberMachine
-      const pcSN = pc.pc.serial_number
-      if (oldNumberMachine) {
-        if (oldNumberMachine != pcSN) {
-          document.querySelector('.popup-checkbox').checked = true
-          let msg_txt = 'Серийник был привязан к машине с номером ' + oldNumberMachine
-          document.getElementById('oldNumber').innerHTML = msg_txt
-          var audio = {};
-          audio["alert"] = new Audio();
-          audio["alert"].src = "/sounds/alert.mp3"
-          audio["alert"].play()
-        } else {
-          oldNumberMachine = null
-        }
-      }
-      UpdateCells(pc.pc, oldNumberMachine, function () {
-      })
+    .then((data) => {
+      flashAlert(data)
+      const pcSN = data.pc.serial_number
+      const oldNumberMachine = (data.oldNumberMachine != pcSN) ? data.oldNumberMachine : null
+      UpdateCells(data.pc, oldNumberMachine)
     })
 }
 
@@ -670,12 +640,54 @@ function edit_serial_number_apkzi(id, obj, unit, serial_number) {
     serial_number: serial_number
   }
   postData('/pcPa/insert_serial_apkzi', data)
-    .then((pc) => {
-      UpdateCells(pc)
+    .then((data) => {
+      flashAlert(data)
+      const pcSN = data.pc.serial_number
+      const oldNumberMachine = (data.oldNumberMachine != pcSN) ? data.oldNumberMachine : null
+      UpdateCells(data.pc, oldNumberMachine)
     })
 }
 
-function UpdateCells(pc, oldNumberMachine, callback) {
+function buttons(container, pc) {
+  let button_copy = document.createElement('input')
+  button_copy.type = "button"
+  button_copy.className = 'btn btn-outline-primary mr-2 mb-2 ml-3 copyBtn'
+  button_copy.onchange = "clkCopy()"
+  button_copy.value = 'Копировать'
+  button_copy.dataset.id = pc._id
+  button_copy.dataset.serial_number = pc.serial_number
+  button_copy.dataset.toggle = 'modal'
+  button_copy.dataset.target = '#modalCopy'
+  button_copy.addEventListener('click', (e) => {
+    document.getElementById('hidInputCopy').value = e.target.dataset.id
+    document.getElementById('inputCopy').value = e.target.dataset.serial_number
+  })
+  container.appendChild(button_copy)
+
+  let button_edit = document.createElement('input')
+  button_edit.type = 'button'
+  button_edit.className = 'btn btn-outline-success mr-2 mb-2'
+  button_edit.value = 'Редактировать'
+  button_edit.setAttribute("onclick", "location.href='/pcPa/" + pc._id + "/edit?allow=true'")
+  button_edit.dataset.id = pc._id
+  container.appendChild(button_edit)
+
+  let button_del = document.createElement('input')
+  button_del.type = 'button'
+  button_del.className = 'btn btn-outline-danger mr-2 mb-2 delBtn float-right'
+  button_del.value = 'Удалить'
+  button_del.dataset.id = pc._id
+  button_del.dataset.serial_number = pc.serial_number
+  button_del.dataset.target = '#modalDel'
+  button_del.dataset.toggle = 'modal'
+  button_del.addEventListener('click', (e) => {
+    document.getElementById('hidId').value = e.target.dataset.id
+    document.getElementById('serial').innerHTML = 'Серийный номер - ' + e.target.dataset.serial_number
+  })
+  container.appendChild(button_del)
+}
+
+function UpdateCells(pc, oldNumberMachine) {
   if (oldNumberMachine) {
     // Обновление всех таблиц
     let page = document.getElementById('page').value
@@ -759,16 +771,14 @@ function UpdateCells(pc, oldNumberMachine, callback) {
             let textToSpeech = row[1].innerText
             const ut = new SpeechSynthesisUtterance(textToSpeech)
             ut.lang = 'ru-RU'
-            ut.rate = 1.1
+            ut.volume = 1
+            ut.rate = 1.5
             speechSynthesis.speak(ut)
           }
         }
       }
       painting()
     }
-  }
-  if (callback) {
-    callback()
   }
 }
 
