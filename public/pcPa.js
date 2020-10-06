@@ -194,7 +194,6 @@ function loadPage(page, pages) {
     .then((data) => {
       CreateTableFromJSON(data, function () {
         painting()
-        buttons()
         let overlay = document.getElementById('overlay')
         overlay.style.display = 'none'
       })
@@ -659,7 +658,6 @@ function edit_serial_number(id, obj, unit, serial_number) {
         }
       }
       UpdateCells(pc.pc, oldNumberMachine, function () {
-        buttons()
       })
     })
 }
