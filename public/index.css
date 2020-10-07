@@ -1,3 +1,9 @@
+/* @media screen and (min-width: 1200px) {
+  .container {
+    max-width: 1800px;
+  }
+} */
+
 body {
   font-family: 'Ubuntu', sans-serif;
 }
@@ -894,4 +900,10 @@ th {
   -khtml-user-select: none;
   -webkit-user-select: none;
   user-select: none;
+}
+
+.assemblyCont {}
+
+.assemblytable td {
+  padding: 0.5rem;
 }

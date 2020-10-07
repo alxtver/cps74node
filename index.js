@@ -10,6 +10,7 @@ const homeRoutes = require('./routes/home')
 const apkziRoutes = require('./routes/apkzi')
 const addRoutes = require('./routes/add')
 const pkiRoutes = require('./routes/pkis')
+const assemblyRoutes = require('./routes/assembly')
 // const pcRoutes = require('./routes/pc')
 const pcPaRoutes = require('./routes/pcPa')
 const authRoutes = require('./routes/auth')
@@ -40,7 +41,7 @@ const hbs = exphbs.create({
 })
 
 mongoose.set('useCreateIndex', true)
-const store = new MongoStore ({
+const store = new MongoStore({
   collection: 'sessions',
   uri: config.url
 })
@@ -51,7 +52,9 @@ app.set('view engine', 'hbs')
 app.set('views', 'views')
 
 app.use(express.static(path.join(__dirname, 'public')))
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({
+  extended: true
+}))
 app.use(favicon(__dirname + '/public/favicon.ico'))
 app.use(session({
   secret: config.secretkey,
@@ -69,6 +72,7 @@ app.use('/', homeRoutes)
 app.use('/add', addRoutes)
 app.use('/pkis', pkiRoutes)
 app.use('/apkzi', apkziRoutes)
+app.use('/assembly', assemblyRoutes)
 // app.use('/pc', pcRoutes)
 app.use('/pcPa', pcPaRoutes)
 app.use('/projects', projectsRoutes)
@@ -86,7 +90,7 @@ const PORT = process.env.PORT || 3000
 
 async function start() {
   try {
-    
+
     await mongoose.connect(config.url, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -94,10 +98,10 @@ async function start() {
     })
     app.listen(PORT, () => {
       console.log(`Сервер запущен на ${PORT} порту`)
-  })    
+    })
   } catch (e) {
     console.log(e)
-  }  
+  }
 }
 
 start()

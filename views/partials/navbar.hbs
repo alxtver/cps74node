@@ -34,6 +34,11 @@
       {{else}}
       <li class="nav-item"><a class="nav-link" href="/pcPa">Производство</a></li>
       {{/if}}
+      {{#if isAssembly}}
+      <li class="nav-item active"><a class="nav-link" href="/assembly">Сборка СБ</a></li>
+      {{else}}
+      <li class="nav-item"><a class="nav-link" href="/assembly">Сборка СБ</a></li>
+      {{/if}}
       <li class="nav-item dropdown">
         {{#if isEquipment}}
         <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
@@ -92,6 +97,9 @@
       {{#if isProjects}}
       <select class="selectpicker custom-select mr-2" id="serials" data-live-search="true"></select>
       {{/if}}
+      {{#if isAssembly}}
+      <select class="selectpicker custom-select mr-2" id="serials" data-live-search="true"></select>
+      {{/if}}
       <select id="part_select_navbar" class="custom-select"></select>
     </ul>
     {{/if}}
@@ -107,5 +115,4 @@
       })
     </script>
   </div>
-
 </nav>

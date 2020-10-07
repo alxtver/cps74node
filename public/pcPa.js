@@ -706,42 +706,7 @@ function UpdateCells(pc, oldNumberMachine) {
     divCont.innerHTML = ""
     divCont.appendChild(table)
 
-    let button_copy = document.createElement('input')
-    button_copy.type = "button"
-    button_copy.className = 'btn btn-outline-primary mr-2 mb-2 ml-3 copyBtn'
-    button_copy.onchange = "clkCopy()"
-    button_copy.value = 'Копировать'
-    button_copy.dataset.id = pc._id
-    button_copy.dataset.serial_number = pc.serial_number
-    button_copy.dataset.toggle = 'modal'
-    button_copy.dataset.target = '#modalCopy'
-    button_copy.addEventListener('click', (e) => {
-      document.getElementById('hidInputCopy').value = e.target.dataset.id
-      document.getElementById('inputCopy').value = e.target.dataset.serial_number
-    })
-    divCont.appendChild(button_copy)
-
-    let button_edit = document.createElement('input')
-    button_edit.type = 'button'
-    button_edit.className = 'btn btn-outline-success mr-2 mb-2'
-    button_edit.value = 'Редактировать'
-    button_edit.setAttribute("onclick", "location.href='/pcPa/" + pc._id + "/edit?allow=true'")
-    button_edit.dataset.id = pc._id
-    divCont.appendChild(button_edit)
-
-    let button_del = document.createElement('input')
-    button_del.type = 'button'
-    button_del.className = 'btn btn-outline-danger mr-2 mb-2 delBtn float-right'
-    button_del.value = 'Удалить'
-    button_del.dataset.id = pc._id
-    button_del.dataset.serial_number = pc.serial_number
-    button_del.dataset.target = '#modalDel'
-    button_del.dataset.toggle = 'modal'
-    button_del.addEventListener('click', (e) => {
-      document.getElementById('hidId').value = e.target.dataset.id
-      document.getElementById('serial').innerHTML = 'Серийный номер - ' + e.target.dataset.serial_number
-    })
-    divCont.appendChild(button_del)
+    buttons(divCont, pc)
 
     //переход на одну ячейку вниз
     let current_id = document.getElementById('hidd_id').value
@@ -773,7 +738,7 @@ function UpdateCells(pc, oldNumberMachine) {
             ut.lang = 'ru-RU'
             ut.volume = 1
             ut.rate = 1.1
-	    ut.pitch = 1
+            ut.pitch = 1
             speechSynthesis.speak(ut)
           }
         }

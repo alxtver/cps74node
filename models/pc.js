@@ -1,4 +1,7 @@
-const {Schema, model} = require('mongoose')
+const {
+    Schema,
+    model
+} = require('mongoose')
 
 const pc = new Schema({
     serial_number: {
@@ -18,19 +21,21 @@ const pc = new Schema({
         required: true
     },
     arm: {
-        type: String        
+        type: String
     },
     pc_unit: Array,
     system_case_unit: Array,
     created: {
         type: Date,
-        default: () => Date.now() + 3*60*60*1000 //время МСК
-      },
+        default: () => Date.now() + 3 * 60 * 60 * 1000 //время МСК
+    },
     back_color: {
         type: String,
         default: '#3d3d3d'
     },
     attachment: String
-}, { versionKey: false })
+}, {
+    versionKey: false
+})
 
 module.exports = model('Pc', pc)
