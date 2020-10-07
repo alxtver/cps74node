@@ -772,7 +772,8 @@ function UpdateCells(pc, oldNumberMachine) {
             const ut = new SpeechSynthesisUtterance(textToSpeech)
             ut.lang = 'ru-RU'
             ut.volume = 1
-            ut.rate = 1.5
+            ut.rate = 1.1
+	    ut.pitch = 1
             speechSynthesis.speak(ut)
           }
         }
