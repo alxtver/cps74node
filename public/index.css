@@ -425,6 +425,7 @@ input[type=text]:placeholder {
   padding: 0px;
   margin-bottom: 3rem;
 }
+
 .pcCardAssembly {
   -webkit-border-radius: 10px 10px 10px 10px;
   border-radius: 10px 10px 10px 10px;
@@ -438,9 +439,14 @@ input[type=text]:placeholder {
 }
 
 @keyframes spin {
-  /* 0% { opacity: 0.3;} */
-  25% { transform: rotate(2deg); opacity: .7; }
-  75% { transform: rotate(-2deg); }
+  25% {
+    transform: rotate(2deg);
+    opacity: .7;
+  }
+
+  75% {
+    transform: rotate(-2deg);
+  }
 }
 
 .navbar {
@@ -926,10 +932,24 @@ th {
 .previousButton {
   height: 8rem;
   width: 8rem;
+  box-shadow: rgb(53 56 53) 5px 5px 5px 2px;
+  font-size: 40px;
 }
 
 .nextButton {
   height: 8rem;
   width: 8rem;
   float: right;
+  box-shadow: rgb(53 56 53) 5px 5px 5px 2px;
+  font-size: 40px;
+}
+
+.buttonsActive {
+  box-shadow: rgb(53 56 53) 0px 0px 0px 0px;
+}
+
+.status {
+  background-color: indianred;
+  margin: auto;
+
 }

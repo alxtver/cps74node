@@ -17,13 +17,25 @@
 <input type="hidden" id="hidd_obj" value="0">
 <input type="hidden" id="hidd_unit" value="0">
 
-<button id="PreviousPC" onclick="getPreviousPC()" class="btn btn-dark previousButton"><i class="fa fa-chevron-left"
-    aria-hidden="true"></i></button>
-<button id="NextPC" onclick="getNextPC()" class="btn btn-dark nextButton"><i class="fa fa-chevron-right"
-    aria-hidden="true"></i></button>
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+      <button id="PreviousPC" onclick="getPreviousPC()" class="btn btn-dark previousButton"><i
+          class="fa fa-chevron-left" aria-hidden="true"></i></button>
+    </div>
+    <div class="col-sm status">
+      One of three columns
+    </div>
+    <div class="col-sm">
+      <button id="NextPC" onclick="getNextPC()" class="btn btn-dark nextButton"><i class="fa fa-chevron-right"
+          aria-hidden="true"></i><span class="ion-help-buoy"></span></button>
+    </div>
+  </div>
+</div>
 
-<button id="soundOn" onclick="setSoundSessionOff()" class="btn btn-dark soundButton"><i
-    class="fa fa-microphone"></i></button>
+<div><button id="soundOn" onclick="setSoundSessionOff()" class="btn btn-dark soundButton"><i
+      class="fa fa-microphone"></i></button></div>
+
 <button id="soundOff" onclick="setSoundSessionOn()" hidden="true" class="btn btn-dark soundButtonSlash"><i
     class="fa fa-microphone-slash"></i></button>
 
@@ -38,5 +50,5 @@
 </div>
 <script>
   loadPage()
-  
+
 </script>

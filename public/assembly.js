@@ -15,15 +15,15 @@ document.addEventListener("DOMContentLoaded", function () {
   snSelect.addEventListener('change', (e) => {
     getPC(e.target.value)
   })
-
-
 })
 
 document.onkeydown = function (e) {
-  e = e || window.event
+
   if (e.ctrlKey && e.keyCode == 39) {
+    e.preventDefault()
     getNextPC()
   } else if (e.ctrlKey && e.keyCode == 37) {
+    e.preventDefault()
     getPreviousPC()
   }
 }
@@ -49,9 +49,12 @@ function loadPage() {
       CreateTableFromJSON(data, function () {
         painting()
         document.getElementById('overlay').style.display = 'none'
+        document.querySelectorAll('[data-obj="1"]')[0].focus()
       })
     })
 }
+
+
 
 function getPC(serialNumberPC) {
   const data = {
@@ -62,6 +65,7 @@ function getPC(serialNumberPC) {
       CreateTableFromJSON(data, function () {
         painting()
         document.getElementById('overlay').style.display = 'none'
+        document.querySelectorAll('[data-obj="1"]')[0].focus()
       })
     })
 }
@@ -315,12 +319,17 @@ function getNextPC() {
   const serialNumberPlusOne = plusOne(serialNumber)
   const select = document.getElementById('serials')
   const lastPCSerialNumber = select.options[select.options.length - 1].value
+  const nextButton = document.getElementById('NextPC')
+  nextButton.classList.add("buttonsActive")
+  setTimeout(() => {
+    nextButton.classList.remove("buttonsActive")
+  }, 300);
   if (lastPCSerialNumber != serialNumber) {
     getPC(serialNumberPlusOne)
     select.value = serialNumberPlusOne
   }
   if (serialNumberPlusOne == lastPCSerialNumber) {
-    document.getElementById('NextPC').style.display = 'none'
+    nextButton.style.display = 'none'
   }
   document.getElementById('PreviousPC').style.display = 'inline'
 }
@@ -330,6 +339,11 @@ function getPreviousPC() {
   const serialNumberMinusOne = minusOne(serialNumber)
   const select = document.getElementById('serials')
   const firstPCSerialNumber = select.options[0].value
+  const previousButton = document.getElementById('PreviousPC')
+  previousButton.classList.add("buttonsActive")
+  setTimeout(() => {
+    previousButton.classList.remove("buttonsActive")
+  }, 300);
   if (firstPCSerialNumber != serialNumber) {
     getPC(serialNumberMinusOne)
     select.value = serialNumberMinusOne
