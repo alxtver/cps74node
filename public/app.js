@@ -112,6 +112,21 @@ function plusOne(number) {
   return firstPart + secondPartPlusOne.toString().padStart(lengthSecondPart, '0')
 }
 
+function minusOne(number) {
+  let indexChar = 0
+  for (let index = 0; index < number.length; index++) {
+    if (!/\d/.test(number[index])) {
+      indexChar = index
+    }
+  }
+  let firstPart = number.slice(0, indexChar + 1)
+  let secondPart = number.slice(indexChar + 1)
+  const lengthSecondPart = secondPart.length
+  const secondPartPlusOne = parseInt(secondPart) - 1
+  return firstPart + secondPartPlusOne.toString().padStart(lengthSecondPart, '0')
+}
+
+
 
 // добавление данных в сессию браузера
 function addSessionApkzi() {

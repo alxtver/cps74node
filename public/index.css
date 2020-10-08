@@ -902,8 +902,17 @@ th {
   user-select: none;
 }
 
-.assemblyCont {}
-
 .assemblytable td {
   padding: 0.5rem;
+}
+
+.previousButton {
+  height: 8rem;
+  width: 8rem;
+}
+
+.nextButton {
+  height: 8rem;
+  width: 8rem;
+  float: right;
 }

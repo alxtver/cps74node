@@ -34,6 +34,7 @@ function loadPage() {
     })
   postData('/assembly/firstPC')
     .then((data) => {
+      document.getElementById('PreviousPC').style.display = 'none'
       CreateTableFromJSON(data, function () {
         painting()
         document.getElementById('overlay').style.display = 'none'
@@ -81,7 +82,7 @@ function TablePc(pc) {
 
   td = document.createElement("td")
   td.innerHTML = pc.serial_number
-  td.id = pc.serial_number
+  td.id = 'serial_number'
   td.style.cssText = 'font-size: 1.5rem;background-color:' + pc.back_color
   tr.appendChild(td)
   insCell('', tr, pc.arm, 'up', '', false)
@@ -296,4 +297,32 @@ function insCell(unit, parrent, html = '', classN, id, contentEditable, dataset)
       cell.dataset[key] = value
     }
   }
+}
+
+function getNextPC() {
+  const serialNumber = document.getElementById('serial_number').innerHTML
+  const serialNumberPlusOne = plusOne(serialNumber)
+  const select = document.getElementById('serials')
+  const lastPCSerialNumber = select.options[select.options.length-1].value
+  if (lastPCSerialNumber != serialNumber) {
+    getPC(serialNumberPlusOne)
+  }
+  if (serialNumberPlusOne == lastPCSerialNumber) {
+    document.getElementById('NextPC').style.display = 'none'
+  }
+  document.getElementById('PreviousPC').style.display = 'inline'
+}
+
+function getPreviousPC() {
+  const serialNumber = document.getElementById('serial_number').innerHTML
+  const serialNumberMinusOne = minusOne(serialNumber)
+  const select = document.getElementById('serials')
+  const firstPCSerialNumber = select.options[0].value
+  if (firstPCSerialNumber != serialNumber) {
+    getPC(serialNumberMinusOne)
+  }
+  if (serialNumberMinusOne == firstPCSerialNumber) {
+    document.getElementById('PreviousPC').style.display = 'none'
+  }
+  document.getElementById('NextPC').style.display = 'inline'
 }
