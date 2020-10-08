@@ -4,36 +4,39 @@
 <div id="PC" class="mt-4 assemblyCont"></div>
 
 <div class="popup-wrapper">
-    <input type="checkbox" class="popup-checkbox" id="popupCheckboxOne">
-    <div class="popup">
-        <div class="popup-content">
-            <label for="popupCheckboxOne" class="popup-closer">&times;</label>
-            <p id="oldNumber" class="alert alert-danger mt-1"></p>
-            <input id="hiddInp" type="hidden" value="">
-        </div>
+  <input type="checkbox" class="popup-checkbox" id="popupCheckboxOne">
+  <div class="popup">
+    <div class="popup-content">
+      <label for="popupCheckboxOne" class="popup-closer">&times;</label>
+      <p id="oldNumber" class="alert alert-danger mt-1"></p>
+      <input id="hiddInp" type="hidden" value="">
     </div>
+  </div>
 </div>
 <input type="hidden" id="hidd_id" value="0">
 <input type="hidden" id="hidd_obj" value="0">
 <input type="hidden" id="hidd_unit" value="0">
 
-<button id="PreviousPC" onclick="getPreviousPC()" class="btn btn-dark previousButton"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>
-<button id="NextPC" onclick="getNextPC()" class="btn btn-dark nextButton"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>
+<button id="PreviousPC" onclick="getPreviousPC()" class="btn btn-dark previousButton"><i class="fa fa-chevron-left"
+    aria-hidden="true"></i></button>
+<button id="NextPC" onclick="getNextPC()" class="btn btn-dark nextButton"><i class="fa fa-chevron-right"
+    aria-hidden="true"></i></button>
 
 <button id="soundOn" onclick="setSoundSessionOff()" class="btn btn-dark soundButton"><i
-        class="fa fa-microphone"></i></button>
+    class="fa fa-microphone"></i></button>
 <button id="soundOff" onclick="setSoundSessionOn()" hidden="true" class="btn btn-dark soundButtonSlash"><i
-        class="fa fa-microphone-slash"></i></button>
+    class="fa fa-microphone-slash"></i></button>
 
 <div id="overlay">
-    <div class="spinner " id="spinner">
-        <div class="rect1"></div>
-        <div class="rect2"></div>
-        <div class="rect3"></div>
-        <div class="rect4"></div>
-        <div class="rect5"></div>
-    </div>
+  <div class="spinner " id="spinner">
+    <div class="rect1"></div>
+    <div class="rect2"></div>
+    <div class="rect3"></div>
+    <div class="rect4"></div>
+    <div class="rect5"></div>
+  </div>
 </div>
 <script>
-    loadPage()
+  loadPage()
+  
 </script>

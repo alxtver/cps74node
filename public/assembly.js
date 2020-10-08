@@ -15,7 +15,18 @@ document.addEventListener("DOMContentLoaded", function () {
   snSelect.addEventListener('change', (e) => {
     getPC(e.target.value)
   })
+
+
 })
+
+document.onkeydown = function (e) {
+  e = e || window.event
+  if (e.ctrlKey && e.keyCode == 39) {
+    getNextPC()
+  } else if (e.ctrlKey && e.keyCode == 37) {
+    getPreviousPC()
+  }
+}
 
 function loadPage() {
   postData('/assembly/serialNumbers')
@@ -63,7 +74,7 @@ function CreateTableFromJSON(data, callback) {
 
   let divCont = document.createElement("div")
   divCont.id = data._id
-  divCont.className = "pcCard mb-3"
+  divCont.className = "pcCardAssembly mb-3"
   divCont.style.cssText = '-webkit-box-shadow: 0 30px 60px 0' + data.back_color + ';box-shadow: 0 30px 60px 0' + data.back_color
   divContainer.appendChild(divCont);
   divCont.innerHTML = ""
@@ -303,9 +314,10 @@ function getNextPC() {
   const serialNumber = document.getElementById('serial_number').innerHTML
   const serialNumberPlusOne = plusOne(serialNumber)
   const select = document.getElementById('serials')
-  const lastPCSerialNumber = select.options[select.options.length-1].value
+  const lastPCSerialNumber = select.options[select.options.length - 1].value
   if (lastPCSerialNumber != serialNumber) {
     getPC(serialNumberPlusOne)
+    select.value = serialNumberPlusOne
   }
   if (serialNumberPlusOne == lastPCSerialNumber) {
     document.getElementById('NextPC').style.display = 'none'
@@ -320,6 +332,7 @@ function getPreviousPC() {
   const firstPCSerialNumber = select.options[0].value
   if (firstPCSerialNumber != serialNumber) {
     getPC(serialNumberMinusOne)
+    select.value = serialNumberMinusOne
   }
   if (serialNumberMinusOne == firstPCSerialNumber) {
     document.getElementById('PreviousPC').style.display = 'none'
