@@ -49,6 +49,7 @@ function loadPage() {
       CreateTableFromJSON(data, function () {
         painting()
         document.getElementById('overlay').style.display = 'none'
+        
         document.querySelectorAll('[data-obj="1"]')[0].focus()
       })
     })
@@ -166,16 +167,21 @@ function TablePc(pc) {
 }
 
 function painting() {
-  let nameCells = document.querySelectorAll('td.name')
-  let snCells = document.querySelectorAll('td.serial_number')
+  const nameCells = document.querySelectorAll('td.name')
+  const snCells = document.querySelectorAll('td.serial_number')
+  const status = document.getElementById('status')
+  status.style.background = 'green'
+  status.innerHTML = "OK!"
   for (const cell of nameCells) {
     if (cell.innerHTML == 'Н/Д') {
-      cell.style.backgroundColor = 'coral'
+      cell.style.backgroundColor = 'coral'      
     }
   }
   for (const cell of snCells) {
     if (cell.innerHTML == '') {
       cell.style.backgroundColor = 'darkgray'
+      status.style.background = 'red'
+      status.innerHTML = "not OK!"
     }
   }
 }
@@ -314,9 +320,33 @@ function insCell(unit, parrent, html = '', classN, id, contentEditable, dataset)
   }
 }
 
-function getNextPC() {
+function nextPC(serialNumber) {
+  const select = document.getElementById('serials')
+  let nextPCIndex
+  for (let i = 0; i < select.length; i++) {
+    if (select[i].value == serialNumber) {
+      nextPCIndex = ++i
+      break
+    }
+  }
+  return (nextPCIndex >= select.length) ? null : select[nextPCIndex].value
+}
+
+function previousPC(serialNumber) {
+  const select = document.getElementById('serials')
+  let NextPCIndex
+  for (let i = 0; i < select.length; i++) {
+    if (select[i].value == serialNumber) {
+      NextPCIndex = --i
+      break
+    }
+  }
+  return (NextPCIndex < 0) ? null : select[NextPCIndex].value
+}
+
+function getNextPC() {  
   const serialNumber = document.getElementById('serial_number').innerHTML
-  const serialNumberPlusOne = plusOne(serialNumber)
+  const serialNumberPlusOne = nextPC(serialNumber)
   const select = document.getElementById('serials')
   const lastPCSerialNumber = select.options[select.options.length - 1].value
   const nextButton = document.getElementById('NextPC')
@@ -336,7 +366,7 @@ function getNextPC() {
 
 function getPreviousPC() {
   const serialNumber = document.getElementById('serial_number').innerHTML
-  const serialNumberMinusOne = minusOne(serialNumber)
+  const serialNumberMinusOne = previousPC(serialNumber)
   const select = document.getElementById('serials')
   const firstPCSerialNumber = select.options[0].value
   const previousButton = document.getElementById('PreviousPC')

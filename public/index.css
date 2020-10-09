@@ -949,7 +949,10 @@ th {
 }
 
 .status {
-  background-color: indianred;
+  border-radius: 5px;
+  background-color: rgb(92, 205, 98);
   margin: auto;
-
+  text-align: center;
+  box-shadow: rgb(53 56 53) 5px 5px 5px 2px;
+  font-size: 25px;
 }
