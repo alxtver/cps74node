@@ -434,7 +434,15 @@ input[type=text]:placeholder {
   position: relative;
   padding: 0px;
   margin-bottom: 3rem;
-  animation-name: spin;
+}
+
+.pcCardAssemblyNext {
+  animation-name: slideNext;
+  animation-duration: .5s;
+}
+
+.pcCardAssemblyPrevious {
+  animation-name: slidePrevious;
   animation-duration: .5s;
 }
 
@@ -446,6 +454,26 @@ input[type=text]:placeholder {
 
   75% {
     transform: rotate(-2deg);
+  }
+}
+
+@keyframes slideNext {
+  50% {
+    transform: translate(-100vw, 0);
+  }
+
+  51% {
+    transform: translate(100vw, 0);
+  }
+}
+
+@keyframes slidePrevious {
+  50% {
+    transform: translate(100vw, 0);
+  }
+
+  51% {
+    transform: translate(-100vw, 0);
   }
 }
 

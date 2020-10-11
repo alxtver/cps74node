@@ -56,7 +56,7 @@ function loadPage() {
 
 
 
-function getPC(serialNumberPC) {
+function getPC(serialNumberPC, metod) {
   const data = {
     serialNumberPC: serialNumberPC
   }
@@ -66,6 +66,16 @@ function getPC(serialNumberPC) {
         painting()
         document.getElementById('overlay').style.display = 'none'
         document.querySelectorAll('[data-obj="1"]')[0].focus()
+        const card = document.querySelector('.pcCardAssembly')
+        const audio = {};
+        audio["slide"] = new Audio();
+        audio["slide"].src = "/sounds/wave.mp3"
+        audio["slide"].play()
+        if (metod == 'next') {
+          card.classList.add('pcCardAssemblyNext')
+        } else {
+          card.classList.add('pcCardAssemblyPrevious')
+        }
       })
     })
 }
@@ -344,6 +354,8 @@ function previousPC(serialNumber) {
 }
 
 function getNextPC() {
+
+  document.body.style.overflow = 'hidden';
   const serialNumber = document.getElementById('serial_number').innerHTML
   const serialNumberPlusOne = nextPC(serialNumber)
   const select = document.getElementById('serials')
@@ -354,13 +366,14 @@ function getNextPC() {
     nextButton.classList.remove("buttonsActive")
   }, 300);
   if (lastPCSerialNumber != serialNumber) {
-    getPC(serialNumberPlusOne)
+    getPC(serialNumberPlusOne, 'next')
     select.value = serialNumberPlusOne
   }
   if (serialNumberPlusOne == lastPCSerialNumber) {
     nextButton.style.display = 'none'
   }
   document.getElementById('PreviousPC').style.display = 'inline'
+
 }
 
 function getPreviousPC() {
@@ -374,7 +387,7 @@ function getPreviousPC() {
     previousButton.classList.remove("buttonsActive")
   }, 300);
   if (firstPCSerialNumber != serialNumber) {
-    getPC(serialNumberMinusOne)
+    getPC(serialNumberMinusOne, 'previous')
     select.value = serialNumberMinusOne
   }
   if (serialNumberMinusOne == firstPCSerialNumber) {
