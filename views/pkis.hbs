@@ -1,109 +1,114 @@
 <script src="/pki.js"></script>
-<h1>ПКИ</h1>
-<button class="btn btn-dark" style="margin-bottom: 1rem" onclick="location.href='/add';">Добавить ПКИ</button>
-<button id="excelImport" class="btn btn-outline-success" data-toggle="modal" data-target="#modalSort"
-  style="margin-bottom: 1rem">Экспорт в Excel</button>
-<button id="searchAndReplace" class="btn btn-outline-success" data-toggle="modal" data-target="#modalSearchAndReplace"
-  style="margin-bottom: 1rem">Поиск и замена</button>
+<div class="container">
+  <h1>ПКИ</h1>
+  <button class="btn btn-dark" style="margin-bottom: 1rem" onclick="location.href='/add';">Добавить ПКИ</button>
+  <button id="excelImport" class="btn btn-outline-success" data-toggle="modal" data-target="#modalSort"
+    style="margin-bottom: 1rem">Экспорт в Excel</button>
+  <button id="searchAndReplace" class="btn btn-outline-success" data-toggle="modal" data-target="#modalSearchAndReplace"
+    style="margin-bottom: 1rem">Поиск и замена</button>
 
-<select id="type_select_navbar" class="custom-select mt-2 mb-2"></select>
+  <select id="type_select_navbar" class="custom-select mt-2 mb-2"></select>
 
-<div class="form-group">
-  <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Поиск...">
-</div>
-{{!-- модальное окно --}}
-<div class="modal fade" id="modalDel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Удалить ПКИ?</h5>
-
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form>
-        <input type="hidden" name="_csrf" value="{{csrf}}">
-        <input type="hidden" name="id" id="hidId">
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Закрыть</button>
-          <button type="button" id="btnSubmit" onclick="delBtn()" data-dismiss="modal"
-            class="btn btn-danger">Удалить</button>
-        </div>
-      </form>
-    </div>
+  <div class="form-group">
+    <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Поиск...">
   </div>
-</div>
+  {{!-- модальное окно --}}
+  <div class="modal fade" id="modalDel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Удалить ПКИ?</h5>
 
-<div class="modal fade" id="modalSort" tabindex="-1" role="dialog" aria-labelledby="modalSortLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalSortLabel">Выбор сортировки</h5>
-
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-      <form method="GET" action="/pkis/excelImport">
-        <select name="sortSelect" class="custom-select type-select mt-3 mb-3" id="sortSelect">
-          <option value="byType">По типу</option>
-          <option value="byPC">По ПЭВМ</option>
-        </select>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" id="close2" data-dismiss="modal">Назад</button>
-          <button onclick="modalHide()" class="btn btn-outline-success" id="btnSort">Экспорт</button>
-
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="modalSearchAndReplace" tabindex="-1" aria-labelledby="modalSortLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalSortLabel">Поиск и замена</h5>
-
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-      <form method="POST" action="/pkis/searchAndReplace">
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="inputGroup-sizing-default">Найти</span>
+        <form>
+          <input type="hidden" name="_csrf" value="{{csrf}}">
+          <input type="hidden" name="id" id="hidId">
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Закрыть</button>
+            <button type="button" id="btnSubmit" onclick="delBtn()" data-dismiss="modal"
+              class="btn btn-danger">Удалить</button>
           </div>
-          <input name="search" type="text" class="form-control" aria-label="Default"
-            aria-describedby="inputGroup-sizing-default">
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalSort" tabindex="-1" role="dialog" aria-labelledby="modalSortLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalSortLabel">Выбор сортировки</h5>
+
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="inputGroup-sizing-default">Заменить на</span>
+        <form method="GET" action="/pkis/excelImport">
+          <select name="sortSelect" class="custom-select type-select mt-3 mb-3" id="sortSelect">
+            <option value="byType">По типу</option>
+            <option value="byPC">По ПЭВМ</option>
+          </select>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" id="close2" data-dismiss="modal">Назад</button>
+            <button onclick="modalHide()" class="btn btn-outline-success" id="btnSort">Экспорт</button>
+
           </div>
-          <input name="replace" type="text" class="form-control" aria-label="Default"
-            aria-describedby="inputGroup-sizing-default">
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalSearchAndReplace" tabindex="-1" aria-labelledby="modalSortLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalSortLabel">Поиск и замена</h5>
+
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
-        <input type="hidden" name="_csrf" value="{{csrf}}">
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" id="close1" data-dismiss="modal">Назад</button>
-          <button class="btn btn-outline-success" data-dismiss="modal" id="btnSearchAndReplace">Поиск и замена</button>
-        </div>
-      </form>
+        <form method="POST" action="/pkis/searchAndReplace">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-default">Найти</span>
+            </div>
+            <input name="search" type="text" class="form-control" aria-label="Default"
+              aria-describedby="inputGroup-sizing-default">
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-default">Заменить на</span>
+            </div>
+            <input name="replace" type="text" class="form-control" aria-label="Default"
+              aria-describedby="inputGroup-sizing-default">
+          </div>
+          <input type="hidden" name="_csrf" value="{{csrf}}">
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" id="close1" data-dismiss="modal">Назад</button>
+            <button class="btn btn-outline-success" data-dismiss="modal" id="btnSearchAndReplace">Поиск и
+              замена</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="showData"></div>
+
+  <input hidden="true" id="temp" value="0"></input>
+
+  <div id="overlay">
+    <div class="spinner " id="spinner">
+      <div class="rect1"></div>
+      <div class="rect2"></div>
+      <div class="rect3"></div>
+      <div class="rect4"></div>
+      <div class="rect5"></div>
     </div>
   </div>
 </div>
 
-<div id="showData"></div>
-
-<input hidden="true" id="temp" value="0"></input>
-
-<div id="overlay">
-  <div class="spinner " id="spinner">
-    <div class="rect1"></div>
-    <div class="rect2"></div>
-    <div class="rect3"></div>
-    <div class="rect4"></div>
-    <div class="rect5"></div>
-  </div>
-</div>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {

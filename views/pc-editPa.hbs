@@ -1,53 +1,55 @@
 <script src="/pcPa.js"></script>
 <script type="text/javascript" src="/lib/huebee/huebee.pkgd.js"></script>
-<link rel="stylesheet" href="/lib/huebee/huebee.css" type="text/css"/>
+<link rel="stylesheet" href="/lib/huebee/huebee.css" type="text/css" />
+<div class="container">
+  <h1>Редактирование {{pc.serial_number}}</h1>
+  <div class="tableContent">
+    <form action="/pcPa">
+      <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-sm">Проект</span>
+        </div>
+        <input type="text" id="part" name="part" class="form-control" aria-label="Small"
+          aria-describedby="inputGroup-sizing-sm" value="{{pc.part}}" required>
 
-<h1>Редактирование {{pc.serial_number}}</h1>
-<div class="tableContent">
-  <form action="/pcPa">
-    <div class="input-group input-group-sm mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text" id="inputGroup-sizing-sm">Проект</span>
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-sm">ФДШИ</span>
+        </div>
+        <input type="text" id="fdsi" name="fdsi" class="form-control" aria-label="Small"
+          aria-describedby="inputGroup-sizing-sm" value="{{pc.fdsi}}" required>
+
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-sm">Заводской номер</span>
+        </div>
+        <input type="text" id="serial_number" name="serial_number" class="form-control" aria-label="Small"
+          aria-describedby="inputGroup-sizing-sm" value="{{pc.serial_number}}" required>
       </div>
-      <input type="text" id="part" name="part" class="form-control" aria-label="Small"
-        aria-describedby="inputGroup-sizing-sm" value="{{pc.part}}" required>
+      <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-sm">АРМ</span>
+        </div>
+        <input type="text" id="arm" name="arm" class="form-control" aria-label="Small"
+          aria-describedby="inputGroup-sizing-sm" value="{{pc.arm}}" required>
 
-      <div class="input-group-prepend">
-        <span class="input-group-text" id="inputGroup-sizing-sm">ФДШИ</span>
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-sm">Исполнение</span>
+        </div>
+        <input type="text" id="execution" name="execution" class="form-control" aria-label="Small"
+          aria-describedby="inputGroup-sizing-sm" value="{{pc.execution}}">
+
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-sm">Приложение</span>
+        </div>
+        <input type="text" id="attachment" name="attachment" class="form-control" aria-label="Small"
+          aria-describedby="inputGroup-sizing-sm" value="{{pc.attachment}}">
       </div>
-      <input type="text" id="fdsi" name="fdsi" class="form-control" aria-label="Small"
-        aria-describedby="inputGroup-sizing-sm" value="{{pc.fdsi}}" required>
+      <div id="PC"></div>
 
-      <div class="input-group-prepend">
-        <span class="input-group-text" id="inputGroup-sizing-sm">Заводской номер</span>
-      </div>
-      <input type="text" id="serial_number" name="serial_number" class="form-control" aria-label="Small"
-        aria-describedby="inputGroup-sizing-sm" value="{{pc.serial_number}}" required>
-    </div>
-    <div class="input-group input-group-sm mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text" id="inputGroup-sizing-sm">АРМ</span>
-      </div>
-      <input type="text" id="arm" name="arm" class="form-control" aria-label="Small"
-        aria-describedby="inputGroup-sizing-sm" value="{{pc.arm}}" required>
+    </form>
 
-      <div class="input-group-prepend">
-        <span class="input-group-text" id="inputGroup-sizing-sm">Исполнение</span>
-      </div>
-      <input type="text" id="execution" name="execution" class="form-control" aria-label="Small"
-        aria-describedby="inputGroup-sizing-sm" value="{{pc.execution}}">
-
-      <div class="input-group-prepend">
-        <span class="input-group-text" id="inputGroup-sizing-sm">Приложение</span>
-      </div>
-      <input type="text" id="attachment" name="attachment" class="form-control" aria-label="Small"
-        aria-describedby="inputGroup-sizing-sm" value="{{pc.attachment}}">
-    </div>
-    <div id="PC"></div>
-
-  </form>
-
+  </div>
 </div>
+
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {

@@ -1,36 +1,39 @@
 <script src="/apkzi.js"></script>
-<h1>АПКЗИ</h1>
+<div class="container">
+  <h1>АПКЗИ</h1>
 
-<button class="btn btn-dark" style="margin-bottom: 1rem" onclick="location.href='/add/apkzi';">Добавить АПКЗИ</button>
+  <button class="btn btn-dark" style="margin-bottom: 1rem" onclick="location.href='/add/apkzi';">Добавить АПКЗИ</button>
 
-{{!-- модальное окно --}}
-<div class="modal fade" id="modalDel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Удалить АПКЗИ?</h5>
+  {{!-- модальное окно --}}
+  <div class="modal fade" id="modalDel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Удалить АПКЗИ?</h5>
 
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form>
-        <input type="hidden" name="_csrf" value="{{csrf}}">
-        <input type="hidden" name="id" id="hidId">
-        <input type="hidden" name="part" id="hidPart">
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Закрыть</button>
-          <button type="button" id="btnSubmit" onclick="delBtn()" data-dismiss="modal"
-            class="btn btn-danger">Удалить</button>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-      </form>
+        <form>
+          <input type="hidden" name="_csrf" value="{{csrf}}">
+          <input type="hidden" name="id" id="hidId">
+          <input type="hidden" name="part" id="hidPart">
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Закрыть</button>
+            <button type="button" id="btnSubmit" onclick="delBtn()" data-dismiss="modal"
+              class="btn btn-danger">Удалить</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
+  <div id="showData"></div>
 </div>
-<div id="showData"></div>
+
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
     load_data()
   })
 </script>

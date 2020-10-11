@@ -1,73 +1,77 @@
 <script src="/equipment.js"></script>
-<h1>Добавление оборудования</h1>
+<div class="container">
+  <h1>Добавление оборудования</h1>
 
-<div class="wrapper fadeInDown">
-  <div id="formContentSP">
-    <div class="error_message">
-      {{#if insertError}}
-      <p class="alert alert-danger mt-1">{{insertError}}</p>
-      <audio src="/sounds/alert.mp3" autoplay="autoplay"></audio>
-      {{/if}}
+  <div class="wrapper fadeInDown">
+    <div id="formContentSP">
+      <div class="error_message">
+        {{#if insertError}}
+        <p class="alert alert-danger mt-1">{{insertError}}</p>
+        <audio src="/sounds/alert.mp3" autoplay="autoplay"></audio>
+        {{/if}}
+      </div>
+
+      <form id="add" action="/equipment" autocomplete="off" method="GET" class="needs-validation" novalidate>
+
+        <div class="input-field">
+          <input id="ean_code" name="ean_code" type="text" class="form-control" aria-describedby="eanlHelp"
+            placeholder="Штрих-код" required>
+          <div class="invalid-feedback">
+            Введите Штрих-код!
+          </div>
+        </div>
+
+        <div class="input-field">
+          <input id="type_pki" name="type_pki" type="text" class="form-control" aria-describedby="pkilHelp"
+            placeholder="Тип ПКИ" required>
+          <div class="invalid-feedback">
+            Введите тип ПКИ!
+          </div>
+        </div>
+
+        <div class="input-field">
+          <input id="vendor" name="vendor" type="text" class="form-control" aria-describedby="vendorHelp"
+            placeholder="Производитель" required>
+          <div class="invalid-feedback">
+            Введите Производителя!
+          </div>
+        </div>
+
+        <div class="input-field">
+          <input id="model" name="model" type="text" class="form-control" aria-describedby="modelHelp"
+            placeholder="Модель" required>
+          <div class="invalid-feedback">
+            Введите Модель!
+          </div>
+        </div>
+
+        <div class="input-field">
+          <input id="country" name="country" type="text" class="form-control" placeholder="Страна производства"
+            required>
+          <div class="invalid-feedback">
+            Введите страну!
+          </div>
+        </div>
+
+        <div id="pki_sp_table1"></div>
+        <div id="pki_sp_table2"></div>
+
+        <div class="mb-3" style="text-align: left;">
+          <input type="button" id="add-row" onclick="addRow()" class="add-row btn btn-outline-primary"
+            value="Добавить строку">
+          <input type="button" id="delete-row" onclick="delRow()" class="delete-row btn btn-outline-danger"
+            value="Удалить строку">
+          <input type="button" id="copy_table" class="delete-row btn btn-outline-success" value="Копировать таблицу">
+        </div>
+
+        <input type="hidden" name="_csrf" value="{{csrf}}">
+        <button type="button" onclick="submitEq()" class="btn btn-outline-success">Добавить оборудование</button>
+        <input type="button" value="Назад" class="btn btn-outline-primary" onclick="window.location='/equipment';">
+      </form>
     </div>
-
-    <form id="add" action="/equipment" autocomplete="off" method="GET" class="needs-validation" novalidate>
-
-      <div class="input-field">
-        <input id="ean_code" name="ean_code" type="text" class="form-control" aria-describedby="eanlHelp"
-          placeholder="Штрих-код" required>
-        <div class="invalid-feedback">
-          Введите Штрих-код!
-        </div>
-      </div>
-
-      <div class="input-field">
-        <input id="type_pki" name="type_pki" type="text" class="form-control" aria-describedby="pkilHelp"
-          placeholder="Тип ПКИ" required>
-        <div class="invalid-feedback">
-          Введите тип ПКИ!
-        </div>
-      </div>
-
-      <div class="input-field">
-        <input id="vendor" name="vendor" type="text" class="form-control" aria-describedby="vendorHelp"
-          placeholder="Производитель" required>
-        <div class="invalid-feedback">
-          Введите Производителя!
-        </div>
-      </div>
-
-      <div class="input-field">
-        <input id="model" name="model" type="text" class="form-control" aria-describedby="modelHelp"
-          placeholder="Модель" required>
-        <div class="invalid-feedback">
-          Введите Модель!
-        </div>
-      </div>
-
-      <div class="input-field">
-        <input id="country" name="country" type="text" class="form-control" placeholder="Страна производства" required>
-        <div class="invalid-feedback">
-          Введите страну!
-        </div>
-      </div>
-
-      <div id="pki_sp_table1"></div>
-      <div id="pki_sp_table2"></div>
-
-      <div class="mb-3" style="text-align: left;">
-        <input type="button" id="add-row" onclick="addRow()" class="add-row btn btn-outline-primary"
-          value="Добавить строку">
-        <input type="button" id="delete-row" onclick="delRow()" class="delete-row btn btn-outline-danger"
-          value="Удалить строку">
-        <input type="button" id="copy_table" class="delete-row btn btn-outline-success" value="Копировать таблицу">
-      </div>
-
-      <input type="hidden" name="_csrf" value="{{csrf}}">
-      <button type="button" onclick="submitEq()" class="btn btn-outline-success">Добавить оборудование</button>
-      <input type="button" value="Назад" class="btn btn-outline-primary" onclick="window.location='/equipment';">
-    </form>
   </div>
 </div>
+
 
 
 <script>

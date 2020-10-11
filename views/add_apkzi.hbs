@@ -5,52 +5,57 @@
 
     <form action="/add/apkzi" method="POST" class="needs-validation" novalidate>
 
-  <div class="input-field">
-    <input id="fdsi" name="fdsi" type="text" class="form-control" aria-describedby="modelHelp" placeholder="ФДШИ" required>
-    <div class="invalid-feedback">
-      Введите ФДШИ!
-    </div>
-  </div>
+      <div class="input-field">
+        <input id="fdsi" name="fdsi" type="text" class="form-control" aria-describedby="modelHelp" placeholder="ФДШИ"
+          required>
+        <div class="invalid-feedback">
+          Введите ФДШИ!
+        </div>
+      </div>
 
-  <div class="input-field">
-    <input id="apkzi_name" name="apkzi_name" type="text" class="form-control" aria-describedby="pkiHelp" placeholder="Наименование АПКЗИ" required>
-    <div class="invalid-feedback">
-      Введите наименование АПКЗИ!
-    </div>
-  </div>
+      <div class="input-field">
+        <input id="apkzi_name" name="apkzi_name" type="text" class="form-control" aria-describedby="pkiHelp"
+          placeholder="Наименование АПКЗИ" required>
+        <div class="invalid-feedback">
+          Введите наименование АПКЗИ!
+        </div>
+      </div>
 
-  <div class="input-field">
-    <input id="kont_name" name="kont_name" type="text" class="form-control" aria-describedby="vendorHelp" placeholder="Наименование контроллера СЗИ" required>
-    <div class="invalid-feedback">
-      Введите наименование контроллера СЗИ!
-    </div>
-  </div>
+      <div class="input-field">
+        <input id="kont_name" name="kont_name" type="text" class="form-control" aria-describedby="vendorHelp"
+          placeholder="Наименование контроллера СЗИ" required>
+        <div class="invalid-feedback">
+          Введите наименование контроллера СЗИ!
+        </div>
+      </div>
 
-  <div class="input-field">
-    <input id="zav_number" name="zav_number" type="text" class="form-control" aria-describedby="modelHelp" placeholder="Заводской номер" required>
-    <div class="invalid-feedback">
-      Введите заводской номер!
-    </div>
-  </div>
+      <div class="input-field">
+        <input id="zav_number" name="zav_number" type="text" class="form-control" aria-describedby="modelHelp"
+          placeholder="Заводской номер" required>
+        <div class="invalid-feedback">
+          Введите заводской номер!
+        </div>
+      </div>
 
-  <div class="input-field">
-    <input id="kontr_zav_number" name="kontr_zav_number" type="text" class="form-control"  placeholder="Заводской номер контроллера" required>
-    <div class="invalid-feedback">
-      Введите заводской номер контроллера!
-    </div>
-  </div>
+      <div class="input-field">
+        <input id="kontr_zav_number" name="kontr_zav_number" type="text" class="form-control"
+          placeholder="Заводской номер контроллера" required>
+        <div class="invalid-feedback">
+          Введите заводской номер контроллера!
+        </div>
+      </div>
 
-  <div class="input-field">
-    <input id="part" name="part" type="text" class="form-control" placeholder="Название партии" required>
-    <div class="invalid-feedback">
-      Введите название партии!
-    </div>
-  </div>
+      <div class="input-field">
+        <input id="part" name="part" type="text" class="form-control" placeholder="Название партии" required>
+        <div class="invalid-feedback">
+          Введите название партии!
+        </div>
+      </div>
 
 
-  <input type="hidden" name="_csrf" value="{{csrf}}">
-  <button type="submit" onclick="return addSessionApkzi();" class="btn btn-primary btn-dark">Добавить АПКЗИ</button>
-</form>
+      <input type="hidden" name="_csrf" value="{{csrf}}">
+      <button type="submit" onclick="return addSessionApkzi();" class="btn btn-primary btn-dark">Добавить АПКЗИ</button>
+    </form>
 
   </div>
 </div>

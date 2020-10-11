@@ -956,3 +956,15 @@ th {
   box-shadow: rgb(53 56 53) 5px 5px 5px 2px;
   font-size: 25px;
 }
+
+.assemblyCont {
+  margin-left: 3rem;
+  margin-right: 3rem;
+  margin-top: 5vh;
+}
+
+@media screen and (min-height: 1500px) {
+  .assemblyCont {
+    margin-top: 25vh;
+  }
+}

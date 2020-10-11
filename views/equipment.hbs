@@ -1,20 +1,23 @@
 <script src="/equipment.js"></script>
-<h1>Оборудование</h1>
+<div class="container">
+  <h1>Оборудование</h1>
 
-<button onclick="location.href='equipment/add';" class="btn btn-outline-success mb-1">Новое оборудование</button>
-<div class="form-group">
-  <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Штрих-код">
+  <button onclick="location.href='equipment/add';" class="btn btn-outline-success mb-1">Новое оборудование</button>
+  <div class="form-group">
+    <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Штрих-код">
+  </div>
+
+  <select id="type_select_navbar" class="custom-select mt-2 mb-2"></select>
+
+  <div id="showData"></div>
 </div>
 
-<select id="type_select_navbar" class="custom-select mt-2 mb-2"></select>
-
-<div id="showData"></div>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     load_data()
     let selectType = document.getElementById('type_select_navbar')
-    selectType.addEventListener('change', (e)=> {
+    selectType.addEventListener('change', (e) => {
       load_data(e.target.value)
     })
     let searchInput = document.getElementById('search')

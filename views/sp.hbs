@@ -1,23 +1,27 @@
 <script src="/sp.js"></script>
-<h1>ПКИ</h1>
-<button class="btn btn-dark mb-1" onclick="location.href='/add';">Добавить ПКИ</button>
-<button id="excelImport" onclick="location.href='/sp/excelExport'" class="btn btn-outline-success mb-1">Акт</button>
-<button id="excelImport1" onclick="location.href='/sp/excelExport1'" class="btn btn-outline-success mb-1">Заключение</button>
-<div class="form-group">
-  <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Поиск...">
-  <select id="type_select_navbar" class="custom-select mt-2">
-    {{!-- <option value="part">Выберите проект</option> --}}
-  </select>
+<div class="container">
+  <h1>ПКИ</h1>
+  <button class="btn btn-dark mb-1" onclick="location.href='/add';">Добавить ПКИ</button>
+  <button id="excelImport" onclick="location.href='/sp/excelExport'" class="btn btn-outline-success mb-1">Акт</button>
+  <button id="excelImport1" onclick="location.href='/sp/excelExport1'"
+    class="btn btn-outline-success mb-1">Заключение</button>
+  <div class="form-group">
+    <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Поиск...">
+    <select id="type_select_navbar" class="custom-select mt-2">
+      {{!-- <option value="part">Выберите проект</option> --}}
+    </select>
+  </div>
+
+  <div id="showData"></div>
+
+
+  <input hidden="true" id="temp" value="0"></input>
+  <input type="hidden" name="id" id="hidId">
 </div>
 
-<div id="showData"></div>
-
-
-<input hidden="true" id="temp" value="0"></input>
-<input type="hidden" name="id" id="hidId">
 
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
     load_data()
 
     let searchInput = document.getElementById('search')

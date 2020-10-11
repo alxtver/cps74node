@@ -1,43 +1,46 @@
 <script src="/sp.js"></script>
-<h1>Редактировать {{pki.vendor}} {{pki.model}}</h1>
+<div class="container">
+  <h1>Редактировать {{pki.vendor}} {{pki.model}}</h1>
 
-<div class="wrapper">
-  <div id="formContentSP">
-    <!-- Tabs Titles -->
-    <div>{{pki.type_pki}} {{pki.vendor}} {{pki.model}} № {{pki.serial_number}}</div>
-    <div>Страна производитель: {{pki.country}}, тема: {{pki.part}}</div>
-    <hr>
-    <div class="input-group input-group-sm mb-1 padd_l_r">
-      <div class="input-group-prepend">
-        <span class="input-group-text" id="ean_span">Штрих-код</span>
+  <div class="wrapper">
+    <div id="formContentSP">
+      <!-- Tabs Titles -->
+      <div>{{pki.type_pki}} {{pki.vendor}} {{pki.model}} № {{pki.serial_number}}</div>
+      <div>Страна производитель: {{pki.country}}, тема: {{pki.part}}</div>
+      <hr>
+      <div class="input-group input-group-sm mb-1 padd_l_r">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="ean_span">Штрих-код</span>
+        </div>
+        <input value="{{pki.ean_code}}" id="ean_code" type="text" class="form-control" aria-label="Default"
+          aria-describedby="ean_span">
       </div>
-      <input value="{{pki.ean_code}}" id="ean_code" type="text" class="form-control" aria-label="Default"
-        aria-describedby="ean_span">
-    </div>
-    <div class="input-group input-group-sm mb-1 padd_l_r">
-      <div class="input-group-prepend">
-        <span class="input-group-text" id="ean_span">СЗЗ Тип 1</span>
+      <div class="input-group input-group-sm mb-1 padd_l_r">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="ean_span">СЗЗ Тип 1</span>
+        </div>
+        <input value="{{pki.szz1}}" placeholder="СЗЗ Тип 1" id="szz1" type="text" class="form-control"
+          aria-label="Default" aria-describedby="ean_span">
       </div>
-      <input value="{{pki.szz1}}" placeholder="СЗЗ Тип 1" id="szz1" type="text" class="form-control"
-        aria-label="Default" aria-describedby="ean_span">
-    </div>
-    <div class="form-check">
-      <input type="checkbox" class="form-check-input" id="viborka">
-      <label class="form-check-label" for="viborka">Выборка</label>
-    </div>
-    <form id="edit" action="/sp">
-      <input hidden="true" id="id" name="id" type="text" class="form-control" value="{{pki._id}}">
-      <div id="pki_sp_table"></div>
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="viborka">
+        <label class="form-check-label" for="viborka">Выборка</label>
+      </div>
+      <form id="edit" action="/sp">
+        <input hidden="true" id="id" name="id" type="text" class="form-control" value="{{pki._id}}">
+        <div id="pki_sp_table"></div>
 
-      <input type="hidden" name="_csrf" value="{{csrf}}">
-      <input type="hidden" name="id" id="pki_id" value="{{pki._id}}">
-      <div class="mt-5">
-        <button type="button" onclick="subSpPki()" class="btn btn-outline-success">Сохранить</button>
-        <input type="button" value="Назад" class="btn btn-outline-primary" onclick="window.location='/sp';">
-      </div>
-    </form>
+        <input type="hidden" name="_csrf" value="{{csrf}}">
+        <input type="hidden" name="id" id="pki_id" value="{{pki._id}}">
+        <div class="mt-5">
+          <button type="button" onclick="subSpPki()" class="btn btn-outline-success">Сохранить</button>
+          <input type="button" value="Назад" class="btn btn-outline-primary" onclick="window.location='/sp';">
+        </div>
+      </form>
+    </div>
   </div>
 </div>
+
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {

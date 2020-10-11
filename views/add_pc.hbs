@@ -1,62 +1,67 @@
 <script src="/pcPa.js"></script>
-<h1>Добавить ПЭВМ</h1>
-<div class="tableContent">
-<form action="/pcPa">
+<div class="container">
+  <h1>Добавить ПЭВМ</h1>
+  <div class="tableContent">
+    <form action="/pcPa">
 
-  <div class="input-group input-group-sm mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text" id="inputGroup-sizing-sm">Проект</span>
-    </div>
-    <input type="text" id="part" name="part" class="form-control" aria-label="Small"
-      aria-describedby="inputGroup-sizing-sm" required>
+      <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-sm">Проект</span>
+        </div>
+        <input type="text" id="part" name="part" class="form-control" aria-label="Small"
+          aria-describedby="inputGroup-sizing-sm" required>
 
-    <div class="input-group-prepend">
-      <span class="input-group-text" id="inputGroup-sizing-sm">ФДШИ</span>
-    </div>
-    <input type="text" id="fdsi" name="fdsi" class="form-control" aria-label="Small"
-      aria-describedby="inputGroup-sizing-sm" required>
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-sm">ФДШИ</span>
+        </div>
+        <input type="text" id="fdsi" name="fdsi" class="form-control" aria-label="Small"
+          aria-describedby="inputGroup-sizing-sm" required>
 
-    <div class="input-group-prepend">
-      <span class="input-group-text" id="inputGroup-sizing-sm">Заводской номер</span>
-    </div>
-    <input type="text" id="serial_number" name="serial_number" class="form-control" aria-label="Small"
-      aria-describedby="inputGroup-sizing-sm" required>
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-sm">Заводской номер</span>
+        </div>
+        <input type="text" id="serial_number" name="serial_number" class="form-control" aria-label="Small"
+          aria-describedby="inputGroup-sizing-sm" required>
 
+      </div>
+      <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-sm">АРМ</span>
+        </div>
+        <input type="text" id="arm" name="arm" class="form-control" aria-label="Small"
+          aria-describedby="inputGroup-sizing-sm" value="" required>
+
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-sm">Исполнение</span>
+        </div>
+        <input type="text" id="execution" name="execution" class="form-control" aria-label="Small"
+          aria-describedby="inputGroup-sizing-sm" value="">
+
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-sm">Приложение</span>
+        </div>
+        <input type="text" id="attachment" name="attachment" class="form-control" aria-label="Small"
+          aria-describedby="inputGroup-sizing-sm" value="">
+      </div>
+
+      <div id="pc_unit_table"></div>
+
+      <div id="system_case_unit_table"></div>
+      <input type="button" class="add-row btn btn-outline-primary" onclick="addRow()" value="Добавить строку">
+      <input type="button" class="delete-row btn btn-outline-danger" onclick="delRow()" value="Удалить строку">
+
+      <input type="hidden" name="_csrf" value="{{csrf}}">
+
+
+      <div class="mt-2 "><button type="submit" class="save_button btn btn-outline-success mb-2">Сохранить ПЭВМ</button>
+      </div>
+      <div class="mt-2 "><button type="submit" onclick="location.href='/pcPa'"
+          class="btn btn-outline-primary mt-2 save_button">Назад</button></div>
+
+    </form>
   </div>
-<div class="input-group input-group-sm mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text" id="inputGroup-sizing-sm">АРМ</span>
-      </div>
-      <input type="text" id="arm" name="arm" class="form-control" aria-label="Small"
-        aria-describedby="inputGroup-sizing-sm" value="" required>
-
-      <div class="input-group-prepend">
-        <span class="input-group-text" id="inputGroup-sizing-sm">Исполнение</span>
-      </div>
-      <input type="text" id="execution" name="execution" class="form-control" aria-label="Small"
-        aria-describedby="inputGroup-sizing-sm" value="">
-
-      <div class="input-group-prepend">
-        <span class="input-group-text" id="inputGroup-sizing-sm">Приложение</span>
-      </div>
-      <input type="text" id="attachment" name="attachment" class="form-control" aria-label="Small"
-        aria-describedby="inputGroup-sizing-sm" value="">
-    </div>
-
-  <div id="pc_unit_table"></div>
-
-  <div id="system_case_unit_table"></div>
-  <input type="button" class="add-row btn btn-outline-primary" onclick="addRow()" value="Добавить строку">
-  <input type="button" class="delete-row btn btn-outline-danger" onclick="delRow()" value="Удалить строку">
-
-  <input type="hidden" name="_csrf" value="{{csrf}}">
-
-
-  <div class="mt-2 "><button type="submit" class="save_button btn btn-outline-success mb-2">Сохранить ПЭВМ</button></div>
-  <div class="mt-2 "><button type="submit" onclick="location.href='/pcPa'" class="btn btn-outline-primary mt-2 save_button">Назад</button></div>
-
-</form>
 </div>
+
 
 <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", function () {
