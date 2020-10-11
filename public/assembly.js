@@ -49,7 +49,6 @@ function loadPage() {
       CreateTableFromJSON(data, function () {
         painting()
         document.getElementById('overlay').style.display = 'none'
-        
         document.querySelectorAll('[data-obj="1"]')[0].focus()
       })
     })
@@ -170,17 +169,17 @@ function painting() {
   const nameCells = document.querySelectorAll('td.name')
   const snCells = document.querySelectorAll('td.serial_number')
   const status = document.getElementById('status')
-  status.style.background = 'green'
+  status.style.background = '#4CAF50'
   status.innerHTML = "OK!"
   for (const cell of nameCells) {
     if (cell.innerHTML == 'Н/Д') {
-      cell.style.backgroundColor = 'coral'      
+      cell.style.backgroundColor = 'coral'
     }
   }
   for (const cell of snCells) {
     if (cell.innerHTML == '') {
       cell.style.backgroundColor = 'darkgray'
-      status.style.background = 'red'
+      status.style.background = '#f44336'
       status.innerHTML = "not OK!"
     }
   }
@@ -344,7 +343,7 @@ function previousPC(serialNumber) {
   return (NextPCIndex < 0) ? null : select[NextPCIndex].value
 }
 
-function getNextPC() {  
+function getNextPC() {
   const serialNumber = document.getElementById('serial_number').innerHTML
   const serialNumberPlusOne = nextPC(serialNumber)
   const select = document.getElementById('serials')
