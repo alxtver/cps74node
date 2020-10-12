@@ -346,7 +346,6 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
   })
   let oldNumberMachine
   const unit = req.body.unit
-
   // Если серийник есть, то ищем ПКИ с таким серийником и отвязываем от машины
   let oldapkzi = await APKZI.findOne({
     part: pc.part,
@@ -375,7 +374,7 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
     const arr_start = arr_kontr_name.slice(0, -1)
     pc[unit][req.body.obj].name = arr_end //меняем тип
     pc[unit][req.body.obj].type = arr_start.join(' ') //меняем имя
-    // pc[unit][req.body.obj].fdsi = apkzi.fdsi
+    pc[unit][req.body.obj].fdsi = 'ФДШИ.' + apkzi.fdsiKontr
 
     let index_apkzi
     for (let index = 0; index < pc.pc_unit.length; index++) {
@@ -399,7 +398,6 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
       pc[unit][req.body.obj].notes = arr_apkzi_start + ' ' + arr_apkzi_end + ' ' + apkzi.zav_number
     }
 
-
     pc_copy[unit] = pc[unit]
     pc_copy.pc_unit = pc.pc_unit
     await pc_copy.save()
@@ -407,6 +405,7 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
   } else {
     pc[unit][req.body.obj].serial_number = serial_number
     pc[unit][req.body.obj].name = "Н/Д"
+    pc[unit][req.body.obj].fdsi = ''
     let index_apkzi
     for (let index = 0; index < pc.pc_unit.length; index++) {
       if (pc.pc_unit[index].apkzi) {
@@ -417,6 +416,7 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
     if (index_apkzi) {
       pc.pc_unit[index_apkzi].name = "Н/Д"
       pc.pc_unit[index_apkzi].serial_number = ""
+      pc.pc_unit[index_apkzi].fdsi = ""
     }
     pc_copy[unit] = pc[unit]
     pc_copy.pc_unit = pc.pc_unit
@@ -519,11 +519,6 @@ router.post('/copy', auth, async (req, res) => {
       number = plusOne(number)
     }
     res.redirect('/pcPa')
-    // res.render('pcPa', {
-    //   title: 'Машины',
-    //   isPC: true,
-    //   part: pc.part
-    // })
   } else {
     let newPC = new PC({
       serial_number: req.body.serial_number,

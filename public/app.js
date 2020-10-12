@@ -133,6 +133,7 @@ function addSessionApkzi() {
   sessionStorage.setItem("fdsi", document.getElementById("fdsi").value)
   sessionStorage.setItem("apkzi_name", document.getElementById("apkzi_name").value)
   sessionStorage.setItem("kont_name", document.getElementById("kont_name").value)
+  sessionStorage.setItem("fdsiKontr", document.getElementById("fdsiKontr").value)
   sessionStorage.setItem("zav_number", document.getElementById("zav_number").value)
   sessionStorage.setItem("kontr_zav_number", document.getElementById("kontr_zav_number").value)
   sessionStorage.setItem("part", document.getElementById("part").value)
@@ -153,6 +154,11 @@ function loadSessionApkzi() {
   let field_kont_name = document.getElementById("kont_name")
   if (sessionStorage.getItem("kont_name")) {
     field_kont_name.value = sessionStorage.getItem("kont_name")
+  }
+
+  let field_fdsiKontr = document.getElementById("fdsiKontr")
+  if (sessionStorage.getItem("fdsiKontr")) {
+    field_fdsiKontr.value = sessionStorage.getItem("fdsiKontr")
   }
 
   let field_zav_number = document.getElementById("zav_number")

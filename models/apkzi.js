@@ -1,4 +1,7 @@
-const {Schema, model} = require('mongoose')
+const {
+  Schema,
+  model
+} = require('mongoose')
 
 const apkzi = new Schema({
   apkzi_name: {
@@ -12,6 +15,11 @@ const apkzi = new Schema({
   },
 
   fdsi: {
+    type: String,
+    required: true
+  },
+
+  fdsiKontr: {
     type: String,
     required: true
   },
@@ -36,7 +44,7 @@ const apkzi = new Schema({
 
   created: {
     type: Date,
-    default: () => Date.now() + 3*60*60*1000 //время МСК
+    default: () => Date.now() + 3 * 60 * 60 * 1000 //время МСК
   }
 
 

@@ -1,5 +1,5 @@
 function blur() {
-  let tds = document.querySelectorAll('.fdsi,.apkzi_name,.kont_name,.zav_number,.kontr_zav_number')
+  let tds = document.querySelectorAll('.fdsi,.apkzi_name,.kont_name,.fdsiKontr,.zav_number,.kontr_zav_number')
   for (const td of tds) {
     td.addEventListener("blur", function (event) {
       let id = event.target.dataset.id
@@ -45,12 +45,12 @@ function delBtn() {
 }
 
 function CreateTableFromJSON(data, callback) {
-  let col = ["type_pki", "vendor", "model", "serial_number", "country", "part", "number_machine"];
   let col_rus = [
     "№",
     "ФДШИ",
     "Наим. АПКЗИ",
     "Наим. контроллера СЗИ",
+    "ФДШИ контроллера",
     "Зав. номер",
     "Зав. номер контроллера",
     "Номер машины",
@@ -95,6 +95,12 @@ function CreateTableFromJSON(data, callback) {
     kont_nameCell.dataset.id = data[i]._id
     kont_nameCell.className = "kont_name"
     kont_nameCell.contentEditable = "true"
+
+    let kont_fdsiCell = tr.insertCell(-1)
+    kont_fdsiCell.innerHTML = data[i].fdsiKontr
+    kont_fdsiCell.dataset.id = data[i]._id
+    kont_fdsiCell.className = "fdsiKontr"
+    kont_fdsiCell.contentEditable = "true"
 
     let zav_numberCell = tr.insertCell(-1)
     zav_numberCell.innerHTML = data[i].zav_number

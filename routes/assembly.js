@@ -12,7 +12,7 @@ const snReModifer = require('./foo/snReModifer')
 
 router.get('/', auth, async (req, res) => {
   res.render('assembly', {
-    title: 'Машины',
+    title: 'Сборка',
     isAssembly: true,
     part: req.session.part,
   })

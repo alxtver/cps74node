@@ -1,11 +1,13 @@
-const {Router} = require('express')
+const {
+  Router
+} = require('express')
 const Apkzi = require('../models/apkzi')
 const auth = require('../middleware/auth')
 const LOG = require('../models/logs')
 const router = Router()
 
 
-router.get('/', auth, async (req, res) => {  
+router.get('/', auth, async (req, res) => {
   Apkzi.find().distinct('part', function (error, part) {
     res.render('apkzi', {
       title: 'АПКЗИ',
@@ -19,10 +21,18 @@ router.get('/', auth, async (req, res) => {
 router.post("/search", auth, async (req, res) => {
   let apkzi
   if (req.body.part) {
-    apkzi = await Apkzi.find({part: req.body.part}).sort([['created', -1] ])
+    apkzi = await Apkzi.find({
+      part: req.body.part
+    }).sort([
+      ['created', -1]
+    ])
     req.session.part = req.body.part
   } else {
-    apkzi = await Apkzi.find({part: req.session.part}).sort([['created', -1] ])
+    apkzi = await Apkzi.find({
+      part: req.session.part
+    }).sort([
+      ['created', -1]
+    ])
   }
   res.send(JSON.stringify(apkzi))
 })
@@ -32,7 +42,9 @@ router.post('/edit_ajax', auth, async (req, res) => {
   try {
     if (!req.body) return res.sendStatus(400)
     await Apkzi.findByIdAndUpdate(req.body.id, req.body)
-    res.status(200).json({ message: 'ok' })
+    res.status(200).json({
+      message: 'ok'
+    })
   } catch (error) {
     console.log(error)
   }
@@ -74,14 +86,16 @@ router.post('/del', auth, async (req, res) => {
       note: note,
       user: req.session.user.username,
       part: req.session.part
-    })    
-    await Apkzi.deleteOne({_id: id})
+    })
+    await Apkzi.deleteOne({
+      _id: id
+    })
     log.save()
     res.send(JSON.stringify(part))
   } catch (e) {
     console.log(e)
     res.send(JSON.stringify(part))
-  }  
+  }
 })
 
 module.exports = router

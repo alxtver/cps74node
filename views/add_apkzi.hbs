@@ -30,6 +30,14 @@
       </div>
 
       <div class="input-field">
+        <input id="fdsiKontr" name="fdsiKontr" type="text" class="form-control" aria-describedby="vendorHelp"
+          placeholder="ФДШИ контроллера СЗИ" required>
+        <div class="invalid-feedback">
+          Введите ФДШИ контроллера!
+        </div>
+      </div>
+
+      <div class="input-field">
         <input id="zav_number" name="zav_number" type="text" class="form-control" aria-describedby="modelHelp"
           placeholder="Заводской номер" required>
         <div class="invalid-feedback">
@@ -52,14 +60,11 @@
         </div>
       </div>
 
-
       <input type="hidden" name="_csrf" value="{{csrf}}">
       <button type="submit" onclick="return addSessionApkzi();" class="btn btn-primary btn-dark">Добавить АПКЗИ</button>
     </form>
-
   </div>
 </div>
-
 
 <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", function () {

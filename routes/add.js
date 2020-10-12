@@ -149,6 +149,7 @@ router.post('/apkzi', auth, async (req, res) => {
     fdsi: req.body.fdsi,
     apkzi_name: req.body.apkzi_name,
     kont_name: req.body.kont_name,
+    fdsiKontr: req.body.fdsiKontr,
     zav_number: req.body.zav_number,
     kontr_zav_number: req.body.kontr_zav_number,
     part: req.body.part
