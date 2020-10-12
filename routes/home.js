@@ -117,12 +117,13 @@ router.get('/script', authAdmin, async (req, res) => {
   let n = 0
   for (const pc of pcs) {
     if (pc.system_case_unit && pc.system_case_unit[0]) {
+      let arr = pc.system_case_unit
       console.log(n);
       n += 1
+
+      pc.system_case_unit[arr.length-1].fdsi = 'ФДШИ.468353.020'
       
-      pc.system_case_unit[2].name = 'DEEPCOOl CK-11509'
-      
-      console.log(pc.system_case_unit[0]);
+      console.log(pc.system_case_unit[arr.length-1]);
       pc_copy = await PC.findById(pc.id)
       pc_copy.system_case_unit = pc.system_case_unit
       await pc_copy.save()
