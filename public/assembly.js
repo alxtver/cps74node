@@ -45,12 +45,24 @@ function loadPage() {
     })
   postData('/assembly/firstPC')
     .then((data) => {
+      const select = document.getElementById('serials')
+      select.value = data.firstPC.serial_number
       document.getElementById('PreviousPC').style.display = 'none'
-      CreateTableFromJSON(data, function () {
+      CreateTableFromJSON(data.firstPC, function () {
         painting()
         document.getElementById('overlay').style.display = 'none'
         document.querySelectorAll('[data-obj="1"]')[0].focus()
       })
+      if (data.firstPC.serial_number == data.firstSN) {
+        document.getElementById('PreviousPC').style.display = 'none'
+        document.getElementById('NextPC').style.display = 'inline'
+      } else if (data.firstPC.serial_number == data.lastSN) {
+        document.getElementById('PreviousPC').style.display = 'inline'
+        document.getElementById('NextPC').style.display = 'none'
+      } else {
+        document.getElementById('PreviousPC').style.display = 'inline'
+        document.getElementById('NextPC').style.display = 'inline'
+      }
     })
 }
 
