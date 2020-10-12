@@ -113,20 +113,21 @@ router.get('/script', authAdmin, async (req, res) => {
   //   }    
   // }
 
-  // let pcs = await PC.find({part: req.session.part})
-  // let n = 0
-  // for (const pc of pcs) {
-  //   if (pc.system_case_unit && pc.system_case_unit[0]) {
-  //     console.log(n);
-  //     n += 1
-  //     pc.system_case_unit[0].type = 'Корпус'
+  let pcs = await PC.find({part: req.session.part})
+  let n = 0
+  for (const pc of pcs) {
+    if (pc.system_case_unit && pc.system_case_unit[0]) {
+      console.log(n);
+      n += 1
+      pc.system_case_unit[0].type = 'Корпус'
+      pc.system_case_unit[0].name = 'ZALMAN Z1 MidiTower'
       
-  //     console.log(pc._id);
-  //     pc_copy = await PC.findById(pc.id)
-  //     pc_copy.system_case_unit = pc.system_case_unit
-  //     await pc_copy.save()
-  //   }    
-  // }
+      console.log(pc.system_case_unit[0]);
+      pc_copy = await PC.findById(pc.id)
+      pc_copy.system_case_unit = pc.system_case_unit
+      await pc_copy.save()
+    }    
+  }
 
 
 
@@ -211,20 +212,20 @@ router.get('/script', authAdmin, async (req, res) => {
   //   }
   // }
   // Part.deleteOne({part: 'ЛОТ 10,11(2020)'}, function (err) {});
-  let pcs = await PC.find()
-  for (const pc of pcs) {
-    if (pc.back_color == 'Желтый') {
-      pc.back_color = '#e7e821'
-    } else if (pc.back_color == 'Зеленый') {
-      pc.back_color = '#26e821'
-    } else if (pc.back_color == 'Синий') {
-      pc.back_color = '#2168e8'
-    } else if (pc.back_color == 'Красный') {
-      pc.back_color = '#e8213a'
-    }
-    await pc.save()
-    console.log(pc.serial_number + ' готов!')
-  }
+  // let pcs = await PC.find()
+  // for (const pc of pcs) {
+  //   if (pc.back_color == 'Желтый') {
+  //     pc.back_color = '#e7e821'
+  //   } else if (pc.back_color == 'Зеленый') {
+  //     pc.back_color = '#26e821'
+  //   } else if (pc.back_color == 'Синий') {
+  //     pc.back_color = '#2168e8'
+  //   } else if (pc.back_color == 'Красный') {
+  //     pc.back_color = '#e8213a'
+  //   }
+  //   await pc.save()
+  //   console.log(pc.serial_number + ' готов!')
+  // }
 
   res.send('Скрипт отработал!')
 })
