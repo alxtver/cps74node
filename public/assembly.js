@@ -67,7 +67,9 @@ function loadPage() {
 }
 
 function setAssemblyPC(serialNumber) {
-  postData('/assembly/setLastPC', {serialNumber})
+  postData('/assembly/setLastPC', {
+    serialNumber
+  })
 }
 
 function getPC(serialNumberPC, metod) {
@@ -123,7 +125,7 @@ function TablePc(pc) {
   td = document.createElement("td")
   td.innerHTML = pc.serial_number
   td.id = 'serial_number'
-  td.style.cssText = 'font-size: 1.5rem;background-color:' + pc.back_color
+  td.style.cssText = 'font-size: 1.5rem;border-radius: 10px 0px 0px 0px;background-color:' + pc.back_color
   tr.appendChild(td)
   insCell('', tr, pc.arm, 'up', '', false)
   insCell('', tr, pc.execution, 'up', '', false)
