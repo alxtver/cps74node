@@ -54,12 +54,15 @@ function loadPage() {
     })
 }
 
-
+function setAssemblyPC(serialNumber) {
+  postData('/assembly/setLastPC', {serialNumber})
+}
 
 function getPC(serialNumberPC, metod) {
   const data = {
     serialNumberPC: serialNumberPC
   }
+  setAssemblyPC(serialNumberPC)
   postData('/assembly/getPC', data)
     .then((data) => {
       CreateTableFromJSON(data, function () {

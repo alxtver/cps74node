@@ -10,7 +10,8 @@ const User = new Schema({
     lastPart: String,
     lastType: String,
     lastPage: Number,
-    pcCount: String
+    pcCount: String,
+    lastAssemblyPC: String
 })
 
 module.exports = model('User', User)
