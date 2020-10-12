@@ -119,8 +119,8 @@ router.get('/script', authAdmin, async (req, res) => {
     if (pc.system_case_unit && pc.system_case_unit[0]) {
       console.log(n);
       n += 1
-      pc.system_case_unit[0].type = 'Корпус'
-      pc.system_case_unit[0].name = 'ZALMAN Z1 MidiTower'
+      
+      pc.system_case_unit[2].name = 'DEEPCOOl CK-11509'
       
       console.log(pc.system_case_unit[0]);
       pc_copy = await PC.findById(pc.id)
