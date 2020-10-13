@@ -392,3 +392,16 @@ function CreateSelectType(data, callback) {
   }
   callback()
 }
+
+function setSoundSessionOn() {
+  sessionStorage.setItem("sound", "on")
+  document.getElementById("soundOff").hidden = true
+  document.getElementById("soundOn").hidden = false
+}
+
+function setSoundSessionOff() {
+  sessionStorage.setItem("sound", "off")
+  document.getElementById("soundOff").hidden = false
+  document.getElementById("soundOn").hidden = true
+  speechSynthesis.cancel()
+}

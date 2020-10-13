@@ -308,19 +308,6 @@ function UpdateCells(pc) {
   }
 }
 
-function setSoundSessionOn() {
-  sessionStorage.setItem("sound", "on")
-  document.getElementById("soundOff").hidden = true
-  document.getElementById("soundOn").hidden = false
-}
-
-function setSoundSessionOff() {
-  sessionStorage.setItem("sound", "off")
-  document.getElementById("soundOff").hidden = false
-  document.getElementById("soundOn").hidden = true
-  speechSynthesis.cancel()
-}
-
 function insCell(unit, parrent, html = '', classN, id, contentEditable, dataset) {
   let cell = parrent.insertCell(-1)
   if (classN) cell.className = classN

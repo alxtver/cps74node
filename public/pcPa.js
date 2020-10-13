@@ -186,6 +186,7 @@ function painting() {
 }
 
 function loadPage(page, pages) {
+  overlay.style.display = 'block'
   let data = {
     page: page,
     pages: pages
@@ -832,19 +833,6 @@ function testPC() {
       }
       divContainer.appendChild(table)
     })
-}
-
-function setSoundSessionOn() {
-  sessionStorage.setItem("sound", "on")
-  document.getElementById("soundOff").hidden = true
-  document.getElementById("soundOn").hidden = false
-}
-
-function setSoundSessionOff() {
-  sessionStorage.setItem("sound", "off")
-  document.getElementById("soundOff").hidden = false
-  document.getElementById("soundOn").hidden = true
-  speechSynthesis.cancel()
 }
 
 function getSoundSession() {

@@ -1,4 +1,6 @@
-const {Router} = require('express')
+const {
+  Router
+} = require('express')
 const router = Router()
 const auth = require('../middleware/auth')
 const authAdmin = require('../middleware/authAdmin')
@@ -10,66 +12,81 @@ const Part = require('../models/part')
 
 
 router.get('/', auth, async (req, res) => {
-  let countPKI = await PKI.countDocuments()
-  let countPC = 0
-  let docsPC = await PC.find()
-  for (const doc of docsPC) {
-    let sn = doc.serial_number
-      if (!sn.includes('Z') && !sn.includes('z')) {
-        countPC += 1
-      }
-  }
+  res.redirect('/pcPa')
+  // let countPKI = await PKI.countDocuments()
+  // let countPC = 0
+  // let docsPC = await PC.find()
+  // for (const doc of docsPC) {
+  //   let sn = doc.serial_number
+  //   if (!sn.includes('Z') && !sn.includes('z')) {
+  //     countPC += 1
+  //   }
+  // }
 
-  let dateNow = new Date()  
-  let nowYear = Date.parse(dateNow.getFullYear())
-  
-  let countPCinYear = 0
-  let docsPCinYear = await PC.find({created: {$gt: nowYear}})
-  for (const doc of docsPCinYear) {
-    let sn = doc.serial_number
-      if (!sn.includes('Z') && !sn.includes('z')) {
-        countPCinYear += 1
-      }
-  }
+  // let dateNow = new Date()
+  // let nowYear = Date.parse(dateNow.getFullYear())
 
-  let countPKIinYear = await PKI.countDocuments({created: {$gt: nowYear}})
-  let args_devel = {
-    title: 'Главная страница',
-    isHome: true,
-    countPKI: countPKI,
-    countPC: countPC,
-    countPCinYear: countPCinYear,
-    countPKIinYear: countPKIinYear,
-    part: req.session.part
-  }
-  res.render('index', args_devel)
+  // let countPCinYear = 0
+  // let docsPCinYear = await PC.find({
+  //   created: {
+  //     $gt: nowYear
+  //   }
+  // })
+  // for (const doc of docsPCinYear) {
+  //   let sn = doc.serial_number
+  //   if (!sn.includes('Z') && !sn.includes('z')) {
+  //     countPCinYear += 1
+  //   }
+  // }
+
+  // let countPKIinYear = await PKI.countDocuments({
+  //   created: {
+  //     $gt: nowYear
+  //   }
+  // })
+  // let args_devel = {
+  //   title: 'Главная страница',
+  //   isHome: true,
+  //   countPKI: countPKI,
+  //   countPC: countPC,
+  //   countPCinYear: countPCinYear,
+  //   countPKIinYear: countPKIinYear,
+  //   part: req.session.part
+  // }
+  // res.render('index', args_devel)
 })
 
 
-router.get('/diagram', auth, async (req, res) => {    
+router.get('/diagram', auth, async (req, res) => {
   PC.find().distinct('part', async function (error, parts) {
     if (error) {
       res.sendStatus(400)
-      }
-    let arr = [['Проект', 'Процентное отношение']]
+    }
+    let arr = [
+      ['Проект', 'Процентное отношение']
+    ]
     for (const part of parts) {
-      let docsInPart = await PC.find({part:part})
+      let docsInPart = await PC.find({
+        part: part
+      })
       let count = 0
       for (const doc of docsInPart) {
         let sn = doc.serial_number
         if (!sn.includes('Z') && !sn.includes('z')) {
           count += 1
         }
-      }      
+      }
       arr.push([part, count])
     }
     res.send(JSON.stringify(arr))
-  })  
+  })
 })
 
 
-router.post("/insert_part_session", async function (req, res) {  
-  await User.findByIdAndUpdate(req.session.user._id, {lastPart: req.body.selectedItem})
+router.post("/insert_part_session", async function (req, res) {
+  await User.findByIdAndUpdate(req.session.user._id, {
+    lastPart: req.body.selectedItem
+  })
   req.session.part = req.body.selectedItem
   res.send(JSON.stringify('OK'))
 })
@@ -105,7 +122,7 @@ router.get('/script', authAdmin, async (req, res) => {
   //     console.log(n);
   //     n += 1
   //     pc.system_case_unit[2].name = 'Intel E97378-001'
-      
+
   //     console.log(pc._id);
   //     pc_copy = await PC.findById(pc.id)
   //     pc_copy.system_case_unit = pc.system_case_unit
@@ -113,7 +130,9 @@ router.get('/script', authAdmin, async (req, res) => {
   //   }    
   // }
 
-  let pcs = await PC.find({part: req.session.part})
+  let pcs = await PC.find({
+    part: req.session.part
+  })
   let n = 0
   for (const pc of pcs) {
     if (pc.system_case_unit && pc.system_case_unit[0]) {
@@ -121,13 +140,13 @@ router.get('/script', authAdmin, async (req, res) => {
       console.log(n);
       n += 1
 
-      pc.system_case_unit[arr.length-1].fdsi = 'ФДШИ.468353.020'
-      
-      console.log(pc.system_case_unit[arr.length-1]);
+      pc.system_case_unit[arr.length - 1].fdsi = 'ФДШИ.468353.020'
+
+      console.log(pc.system_case_unit[arr.length - 1]);
       pc_copy = await PC.findById(pc.id)
       pc_copy.system_case_unit = pc.system_case_unit
       await pc_copy.save()
-    }    
+    }
   }
 
 

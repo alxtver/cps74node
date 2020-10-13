@@ -1,57 +1,58 @@
 function search() {
-	let val = document.querySelector('#serial_number').value
-	data = {
-		val: val
-	}
-	postData('/search/searchPKI', data)
-		.then((data) => {
-			let containerPKI = document.querySelector('#resultPKI')
-			let containerPC = document.querySelector('#resultPC')
-			containerPC.innerHTML = ''
-			containerPKI.innerHTML = ''
-			if (data.pkis.length > 0) {
-				CreateTablePKI(data.pkis, containerPKI)
-			}
-			if (data.pcs.length > 0) {
-				CreateTablePC(data.pcs, containerPC, () => {
-					let val = document.querySelector('#serial_number').value
-					var tds = document.querySelectorAll('td[data-sn="'+val.trim()+'"]')
-					for (const td of tds) {
+  let val = document.querySelector('#serial_number').value
+  data = {
+    val: val
+  }
+  postData('/search/searchPKI', data)
+    .then((data) => {
+      let containerPKI = document.querySelector('#resultPKI')
+      let containerPC = document.querySelector('#resultPC')
+      containerPC.innerHTML = ''
+      containerPKI.innerHTML = ''
+      if (data.pkis.length > 0) {
+        CreateTablePKI(data.pkis, containerPKI)
+      }
+      if (data.pcs.length > 0) {
+        CreateTablePC(data.pcs, containerPC, () => {
+          let val = document.querySelector('#serial_number').value
+          let tds = document.querySelectorAll('tr[data-sn="' + val.trim() + '"]')
+          for (const td of tds) {
+            console.log(td);
             td.style.background = 'orangered'
             td.style.fontWeight = '600'
-					}
-				})
-			}
-			if (data.pkis.length == 0 && data.pcs.length == 0) {
-				containerPKI.innerHTML = 'Нет результатов...'
-			}
-		})
+          }
+        })
+      }
+      if (data.pkis.length == 0 && data.pcs.length == 0) {
+        containerPKI.innerHTML = 'Нет результатов...'
+      }
+    })
 }
 
 function CreateTablePKI(data, container) {
-	let col_rus = [
-		'№',
-		'Тип',
-		'Производитель',
-		'Модель',
-		'Серийный номер',
-		'Страна производства',
-		'Номер машины',
-		'Тема'
-	]
-	let table = document.createElement("table");
-	table.className = "table table-sm table-bordered table-hover table-responsive table-striped"
-	let thead = table.createTHead()
-	let tr = thead.insertRow(-1)
-	thead.className = "thead-dark"
-	for (let i = 0; i < col_rus.length; i++) {
-		let th = document.createElement("th")
-		th.innerHTML = col_rus[i];
-		tr.appendChild(th);
-		thead.appendChild(tr)
-	}
-	let tbody = table.createTBody()
-	for (let i = 0; i < data.length; i++) {
+  let col_rus = [
+    '№',
+    'Тип',
+    'Производитель',
+    'Модель',
+    'Серийный номер',
+    'Страна производства',
+    'Номер машины',
+    'Тема'
+  ]
+  let table = document.createElement("table");
+  table.className = "table table-sm table-bordered table-hover table-responsive table-striped"
+  let thead = table.createTHead()
+  let tr = thead.insertRow(-1)
+  thead.className = "thead-dark"
+  for (let i = 0; i < col_rus.length; i++) {
+    let th = document.createElement("th")
+    th.innerHTML = col_rus[i];
+    tr.appendChild(th);
+    thead.appendChild(tr)
+  }
+  let tbody = table.createTBody()
+  for (let i = 0; i < data.length; i++) {
     tr = tbody.insertRow(-1)
     insCell(tr, i + 1)
     insCell(tr, data[i].type_pki)
@@ -61,9 +62,9 @@ function CreateTablePKI(data, container) {
     insCell(tr, data[i].country)
     insCell(tr, data[i].number_machine)
     insCell(tr, data[i].part)
-	}
-	container.innerHTML = ""
-	container.appendChild(table)
+  }
+  container.innerHTML = ""
+  container.appendChild(table)
 }
 
 function CreateTablePC(data, container, callback) {
@@ -77,8 +78,8 @@ function CreateTablePC(data, container, callback) {
     container.appendChild(divCont);
     divCont.innerHTML = ""
     divCont.appendChild(table)
-	}
-	callback()
+  }
+  callback()
 }
 
 function TablePc(pc) {
@@ -110,9 +111,9 @@ function TablePc(pc) {
   td.className = "up"
   tr.appendChild(td)
 
-	td = document.createElement("td")
-	td.style.cssText = 'font-size: 1.5rem;background-color:' + pc.back_color
-	td.innerHTML = pc.part
+  td = document.createElement("td")
+  td.style.cssText = 'font-size: 1.5rem;background-color:' + pc.back_color
+  td.innerHTML = pc.part
   td.className = "up"
   tr.appendChild(td)
 
@@ -136,6 +137,7 @@ function TablePc(pc) {
   let arr_pc_unit = pc.pc_unit
   for (let j = 0; j < arr_pc_unit.length; j++) {
     tr = table.insertRow(-1)
+    tr.dataset.sn = arr_pc_unit[j].serial_number
     insCell(tr, arr_pc_unit[j].fdsi)
     insCell(tr, arr_pc_unit[j].type)
     insCell(tr, arr_pc_unit[j].name)
@@ -155,6 +157,7 @@ function TablePc(pc) {
   let arr_system_case_unit = pc.system_case_unit
   for (let j = 0; j < arr_system_case_unit.length; j++) {
     tr = table.insertRow(-1)
+    tr.dataset.sn = arr_system_case_unit[j].serial_number
     insCell(tr, arr_system_case_unit[j].fdsi)
     insCell(tr, arr_system_case_unit[j].type)
     insCell(tr, arr_system_case_unit[j].name)

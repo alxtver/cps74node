@@ -1,5 +1,4 @@
 <script src="/pki.js"></script>
-<h1>Добавить ПКИ</h1>
 
 <div class="wrapper fadeInDown">
   <div id="formContent">
@@ -66,6 +65,12 @@
   </div>
 </div>
 <div id="snBar" class="snBar"></div>
+
+<button id="soundOn" onclick="setSoundSessionOff()" class="btn btn-dark soundButton"><i
+    class="fa fa-microphone"></i></button>
+
+<button id="soundOff" onclick="setSoundSessionOn()" hidden="true" class="btn btn-dark soundButtonSlash"><i
+    class="fa fa-microphone-slash"></i></button>
 
 <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", function () {

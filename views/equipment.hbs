@@ -1,17 +1,12 @@
 <script src="/equipment.js"></script>
 <div class="container">
-  <h1>Оборудование</h1>
-
-  <button onclick="location.href='equipment/add';" class="btn btn-outline-success mb-1">Новое оборудование</button>
+  <button onclick="location.href='equipment/add';" class="btn btn-outline-success mb-1 mt-2">Новое оборудование</button>
   <div class="form-group">
     <input type="text" name="search" class="form-control hoverable" id="search" placeholder="Штрих-код">
   </div>
-
   <select id="type_select_navbar" class="custom-select mt-2 mb-2"></select>
-
   <div id="showData"></div>
 </div>
-
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {

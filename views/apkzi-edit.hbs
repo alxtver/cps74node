@@ -1,65 +1,69 @@
-<h1>{{title}}</h1>
-
 <div class="wrapper fadeInDown">
   <div id="formContent">
 
-  <form action="/apkzi/edit" method="POST" class="needs-validation" novalidate>
+    <form action="/apkzi/edit" method="POST" class="needs-validation" novalidate>
 
-  <div class="input-field">
-    <input id="fdsi" name="fdsi" type="text"  value="{{apkzi.fdsi}}" class="form-control" aria-describedby="modelHelp" placeholder="ФДШИ" required>
-    <div class="invalid-feedback">
-      Введите ФДШИ!
-    </div>
-  </div>
+      <div class="input-field">
+        <input id="fdsi" name="fdsi" type="text" value="{{apkzi.fdsi}}" class="form-control"
+          aria-describedby="modelHelp" placeholder="ФДШИ" required>
+        <div class="invalid-feedback">
+          Введите ФДШИ!
+        </div>
+      </div>
 
-  <div class="input-field">
-    <input id="apkzi_name" name="apkzi_name" type="text"  value="{{apkzi.apkzi_name}}" class="form-control" aria-describedby="pkiHelp" placeholder="Наименование АПКЗИ" required>
-    <div class="invalid-feedback">
-      Введите наименование АПКЗИ!
-    </div>
-  </div>
+      <div class="input-field">
+        <input id="apkzi_name" name="apkzi_name" type="text" value="{{apkzi.apkzi_name}}" class="form-control"
+          aria-describedby="pkiHelp" placeholder="Наименование АПКЗИ" required>
+        <div class="invalid-feedback">
+          Введите наименование АПКЗИ!
+        </div>
+      </div>
 
-  <div class="input-field">
-    <input id="kont_name" name="kont_name" type="text"  value="{{apkzi.kont_name}}" class="form-control" aria-describedby="vendorHelp" placeholder="Наименование контроллера СЗИ" required>
-    <div class="invalid-feedback">
-      Введите наименование контроллера СЗИ!
-    </div>
-  </div>
+      <div class="input-field">
+        <input id="kont_name" name="kont_name" type="text" value="{{apkzi.kont_name}}" class="form-control"
+          aria-describedby="vendorHelp" placeholder="Наименование контроллера СЗИ" required>
+        <div class="invalid-feedback">
+          Введите наименование контроллера СЗИ!
+        </div>
+      </div>
 
-  <div class="input-field">
-        <input id="fdsiKontr" name="fdsiKontr" value="{{apkzi.fdsiKontr}}" type="text" class="form-control" aria-describedby="vendorHelp"
-          placeholder="ФДШИ контроллера СЗИ" required>
+      <div class="input-field">
+        <input id="fdsiKontr" name="fdsiKontr" value="{{apkzi.fdsiKontr}}" type="text" class="form-control"
+          aria-describedby="vendorHelp" placeholder="ФДШИ контроллера СЗИ" required>
         <div class="invalid-feedback">
           Введите ФДШИ контроллера!
         </div>
       </div>
 
-  <div class="input-field">
-    <input id="zav_number" name="zav_number" type="text"  value="{{apkzi.zav_number}}" class="form-control" aria-describedby="modelHelp" placeholder="Заводской номер" required>
-    <div class="invalid-feedback">
-      Введите заводской номер!
-    </div>
-  </div>
+      <div class="input-field">
+        <input id="zav_number" name="zav_number" type="text" value="{{apkzi.zav_number}}" class="form-control"
+          aria-describedby="modelHelp" placeholder="Заводской номер" required>
+        <div class="invalid-feedback">
+          Введите заводской номер!
+        </div>
+      </div>
 
-  <div class="input-field">
-    <input id="kontr_zav_number" name="kontr_zav_number" type="text"  value="{{apkzi.kontr_zav_number}}" class="form-control"  placeholder="Заводской номер контроллера" required>
-    <div class="invalid-feedback">
-      Введите заводской номер контроллера!
-    </div>
-  </div>
+      <div class="input-field">
+        <input id="kontr_zav_number" name="kontr_zav_number" type="text" value="{{apkzi.kontr_zav_number}}"
+          class="form-control" placeholder="Заводской номер контроллера" required>
+        <div class="invalid-feedback">
+          Введите заводской номер контроллера!
+        </div>
+      </div>
 
-  <div class="input-field">
-    <input id="part" name="part" type="text" value="{{apkzi.part}}" class="form-control" placeholder="Название партии" required>
-    <div class="invalid-feedback">
-      Введите название партии!
-    </div>
-  </div>
+      <div class="input-field">
+        <input id="part" name="part" type="text" value="{{apkzi.part}}" class="form-control"
+          placeholder="Название партии" required>
+        <div class="invalid-feedback">
+          Введите название партии!
+        </div>
+      </div>
 
-  <input type="hidden" name="id" value="{{apkzi._id}}">
+      <input type="hidden" name="id" value="{{apkzi._id}}">
 
-  <input type="hidden" name="_csrf" value="{{csrf}}">
-  <button type="submit" class="btn btn-outline-success">Редактировать АПКЗИ</button>
-</form>
+      <input type="hidden" name="_csrf" value="{{csrf}}">
+      <button type="submit" class="btn btn-outline-success">Редактировать АПКЗИ</button>
+    </form>
 
   </div>
 </div>

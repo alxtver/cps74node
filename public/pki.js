@@ -177,6 +177,16 @@ function addPkiSubmit() {
   sessionStorage.setItem("model", model)
   sessionStorage.setItem("country", country)
   sessionStorage.setItem("part", part)
+  //TextToSpeech
+  if (sessionStorage.getItem("sound") === 'on') {
+    let textToSpeech = serial_number.slice(-3)
+    const ut = new SpeechSynthesisUtterance(textToSpeech)
+    ut.lang = 'ru-RU'
+    ut.volume = 1
+    ut.rate = 1.1
+    ut.pitch = 1
+    speechSynthesis.speak(ut)
+  }
 
   if (!type_pki) {
     validate(document.getElementById("type_pki"))
