@@ -3,7 +3,7 @@ function blur() {
   for (const td of tds) {
     td.addEventListener("blur", function (event) {
       let id = event.target.dataset.id
-      let value = event.target.innerHTML
+      let value = event.target.textContent
       let className = event.target.className
       editCell(id, value, className)
     }, true)
