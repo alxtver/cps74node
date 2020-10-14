@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const snSelect = document.getElementById('serials')
   snSelect.addEventListener('change', (e) => {
+    document.getElementById('apkziDiv').style.display = 'none'
     getPC(e.target.value)
   })
 })
@@ -114,13 +115,14 @@ function CreateTableFromJSON(data, callback) {
 }
 
 function TablePc(pc) {
+   const apkziDiv = document.getElementById('apkziDiv')
+   apkziDiv.innerHTML = ''
   // таблица ПЭВМ
   let table = document.createElement("table");
   table.className = "table table-bordered table-hover table-responsive assemblytable"
   table.id = pc._id
 
   let tr = table.insertRow(-1)
-
 
   td = document.createElement("td")
   td.innerHTML = pc.serial_number
@@ -136,20 +138,26 @@ function TablePc(pc) {
     td.style.cssText = 'font-size: 1.1rem;border-radius: 0px 10px 0px 0px;background-color:' + pc.back_color
   }
   tr.appendChild(td)
-
   if (pc.system_case_unit.length > 0) {
     tr = table.insertRow(-1) // TABLE ROW.
-
     insCell('', tr, 'Наименование изделия', 'header', '', false)
     insCell('', tr, 'Характеристика', 'header', '', false)
     insCell('', tr, 'Количество', 'header', '', false)
     insCell('', tr, 'Заводской номер', 'header', '', false)
-
   }
+  let arr_pc_unit = pc.pc_unit
   let arr_system_case_unit = pc.system_case_unit
+  console.log(document.getElementById('apkziDiv'));
+  for (let j = 0; j < arr_pc_unit.length; j++) {
+    if (arr_pc_unit[j].apkzi && arr_pc_unit[j].serial_number != '') {
+      const apkziDiv = document.getElementById('apkziDiv')
+      apkziDiv.innerHTML = 'Номер АПКЗИ - ' + arr_pc_unit[j].serial_number
+      apkziDiv.style.display = 'block'
+    }
+  }
+
   for (let j = 0; j < arr_system_case_unit.length; j++) {
     tr = table.insertRow(-1)
-
     insCell('', tr, arr_system_case_unit[j].type, 'type', '', false, {
       'id': pc._id
     })
@@ -196,18 +204,21 @@ function painting() {
   const nameCells = document.querySelectorAll('td.name')
   const snCells = document.querySelectorAll('td.serial_number')
   const status = document.getElementById('status')
+  const statusName = document.getElementById('statusName');
   status.style.background = '#4CAF50'
-  status.innerHTML = "OK!"
+  statusName.innerHTML = "OK!"
   for (const cell of nameCells) {
     if (cell.innerHTML == 'Н/Д') {
       cell.style.backgroundColor = 'coral'
+      status.style.background = '#f44336'
+      statusName.innerHTML = "not OK!"
     }
   }
   for (const cell of snCells) {
     if (cell.innerHTML == '') {
       cell.style.backgroundColor = 'darkgray'
       status.style.background = '#f44336'
-      status.innerHTML = "not OK!"
+      statusName.innerHTML = "not OK!"
     }
   }
 }
@@ -237,6 +248,7 @@ function edit_serial_number_apkzi(id, obj, unit, serial_number) {
     .then((data) => {
       flashAlert(data)
       UpdateCells(data.pc)
+      //сюда вставляем код для отображения номера апкзи
     })
 }
 
@@ -358,7 +370,6 @@ function previousPC(serialNumber) {
 }
 
 function getNextPC() {
-
   document.body.style.overflow = 'hidden';
   const serialNumber = document.getElementById('serial_number').innerHTML
   const serialNumberPlusOne = nextPC(serialNumber)
@@ -377,10 +388,10 @@ function getNextPC() {
     nextButton.style.display = 'none'
   }
   document.getElementById('PreviousPC').style.display = 'inline'
-
 }
 
 function getPreviousPC() {
+  document.body.style.overflow = 'hidden';
   const serialNumber = document.getElementById('serial_number').innerHTML
   const serialNumberMinusOne = previousPC(serialNumber)
   const select = document.getElementById('serials')
