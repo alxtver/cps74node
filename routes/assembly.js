@@ -15,8 +15,10 @@ router.get('/', auth, async (req, res) => {
     title: 'Сборка',
     isAssembly: true,
     part: req.session.part,
+    userName: req.session.user.username
   })
 })
+
 
 router.post('/serialNumbers', auth, async (req, res) => {
   const serialNumbers = await PC.find({

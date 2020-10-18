@@ -25,6 +25,13 @@ const varMiddleware = require('./middleware/variables')
 const userMiddleware = require('./middleware/user')
 const partMiddleware = require('./middleware/part')
 const bodyParser = require('body-parser')
+const io = require('socket.io')(3001)
+
+io.on('connect', socket => {
+  socket.on('updateAssemblyPC', function(data){
+    io.emit('updateAssemblyPC', data);
+  })
+})
 
 const app = express()
 

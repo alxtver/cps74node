@@ -446,6 +446,11 @@ input[type=text]:placeholder {
   animation-duration: .5s;
 }
 
+.pcCardAssemblyUpdate {
+  animation-name: spin;
+  animation-duration: .5s;
+}
+
 @keyframes spin {
   25% {
     transform: rotate(2deg);

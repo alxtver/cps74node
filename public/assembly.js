@@ -147,7 +147,6 @@ function TablePc(pc) {
   }
   let arr_pc_unit = pc.pc_unit
   let arr_system_case_unit = pc.system_case_unit
-  console.log(document.getElementById('apkziDiv'));
   for (let j = 0; j < arr_pc_unit.length; j++) {
     if (arr_pc_unit[j].apkzi && arr_pc_unit[j].serial_number != '') {
       const apkziDiv = document.getElementById('apkziDiv')
@@ -155,7 +154,6 @@ function TablePc(pc) {
       apkziDiv.style.display = 'block'
     }
   }
-
   for (let j = 0; j < arr_system_case_unit.length; j++) {
     tr = table.insertRow(-1)
     insCell('', tr, arr_system_case_unit[j].type, 'type', '', false, {
@@ -181,6 +179,10 @@ function TablePc(pc) {
     serial_numberCell.addEventListener('keypress', function (e) {
       if (e.keyCode == 13) {
         e.preventDefault()
+        const pc = document.getElementById('serial_number')
+        const serialNumber = pc.innerHTML
+        const user = document.getElementById('userName').value
+        socket.emit('updateAssemblyPC', { serialNumber, user })
         const id = e.target.dataset.id
         const obj = e.target.dataset.obj
         const unit = e.target.dataset.unit
@@ -409,4 +411,32 @@ function getPreviousPC() {
     document.getElementById('PreviousPC').style.display = 'none'
   }
   document.getElementById('NextPC').style.display = 'inline'
+}
+
+function websocketUpdate(sn, reqUser) {
+
+  const pc = document.getElementById('serial_number')
+  const user = document.getElementById('userName').value
+  const serialNumber = pc.innerHTML
+  if (serialNumber == sn && reqUser != user) {
+    setTimeout(() => {
+        updatePC(serialNumber, 'update')
+    }, 500);
+  }
+}
+
+function updatePC(serialNumberPC, metod) {
+  const data = {
+    serialNumberPC: serialNumberPC
+  }
+  postData('/assembly/getPC', data)
+    .then((data) => {
+      CreateTableFromJSON(data, function () {
+        painting()
+        document.getElementById('overlay').style.display = 'none'
+        document.querySelectorAll('[data-obj="1"]')[0].focus()
+        const card = document.querySelector('.pcCardAssembly')
+        card.classList.add('pcCardAssemblyUpdate')
+      })
+    })
 }
