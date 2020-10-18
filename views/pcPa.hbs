@@ -1,4 +1,5 @@
 <script src="/pcPa.js"></script>
+<script type="text/javascript" src="/lib/socketIO/socket.io.js"></script>
 <div class="container">
   <div class="input-group mt-2 mb-3">
     <button class="btn btn-outline-dark mr-1 mt-1" onclick="location.href='/pcPa/add';">Добавить ПЭВМ</button>
@@ -59,6 +60,7 @@
   <input type="hidden" id="hidd_unit" value="0">
   <input type="hidden" id="pagesCount" value="{{ pages }}">
   <input type="hidden" id="page" value="">
+  <input type="hidden" id="userName" value="{{ userName }}">
 
   <!-- Modal -->
 
@@ -208,5 +210,10 @@
   const copyInput = document.getElementById('inputCopy')
   copyInput.addEventListener('keyup', (e) => {
     find_serial(e.target.value)
+  })
+
+  const socket = io('ws://localhost:3001')
+  socket.on('updateAssemblyPC', function (data) {
+    updateOnePC(data.id)
   })
 </script>

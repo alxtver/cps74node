@@ -46,7 +46,8 @@ router.get('/', auth, async (req, res) => {
     part: req.session.part,
     serial_number: req.query.serial_number,
     pages: pages,
-    pcCount: pcCount
+    pcCount: pcCount,
+    userName: req.session.user.username
   })
 })
 
@@ -231,6 +232,15 @@ router.post("/part", async function (req, res) {
     currentPartId: currentPartId
   }))
 })
+
+
+router.post('/getPC', auth, async (req, res) => {
+  let pc = await PC.findById(req.body.id)
+  res.send(JSON.stringify({
+    pc: pc,
+  }))
+})
+
 
 
 router.post('/insert_serial', auth, async (req, res) => {

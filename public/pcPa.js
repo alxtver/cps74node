@@ -630,6 +630,9 @@ function edit_serial_number(id, obj, unit, serial_number) {
       const pcSN = data.pc.serial_number
       const oldNumberMachine = (data.oldNumberMachine != pcSN) ? data.oldNumberMachine : null
       UpdateCells(data.pc, oldNumberMachine)
+      const user = document.getElementById('userName').value
+      const id = data.pc._id
+      socket.emit('updateAssemblyPC', { pcSN, user, id })
     })
 }
 
@@ -646,6 +649,9 @@ function edit_serial_number_apkzi(id, obj, unit, serial_number) {
       const pcSN = data.pc.serial_number
       const oldNumberMachine = (data.oldNumberMachine != pcSN) ? data.oldNumberMachine : null
       UpdateCells(data.pc, oldNumberMachine)
+      const user = document.getElementById('userName').value
+      const id = data.pc._id
+      socket.emit('updateAssemblyPC', { pcSN, user, id })
     })
 }
 
@@ -688,7 +694,16 @@ function buttons(container, pc) {
   container.appendChild(button_del)
 }
 
-function UpdateCells(pc, oldNumberMachine) {
+function updateOnePC(id) {
+  postData('/pcPa/getPC', {
+      id
+    })
+    .then((data) => {
+      UpdateCells(data.pc, null, false)
+    })
+}
+
+function UpdateCells(pc, oldNumberMachine, voice = true) {
   if (oldNumberMachine) {
     // Обновление всех таблиц
     let page = document.getElementById('page').value
@@ -706,9 +721,7 @@ function UpdateCells(pc, oldNumberMachine) {
     divContainer.appendChild(divCont);
     divCont.innerHTML = ""
     divCont.appendChild(table)
-
     buttons(divCont, pc)
-
     //переход на одну ячейку вниз
     let current_id = document.getElementById('hidd_id').value
     let next_id = current_id.split(";")
@@ -730,17 +743,19 @@ function UpdateCells(pc, oldNumberMachine) {
           nextCell.focus()
         }
         //TextToSpeech
-        if (sessionStorage.getItem("sound") === 'on' && nextCell) {
-          let rows = document.querySelector(".serial_number[data-data='" + next_id.join(';') + "']").parentElement
-          let row = rows.children
-          if (row) {
-            let textToSpeech = row[1].innerText
-            const ut = new SpeechSynthesisUtterance(textToSpeech)
-            ut.lang = 'ru-RU'
-            ut.volume = 1
-            ut.rate = 1.1
-            ut.pitch = 1
-            speechSynthesis.speak(ut)
+        if (voice) {
+          if (sessionStorage.getItem("sound") === 'on' && nextCell) {
+            let rows = document.querySelector(".serial_number[data-data='" + next_id.join(';') + "']").parentElement
+            let row = rows.children
+            if (row) {
+              let textToSpeech = row[1].innerText
+              const ut = new SpeechSynthesisUtterance(textToSpeech)
+              ut.lang = 'ru-RU'
+              ut.volume = 1
+              ut.rate = 1.1
+              ut.pitch = 1
+              speechSynthesis.speak(ut)
+            }
           }
         }
       }

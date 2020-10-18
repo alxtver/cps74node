@@ -54,12 +54,8 @@
 </div>
 <script>
   loadPage()
-
-
   const socket = io('ws://localhost:3001')
   socket.on('updateAssemblyPC', function (data) {
-    console.log(data.user)
     websocketUpdate(data.serialNumber, data.user)
   })
-
 </script>

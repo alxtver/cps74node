@@ -179,10 +179,6 @@ function TablePc(pc) {
     serial_numberCell.addEventListener('keypress', function (e) {
       if (e.keyCode == 13) {
         e.preventDefault()
-        const pc = document.getElementById('serial_number')
-        const serialNumber = pc.innerHTML
-        const user = document.getElementById('userName').value
-        socket.emit('updateAssemblyPC', { serialNumber, user })
         const id = e.target.dataset.id
         const obj = e.target.dataset.obj
         const unit = e.target.dataset.unit
@@ -197,7 +193,6 @@ function TablePc(pc) {
         }
       }
     })
-
   }
   return table
 }
@@ -236,6 +231,10 @@ function edit_serial_number(id, obj, unit, serial_number) {
     .then((data) => {
       flashAlert(data)
       UpdateCells(data.pc)
+      const pc = document.getElementById('serial_number')
+      const serialNumber = pc.innerHTML
+      const user = document.getElementById('userName').value
+      socket.emit('updateAssemblyPC', { serialNumber, user, id })
     })
 }
 
@@ -250,7 +249,10 @@ function edit_serial_number_apkzi(id, obj, unit, serial_number) {
     .then((data) => {
       flashAlert(data)
       UpdateCells(data.pc)
-      //сюда вставляем код для отображения номера апкзи
+      const pc = document.getElementById('serial_number')
+      const serialNumber = pc.innerHTML
+      const user = document.getElementById('userName').value
+      socket.emit('updateAssemblyPC', { serialNumber, user, id })
     })
 }
 
@@ -414,14 +416,11 @@ function getPreviousPC() {
 }
 
 function websocketUpdate(sn, reqUser) {
-
   const pc = document.getElementById('serial_number')
   const user = document.getElementById('userName').value
   const serialNumber = pc.innerHTML
   if (serialNumber == sn && reqUser != user) {
-    setTimeout(() => {
-        updatePC(serialNumber, 'update')
-    }, 500);
+    updatePC(serialNumber, 'update')
   }
 }
 
