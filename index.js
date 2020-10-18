@@ -29,7 +29,7 @@ const io = require('socket.io')(3001)
 
 io.on('connect', socket => {
   socket.on('updateAssemblyPC', function(data){
-    io.emit('updateAssemblyPC', data);
+    io.emit('updateAssemblyPC', data)
   })
 })
 

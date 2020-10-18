@@ -627,12 +627,12 @@ function edit_serial_number(id, obj, unit, serial_number) {
   postData('/pcPa/insert_serial', data)
     .then((data) => {
       flashAlert(data)
-      const pcSN = data.pc.serial_number
-      const oldNumberMachine = (data.oldNumberMachine != pcSN) ? data.oldNumberMachine : null
+      const serialNumber = data.pc.serial_number
+      const oldNumberMachine = (data.oldNumberMachine != serialNumber) ? data.oldNumberMachine : null
       UpdateCells(data.pc, oldNumberMachine)
       const user = document.getElementById('userName').value
       const id = data.pc._id
-      socket.emit('updateAssemblyPC', { pcSN, user, id })
+      socket.emit('updateAssemblyPC', { serialNumber, user, id })
     })
 }
 
@@ -646,12 +646,12 @@ function edit_serial_number_apkzi(id, obj, unit, serial_number) {
   postData('/pcPa/insert_serial_apkzi', data)
     .then((data) => {
       flashAlert(data)
-      const pcSN = data.pc.serial_number
-      const oldNumberMachine = (data.oldNumberMachine != pcSN) ? data.oldNumberMachine : null
+      const serialNumber = data.pc.serial_number
+      const oldNumberMachine = (data.oldNumberMachine != serialNumber) ? data.oldNumberMachine : null
       UpdateCells(data.pc, oldNumberMachine)
       const user = document.getElementById('userName').value
       const id = data.pc._id
-      socket.emit('updateAssemblyPC', { pcSN, user, id })
+      socket.emit('updateAssemblyPC', { serialNumber, user, id })
     })
 }
 
