@@ -694,12 +694,20 @@ function buttons(container, pc) {
   container.appendChild(button_del)
 }
 
-function updateOnePC(id) {
+function updateOnePC(id, reqUser) {
   postData('/pcPa/getPC', {
       id
     })
     .then((data) => {
-      UpdateCells(data.pc, null, false)
+      const user = document.getElementById('userName').value
+      if (user != reqUser) {
+        const card = document.getElementById(data.pc._id)
+        card.classList.add('pcCardAssemblyUpdate')
+        UpdateCells(data.pc, null, false)
+        setTimeout(() => {
+          card.classList.remove('pcCardAssemblyUpdate')
+        }, 500);
+      }
     })
 }
 

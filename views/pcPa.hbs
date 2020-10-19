@@ -214,6 +214,6 @@
 
   const socket = io('ws://localhost:3001')
   socket.on('updateAssemblyPC', function (data) {
-    updateOnePC(data.id)
+    updateOnePC(data.id, data.user)
   })
 </script>
