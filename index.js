@@ -25,6 +25,7 @@ const varMiddleware = require('./middleware/variables')
 const userMiddleware = require('./middleware/user')
 const partMiddleware = require('./middleware/part')
 const bodyParser = require('body-parser')
+const config = require('./config.js')
 const io = require('socket.io')(3001)
 
 io.on('connect', socket => {
@@ -40,7 +41,7 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(bodyParser.json())
 
-const config = require('./config.js')
+
 
 const hbs = exphbs.create({
   defaultLayout: 'main',
