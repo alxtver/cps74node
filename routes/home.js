@@ -82,6 +82,14 @@ router.get('/diagram', auth, async (req, res) => {
   })
 })
 
+router.get('/monitoring', auth, async (req, res) => {
+  let args_devel = {
+      title: 'Мониторинг',
+      part: req.session.part
+    }
+  res.render('monitoring', args_devel)
+})
+
 
 router.post("/insert_part_session", async function (req, res) {
   await User.findByIdAndUpdate(req.session.user._id, {
@@ -99,7 +107,7 @@ router.get('/script', authAdmin, async (req, res) => {
   //     return handleError(err)
   //   } else {
   //     res.send('Скрипт отработал!')
-  //   }    
+  //   }
   // })
 
   // скрипт для добавления штрихкода

@@ -979,6 +979,7 @@ th {
 
 .buttonsActive {
   box-shadow: rgb(53 56 53) 0px 0px 0px 0px;
+  transform: translate(3px, 2px);
 }
 
 .status {
@@ -1000,4 +1001,24 @@ th {
   .assemblyCont {
     margin-top: 25vh;
   }
+}
+
+#grid {
+  display: grid;
+  margin-top: 1rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  grid-gap: .3rem;
+}
+
+.divGrid {
+  background: rgb(110, 197, 118);
+  text-align: center;
+  box-shadow: 0px 2px 2px 0px rgba(42, 51, 78, 0.09)
+}
+
+.divGrid:hover {
+  transform: translate(1px, -2px);
+  box-shadow: 0px 10px 10px 0px rgba(57, 67, 103, 0.2);
+  cursor: pointer;
 }
