@@ -21,10 +21,8 @@ router.get('/', auth, async (req, res) => {
 
 
 router.post('/serialNumbers', auth, async (req, res) => {
-  const serialNumbers = await PC.find({
-    part: req.session.part
-  }).distinct('serial_number')
-  res.send(JSON.stringify(serialNumbers))
+  const pcs = await PC.find({part: req.session.part}).sort({'created': 1})
+  res.send(JSON.stringify(pcs))
 })
 
 router.post('/firstPC', auth, async (req, res) => {
@@ -64,6 +62,11 @@ router.post('/getPC', auth, async (req, res) => {
     part: req.session.part,
     serial_number: req.body.serialNumberPC
   })
+  res.send(JSON.stringify(pc))
+})
+
+router.post('/getPCById', auth, async (req, res) => {
+  const pc = await PC.findById(req.body.id)
   res.send(JSON.stringify(pc))
 })
 
