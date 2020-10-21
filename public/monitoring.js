@@ -282,9 +282,10 @@ function websocketUpdate(id, userName) {
       .then((data) => {
         paintingOneItem(data)
         const item = document.getElementById(data._id)
+        item.classList.remove('pcCardAssemblyUpdate')
         setTimeout(() => {
           item.classList.add('pcCardAssemblyUpdate')
-        }, 500)        
+        }, 800)        
       })
   }
 }
