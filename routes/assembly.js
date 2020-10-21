@@ -20,8 +20,13 @@ router.get('/', auth, async (req, res) => {
 })
 
 
-router.post('/serialNumbers', auth, async (req, res) => {
+router.post('/pc', auth, async (req, res) => {
   const pcs = await PC.find({part: req.session.part}).sort({'created': 1})
+  res.send(JSON.stringify(pcs))
+})
+
+router.post('/serialNumbers', auth, async (req, res) => {
+  const pcs = await PC.find({part: req.session.part}).distinct('serial_number')
   res.send(JSON.stringify(pcs))
 })
 

@@ -451,14 +451,28 @@ input[type=text]:placeholder {
   animation-duration: .5s;
 }
 
+.monitoringPCUpdate {
+  animation-name: scale;
+  animation-duration: 1s;
+}
+
 @keyframes spin {
   25% {
     transform: rotate(2deg);
-    opacity: .7;
   }
 
   75% {
     transform: rotate(-2deg);
+  }
+}
+
+@keyframes scale {
+  25% {
+    transform: scale3d(1.1, 1.1, 1);
+  }
+
+  75% {
+    transform: scale3d(.95, .95, 1);
   }
 }
 
@@ -1008,32 +1022,32 @@ th {
   margin-top: 1rem;
   margin-left: 1rem;
   margin-right: 1rem;
-  grid-gap: .5rem;
+  grid-gap: 1px;
   height: 90vh;
 }
 
 .divGrid {
   text-align: center;
-  box-shadow: rgba(60, 64, 67, .3) 0 1px 2px 0, rgba(60, 64, 67, .15) 0 1px 3px 1px;
-  border-radius: 4px;
-  transition: transform .5s;
+  box-shadow: rgba(60, 64, 67, .3) 0 1px 2px 0, rgba(0, 0, 0, 0.15) 0 1px 3px 1px;
+  border-radius: 3px;
+  transition: transform .2s ease-in-out .1s, box-shadow .2s;
 }
 
 .divGrid:hover {
-  transform: translate(2px, -2px);
-  box-shadow: 0px 10px 10px 0px rgba(57, 67, 103, 0.2);
+  transform: translate(5px, -2px);
+  box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   font-weight: 700;
 }
 
 .divGridAllOk {
-  background: rgb(110, 197, 118);
+  background: rgb(114, 221, 131);
 }
 
 .divGridSystemOk {
-  background: rgb(126, 110, 197);
+  background: rgb(133, 65, 222);
 }
 
 .divGridNotOk {
-  background: rgb(197, 110, 110);
+  background: rgb(222, 76, 65);
 }

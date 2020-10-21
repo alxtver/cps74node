@@ -1,6 +1,6 @@
 function loadSN() {
   document.getElementById('overlay').style.display = 'block'
-  postData('/assembly/serialNumbers')
+  postData('/assembly/pc')
     .then((data) => {
       createGrid(data)
       document.getElementById('overlay').style.display = 'none'
@@ -66,7 +66,7 @@ function CreateTableFromJSON(data, callback) {
   let divCont = document.createElement("div")
   divCont.id = data._id
   divCont.className = "pcCard mb-3"
-  modalWindow.style.cssText = '-webkit-box-shadow: 0 30px 60px 0' + data.back_color + ';box-shadow: 0 30px 60px 0' + data.back_color
+  // modalWindow.style.cssText = '-webkit-box-shadow: 0 30px 60px 0' + data.back_color + ';box-shadow: 0 30px 60px 0' + data.back_color
   divContainer.appendChild(divCont);
   divCont.innerHTML = ""
   divCont.appendChild(table)
@@ -274,6 +274,8 @@ function paintingOneItem(pc) {
 
 function websocketUpdate(id, userName) {
   const user = document.getElementById('userName').value
+  const item = document.getElementById(id)
+  item.classList.remove('monitoringPCUpdate')
   if (userName != user) {
     const data = {
       id: id
@@ -281,11 +283,7 @@ function websocketUpdate(id, userName) {
     postData('/assembly/getPCById', data)
       .then((data) => {
         paintingOneItem(data)
-        const item = document.getElementById(data._id)
-        item.classList.remove('pcCardAssemblyUpdate')
-        setTimeout(() => {
-          item.classList.add('pcCardAssemblyUpdate')
-        }, 800)        
+        item.classList.add('monitoringPCUpdate')
       })
   }
 }
