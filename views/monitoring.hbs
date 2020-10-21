@@ -12,6 +12,20 @@
 </div>
 <input type="hidden" id="userName" value="{{ userName }}">
 
+{{!-- модальное окно теста--}}
+<div class="modal fade bd-example-modal-lg" id="modalPC" tabindex="-1" role="document"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" id="modalWindow" role="document">
+    <div class="modal-content">
+      <div id="PC"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     loadSN()

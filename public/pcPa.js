@@ -186,6 +186,7 @@ function painting() {
 }
 
 function loadPage(page, pages) {
+  let overlay = document.getElementById('overlay')
   overlay.style.display = 'block'
   let data = {
     page: page,
