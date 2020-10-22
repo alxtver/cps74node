@@ -42,18 +42,19 @@ function createGrid(data) {
   }
 }
 
-function loadModalPage(id) {
-  let overlay = document.getElementById('overlay')
-  overlay.style.display = 'block'
-  let data = {
+function loadModalPage(id, isFirst = true) {
+  const modalWindow = document.getElementById('modalWindow')
+  modalWindow.classList.remove('pcCardAssemblyUpdate')
+  const data = {
     id: id
   }
   postData('/assembly/getPCById', data)
     .then((data) => {
       CreateTableFromJSON(data, function () {
-        let overlay = document.getElementById('overlay')
-        overlay.style.display = 'none'
       })
+      if (!isFirst) {
+        modalWindow.classList.add('pcCardAssemblyUpdate')
+      }
     })
 }
 
@@ -66,7 +67,6 @@ function CreateTableFromJSON(data, callback) {
   let divCont = document.createElement("div")
   divCont.id = data._id
   divCont.className = "pcCard mb-3"
-  // modalWindow.style.cssText = '-webkit-box-shadow: 0 30px 60px 0' + data.back_color + ';box-shadow: 0 30px 60px 0' + data.back_color
   divContainer.appendChild(divCont);
   divCont.innerHTML = ""
   divCont.appendChild(table)
@@ -270,6 +270,10 @@ function paintingOneItem(pc) {
   } else {
     item.classList.add('divGridNotOk')
   }
+}
+
+function modalWebsocketUpdate(id) {
+  loadModalPage(id, false)
 }
 
 function websocketUpdate(id, userName) {

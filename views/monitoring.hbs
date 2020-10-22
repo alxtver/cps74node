@@ -30,6 +30,12 @@
   let uri = 'ws://' + location.hostname + ':3001'
   const socket = io(uri)
   socket.on('updateAssemblyPC', function (data) {
+    const modalPC = document.querySelector('div#PC div.pcCard')
+    if (modalPC && data.user != document.getElementById('userName').value) {
+      if (modalPC.id == data.id) {
+        modalWebsocketUpdate(data.id)
+      }
+    }
     websocketUpdate(data.id, data.user)
   })
 </script>
