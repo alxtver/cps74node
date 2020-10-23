@@ -66,7 +66,7 @@ function CreateTableFromJSON(data, callback) {
   table = TablePc(data)
   let divCont = document.createElement("div")
   divCont.id = data._id
-  divCont.className = "pcCard mb-3"
+  divCont.className = "pcCard mb-0"
   divContainer.appendChild(divCont);
   divCont.innerHTML = ""
   divCont.appendChild(table)
