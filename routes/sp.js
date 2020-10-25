@@ -161,7 +161,9 @@ router.post('/edit_ajax', auth, async (req, res) => {
 	} catch (error) {
 		console.log(error)
 	}
-	res.status(200).json({ message: 'ok' })
+	res.status(200).json({
+		message: 'ok'
+	})
 })
 
 
@@ -170,7 +172,9 @@ router.post("/insert_type_session", async function (req, res) {
 		lastType: req.body.selectedItem
 	})
 	req.session.type = req.body.selectedItem
-	res.status(200).json({ message: 'ok' })
+	res.status(200).json({
+		message: 'ok'
+	})
 })
 
 
@@ -183,7 +187,7 @@ router.get('/:id/edit', auth, async (req, res) => {
 		title: `Редактировать ${pki.type_pki}`,
 		part: req.session.part,
 		pki: pki,
-		encodedPki : encodeURIComponent(JSON.stringify(pki))
+		encodedPki: encodeURIComponent(JSON.stringify(pki))
 	})
 })
 
@@ -194,11 +198,15 @@ router.post('/edit', auth, async (req, res) => {
 	await Pki.findByIdAndUpdate(id, req.body)
 	let pki = await Pki.findById(id)
 	if (req.body.ean_code != '' && pki.sp_unit.length == 0) {
-		let ean = await EAN.find({ean_code: req.body.ean_code})
+		let ean = await EAN.find({
+			ean_code: req.body.ean_code
+		})
 		pki.sp_unit = ean.sp_unit
 		await pki.save()
 	}
-	res.status(200).json({ message: 'ok' })
+	res.status(200).json({
+		message: 'ok'
+	})
 })
 
 
@@ -207,14 +215,20 @@ router.post('/sp_unit', auth, async (req, res) => {
 	if (pki.sp_unit && pki.sp_unit.length > 0) {
 		res.send(pki)
 	} else if (pki.ean_code) {
-		ean = await EAN.findOne({ean_code: pki.ean_code})
+		ean = await EAN.findOne({
+			ean_code: pki.ean_code
+		})
 		if (ean && ean.sp_unit.length > 0) {
 			res.send(ean)
 		} else {
-			res.status(200).json({ message: 'ok' })
+			res.status(200).json({
+				message: 'ok'
+			})
 		}
 	} else {
-		res.status(200).json({ message: 'ok' })
+		res.status(200).json({
+			message: 'ok'
+		})
 	}
 })
 
@@ -248,7 +262,9 @@ router.post('/check_ean', auth, async (req, res) => {
 			res.send(ean.sp_unit1)
 		}
 	} else {
-		res.status(200).json({ message: 'ok' })
+		res.status(200).json({
+			message: 'ok'
+		})
 	}
 })
 
@@ -397,7 +413,7 @@ router.get('/reportSPDoc', auth, async (req, res) => {
 			{}
 		]
 	)
-	
+
 	var table = [
 		[{
 				val: 'No.',
@@ -513,8 +529,9 @@ router.get("/excelExport", auth, async function (req, res) {
 	let workbook = new excel.Workbook({
 		defaultFont: {
 			size: 12,
-			name: 'Times New Roman'			
-		}})
+			name: 'Times New Roman'
+		}
+	})
 	// Add Worksheets to the workbook
 	let ws = workbook.addWorksheet('Sheet 1')
 	// Create a reusable style
@@ -651,23 +668,12 @@ router.get("/excelExport", auth, async function (req, res) {
 		},
 	})
 
-	let pkis = await Pki.find({part: req.session.part}).sort({type_pki: 1})
-	// if (!req.session.type || req.session.type == '...') {
-	// 	pkis = await Pki.find({
-	// 		part: req.session.part
-	// 	}).sort({
-	// 		type_pki: 1
-	// 	})
-	// } else {
-	// 	pkis = await Pki.find({
-	// 		part: req.session.part,
-	// 		type_pki: req.session.type
-	// 	}).sort({
-	// 		type_pki: 1
-	// 	})
-	// }
-	
-	
+	let pkis = await Pki.find({
+		part: req.session.part
+	}).sort({
+		type_pki: 1
+	})
+
 	ws.column(1).setWidth(3)
 	ws.column(2).setWidth(5)
 	ws.column(3).setWidth(30)
@@ -759,28 +765,27 @@ router.get("/excelExport", auth, async function (req, res) {
 				unit.serial_number == 'Б/н' ||
 				unit.serial_number == 'б/Н' ||
 				unit.serial_number == 'Б/Н'
-				) {
-					if (unit.type == 'Коврик для мыши') {						
-					} else {
-						unitsWOSn.push({
-							type: unit.type,
-							name: unit.name,
-							quantity: unit.quantity,
-							serial_number: unit.serial_number
-						})
-					}				
-			} else if (
-				unit.serial_number == pc.serial_number &&
-				unit.type != 'Системный блок' &&
-				unit.type != 'Корпус' &&
-				unit.type != 'Коврик для мыши'
-				) {
-					unitsWPcSn.push({
+			) {
+				if (unit.type == 'Коврик для мыши') {} else {
+					unitsWOSn.push({
 						type: unit.type,
 						name: unit.name,
 						quantity: unit.quantity,
 						serial_number: unit.serial_number
 					})
+				}
+			} else if (
+				unit.serial_number == pc.serial_number &&
+				unit.type != 'Системный блок' &&
+				unit.type != 'Корпус' &&
+				unit.type != 'Коврик для мыши'
+			) {
+				unitsWPcSn.push({
+					type: unit.type,
+					name: unit.name,
+					quantity: unit.quantity,
+					serial_number: unit.serial_number
+				})
 			}
 		}
 		for (const unit of pc.system_case_unit) {
@@ -788,8 +793,8 @@ router.get("/excelExport", auth, async function (req, res) {
 				unit.serial_number == 'Б/н' ||
 				unit.serial_number == 'б/Н' ||
 				unit.serial_number == 'Б/Н'
-				) {
-					
+			) {
+
 				unitsWOSn.push({
 					type: unit.type,
 					name: unit.name,
@@ -800,7 +805,7 @@ router.get("/excelExport", auth, async function (req, res) {
 				unit.serial_number == pc.serial_number &&
 				unit.type != 'Системный блок' &&
 				unit.type != 'Корпус'
-				) {
+			) {
 				unitsWPcSn.push({
 					type: unit.type,
 					name: unit.name,
@@ -828,33 +833,33 @@ router.get("/excelExport", auth, async function (req, res) {
 		}
 	}
 
-// выгрузка в отчет комплектухи c номерами машин
-for (const un of unitsWPcSn) {
-	if (un.type == type) {
-		st = style
-		stB = styleB
-	} else {
-		st = style1
-		stB = style1B
+	// выгрузка в отчет комплектухи c номерами машин
+	for (const un of unitsWPcSn) {
+		if (un.type == type) {
+			st = style
+			stB = styleB
+		} else {
+			st = style1
+			stB = style1B
+		}
+		let name = un.name.split(' ')
+		let vendor = name.splice(0, 1).join(' ')
+		let model = name.join(' ')
+		ws.cell(n, 2).number(number).style(stB)
+		ws.cell(n, 3).string(un.type).style(stB)
+		ws.cell(n, 4).string(vendor).style(st)
+		ws.cell(n, 5).string(model).style(st)
+		ws.cell(n, 6).string(un.quantity).style(st)
+		ws.cell(n, 7).string(un.serial_number).style(st)
+		ws.cell(n, 8).string('').style(st)
+		ws.cell(n, 9).string('').style(st)
+		ws.cell(n, 10).string(un.quantity).style(st)
+		n += 1
+		number += 1
+		type = un.type
 	}
-	let name = un.name.split(' ')
-	let vendor = name.splice(0, 1).join(' ')
-	let model = name.join(' ')
-	ws.cell(n, 2).number(number).style(stB)
-	ws.cell(n, 3).string(un.type).style(stB)
-	ws.cell(n, 4).string(vendor).style(st)
-	ws.cell(n, 5).string(model).style(st)
-	ws.cell(n, 6).string(un.quantity).style(st)
-	ws.cell(n, 7).string(un.serial_number).style(st)
-	ws.cell(n, 8).string('').style(st)
-	ws.cell(n, 9).string('').style(st)
-	ws.cell(n, 10).string(un.quantity).style(st)
-	n += 1
-	number += 1
-	type = un.type
-}
 
-// выгрузка в отчет комплектухи без номеров
+	// выгрузка в отчет комплектухи без номеров
 	for (let i = 0; i < arr.length; i++) {
 		let name = sumUnitsWOSn[arr[i]].name.split(' ')
 		let vendor = name.splice(0, 1).join(' ')
@@ -889,8 +894,9 @@ router.get("/excelExport1", auth, async function (req, res) {
 	let workbook = new excel.Workbook({
 		defaultFont: {
 			size: 12,
-			name: 'Times New Roman'			
-		}})
+			name: 'Times New Roman'
+		}
+	})
 	// Add Worksheets to the workbook
 	let ws = workbook.addWorksheet('Sheet 1')
 	// Create a reusable style
@@ -1026,8 +1032,16 @@ router.get("/excelExport1", auth, async function (req, res) {
 			size: 18
 		},
 	})
-	let pkis = await Pki.find({part: req.session.part}).sort({type_pki: 1})
-	const pcs = await PC.find({part: req.session.part}).sort({'created': 1})
+	let pkis = await Pki.find({
+		part: req.session.part
+	}).sort({
+		type_pki: 1
+	})
+	const pcs = await PC.find({
+		part: req.session.part
+	}).sort({
+		'created': 1
+	})
 
 
 	// ws.column(1).setWidth(3)
@@ -1055,33 +1069,31 @@ router.get("/excelExport1", auth, async function (req, res) {
 	ws.cell(2, 6).string('Серийный (инв.) номер').style(styleheader)
 
 	ws.row(2).freeze()
-	
-	
+
 	let n = 3
 
 	for (const pc of pcs) {
 		ws.cell(n, 2, n, 6, true).string(pc.serial_number).style(styleheader)
-		n+=1
+		n += 1
 		for (const unit of pc.pc_unit) {
 			let pki = ''
-				
 			if (
 				unit.serial_number != 'б/н' &&
 				unit.serial_number != 'Б/н' &&
 				unit.serial_number != 'б/Н' &&
 				unit.serial_number != 'б/н'
-				) {
-					if (unit.apkzi != "apkzi" && unit.type != 'Системный блок' && unit.serial_number != pc.serial_number) {
-						for (const pk of pkis) {
-							if (pk.serial_number == unit.serial_number) {
-								pki = pk
-								break
-							}
+			) {
+				if (unit.apkzi != "apkzi" && unit.type != 'Системный блок' && unit.serial_number != pc.serial_number) {
+					for (const pk of pkis) {
+						if (pk.serial_number == unit.serial_number) {
+							pki = pk
+							break
 						}
+					}
 					//	pki = await Pki.findOne({part: req.session.part, serial_number: unit.serial_number})
-					}	
+				}
 			}
-			
+
 			if (pki) {
 				ws.cell(n, 2).string(unit.type).style(styleB)
 				ws.cell(n, 3).string(pki.vendor).style(style)
@@ -1109,17 +1121,18 @@ router.get("/excelExport1", auth, async function (req, res) {
 				ws.cell(n, 5).string(unit.quantity).style(style)
 				ws.cell(n, 6).string(unit.serial_number).style(style)
 				n += 1
-			}	
+			}
 		}
 		for (const unit of pc.system_case_unit) {
 			let pki = ''
-			
+
 			if (
 				unit.serial_number != 'б/н' &&
 				unit.serial_number != 'Б/н' &&
 				unit.serial_number != 'б/Н' &&
 				unit.serial_number != 'б/н'
-				) { if (unit.serial_number != pc.serial_number || unit.type == 'Корпус') {
+			) {
+				if (unit.serial_number != pc.serial_number || unit.type == 'Корпус') {
 					for (const pk of pkis) {
 						if (pk.serial_number == unit.serial_number) {
 							pki = pk
@@ -1128,7 +1141,7 @@ router.get("/excelExport1", auth, async function (req, res) {
 					}
 					//pki = await Pki.findOne({part: req.session.part, serial_number: unit.serial_number})
 				}
-					
+
 			}
 			if (pki) {
 				ws.cell(n, 2).string(unit.type).style(styleB)
@@ -1156,9 +1169,9 @@ router.get("/excelExport1", auth, async function (req, res) {
 				ws.cell(n, 4).string(model).style(style)
 				ws.cell(n, 5).string(unit.quantity).style(style)
 				ws.cell(n, 6).string(unit.serial_number).style(style)
-				n += 1				
-			}			
-		}		
+				n += 1
+			}
+		}
 	}
 
 
