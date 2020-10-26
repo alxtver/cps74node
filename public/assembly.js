@@ -314,7 +314,7 @@ function UpdateCells(pc) {
           const ut = new SpeechSynthesisUtterance(textToSpeech)
           ut.lang = 'ru-RU'
           ut.volume = 1
-          ut.rate = 1.1
+          ut.rate = 5
           ut.pitch = 1
           speechSynthesis.speak(ut)
         }

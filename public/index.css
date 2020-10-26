@@ -1023,17 +1023,27 @@ th {
   margin-left: 1rem;
   margin-right: 1rem;
   grid-gap: 1px;
-  height: 90vh;
+  height: calc(100vh - 85px);
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
 }
 
 .divGrid {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   box-shadow: rgba(60, 64, 67, .3) 0 1px 2px 0, rgba(0, 0, 0, 0.15) 0 1px 3px 1px;
-  border-radius: 3px;
+  border-radius: 4px;
   transition: transform .2s ease-in-out .1s, box-shadow .2s;
 }
 
 .divGrid:hover {
+  transform: scale3d(1.1, 1.1, 1) translate(5px, -2px) rotate(-2deg);
+  box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.divGrid:focus {
   transform: scale3d(1.1, 1.1, 1) translate(5px, -2px) rotate(-2deg);
   box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.3);
   cursor: pointer;
