@@ -226,16 +226,8 @@ function addPkiSubmit() {
     snArr.unshift(serial_number)
     sessionStorage.setItem('snList', snArr)
   }
-  let data = {
-    ean_code,
-    type_pki,
-    vendor,
-    model,
-    country,
-    part,
-    serial_number
-  }
-  postData('/add', data)
+  const pki = new PKI(ean_code, type_pki, vendor, model, country, part, serial_number)
+  postData('/add', pki)
     .then((data) => {
       if (data.status == 'snExists') {
         document.getElementById('sound').play()
