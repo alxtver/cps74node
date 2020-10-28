@@ -73,20 +73,20 @@
             <div class="input-group-prepend">
               <span class="input-group-text" id="inputGroup-sizing-default">Найти</span>
             </div>
-            <input name="search" type="text" class="form-control" aria-label="Default"
+            <input name="search" id="searchInput" type="text" class="form-control" aria-label="Default"
               aria-describedby="inputGroup-sizing-default">
           </div>
           <div class="input-group mb-3">
             <div class="input-group-prepend">
               <span class="input-group-text" id="inputGroup-sizing-default">Заменить на</span>
             </div>
-            <input name="replace" type="text" class="form-control" aria-label="Default"
+            <input name="replace" id="replaceInput" type="text" class="form-control" aria-label="Default"
               aria-describedby="inputGroup-sizing-default">
           </div>
           <input type="hidden" name="_csrf" value="{{csrf}}">
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-secondary" id="close1" data-dismiss="modal">Назад</button>
-            <button class="btn btn-outline-success" data-dismiss="modal" id="btnSearchAndReplace">Поиск и
+            <button onclick="searchAndReplace()" class="btn btn-outline-success" data-dismiss="modal" id="btnSearchAndReplace">Поиск и
               замена</button>
           </div>
         </form>

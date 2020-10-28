@@ -448,6 +448,12 @@ router.get('/autocomplete', auth, async (req, res) => {
 router.post('/searchAndReplace', auth, async (req, res) => {
   let pkisByModel = await Pki.find({part: req.session.part, model: req.body.search})
   if (pkisByModel.length > 0) {
+    if (pkisByModel[0].ean_code) {
+      let ean = await EAN.findOne({ean_code: pkisByModel[0].ean_code})
+      ean.model = req.body.replace
+      ean.save()
+    }
+  }
     for (const pki of pkisByModel) {
       if (pki.number_machine) {
         pc = await PC.findOne({part: pki.part, serial_number: pki.number_machine})
@@ -471,17 +477,16 @@ router.post('/searchAndReplace', auth, async (req, res) => {
         pcCopy.save()        
       }
       pki.model = req.body.replace
-      pki.save()
-      if (pki.ean_code) {
-        let ean = await EAN.findOne({ean_code: pki.ean_code})
-        ean.model = req.body.replace
-        ean.save()
-      }
-    }
+      await pki.save()      
   }
   
   let pkisByVendor = await Pki.find({part: req.session.part, vendor: req.body.search})
   if (pkisByVendor.length > 0) {
+    if (pkisByVendor[0].ean_code) {
+      let ean = await EAN.findOne({ean_code: pkisByVendor[0].ean_code})
+      ean.vendor = req.body.replace
+      ean.save()
+    }
     for (const pki of pkisByVendor) {
       if (pki.number_machine) {
         pc = await PC.findOne({part: pki.part, serial_number: pki.number_machine})
@@ -505,13 +510,8 @@ router.post('/searchAndReplace', auth, async (req, res) => {
         pcCopy.save()        
       }
       pki.vendor = req.body.replace
-      pki.save()
-      if (pki.ean_code) {
-        let ean = await EAN.findOne({ean_code: pki.ean_code})
-        ean.vendor = req.body.replace
-        ean.save()
-      }
-    }   
+      await pki.save()      
+    }
   }
 
   let pkisByType = await Pki.find({part: req.session.part, type_pki: req.body.search})
@@ -549,7 +549,7 @@ router.post('/searchAndReplace', auth, async (req, res) => {
     }   
   }
 
-  res.redirect('/pkis')
+  res.status(200).json({ message: 'ok' })
 })
 
 module.exports = router

@@ -249,3 +249,15 @@ function addPkiSubmit() {
       document.getElementById("formContent").style.boxShadow = '0 30px 60px 0 rgba(0, 0, 0, 0.9)'
     })
 }
+
+function searchAndReplace() {
+  let overlay = document.getElementById('overlay')
+  overlay.style.display = 'block'
+  const search = document.getElementById('searchInput').value
+  const replace = document.getElementById('replaceInput').value
+  data = {search, replace}
+  postData('/pkis/searchAndReplace', data)
+    .then(() => {
+      load_data()
+    })
+}
