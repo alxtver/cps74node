@@ -90,6 +90,9 @@ app.use('/equipment', equipmentRoutes)
 app.use('/logs', logsRoutes)
 app.use('/countries', countriesRoutes)
 app.use('/search', searchRoutes)
+app.use(function(req,res){
+  res.status(404).render('404');
+});
 
 
 const PORT = process.env.PORT || 3000
