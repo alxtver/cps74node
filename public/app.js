@@ -179,7 +179,7 @@ function loadSessionApkzi() {
   }
 
   if (sessionStorage.getItem("fdsi")) {
-    document.getElementById("kont_name").focus();
+    field_kontr_zav_number.focus();
   } else {
     document.getElementById("fdsi").focus();
   }

@@ -72,4 +72,10 @@
   document.addEventListener("DOMContentLoaded", function () {
     loadSessionApkzi()
   })
+  let snInput = document.getElementById('kontr_zav_number')
+  snInput.addEventListener("keyup", function (e) {
+    if (e.keyCode == 13) {
+      addAPKZISubmit()
+    }
+  })
 </script>
