@@ -1,3 +1,6 @@
+<script src="/apkzi.js"></script>
+<script src="/classes/classes.js"></script>
+
 <div class="wrapper fadeInDown">
   <div id="formContent">
 
@@ -59,7 +62,8 @@
       </div>
 
       <input type="hidden" name="_csrf" value="{{csrf}}">
-      <button type="submit" onclick="return addSessionApkzi();" class="btn btn-primary btn-dark">Добавить АПКЗИ</button>
+      {{!-- <button type="submit" onclick="addSessionApkzi()" class="btn btn-primary btn-dark">Добавить АПКЗИ</button> --}}
+      <button type="button" onclick="addAPKZISubmit()" class="btn btn-primary btn-dark">Добавить АПКЗИ</button>
     </form>
   </div>
 </div>

@@ -146,3 +146,56 @@ function CreateTableFromJSON(data, callback) {
   }
   callback()
 }
+
+function addAPKZISubmit() {
+  document.getElementById("formContent").style.boxShadow = '0 13px 16px 0 rgba(0, 0, 0, 0.9)'
+  const fdsi = document.getElementById('fdsi').value
+  const apkzi_name = document.getElementById('apkzi_name').value
+  const kont_name = document.getElementById('kont_name').value
+  const fdsiKontr = document.getElementById('fdsiKontr').value
+  const zav_number = document.getElementById('zav_number').value
+  const kontr_zav_number = document.getElementById('kontr_zav_number').value
+  const part = document.getElementById('part').value
+
+  sessionStorage.setItem("fdsi", fdsi)
+  sessionStorage.setItem("apkzi_name", apkzi_name)
+  sessionStorage.setItem("kont_name", kont_name)
+  sessionStorage.setItem("fdsiKontr", fdsiKontr)
+  sessionStorage.setItem("zav_number", zav_number)
+  sessionStorage.setItem("kontr_zav_number", kontr_zav_number)
+  sessionStorage.setItem("part", part)
+
+  if (!fdsi) {
+    validate(document.getElementById('fdsi'))
+    return false
+  }
+  if (!apkzi_name) {
+    validate(document.getElementById("apkzi_name"))
+    return false
+  }
+  if (!kont_name) {
+    validate(document.getElementById("kont_name"))
+    return false
+  }
+  if (!fdsiKontr) {
+    validate(document.getElementById("fdsiKontr"))
+    return false
+  }
+  if (!zav_number) {
+    validate(document.getElementById("zav_number"))
+    return false
+  }
+  if (!kontr_zav_number) {
+    validate(document.getElementById("kontr_zav_number"))
+    return false
+  }
+  if (!part) {
+    validate(document.getElementById("part"))
+    return false
+  }
+
+  const apkzi = new APKZI(apkzi_name, kont_name, fdsi, fdsiKontr, zav_number, kontr_zav_number, part)
+  apkzi.addAPKZIToDB().then(() => {
+    document.getElementById("formContent").style.boxShadow = '0 30px 60px 0 rgba(0, 0, 0, 0.9)'
+  })
+}

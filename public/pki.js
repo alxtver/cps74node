@@ -227,8 +227,7 @@ function addPkiSubmit() {
     sessionStorage.setItem('snList', snArr)
   }
   const pki = new PKI(ean_code, type_pki, vendor, model, country, part, serial_number)
-  postData('/add', pki)
-    .then((data) => {
+  pki.addPKIToDB().then((data) => {
       if (data.status == 'snExists') {
         document.getElementById('sound').play()
         document.getElementById('error_message').style.display = 'block'
