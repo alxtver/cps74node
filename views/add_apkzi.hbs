@@ -55,7 +55,8 @@
       </div>
 
       <div class="input-field">
-        <input id="part" name="part" type="text" class="form-control" placeholder="Название партии" required>
+        <input id="part" name="part" type="text" class="form-control" placeholder="Название партии" value="{{ part }}"
+          required>
         <div class="invalid-feedback">
           Введите название партии!
         </div>
@@ -78,4 +79,12 @@
       addAPKZISubmit()
     }
   })
+
+  let inputs = document.querySelectorAll('input')
+  for (input of inputs) {
+    input.addEventListener('keyup', (event) => {
+      event.target.style.borderColor = "#ced4da"
+      event.target.style.backgroundColor = "#fff"
+    })
+  }
 </script>

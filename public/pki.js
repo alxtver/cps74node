@@ -96,10 +96,7 @@ function CreateTableFromJSON(data, callback) {
 
 function delBtn() {
   let id = document.getElementById('hidId').value
-  let data = {
-    id: id
-  }
-  postData('/pkis/del', data)
+  postData('/pkis/del', {id})
     .then(() => {
       load_data()
     })

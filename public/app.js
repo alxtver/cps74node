@@ -380,6 +380,7 @@ function autocomplete(inp, arr) {
 
 function CreateSelectType(data, callback) {
   let select = document.querySelector('#type_select_navbar')
+  select.innerHTML = ''
   let option = document.createElement("option")
   option.text = '...'
   option.value = '...'

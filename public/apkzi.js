@@ -157,11 +157,6 @@ function addAPKZISubmit() {
   const kontr_zav_number = document.getElementById('kontr_zav_number').value
   const part = document.getElementById('part').value
 
-  let zavNumberInput = document.getElementById('zav_number')
-  let kontrZavNumberInput = document.getElementById('kontr_zav_number')
-  zavNumberInput.value = plusOne(sessionStorage.getItem("zav_number"))
-  kontrZavNumberInput.value = plusOne(sessionStorage.getItem("kontr_zav_number"))
-
   sessionStorage.setItem("fdsi", fdsi)
   sessionStorage.setItem("apkzi_name", apkzi_name)
   sessionStorage.setItem("kont_name", kont_name)
@@ -170,6 +165,10 @@ function addAPKZISubmit() {
   sessionStorage.setItem("kontr_zav_number", kontr_zav_number)
   sessionStorage.setItem("part", part)
 
+  let zavNumberInput = document.getElementById('zav_number')
+  let kontrZavNumberInput = document.getElementById('kontr_zav_number')
+  zavNumberInput.value = plusOne(sessionStorage.getItem("zav_number"))
+  kontrZavNumberInput.value = plusOne(sessionStorage.getItem("kontr_zav_number"))
   if (!fdsi) {
     validate(document.getElementById('fdsi'))
     return false
@@ -202,10 +201,12 @@ function addAPKZISubmit() {
   const apkzi = new APKZI(apkzi_name, kont_name, fdsi, fdsiKontr, zav_number, kontr_zav_number, part)
   apkzi.addAPKZIToDB().then(() => {
     document.getElementById("formContent").style.boxShadow = '0 30px 60px 0 rgba(0, 0, 0, 0.9)'
-    let zavNumberInput = document.getElementById('zav_number')
-    let kontrZavNumberInput = document.getElementById('kontr_zav_number')
-    zavNumberInput.value = plusOne(sessionStorage.getItem("zav_number"))
-    kontrZavNumberInput.value = plusOne(sessionStorage.getItem("kontr_zav_number"))
     kontrZavNumberInput.focus()
   })
+}
+
+function validate(input) {
+  input.style.borderColor = "#f57e7e";
+  input.style.backgroundColor = "#f1f1ae";
+  input.style.borderWidth = 2;
 }
