@@ -330,13 +330,13 @@ function autocomplete(inp, arr) {
   inp.addEventListener("keydown", function (e) {
     var x = document.getElementById(this.id + "autocomplete-list");
     if (x) x = x.getElementsByTagName("div");
-    if (e.keyCode == 40) {
+    if (e.key == 'ArrowDown') {
       currentFocus++;
       addActive(x);
-    } else if (e.keyCode == 38) {
+    } else if (e.key == 'ArrowUp') {
       currentFocus--;
       addActive(x);
-    } else if (e.keyCode == 13) {
+    } else if (e.key == 'Enter') {
       e.preventDefault();
       if (currentFocus > -1) {
         if (x) x[currentFocus].click();
@@ -345,20 +345,16 @@ function autocomplete(inp, arr) {
   })
 
   function addActive(x) {
-    /*a function to classify an item as "active":*/
     if (!x) return false;
-    /*start by removing the "active" class on all items:*/
     removeActive(x);
     if (currentFocus >= x.length) currentFocus = 0;
     if (currentFocus < 0) currentFocus = (x.length - 1);
-    /*add class "autocomplete-active":*/
     x[currentFocus].classList.add("autocomplete-active");
   }
 
   function removeActive(x) {
-    /*a function to remove the "active" class from all autocomplete items:*/
     for (var i = 0; i < x.length; i++) {
-      x[i].classList.remove("autocomplete-active");
+      x[i].classList.remove("autocomplete-active")
     }
   }
 
@@ -405,4 +401,16 @@ function setSoundSessionOff() {
   document.getElementById("soundOff").hidden = false
   document.getElementById("soundOn").hidden = true
   speechSynthesis.cancel()
+}
+
+function textToSpeech(text, rate) {
+  if (sessionStorage.getItem("sound") === 'on') {
+    let textToSpeech = text
+    const ut = new SpeechSynthesisUtterance(textToSpeech)
+    ut.lang = 'ru-RU'
+    ut.volume = 1
+    ut.rate = rate
+    ut.pitch = 1.3
+    speechSynthesis.speak(ut)
+  }
 }

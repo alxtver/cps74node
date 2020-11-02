@@ -153,7 +153,7 @@ function TablePc(pc) {
     serial_numberCell.dataset.data = pc._id + ';' + j + ';' + 'pc_unit'
     serial_numberCell.className = 'serial_number'
     serial_numberCell.addEventListener('keypress', function (e) {
-      if (e.keyCode == 13) {
+      if (e.key == 'Enter') {
         e.preventDefault()
         const id = e.target.dataset.id
         const obj = e.target.dataset.obj
@@ -209,7 +209,7 @@ function TablePc(pc) {
     }
     serial_numberCell.className = 'serial_number'
     serial_numberCell.addEventListener('keypress', function (e) {
-      if (e.keyCode == 13) {
+      if (e.key == 'Enter') {
         e.preventDefault()
         const id = e.target.dataset.id
         const obj = e.target.dataset.obj

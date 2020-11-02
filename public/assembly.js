@@ -20,10 +20,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.onkeydown = function (e) {
 
-  if (e.ctrlKey && e.keyCode == 39) {
+  if (e.ctrlKey && e.key == 'ArrowRight') {
     e.preventDefault()
     getNextPC()
-  } else if (e.ctrlKey && e.keyCode == 37) {
+  } else if (e.ctrlKey && e.key == 'ArrowLeft') {
     e.preventDefault()
     getPreviousPC()
   }
@@ -115,8 +115,8 @@ function CreateTableFromJSON(data, callback) {
 }
 
 function TablePc(pc) {
-   const apkziDiv = document.getElementById('apkziDiv')
-   apkziDiv.innerHTML = ''
+  const apkziDiv = document.getElementById('apkziDiv')
+  apkziDiv.innerHTML = ''
   // таблица ПЭВМ
   let table = document.createElement("table");
   table.className = "table table-bordered table-hover table-responsive assemblytable"
@@ -177,7 +177,7 @@ function TablePc(pc) {
     serial_numberCell.className = 'serial_number'
     serial_numberCell.contentEditable = "true"
     serial_numberCell.addEventListener('keypress', function (e) {
-      if (e.keyCode == 13) {
+      if (e.key == 'Enter') {
         e.preventDefault()
         const id = e.target.dataset.id
         const obj = e.target.dataset.obj
@@ -201,7 +201,7 @@ function painting() {
   const nameCells = document.querySelectorAll('td.name')
   const snCells = document.querySelectorAll('td.serial_number')
   const status = document.getElementById('status')
-  const statusName = document.getElementById('statusName');
+  const statusName = document.getElementById('statusName')
   status.style.background = '#4CAF50'
   statusName.innerHTML = "OK!"
   for (const cell of nameCells) {
@@ -234,7 +234,11 @@ function edit_serial_number(id, obj, unit, serial_number) {
       const pc = document.getElementById('serial_number')
       const serialNumber = pc.innerHTML
       const user = document.getElementById('userName').value
-      socket.emit('updateAssemblyPC', { serialNumber, user, id })
+      socket.emit('updateAssemblyPC', {
+        serialNumber,
+        user,
+        id
+      })
     })
 }
 
@@ -252,7 +256,16 @@ function edit_serial_number_apkzi(id, obj, unit, serial_number) {
       const pc = document.getElementById('serial_number')
       const serialNumber = pc.innerHTML
       const user = document.getElementById('userName').value
-      socket.emit('updateAssemblyPC', { serialNumber, user, id })
+      socket.emit('updateAssemblyPC', {
+        serialNumber,
+        user,
+        id
+      })
+      const statusName = document.getElementById('statusName')
+      if (statusName.innerHTML == "OK!") {
+        textToSpeech('Все серийники введены!', 2)
+      }
+      textToSpeech(document.getElementById('apkziDiv').innerHTML, 2)
     })
 }
 
@@ -306,18 +319,10 @@ function UpdateCells(pc) {
         nextCell.focus()
       }
       //TextToSpeech
-      if (sessionStorage.getItem("sound") === 'on' && nextCell) {
-        let rows = document.querySelector(".serial_number[data-data='" + next_id.join(';') + "']").parentElement
-        let row = rows.children
-        if (row) {
-          let textToSpeech = row[0].innerText
-          const ut = new SpeechSynthesisUtterance(textToSpeech)
-          ut.lang = 'ru-RU'
-          ut.volume = 1
-          ut.rate = 5
-          ut.pitch = 1
-          speechSynthesis.speak(ut)
-        }
+      let rows = document.querySelector(".serial_number[data-data='" + next_id.join(';') + "']").parentElement
+      let row = rows.children
+      if (row) {
+        textToSpeech(row[0].innerText, 5)
       }
     }
     painting()

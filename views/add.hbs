@@ -79,14 +79,14 @@
     autoComplete()
     let eanInput = document.getElementById('ean_code')
     eanInput.addEventListener("keypress", function (e) {
-      if (e.keyCode == 13) {
+      if (e.key == 'Enter') {
         e.preventDefault()
         searchEAN(eanInput.value)
       }
     })
     let snInput = document.getElementById('serial_number')
     snInput.addEventListener("keypress", function (e) {
-      if (e.keyCode == 13) {
+      if (e.key == 'Enter') {
         addPkiSubmit()
       }
     })

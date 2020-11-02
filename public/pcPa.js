@@ -316,7 +316,7 @@ function TablePc(pc) {
     serial_numberCell.dataset.data = pc._id + ';' + j + ';' + 'pc_unit'
     serial_numberCell.className = 'serial_number'
     serial_numberCell.addEventListener('keypress', function (e) {
-      if (e.keyCode == 13) {
+      if (e.key == 'Enter') {
         e.preventDefault()
         const id = e.target.dataset.id
         const obj = e.target.dataset.obj
@@ -373,7 +373,7 @@ function TablePc(pc) {
     serial_numberCell.className = 'serial_number'
     serial_numberCell.contentEditable = "true"
     serial_numberCell.addEventListener('keypress', function (e) {
-      if (e.keyCode == 13) {
+      if (e.key == 'Enter') {
         e.preventDefault()
         const id = e.target.dataset.id
         const obj = e.target.dataset.obj
@@ -633,7 +633,11 @@ function edit_serial_number(id, obj, unit, serial_number) {
       UpdateCells(data.pc, oldNumberMachine)
       const user = document.getElementById('userName').value
       const id = data.pc._id
-      socket.emit('updateAssemblyPC', { serialNumber, user, id })
+      socket.emit('updateAssemblyPC', {
+        serialNumber,
+        user,
+        id
+      })
     })
 }
 
@@ -652,7 +656,11 @@ function edit_serial_number_apkzi(id, obj, unit, serial_number) {
       UpdateCells(data.pc, oldNumberMachine)
       const user = document.getElementById('userName').value
       const id = data.pc._id
-      socket.emit('updateAssemblyPC', { serialNumber, user, id })
+      socket.emit('updateAssemblyPC', {
+        serialNumber,
+        user,
+        id
+      })
     })
 }
 
@@ -753,18 +761,10 @@ function UpdateCells(pc, oldNumberMachine, voice = true) {
         }
         //TextToSpeech
         if (voice) {
-          if (sessionStorage.getItem("sound") === 'on' && nextCell) {
-            let rows = document.querySelector(".serial_number[data-data='" + next_id.join(';') + "']").parentElement
-            let row = rows.children
-            if (row) {
-              let textToSpeech = row[1].innerText
-              const ut = new SpeechSynthesisUtterance(textToSpeech)
-              ut.lang = 'ru-RU'
-              ut.volume = 1
-              ut.rate = 5
-              ut.pitch = 1
-              speechSynthesis.speak(ut)
-            }
+          let rows = document.querySelector(".serial_number[data-data='" + next_id.join(';') + "']").parentElement
+          let row = rows.children
+          if (row) {
+            textToSpeech(row[1].innerText, 5)
           }
         }
       }
