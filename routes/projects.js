@@ -204,7 +204,7 @@ router.get('/import', auth, async (req, res) => {
   })
 
   let styleLeft = workbook.createStyle({
-    font: {      
+    font: {
       size: 12
     },
     border: {
@@ -228,7 +228,7 @@ router.get('/import', auth, async (req, res) => {
   })
 
   let styleRight = workbook.createStyle({
-    font: {      
+    font: {
       size: 12
     },
     border: {
@@ -257,7 +257,7 @@ router.get('/import', auth, async (req, res) => {
     },
   })
   const allPC = await PC.find({part: part}).sort({'created': 1})
-  
+
   ws.row(1).setHeight(30)
   ws.cell(1, 2).string(part).style(styleHead)
 
@@ -267,7 +267,7 @@ router.get('/import', auth, async (req, res) => {
   let col4width = 16
   let col5width = 12
   let col6width = 17
-  let col7width = 13  
+  let col7width = 13
 
   for (const pc of allPC) {
     let backColor = pc.back_color
@@ -311,11 +311,11 @@ router.get('/import', auth, async (req, res) => {
     })
     let stColor = styleBoldColor
     let firstCellColor = styleWhite
-  
+
     ws.cell(n, 1).string("").style(firstCellColor)
-    ws.cell(n, 2).string("ФДШИ." + pc.fdsi).style(styleBotLeft)    
+    ws.cell(n, 2).string("ФДШИ." + pc.fdsi).style(styleBotLeft)
     ws.cell(n, 3).string(pc.serial_number).style(stColor)
-    ws.cell(n, 4).string('').style(styleBot)
+    ws.cell(n, 4).string(pc.arm).style(styleBot)
     ws.cell(n, 5).string(pc.execution).style(styleBot)
     ws.cell(n, 6).string('').style(styleBot)
     ws.cell(n, 7).string(pc.attachment).style(styleBotRight)
