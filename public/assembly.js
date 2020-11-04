@@ -191,32 +191,20 @@ function TablePc(pc) {
 }
 
 function painting() {
-  const nameCells = document.querySelectorAll('td.name')
-  const snCells = document.querySelectorAll('td.serial_number')
   const status = document.getElementById('status')
   const statusName = document.getElementById('statusName')
   const count = document.getElementById('count');
   const serialsSelect = document.getElementById('serials')
-  const selectedSerial = serialsSelect.selectedIndex + 1
-  status.style.background = '#4CAF50'
-  count.style.color = '#4CAF50'
-  statusName.innerHTML = "OK!"
-  count.innerHTML = selectedSerial + ' / ' + serialsSelect.options.length
-  for (const cell of nameCells) {
-    if (cell.innerHTML == 'Н/Д') {
-      cell.style.backgroundColor = 'coral'
-      status.style.background = '#f44336'
-      count.style.color = '#f44336'
-      statusName.innerHTML = "not OK!"
-    }
-  }
-  for (const cell of snCells) {
-    if (cell.innerHTML == '') {
-      cell.style.backgroundColor = 'darkgray'
-      status.style.background = '#f44336'
-      count.style.color = '#f44336'
-      statusName.innerHTML = "not OK!"
-    }
+  const selectedSerialIndex = serialsSelect.selectedIndex + 1
+  count.innerHTML = selectedSerialIndex + ' / ' + serialsSelect.options.length
+  if (allOK()) {
+    status.style.background = '#4CAF50'
+    count.style.color = '#4CAF50'
+    statusName.innerHTML = "OK!"
+  } else {
+    status.style.background = '#f44336'
+    count.style.color = '#f44336'
+    statusName.innerHTML = "not OK!"
   }
 }
 
@@ -227,19 +215,21 @@ function edit_serial_number(id, obj, unit, serial_number) {
     unit: unit,
     serial_number: serial_number
   }
-  postData('/pcPa/insert_serial', data)
-    .then((data) => {
-      flashAlert(data)
-      UpdateCells(data.pc)
-      const pc = document.getElementById('serial_number')
-      const serialNumber = pc.innerHTML
-      const user = document.getElementById('userName').value
-      socket.emit('updateAssemblyPC', {
-        serialNumber,
-        user,
-        id
-      })
+  postData('/pcPa/insert_serial', data).then((data) => {
+    flashAlert(data)
+    UpdateCells(data.pc)
+    const pc = document.getElementById('serial_number')
+    const serialNumber = pc.innerHTML
+    const user = document.getElementById('userName').value
+    socket.emit('updateAssemblyPC', {
+      serialNumber,
+      user,
+      id
     })
+    if (allOK()) {
+      textToSpeech('Все серийники введены!', 2)
+    }
+  })
 }
 
 function edit_serial_number_apkzi(id, obj, unit, serial_number) {
@@ -261,12 +251,31 @@ function edit_serial_number_apkzi(id, obj, unit, serial_number) {
         user,
         id
       })
-      const statusName = document.getElementById('statusName')
-      if (statusName.innerHTML == "OK!") {
+      textToSpeech(document.getElementById('apkziDiv').innerHTML, 2)
+      if (allOK()) {
         textToSpeech('Все серийники введены!', 2)
       }
-      textToSpeech(document.getElementById('apkziDiv').innerHTML, 2)
     })
+}
+
+function allOK() {
+  const nameCells = document.querySelectorAll('td.name')
+  const snCells = document.querySelectorAll('td.serial_number')
+  const nameIsOk = Array.from(nameCells).reduce((prev, value) => {
+    if (value.innerHTML == 'Н/Д') {
+      value.style.backgroundColor = 'coral'
+      prev = false
+    }
+    return prev
+  }, true)
+  const snIsOk = Array.from(snCells).reduce((prev, value) => {
+    if (value.innerHTML == '') {
+      value.style.backgroundColor = 'darkgray'
+      prev = false
+    }
+    return prev
+  }, true)
+  return (nameIsOk && snIsOk)
 }
 
 function flashAlert(data) {
