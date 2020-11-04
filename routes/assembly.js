@@ -26,7 +26,10 @@ router.post('/pc', auth, async (req, res) => {
 })
 
 router.post('/serialNumbers', auth, async (req, res) => {
-  const pcs = await PC.find({part: req.session.part}).distinct('serial_number')
+  const pcs = await PC.find({
+    part: req.session.part,
+    "system_case_unit.0": { "$exists": true }
+  }).distinct('serial_number')
   res.send(JSON.stringify(pcs))
 })
 
@@ -63,6 +66,11 @@ router.post('/firstPC', auth, async (req, res) => {
 })
 
 router.post('/getPC', auth, async (req, res) => {
+  await User.updateOne({
+    username: req.session.user.username
+  }, {
+    lastAssemblyPC: req.body.serialNumberPC
+  })
   const pc = await PC.findOne({
     part: req.session.part,
     serial_number: req.body.serialNumberPC
@@ -73,17 +81,6 @@ router.post('/getPC', auth, async (req, res) => {
 router.post('/getPCById', auth, async (req, res) => {
   const pc = await PC.findById(req.body.id)
   res.send(JSON.stringify(pc))
-})
-
-router.post('/setLastPC', auth, async (req, res) => {
-  await User.updateOne({
-    username: req.session.user.username
-  }, {
-    lastAssemblyPC: req.body.serialNumber
-  })
-  res.status(200).json({
-    message: 'ok'
-  })
 })
 
 

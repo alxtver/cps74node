@@ -428,7 +428,7 @@ input[type=text]:placeholder {
 
 .pcCardAssembly {
   -webkit-border-radius: 10px 10px 10px 10px;
-  border-radius: 10px 10px 10px 10px;
+  border-radius: 4px;
   background: #fff;
   padding: 30px;
   position: relative;
@@ -1001,19 +1001,19 @@ th {
   background-color: #4CAF50;
   margin: auto;
   text-align: center;
-  box-shadow: rgb(53 56 53) 5px 5px 5px 2px;
+  box-shadow: rgba(60, 64, 67, .3) 0 1px 2px 0, rgba(0, 0, 0, 0.15) 0 1px 3px 1px;
   font-size: 25px;
 }
 
 .assemblyCont {
   margin-left: 3rem;
   margin-right: 3rem;
-  margin-top: 5vh;
+  margin-top: 4vh;
 }
 
-@media screen and (min-height: 1500px) {
+@media screen and (min-height: 1700px) {
   .assemblyCont {
-    margin-top: 25vh;
+    margin-top: 22vh;
   }
 }
 
@@ -1034,6 +1034,20 @@ th {
   box-shadow: rgba(60, 64, 67, .3) 0 1px 2px 0, rgba(0, 0, 0, 0.15) 0 1px 3px 1px;
   border-radius: 4px;
   transition: transform .2s ease-in-out .1s, box-shadow .2s;
+}
+
+.count {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 5vh;
+  font-size: 2rem;
+  font-weight: 900;
+  margin-left: 42vw;
+  margin-right: 42vw;
+  border-radius: 0 0 4px 4px;
+  box-shadow: rgba(60, 64, 67, .3) 0 1px 2px 0, rgba(0, 0, 0, 0.15) 0 1px 3px 1px;
+  color: #616569;
 }
 
 .divGrid:hover {

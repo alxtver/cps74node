@@ -67,17 +67,10 @@ function loadPage() {
     })
 }
 
-function setAssemblyPC(serialNumber) {
-  postData('/assembly/setLastPC', {
-    serialNumber
-  })
-}
-
 function getPC(serialNumberPC, metod) {
   const data = {
     serialNumberPC: serialNumberPC
   }
-  setAssemblyPC(serialNumberPC)
   postData('/assembly/getPC', data)
     .then((data) => {
       CreateTableFromJSON(data, function () {
@@ -107,7 +100,7 @@ function CreateTableFromJSON(data, callback) {
   let divCont = document.createElement("div")
   divCont.id = data._id
   divCont.className = "pcCardAssembly mb-3"
-  divCont.style.cssText = '-webkit-box-shadow: 0 30px 60px 0' + data.back_color + ';box-shadow: 0 30px 60px 0' + data.back_color
+  divCont.style.cssText = '-webkit-box-shadow: 0 2px 15px 0' + data.back_color + ';box-shadow: 0 2px 15px 0' + data.back_color
   divContainer.appendChild(divCont);
   divCont.innerHTML = ""
   divCont.appendChild(table)
@@ -127,7 +120,7 @@ function TablePc(pc) {
   td = document.createElement("td")
   td.innerHTML = pc.serial_number
   td.id = 'serial_number'
-  td.style.cssText = 'font-size: 1.5rem;border-radius: 10px 0px 0px 0px;background-color:' + pc.back_color
+  td.style.cssText = 'font-size: 1.5rem;border-radius: 4px 0px 0px 0px;background-color:' + pc.back_color
   tr.appendChild(td)
   insCell('', tr, pc.arm, 'up', '', false)
   insCell('', tr, pc.execution, 'up', '', false)
@@ -135,7 +128,7 @@ function TablePc(pc) {
   td = document.createElement("td")
   if (pc.attachment) {
     td.innerHTML = pc.attachment
-    td.style.cssText = 'font-size: 1.1rem;border-radius: 0px 10px 0px 0px;background-color:' + pc.back_color
+    td.style.cssText = 'font-size: 1.1rem;border-radius: 0px 4px 0px 0px;background-color:' + pc.back_color
   }
   tr.appendChild(td)
   if (pc.system_case_unit.length > 0) {
@@ -202,12 +195,18 @@ function painting() {
   const snCells = document.querySelectorAll('td.serial_number')
   const status = document.getElementById('status')
   const statusName = document.getElementById('statusName')
+  const count = document.getElementById('count');
+  const serialsSelect = document.getElementById('serials')
+  const selectedSerial = serialsSelect.selectedIndex + 1
   status.style.background = '#4CAF50'
+  count.style.color = '#4CAF50'
   statusName.innerHTML = "OK!"
+  count.innerHTML = selectedSerial + ' / ' + serialsSelect.options.length
   for (const cell of nameCells) {
     if (cell.innerHTML == 'Н/Д') {
       cell.style.backgroundColor = 'coral'
       status.style.background = '#f44336'
+      count.style.color = '#f44336'
       statusName.innerHTML = "not OK!"
     }
   }
@@ -215,6 +214,7 @@ function painting() {
     if (cell.innerHTML == '') {
       cell.style.backgroundColor = 'darkgray'
       status.style.background = '#f44336'
+      count.style.color = '#f44336'
       statusName.innerHTML = "not OK!"
     }
   }
