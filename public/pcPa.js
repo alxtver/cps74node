@@ -972,7 +972,7 @@ function ulPagination(page, pages) {
 
 function createPagination(page) {
   page = parseInt(page)
-  setPage(page)
+
   const pages = parseInt(document.getElementById('pagesCount').value)
   const containerTop = document.getElementById('paginationTop')
   const containerBottom = document.getElementById('paginationBottom')

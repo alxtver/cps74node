@@ -152,6 +152,8 @@ router.post("/pagination", auth, async function (req, res) {
     username: req.session.user.username
   })
   let pcs
+  user.lastPage = page
+  await user.save()
   if (user.pcCount) {
     let count = user.pcCount
     if (count === '1' || count === '5' || count === '10' || count === '20') {
@@ -467,7 +469,7 @@ router.post('/copy', auth, async (req, res) => {
     let second_part = number.slice(indexChar + 1)
     if (second_part != '') {
       let lenSecondPart = second_part.length
-    return first_part + (parseInt(second_part) + 1).toString().padStart(lenSecondPart, "0")
+      return first_part + (parseInt(second_part) + 1).toString().padStart(lenSecondPart, "0")
     } else {
       return (parseInt(first_part) + 1).toString()
     }
