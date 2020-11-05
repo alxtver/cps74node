@@ -33,9 +33,7 @@ function loadPage() {
   postData('/assembly/serialNumbers')
     .then((data) => {
       let select = document.getElementById("serials")
-      for (i = select.length - 1; i >= 0; i--) {
-        select.remove(i)
-      }
+      select.innerHTML = ''
       for (const d of data) {
         let option = document.createElement("option")
         option.value = d
@@ -261,14 +259,14 @@ function edit_serial_number_apkzi(id, obj, unit, serial_number) {
 function allOK() {
   const nameCells = document.querySelectorAll('td.name')
   const snCells = document.querySelectorAll('td.serial_number')
-  const nameIsOk = Array.from(nameCells).reduce((prev, value) => {
+  const nameIsOk = ([...nameCells]).reduce((prev, value) => {
     if (value.innerHTML == 'Н/Д') {
       value.style.backgroundColor = 'coral'
       prev = false
     }
     return prev
   }, true)
-  const snIsOk = Array.from(snCells).reduce((prev, value) => {
+  const snIsOk = ([...snCells]).reduce((prev, value) => {
     if (value.innerHTML == '') {
       value.style.backgroundColor = 'darkgray'
       prev = false
@@ -303,7 +301,7 @@ function UpdateCells(pc) {
   let divCont = document.createElement("div")
   divCont.id = pc._id
   divCont.className = "tableContent"
-  divContainer.appendChild(divCont);
+  divContainer.appendChild(divCont)
   divCont.innerHTML = ""
   divCont.appendChild(table)
 

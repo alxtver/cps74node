@@ -749,41 +749,42 @@ th {
   margin: 0;
   display: flex;
   padding-bottom: 1rem;
+  width: 100%;
+  /* box-shadow: rgba(60, 64, 67, .3) 0 1px 2px 0, rgba(0, 0, 0, 0.15) 0 1px 3px 1px; */
 }
 
 .PaUl li {
-  color: #e0dada;
-  /* background-color: #3d3d3d; */
+  color: #9a9da0;
   display: flex;
-  -webkit-box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 9);
-  box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.9);
-  border-radius: 5px 5px 5px 5px;
+  /* border-radius: 5px 5px 5px 5px; */
 }
 
 .PaUl li :hover {
-  border: 2px solid #28a745;
+  background-color: #86c023;
 }
 
+
+
 .PaUl li a {
-  background-color: #3d3d3d;
+  background-color: #343A40;
   padding: 5px 10px;
-  border: 2px solid #303131;
+  font-weight: 500;
   border-right: 0;
   cursor: pointer;
 }
 
 .PaUl li.active a {
-  color: #3d3d3d;
-  background-color: #28a745;
+  color: #000;
+  font-weight: 700;
+  background-color: #86c023;
 }
 
 .PaUl li:first-child a {
-  border-radius: 5px 0 0 5px;
+  border-radius: 4px 0 0 4px;
 }
 
 .PaUl li:last-child a {
-  border-radius: 0 5px 5px 0;
-  border-right: 1px solid #d1d5da;
+  border-radius: 0 4px 4px 0;
 }
 
 #paginationBottom {

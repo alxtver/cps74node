@@ -229,8 +229,7 @@ function loadPage(page, pages) {
 function getPage() {
   getData('/pcPa/getPage')
     .then((page) => {
-      document.getElementById('paginationTop').innerHTML = createPagination(page)
-      document.getElementById('paginationBottom').innerHTML = createPagination(page)
+      createPagination(page)
     })
 }
 
@@ -863,49 +862,65 @@ function getSoundSession() {
   sessionStorage.getItem("sound")
 }
 
-function createPagination(page) {
-  page = parseInt(page)
-  setPage(page)
-  let pages = parseInt(document.getElementById('pagesCount').value)
-  let str = '<ul class="PaUl">';
-  let active;
-  let pageCutLow = page - 1;
-  let pageCutHigh = page + 1;
-  // Show the Previous button only if you are on a page other than the first
+function ulPagination(page, pages) {
+  const ul = document.createElement('ul')
+  ul.className = 'PaUl'
+  let pageCutLow = page - 1
+  let pageCutHigh = page + 1
+  // Создаем кнопку "Предыдущая"
   if (page > 1) {
-    str += '<li class="page-item previous no"><a class="latest" onclick="createPagination(' + (page - 1) + ')">Предыдущая</a></li>';
+    const li = document.createElement('li')
+    li.className = 'page-item previous no'
+    const a = document.createElement('a')
+    a.className = 'latest'
+    a.onclick = () => createPagination(page - 1)
+    a.innerHTML = 'Предыдущая'
+    li.appendChild(a)
+    ul.appendChild(li)
   }
-  // Show all the pagination elements if there are less than 6 pages total
   if (pages < 6) {
     for (let p = 1; p <= pages; p++) {
-      active = page == p ? "active" : "no";
-      str += '<li class="' + active + '"><a class="PaA" onclick="createPagination(' + p + ')">' + p + '</a></li>';
+      const active = page == p ? "active" : "no"
+      const li = document.createElement('li')
+      li.className = active
+      const a = document.createElement('a')
+      a.className = 'PaA'
+      a.onclick = () => createPagination(p)
+      a.innerHTML = p
+      li.appendChild(a)
+      ul.appendChild(li)
     }
-  }
-  // Use "..." to collapse pages outside of a certain range
-  else {
-    // Show the very first page followed by a "..." at the beginning of the
-    // pagination section (after the Previous button)
+  } else {
     if (page > 2) {
-      str += '<li class="Pali no page-item"><a class="PaA" onclick="createPagination(1)">1</a></li>';
+      const li = document.createElement('li')
+      li.className = 'Pali no page-item'
+      const a = document.createElement('a')
+      a.className = 'PaA'
+      a.onclick = () => createPagination(1)
+      a.innerHTML = '1'
+      li.appendChild(a)
+      ul.appendChild(li)
       if (page > 3) {
-        str += '<li class="Pali out-of-range"><a class="PaA" onclick="createPagination(' + (page - 2) + ')">...</a></li>';
+        const li = document.createElement('li')
+        li.className = 'Pali out-of-range'
+        const a = document.createElement('a')
+        a.className = 'PaA'
+        a.onclick = () => createPagination(page - 2)
+        a.innerHTML = '...'
+        li.appendChild(a)
+        ul.appendChild(li)
       }
     }
-    // Determine how many pages to show after the current page index
     if (page === 1) {
       pageCutHigh += 2;
     } else if (page === 2) {
       pageCutHigh += 1;
     }
-    // Determine how many pages to show before the current page index
     if (page === pages) {
       pageCutLow -= 2;
     } else if (page === pages - 1) {
       pageCutLow -= 1;
     }
-    // Output the indexes for pages that fall inside the range of pageCutLow
-    // and pageCutHigh
     for (let p = pageCutLow; p <= pageCutHigh; p++) {
       if (p === 0) {
         p += 1;
@@ -913,29 +928,60 @@ function createPagination(page) {
       if (p > pages) {
         continue
       }
-      active = page == p ? "active" : "no";
-      str += '<li class="page-item ' + active + '"><a onclick="createPagination(' + p + ')">' + p + '</a></li>';
+      const active = page == p ? "active" : "no"
+      const li = document.createElement('li')
+      li.className = 'page-item ' + active
+      const a = document.createElement('a')
+      a.className = 'PaA'
+      a.onclick = () => createPagination(p)
+      a.innerHTML = p
+      li.appendChild(a)
+      ul.appendChild(li)
     }
-    // Show the very last page preceded by a "..." at the end of the pagination
-    // section (before the Next button)
     if (page < pages - 1) {
       if (page < pages - 2) {
-        str += '<li class="out-of-range"><a onclick="createPagination(' + (page + 2) + ')">...</a></li>';
+        const li = document.createElement('li')
+        li.className = 'out-of-range'
+        const a = document.createElement('a')
+        a.onclick = () => createPagination(page + 2)
+        a.innerHTML = '...'
+        li.appendChild(a)
+        ul.appendChild(li)
       }
-      str += '<li class="page-item no"><a onclick="createPagination(' + pages + ')">' + pages + '</a></li>';
+      const li = document.createElement('li')
+      li.className = 'page-item no'
+      const a = document.createElement('a')
+      a.onclick = () => createPagination(pages)
+      a.innerHTML = pages
+      li.appendChild(a)
+      ul.appendChild(li)
     }
   }
-  // Show the Next button only if you are on a page other than the last
   if (page < pages) {
-    str += '<li class="page-item next no"><a class="latest" onclick="createPagination(' + (page + 1) + ')">Следующая</a></li>';
+    const li = document.createElement('li')
+    li.className = 'page-item next no'
+    const a = document.createElement('a')
+    a.className = 'latest'
+    a.onclick = () => createPagination(page + 1)
+    a.innerHTML = 'Следующая'
+    li.appendChild(a)
+    ul.appendChild(li)
   }
-  str += '</ul>';
-  // Return the pagination string to be outputted in the pug templates
-  document.getElementById('paginationTop').innerHTML = str
-  document.getElementById('paginationBottom').innerHTML = str
+  return ul
+}
+
+function createPagination(page) {
+  page = parseInt(page)
+  setPage(page)
+  const pages = parseInt(document.getElementById('pagesCount').value)
+  const containerTop = document.getElementById('paginationTop')
+  const containerBottom = document.getElementById('paginationBottom')
+  containerTop.innerHTML = ''
+  containerBottom.innerHTML = ''
+  containerTop.appendChild(ulPagination(page, pages))
+  containerBottom.appendChild(ulPagination(page, pages))
   loadPage(page, pages)
   document.getElementById('page').value = page
-  return str
 }
 
 function selectPages(pageCount) {
