@@ -414,3 +414,26 @@ function textToSpeech(text, rate) {
     speechSynthesis.speak(ut)
   }
 }
+
+function translit(serialNumber) {
+  serialNumber = serialNumber.toUpperCase()
+  for (const letter of serialNumber) {
+    let codeOfLetter = letter.charCodeAt(0)
+    if (codeOfLetter > 122) {
+      let ruToEnSN = ''
+      const ruLet = 'ЙЦУКЕНГШЩЗФЫВАПРОЛДЯЧСМИТЬ'
+      const engLet = 'QWERTYUIOPASDFGHJKLZXCVBNM'
+      for (const l of serialNumber) {
+        ind = ruLet.indexOf(l)
+        if (ind >= 0) {
+          ruToEnSN += engLet[ind]
+        } else {
+          ruToEnSN += l
+        }
+      }
+      serialNumber = ruToEnSN
+      break
+    }
+  }
+  return serialNumber
+}

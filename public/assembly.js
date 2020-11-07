@@ -206,12 +206,13 @@ function painting() {
   }
 }
 
-function edit_serial_number(id, obj, unit, serial_number) {
-  let data = {
+function edit_serial_number(id, obj, unit, serialNumber) {
+  serialNumber = translit(serialNumber)
+  const data = {
     id: id,
     obj: obj,
     unit: unit,
-    serial_number: serial_number
+    serial_number: serialNumber
   }
   postData('/pcPa/insert_serial', data).then((data) => {
     flashAlert(data)
@@ -230,12 +231,13 @@ function edit_serial_number(id, obj, unit, serial_number) {
   })
 }
 
-function edit_serial_number_apkzi(id, obj, unit, serial_number) {
-  let data = {
+function edit_serial_number_apkzi(id, obj, unit, serialNumber) {
+  serialNumber = translit(serialNumber)
+  const data = {
     id: id,
     obj: obj,
     unit: unit,
-    serial_number: serial_number
+    serial_number: serialNumber
   }
   postData('/pcPa/insert_serial_apkzi', data)
     .then((data) => {
