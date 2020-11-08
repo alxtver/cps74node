@@ -79,25 +79,6 @@ function loadSession() {
   }
 }
 
-//валидация формы добавления и редактирования ПКИ
-(function () {
-  'use strict';
-  window.addEventListener('load', function () {
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    var forms = document.getElementsByClassName('needs-validation')
-    // Loop over them and prevent submission
-    var validation = Array.prototype.filter.call(forms, function (form) {
-      form.addEventListener('submit', function (event) {
-        if (form.checkValidity() === false) {
-          event.preventDefault()
-          event.stopPropagation()
-        }
-        form.classList.add('was-validated')
-      }, false)
-    })
-  }, false)
-})()
-
 function plusOne(number) {
   let indexChar = 0
   for (let index = 0; index < number.length; index++) {
@@ -125,8 +106,6 @@ function minusOne(number) {
   const secondPartPlusOne = parseInt(secondPart) - 1
   return firstPart + secondPartPlusOne.toString().padStart(lengthSecondPart, '0')
 }
-
-
 
 // добавление данных в сессию браузера
 function addSessionApkzi() {
@@ -186,22 +165,24 @@ function loadSessionApkzi() {
 }
 
 function searchEAN(valueEAN) {
-  let data = {
+  const data = {
     valueEAN: valueEAN
   }
   postData('/pkis/searchEAN', data)
     .then((data) => {
-      if (data != 'none') {
-        document.getElementById('type_pki').value = data.type_pki
-        document.getElementById('vendor').value = data.vendor
-        document.getElementById('model').value = data.model
-        document.getElementById('country').value = data.country
-        document.getElementById('serial_number').focus()
+      const type = document.getElementById('type_pki')
+      const vendor = document.getElementById('vendor')
+      const model = document.getElementById('model')
+      const country = document.getElementById('country')
+      const serial_number = document.getElementById('serial_number')
+      if (!data.message) {
+        type.value = data.type_pki
+        vendor.value = data.vendor
+        model.value = data.model
+        country.value = data.country
+        serial_number.focus()
       } else {
-        document.getElementById('type_pki').value = ''
-        document.getElementById('vendor').value = ''
-        document.getElementById('model').value = ''
-        document.getElementById('country').value = ''
+        type.value = vendor.value = model.value = country.value = ''
       }
     })
 }

@@ -1,4 +1,6 @@
-const {Router} = require('express')
+const {
+  Router
+} = require('express')
 const Pki = require('../models/pki')
 const PC = require('../models/pc')
 const Part = require('../models/part')
@@ -84,7 +86,9 @@ router.post('/edit_ajax', auth, async (req, res) => {
     pc_copy.system_case_unit = pc.system_case_unit
     pc_copy.save()
   }
-  res.status(200).json({ message: 'ok' })
+  res.status(200).json({
+    message: 'ok'
+  })
 })
 
 
@@ -92,125 +96,125 @@ router.post("/search", auth, async (req, res) => {
   let selected = req.session.part
   let selectedType = (req.session.type) ? req.session.type : '...'
   let typesList = await Pki.find({
-		part: selected
-	}).distinct('type_pki')
+    part: selected
+  }).distinct('type_pki')
 
   let pkis
-	if ((!req.body.q && selectedType == '...') || (!req.body.q && !selectedType)) {
-		pkis = await Pki.find({
-			part: selected
-		}).sort({
-			type_pki: 1
-		})
+  if ((!req.body.q && selectedType == '...') || (!req.body.q && !selectedType)) {
+    pkis = await Pki.find({
+      part: selected
+    }).sort({
+      type_pki: 1
+    })
 
-	} else if (!req.body.q && selectedType != '...') {
-		pkis = await Pki.find({
-			part: selected,
-			type_pki: selectedType
-		}).sort({
-			type_pki: 1
-		})
-	} else if (req.body.q == '...' && selectedType == '...') {
-		pkis = await Pki.find({
-			part: selected
-		}).sort({
-			type_pki: 1
-		})
-	} else if (req.body.q == selectedType) {
-		pkis = await Pki.find({
-			part: selected,
-			type_pki: selectedType
-		}).sort({
-			type_pki: 1
-		})
-	} else if (req.body.q  && selectedType == '...') {
-		query = {
-			$and: [{
-					$or: [{
-							type_pki: new RegExp(req.body.q + '.*', "i")
-						},
-						{
-							vendor: new RegExp(req.body.q + '.*', "i")
-						},
-						{
-							country: new RegExp(req.body.q + '.*', "i")
-						},
-						{
-							model: new RegExp(req.body.q + '.*', "i")
-						},
-						{
-							part: new RegExp(req.body.q + '.*', "i")
-						},
-						{
-							serial_number: new RegExp(req.body.q + '.*', "i")
-						},
-						{
-							number_machine: new RegExp(req.body.q + '.*', "i")
-						}
-					]
-				},
-				{
-					part: selected
-				}
-			]
-		}
-		pkis = await Pki.find(query).sort({
-			type_pki: 1
-		})
-	} else if (req.body.q == 'null' && selectedType == '...') {
-		pkis = await Pki.find({
-			part: selected
-		}).sort({
-			type_pki: 1
-		})
-	} else if (req.body.q == 'null' && selectedType) {
-		pkis = await Pki.find({
-			part: selected,
-			type_pki: selectedType
-		}).sort({
-			type_pki: 1
-		})
-	} else {
-		query = {
-			$and: [{
-					$or: [{
-							type_pki: new RegExp(req.body.q + '.*', "i")
-						},
-						{
-							vendor: new RegExp(req.body.q + '.*', "i")
-						},
-						{
-							country: new RegExp(req.body.q + '.*', "i")
-						},
-						{
-							model: new RegExp(req.body.q + '.*', "i")
-						},
-						{
-							part: new RegExp(req.body.q + '.*', "i")
-						},
-						{
-							serial_number: new RegExp(req.body.q + '.*', "i")
-						},
-						{
-							number_machine: new RegExp(req.body.q + '.*', "i")
-						}
-					]
-				},
-				{
-					part: selected,
-					type_pki: selectedType
-				}
-			]
-		}
-		pkis = await Pki.find(query).sort({
-			type_pki: 1
-		})
-	}
+  } else if (!req.body.q && selectedType != '...') {
+    pkis = await Pki.find({
+      part: selected,
+      type_pki: selectedType
+    }).sort({
+      type_pki: 1
+    })
+  } else if (req.body.q == '...' && selectedType == '...') {
+    pkis = await Pki.find({
+      part: selected
+    }).sort({
+      type_pki: 1
+    })
+  } else if (req.body.q == selectedType) {
+    pkis = await Pki.find({
+      part: selected,
+      type_pki: selectedType
+    }).sort({
+      type_pki: 1
+    })
+  } else if (req.body.q && selectedType == '...') {
+    query = {
+      $and: [{
+          $or: [{
+              type_pki: new RegExp(req.body.q + '.*', "i")
+            },
+            {
+              vendor: new RegExp(req.body.q + '.*', "i")
+            },
+            {
+              country: new RegExp(req.body.q + '.*', "i")
+            },
+            {
+              model: new RegExp(req.body.q + '.*', "i")
+            },
+            {
+              part: new RegExp(req.body.q + '.*', "i")
+            },
+            {
+              serial_number: new RegExp(req.body.q + '.*', "i")
+            },
+            {
+              number_machine: new RegExp(req.body.q + '.*', "i")
+            }
+          ]
+        },
+        {
+          part: selected
+        }
+      ]
+    }
+    pkis = await Pki.find(query).sort({
+      type_pki: 1
+    })
+  } else if (req.body.q == 'null' && selectedType == '...') {
+    pkis = await Pki.find({
+      part: selected
+    }).sort({
+      type_pki: 1
+    })
+  } else if (req.body.q == 'null' && selectedType) {
+    pkis = await Pki.find({
+      part: selected,
+      type_pki: selectedType
+    }).sort({
+      type_pki: 1
+    })
+  } else {
+    query = {
+      $and: [{
+          $or: [{
+              type_pki: new RegExp(req.body.q + '.*', "i")
+            },
+            {
+              vendor: new RegExp(req.body.q + '.*', "i")
+            },
+            {
+              country: new RegExp(req.body.q + '.*', "i")
+            },
+            {
+              model: new RegExp(req.body.q + '.*', "i")
+            },
+            {
+              part: new RegExp(req.body.q + '.*', "i")
+            },
+            {
+              serial_number: new RegExp(req.body.q + '.*', "i")
+            },
+            {
+              number_machine: new RegExp(req.body.q + '.*', "i")
+            }
+          ]
+        },
+        {
+          part: selected,
+          type_pki: selectedType
+        }
+      ]
+    }
+    pkis = await Pki.find(query).sort({
+      type_pki: 1
+    })
+  }
   res.send(JSON.stringify({
-		pkis: pkis,
-		types: typesList,
-		selectedType: selectedType
-	}))
+    pkis: pkis,
+    types: typesList,
+    selectedType: selectedType
+  }))
 })
 
 
@@ -260,10 +264,14 @@ router.post("/del", auth, async (req, res) => {
       _id: req.body.id
     })
     console.log(`PKI ${pki.type_pki} ${pki.vendor} ${pki.model} ${pki.serial_number} has been deleted`)
-    res.status(200).json({ message: 'ok' })
+    res.status(200).json({
+      message: 'ok'
+    })
   } catch (e) {
     console.log(e)
-    res.status(200).json({ message: 'ok' })
+    res.status(200).json({
+      message: 'ok'
+    })
   }
 })
 
@@ -271,8 +279,10 @@ router.post("/searchEAN", auth, async function (req, res) {
   const ean = await EAN.findOne({
     ean_code: req.body.valueEAN
   })
-  if (!ean) return res.send(JSON.stringify('none'))
-  res.send(JSON.stringify(ean)) // отправляем пришедший ответ обратно
+  if (!ean) return res.status(404).json({
+    message: 'not found!'
+  })
+  res.send(JSON.stringify(ean))
 })
 
 router.get("/excelImport", auth, async function (req, res) {
@@ -361,10 +371,18 @@ router.get("/excelImport", auth, async function (req, res) {
     },
   })
   if (sortSelect == 'byType') {
-    pkis = await Pki.find({part: req.session.part}).sort({type_pki: 1})
+    pkis = await Pki.find({
+      part: req.session.part
+    }).sort({
+      type_pki: 1
+    })
   } else {
-    pkis = await Pki.find({part: req.session.part}).sort({number_machine: 1})
-  }  
+    pkis = await Pki.find({
+      part: req.session.part
+    }).sort({
+      number_machine: 1
+    })
+  }
 
   ws.column(1).setWidth(3)
   ws.column(2).setWidth(33)
@@ -385,7 +403,7 @@ router.get("/excelImport", auth, async function (req, res) {
   ws.cell(2, 7).string('Номер ПЭВМ').style(styleheader)
 
   ws.row(2).freeze()
-  
+
   let n = 3
   let model = ''
   let number_machine
@@ -446,50 +464,69 @@ router.get('/autocomplete', auth, async (req, res) => {
 
 
 router.post('/searchAndReplace', auth, async (req, res) => {
-  let pkisByModel = await Pki.find({part: req.session.part, model: req.body.search})
+  let pkisByModel = await Pki.find({
+    part: req.session.part,
+    model: req.body.search
+  })
   if (pkisByModel.length > 0) {
     if (pkisByModel[0].ean_code) {
-      let ean = await EAN.findOne({ean_code: pkisByModel[0].ean_code})
+      let ean = await EAN.findOne({
+        ean_code: pkisByModel[0].ean_code
+      })
       ean.model = req.body.replace
       ean.save()
     }
   }
-    for (const pki of pkisByModel) {
-      if (pki.number_machine) {
-        pc = await PC.findOne({part: pki.part, serial_number: pki.number_machine})
-        let unit = 'pc_unit'
-        for (let i in pc[unit]) {
-          if (pki.serial_number == pc[unit][i].serial_number) {
-            pc[unit][i].name = pki.vendor + " " + req.body.replace
-            break
-          }
+  for (const pki of pkisByModel) {
+    if (pki.number_machine) {
+      pc = await PC.findOne({
+        part: pki.part,
+        serial_number: pki.number_machine
+      })
+      let unit = 'pc_unit'
+      for (let i in pc[unit]) {
+        if (pki.serial_number == pc[unit][i].serial_number) {
+          pc[unit][i].name = pki.vendor + " " + req.body.replace
+          break
         }
-        unit = 'system_case_unit'
-        for (let i in pc[unit]) {
-          if (pki.serial_number == pc[unit][i].serial_number) {
-            pc[unit][i].name = pki.vendor + " " + req.body.replace
-            break
-          }
-        }
-        pcCopy = await PC.findOne({part: pki.part, serial_number: pki.number_machine})
-        pcCopy.pc_unit = pc.pc_unit
-        pcCopy.system_case_unit = pc.system_case_unit
-        pcCopy.save()        
       }
-      pki.model = req.body.replace
-      await pki.save()      
+      unit = 'system_case_unit'
+      for (let i in pc[unit]) {
+        if (pki.serial_number == pc[unit][i].serial_number) {
+          pc[unit][i].name = pki.vendor + " " + req.body.replace
+          break
+        }
+      }
+      pcCopy = await PC.findOne({
+        part: pki.part,
+        serial_number: pki.number_machine
+      })
+      pcCopy.pc_unit = pc.pc_unit
+      pcCopy.system_case_unit = pc.system_case_unit
+      pcCopy.save()
+    }
+    pki.model = req.body.replace
+    await pki.save()
   }
-  
-  let pkisByVendor = await Pki.find({part: req.session.part, vendor: req.body.search})
+
+  let pkisByVendor = await Pki.find({
+    part: req.session.part,
+    vendor: req.body.search
+  })
   if (pkisByVendor.length > 0) {
     if (pkisByVendor[0].ean_code) {
-      let ean = await EAN.findOne({ean_code: pkisByVendor[0].ean_code})
+      let ean = await EAN.findOne({
+        ean_code: pkisByVendor[0].ean_code
+      })
       ean.vendor = req.body.replace
       ean.save()
     }
     for (const pki of pkisByVendor) {
       if (pki.number_machine) {
-        pc = await PC.findOne({part: pki.part, serial_number: pki.number_machine})
+        pc = await PC.findOne({
+          part: pki.part,
+          serial_number: pki.number_machine
+        })
         let unit = 'pc_unit'
         for (let i in pc[unit]) {
           if (pki.serial_number == pc[unit][i].serial_number) {
@@ -504,52 +541,68 @@ router.post('/searchAndReplace', auth, async (req, res) => {
             break
           }
         }
-        pcCopy = await PC.findOne({part: pki.part, serial_number: pki.number_machine})
+        pcCopy = await PC.findOne({
+          part: pki.part,
+          serial_number: pki.number_machine
+        })
         pcCopy.pc_unit = pc.pc_unit
         pcCopy.system_case_unit = pc.system_case_unit
-        pcCopy.save()        
+        pcCopy.save()
       }
       pki.vendor = req.body.replace
-      await pki.save()      
+      await pki.save()
     }
   }
 
-  let pkisByType = await Pki.find({part: req.session.part, type_pki: req.body.search})
-  if (pkisByType.length > 0) {    
+  let pkisByType = await Pki.find({
+    part: req.session.part,
+    type_pki: req.body.search
+  })
+  if (pkisByType.length > 0) {
     req.session.type = req.body.replace
     for (const pki of pkisByType) {
       if (pki.number_machine) {
-        pc = await PC.findOne({part: req.session.part, serial_number: pki.number_machine})
+        pc = await PC.findOne({
+          part: req.session.part,
+          serial_number: pki.number_machine
+        })
         let unit = 'pc_unit'
         for (let i in pc[unit]) {
-          if (pki.serial_number == pc[unit][i].serial_number) {            
+          if (pki.serial_number == pc[unit][i].serial_number) {
             pc[unit][i].type = req.body.replace
             break
           }
         }
         unit = 'system_case_unit'
         for (let i in pc[unit]) {
-          if (pki.serial_number == pc[unit][i].serial_number) {            
+          if (pki.serial_number == pc[unit][i].serial_number) {
             pc[unit][i].type = req.body.replace
             break
           }
         }
-        pcCopy = await PC.findOne({part: pki.part, serial_number: pki.number_machine})
+        pcCopy = await PC.findOne({
+          part: pki.part,
+          serial_number: pki.number_machine
+        })
         pcCopy.pc_unit = pc.pc_unit
         pcCopy.system_case_unit = pc.system_case_unit
-        pcCopy.save()        
+        pcCopy.save()
       }
       pki.type_pki = req.body.replace
       pki.save()
       if (pki.ean_code) {
-        let ean = await EAN.findOne({ean_code: pki.ean_code})
+        let ean = await EAN.findOne({
+          ean_code: pki.ean_code
+        })
         ean.type_pki = req.body.replace
         ean.save()
       }
-    }   
+    }
   }
 
-  res.status(200).json({ message: 'ok' })
+  res.status(200).json({
+    message: 'ok'
+  })
 })
 
 module.exports = router
