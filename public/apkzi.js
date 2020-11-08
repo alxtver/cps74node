@@ -117,11 +117,7 @@ function CreateTableFromJSON(data, callback) {
     let number_machineCell = tr.insertCell(-1)
     number_machineCell.dataset.id = data[i]._id
     number_machineCell.className = "number_machine"
-    if (data[i].number_machine) {
-      number_machineCell.innerHTML = data[i].number_machine
-    } else {
-      number_machineCell.innerHTML = ''
-    }
+    number_machineCell.innerHTML = data[i].number_machine ? data[i].number_machine : ''
 
     let buttonCell = tr.insertCell(-1)
     let id = data[i]._id

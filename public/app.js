@@ -405,7 +405,7 @@ function setSoundSessionOff() {
 
 function textToSpeech(text, rate) {
   if (sessionStorage.getItem("sound") === 'on') {
-    let textToSpeech = text
+    const textToSpeech = text
     const ut = new SpeechSynthesisUtterance(textToSpeech)
     ut.lang = 'ru-RU'
     ut.volume = 1
@@ -425,11 +425,7 @@ function translit(serialNumber) {
       const engLet = 'QWERTYUIOPASDFGHJKLZXCVBNM'
       for (const l of serialNumber) {
         ind = ruLet.indexOf(l)
-        if (ind >= 0) {
-          ruToEnSN += engLet[ind]
-        } else {
-          ruToEnSN += l
-        }
+        ruToEnSN += (ind >= 0) ? engLet[ind] : l
       }
       serialNumber = ruToEnSN
       break
