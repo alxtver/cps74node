@@ -232,7 +232,7 @@ function edit_serial_number(id, obj, unit, serialNumber) {
 }
 
 function edit_serial_number_apkzi(id, obj, unit, serialNumber) {
-  serialNumber = translit(serialNumber)
+//  serialNumber = translit(serialNumber)
   const data = {
     id: id,
     obj: obj,
