@@ -58,6 +58,7 @@ function setColor() {
 }
 
 function CreateTablePC() {
+  console.log('sdafsdfsd');
   let col_rus = ["", "Обозначение изделия", "Наименование изделия", "Характеристика", "Количество", "Заводской номер", "Примечания"]
   let table = document.createElement("table");
   table.className = "table table-sm table-bordered table-hover"
@@ -255,146 +256,6 @@ function load_pc(id) {
     })
 }
 
-function TablePc(pc) {
-  // таблица ПЭВМ
-  let table = document.createElement("table");
-  table.className = "table table-sm table-bordered table-hover table-responsive pctable"
-  table.id = pc._id
-
-  let tr = table.insertRow(-1)
-
-  insCell('', tr, 'ФДШИ.' + pc.fdsi, 'up', '', false)
-  td = document.createElement("td")
-  td.innerHTML = pc.serial_number
-  td.id = pc.serial_number
-  td.style.cssText = 'font-size: 1.5rem;background-color:' + pc.back_color
-  tr.appendChild(td)
-  insCell('', tr, pc.arm, 'up', '', false)
-  insCell('', tr, pc.execution, 'up', '', false)
-  insCell('', tr, '', 'up', '', false)
-  td = document.createElement("td")
-  if (pc.attachment) {
-    td.innerHTML = pc.attachment
-    td.style.cssText = 'font-size: 1.1rem;border-radius: 0px 10px 0px 0px;background-color:' + pc.back_color
-  }
-  tr.appendChild(td)
-  if (pc.pc_unit.length > 0) {
-    tr = table.insertRow(-1) // TABLE ROW.
-    insCell('', tr, 'Обозначение изделия', 'header', '', false)
-    insCell('', tr, 'Наименование изделия', 'header', '', false)
-    insCell('', tr, 'Характеристика', 'header', '', false)
-    insCell('', tr, 'Количество', 'header', '', false)
-    insCell('', tr, 'Заводской номер', 'header', '', false)
-    insCell('', tr, 'Примечания', 'header', '', false)
-  }
-  let arr_pc_unit = pc.pc_unit
-  for (let j = 0; j < arr_pc_unit.length; j++) {
-    tr = table.insertRow(-1)
-    insCell('', tr, arr_pc_unit[j].fdsi, '', '', false, {
-      'id': pc._id
-    })
-    insCell('', tr, arr_pc_unit[j].type, 'type', '', false, {
-      'id': pc._id
-    })
-    insCell('', tr, arr_pc_unit[j].name, 'name', '', false, {
-      'id': pc._id
-    })
-    insCell('', tr, arr_pc_unit[j].quantity, '', '', false, {
-      'id': pc._id
-    })
-    let serial_numberCell = tr.insertCell(-1)
-    serial_numberCell.innerHTML = arr_pc_unit[j].serial_number
-    serial_numberCell.dataset.id = pc._id
-    serial_numberCell.dataset.obj = j
-    serial_numberCell.dataset.unit = 'pc_unit'
-    serial_numberCell.contentEditable = "true"
-    if (arr_pc_unit[j].apkzi) {
-      serial_numberCell.dataset.apkzi = "apkzi"
-      serial_numberCell.contentEditable = "false"
-    }
-    serial_numberCell.dataset.data = pc._id + ';' + j + ';' + 'pc_unit'
-    serial_numberCell.className = 'serial_number'
-    serial_numberCell.addEventListener('keypress', function (e) {
-      if (e.key == 'Enter') {
-        e.preventDefault()
-        const id = e.target.dataset.id
-        const obj = e.target.dataset.obj
-        const unit = e.target.dataset.unit
-        const serial_number = e.target.innerText
-        const data_hidd = e.target.dataset.data
-        const data_apkzi = e.target.dataset.apkzi
-        document.getElementById('hidd_id').value = data_hidd
-        if (data_apkzi) {
-          edit_serial_number_apkzi(id, obj, unit, serial_number)
-        } else {
-          edit_serial_number(id, obj, unit, serial_number)
-        }
-      }
-    })
-    insCell('', tr, arr_pc_unit[j].notes, '', '', false, {
-      'id': pc._id
-    })
-  }
-
-  if (pc.system_case_unit.length > 0) {
-    tr = table.insertRow(-1) // TABLE ROW.
-    insCell('', tr, 'Обозначение изделия', 'header', '', false)
-    insCell('', tr, 'Наименование изделия', 'header', '', false)
-    insCell('', tr, 'Характеристика', 'header', '', false)
-    insCell('', tr, 'Количество', 'header', '', false)
-    insCell('', tr, 'Заводской номер', 'header', '', false)
-    insCell('', tr, 'Примечания', 'header', '', false)
-  }
-  let arr_system_case_unit = pc.system_case_unit
-  for (let j = 0; j < arr_system_case_unit.length; j++) {
-    tr = table.insertRow(-1)
-    insCell('', tr, arr_system_case_unit[j].fdsi, '', '', false, {
-      'id': pc._id
-    })
-    insCell('', tr, arr_system_case_unit[j].type, 'type', '', false, {
-      'id': pc._id
-    })
-    insCell('', tr, arr_system_case_unit[j].name, 'name', '', false, {
-      'id': pc._id
-    })
-    insCell('', tr, arr_system_case_unit[j].quantity, '', '', false, {
-      'id': pc._id
-    })
-    let serial_numberCell = tr.insertCell(-1)
-    serial_numberCell.innerHTML = arr_system_case_unit[j].serial_number
-    serial_numberCell.dataset.id = pc._id
-    serial_numberCell.dataset.obj = j
-    serial_numberCell.dataset.unit = 'system_case_unit'
-    serial_numberCell.dataset.data = pc._id + ';' + j + ';' + 'system_case_unit'
-    if (arr_system_case_unit[j].szi) {
-      serial_numberCell.dataset.apkzi = 'szi'
-    }
-    serial_numberCell.className = 'serial_number'
-    serial_numberCell.contentEditable = "true"
-    serial_numberCell.addEventListener('keypress', function (e) {
-      if (e.key == 'Enter') {
-        e.preventDefault()
-        const id = e.target.dataset.id
-        const obj = e.target.dataset.obj
-        const unit = e.target.dataset.unit
-        const serial_number = e.target.innerText
-        const data_hidd = e.target.dataset.data
-        const data_apkzi = e.target.dataset.apkzi
-        document.getElementById('hidd_id').value = data_hidd
-        if (data_apkzi) {
-          edit_serial_number_apkzi(id, obj, unit, serial_number)
-        } else {
-          edit_serial_number(id, obj, unit, serial_number)
-        }
-      }
-    })
-    insCell('', tr, arr_system_case_unit[j].notes, '', '', false, {
-      'id': pc._id
-    })
-  }
-  return table
-}
-
 function TableEditPcUnit(pc) {
   // таблица ПЭВМ
   let table = document.createElement("table");
@@ -511,7 +372,14 @@ function CreateTableFromJSON(data, callback) {
   let divContainer = document.getElementById("PC")
   divContainer.innerHTML = ""
   for (let i = 0; i < data.length; i++) {
-    table = TablePc(data[i])
+    table = tablePC(data[i], 'all', true,
+      'fdsi',
+      'type',
+      'name',
+      'quantity',
+      'serial_number',
+      'notes'
+    )
     let divContainer = document.getElementById("PC");
     let divCont = document.createElement("div")
     divCont.id = data[i]._id
@@ -730,7 +598,14 @@ function UpdateCells(pc, oldNumberMachine, voice = true) {
     //Обновление только одной таблицы
     let divContainer = document.getElementById(pc._id)
     divContainer.innerHTML = ""
-    table = TablePc(pc)
+    table = tablePC(pc, 'all', true,
+      'fdsi',
+      'type',
+      'name',
+      'quantity',
+      'serial_number',
+      'notes'
+    )
     let divCont = document.createElement("div")
     divCont.id = pc._id
     divCont.className = "tableContent"

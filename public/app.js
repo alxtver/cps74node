@@ -414,3 +414,150 @@ function translit(serialNumber) {
   }
   return serialNumber
 }
+
+function tablePC(pc, units = 'all', contentEditable = true, ...rows) {
+  // таблица ПЭВМ
+  let table = document.createElement("table")
+  table.className = "table table-sm table-bordered table-hover table-responsive pctable"
+  if (units === 'systemCase') {
+    table.classList.remove('pctable')
+    table.classList.add('assemblytable')
+  }
+  table.id = pc._id
+  let tr = table.insertRow(-1)
+  const rowsHeaders = {
+    fdsi: 'Обозначение изделия',
+    type: 'Наименование изделия',
+    name: 'Характеристика',
+    quantity: 'Количество',
+    serial_number: 'Заводской номер',
+    notes: 'Примечания'
+  }
+  // шапка
+  if (units === 'all') {
+    insCell('', tr, 'ФДШИ.' + pc.fdsi, 'up', '', false)
+  }
+
+  td = document.createElement("td")
+  td.innerHTML = pc.serial_number
+  td.id = pc.serial_number
+  td.style.cssText = 'font-size: 1.5rem;background-color:' + pc.back_color
+  tr.appendChild(td)
+  insCell('', tr, pc.arm, 'up', '', false)
+  insCell('', tr, pc.execution, 'up', '', false)
+  if (units === 'all') {
+    insCell('', tr, '', 'up', '', false)
+  }
+  td = document.createElement("td")
+  if (pc.attachment) {
+    td.innerHTML = pc.attachment
+    td.style.cssText = 'font-size: 1.1rem;border-radius: 0px 10px 0px 0px;background-color:' + pc.back_color
+  }
+  tr.appendChild(td)
+
+  if (units === 'all' || units === 'pcUnit') {
+    // заголовок таблицы состава ПЭВМ
+    if (pc.pc_unit.length > 0) {
+      tr = table.insertRow(-1)
+      for (row of rows) {
+        insCell('', tr, rowsHeaders[row], 'header', '', false)
+      }
+    }
+    // таблица ПЭВМ
+    let arr_pc_unit = pc.pc_unit
+    for (let j = 0; j < arr_pc_unit.length; j++) {
+      tr = table.insertRow(-1)
+      for (row of rows) {
+        if (row != 'serial_number') {
+          insCell('', tr, arr_pc_unit[j][row], row, '', false, {
+            'id': pc._id
+          })
+        } else {
+          let serial_numberCell = tr.insertCell(-1)
+          serial_numberCell.innerHTML = arr_pc_unit[j].serial_number
+          serial_numberCell.dataset.id = pc._id
+          serial_numberCell.dataset.obj = j
+          serial_numberCell.dataset.unit = 'pc_unit'
+          if (contentEditable) {
+            serial_numberCell.contentEditable = "true"
+          }
+          if (arr_pc_unit[j].apkzi) {
+            serial_numberCell.dataset.apkzi = "apkzi"
+            serial_numberCell.contentEditable = "false"
+          }
+          serial_numberCell.dataset.data = pc._id + ';' + j + ';' + 'pc_unit'
+          serial_numberCell.className = 'serial_number'
+          serial_numberCell.addEventListener('keypress', function (e) {
+            if (e.key == 'Enter') {
+              e.preventDefault()
+              const id = e.target.dataset.id
+              const obj = e.target.dataset.obj
+              const unit = e.target.dataset.unit
+              const serial_number = e.target.innerText
+              const data_hidd = e.target.dataset.data
+              const data_apkzi = e.target.dataset.apkzi
+              document.getElementById('hidd_id').value = data_hidd
+              if (data_apkzi) {
+                edit_serial_number_apkzi(id, obj, unit, serial_number)
+              } else {
+                edit_serial_number(id, obj, unit, serial_number)
+              }
+            }
+          })
+        }
+      }
+    }
+  }
+  // таблица системного блока
+  if (units === 'all' || units === 'systemCase') {
+    if (pc.system_case_unit.length > 0) {
+      tr = table.insertRow(-1)
+      for (row of rows) {
+        insCell('', tr, rowsHeaders[row], 'header', '', false)
+      }
+    }
+    let arr_system_case_unit = pc.system_case_unit
+    for (let j = 0; j < arr_system_case_unit.length; j++) {
+      tr = table.insertRow(-1)
+      for (row of rows) {
+        if (row != 'serial_number') {
+          insCell('', tr, arr_system_case_unit[j][row], row, '', false, {
+            'id': pc._id
+          })
+        } else {
+          let serial_numberCell = tr.insertCell(-1)
+          serial_numberCell.innerHTML = arr_system_case_unit[j].serial_number
+          serial_numberCell.dataset.id = pc._id
+          serial_numberCell.dataset.obj = j
+          serial_numberCell.dataset.unit = 'system_case_unit'
+          serial_numberCell.dataset.data = pc._id + ';' + j + ';' + 'system_case_unit'
+          if (arr_system_case_unit[j].szi) {
+            serial_numberCell.dataset.apkzi = 'szi'
+          }
+          serial_numberCell.className = 'serial_number'
+          if (contentEditable) {
+            serial_numberCell.contentEditable = "true"
+            serial_numberCell.addEventListener('keypress', function (e) {
+              if (e.key == 'Enter') {
+                e.preventDefault()
+                const id = e.target.dataset.id
+                const obj = e.target.dataset.obj
+                const unit = e.target.dataset.unit
+                const serial_number = e.target.innerText
+                const data_hidd = e.target.dataset.data
+                const data_apkzi = e.target.dataset.apkzi
+                document.getElementById('hidd_id').value = data_hidd
+                if (data_apkzi) {
+                  edit_serial_number_apkzi(id, obj, unit, serial_number)
+                } else {
+                  edit_serial_number(id, obj, unit, serial_number)
+                }
+              }
+            })
+          }
+        }
+      }
+    }
+  }
+  return table
+}
