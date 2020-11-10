@@ -98,16 +98,18 @@
       <select id="part_select_navbar" class="custom-select"></select>
     </ul>
     {{/if}}
+
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         load_part_navbar()
       })
-
-      let partSelect = document.getElementById('part_select_navbar')
-      partSelect.addEventListener('change', (event) => {
-        changeSelect(partSelect.options[partSelect.selectedIndex].innerHTML)
-        setPage(1)
-      })
+      const partSelect = document.getElementById('part_select_navbar')
+      if (partSelect) {
+        partSelect.addEventListener('change', (event) => {
+          changeSelect(partSelect.options[partSelect.selectedIndex].innerHTML)
+          setPage(1)
+        })
+      }
     </script>
   </div>
 </nav>

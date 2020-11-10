@@ -1,8 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
   load_data()
-  on('body', 'click', '.delBtn', function () {
-    document.getElementById('hidId').value = this.dataset.id
-  })
 })
 
 function load_data() {
@@ -50,18 +47,38 @@ function CreateTableFromJSON(data) {
     countryCell.contentEditable = "true"
     countryCell.style.fontWeight = "700"
 
-    let buttonCell = tr.insertCell(-1)
-    let id = data[i]._id
-    let part = data[i].part
-    buttonCell.innerHTML = (
-      "<button class=\"btn_f\" onclick=\"location.href='/countries/" + id + "/edit?allow=true';\"><i class=\"fa fa-pen\"></i></button>" +
-      "<button class=\"btn_d delBtn\" data-id=\'" + id + "'\ data-part=\'" + part + "'\ data-toggle=\"modal\" data-target=\"#modalDel\"><i class=\"fa fa-trash\"></i></button>"
-    )
+    const buttonCell = tr.insertCell(-1)
+    const id = data[i]._id
+    const editBtn = document.createElement('button')
+    editBtn.addEventListener('click', () => {
+      location.href = "/countries/" + id + "/edit?allow=true"
+    })
+    editBtn.className = 'btn_f'
+    const faEdit = document.createElement('i')
+    faEdit.className = 'fa fa-pen'
+    editBtn.appendChild(faEdit)
+    buttonCell.appendChild(editBtn)
+    const delBtn = document.createElement('button')
+    delBtn.className = 'btn_d delBtn'
+    delBtn.dataset.id = id
+    delBtn.dataset.toggle = 'modal'
+    delBtn.dataset.target = '#modalDel'
+    const faDel = document.createElement('i')
+    faDel.className = 'fa fa-trash'
+    delBtn.appendChild(faDel)
+    delBtn.addEventListener('click', () => {
+      document.getElementById('hidId').value = id
+    })
+    buttonCell.appendChild(delBtn)
   }
   const divContainer = document.getElementById("showData")
   divContainer.innerHTML = ""
   divContainer.className = "tableContent"
   divContainer.appendChild(table)
+}
+
+function thisID(id) {
+  document.getElementById('hidId').value = id
 }
 
 function delBtn() {
@@ -70,7 +87,7 @@ function delBtn() {
     id: id
   }
   postData('/countries/del', data)
-    .then((data) => {
+    .then(() => {
       load_data()
     })
 }

@@ -58,7 +58,6 @@ function setColor() {
 }
 
 function CreateTablePC() {
-  console.log('sdafsdfsd');
   let col_rus = ["", "Обозначение изделия", "Наименование изделия", "Характеристика", "Количество", "Заводской номер", "Примечания"]
   let table = document.createElement("table");
   table.className = "table table-sm table-bordered table-hover"

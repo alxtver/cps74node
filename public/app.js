@@ -10,7 +10,6 @@ function snList(arr) {
     cont.appendChild(p)
   }
 }
-
 // добавление данных в сессию браузера
 function addSession() {
   let field_ean_code = document.getElementById("ean_code").value
@@ -229,26 +228,7 @@ function setPage(page) {
       page: page
     }
     postData('/pcPa/setPage', data)
-      .then((data) => {})
   }
-}
-
-function on(elSelector, eventName, selector, fn) {
-  var element = document.querySelector(elSelector)
-  element.addEventListener(eventName, function (event) {
-    var possibleTargets = element.querySelectorAll(selector)
-    var target = event.target
-    for (var i = 0, l = possibleTargets.length; i < l; i++) {
-      var el = target
-      var p = possibleTargets[i]
-      while (el && el !== element) {
-        if (el === p) {
-          return fn.call(p, event)
-        }
-        el = el.parentNode
-      }
-    }
-  })
 }
 
 function translate(text) {
@@ -356,16 +336,16 @@ function autocomplete(inp, arr) {
 }
 
 function CreateSelectType(data, callback) {
-  let select = document.querySelector('#type_select_navbar')
+  const select = document.querySelector('#type_select_navbar')
   select.innerHTML = ''
   let option = document.createElement("option")
   option.text = '...'
   option.value = '...'
   select.add(option)
-  for (let i = 0; i < data.length; i++) {
+  for (const d of data) {
     option = document.createElement("option")
-    option.text = data[i]
-    option.value = data[i]
+    option.text = d
+    option.value = d
     select.add(option)
   }
   callback()
@@ -399,13 +379,12 @@ function textToSpeech(text, rate) {
 function translit(serialNumber) {
   serialNumber = serialNumber.toUpperCase()
   for (const letter of serialNumber) {
-    let codeOfLetter = letter.charCodeAt(0)
-    if (codeOfLetter > 122) {
+    if (letter.charCodeAt() > 122) {
       let ruToEnSN = ''
       const ruLet = 'ЙЦУКЕНГШЩЗФЫВАПРОЛДЯЧСМИТЬ'
       const engLet = 'QWERTYUIOPASDFGHJKLZXCVBNM'
       for (const l of serialNumber) {
-        ind = ruLet.indexOf(l)
+        const ind = ruLet.indexOf(l)
         ruToEnSN += (ind >= 0) ? engLet[ind] : l
       }
       serialNumber = ruToEnSN
