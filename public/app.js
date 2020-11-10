@@ -420,7 +420,7 @@ function tablePC(pc, units = 'all', contentEditable = true, ...rows) {
   let table = document.createElement("table")
   table.className = "table table-sm table-bordered table-hover table-responsive pctable"
   if (units === 'systemCase') {
-    table.classList.remove('pctable')
+    table.classList.remove('pctable', 'table-sm')
     table.classList.add('assemblytable')
   }
   table.id = pc._id
@@ -441,6 +441,9 @@ function tablePC(pc, units = 'all', contentEditable = true, ...rows) {
   td = document.createElement("td")
   td.innerHTML = pc.serial_number
   td.id = pc.serial_number
+  if (units === 'systemCase') {
+    td.id = 'serial_number'
+  }
   td.style.cssText = 'font-size: 1.5rem;background-color:' + pc.back_color
   tr.appendChild(td)
   insCell('', tr, pc.arm, 'up', '', false)
@@ -454,6 +457,19 @@ function tablePC(pc, units = 'all', contentEditable = true, ...rows) {
     td.style.cssText = 'font-size: 1.1rem;border-radius: 0px 10px 0px 0px;background-color:' + pc.back_color
   }
   tr.appendChild(td)
+
+  if (units === 'systemCase') {
+    const apkziDiv = document.getElementById('apkziDiv')
+    apkziDiv.innerHTML = ''
+    let arr_pc_unit = pc.pc_unit
+    for (let j = 0; j < arr_pc_unit.length; j++) {
+      if (arr_pc_unit[j].apkzi && arr_pc_unit[j].serial_number != '') {
+        const apkziDiv = document.getElementById('apkziDiv')
+        apkziDiv.innerHTML = 'Номер АПКЗИ - ' + arr_pc_unit[j].serial_number
+        apkziDiv.style.display = 'block'
+      }
+    }
+  }
 
   if (units === 'all' || units === 'pcUnit') {
     // заголовок таблицы состава ПЭВМ

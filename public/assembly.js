@@ -93,7 +93,13 @@ function CreateTableFromJSON(data, callback) {
   let divContainer = document.getElementById("PC")
   divContainer.innerHTML = ""
 
-  table = TablePc(data)
+  // table = TablePc(data)
+  table = tablePC(data, 'systemCase', true,
+    'type',
+    'name',
+    'quantity',
+    'serial_number'
+  )
 
   let divCont = document.createElement("div")
   divCont.id = data._id
@@ -105,88 +111,88 @@ function CreateTableFromJSON(data, callback) {
   callback()
 }
 
-function TablePc(pc) {
-  const apkziDiv = document.getElementById('apkziDiv')
-  apkziDiv.innerHTML = ''
-  // таблица ПЭВМ
-  let table = document.createElement("table");
-  table.className = "table table-bordered table-hover table-responsive assemblytable"
-  table.id = pc._id
+// function TablePc(pc) {
+//   const apkziDiv = document.getElementById('apkziDiv')
+//   apkziDiv.innerHTML = ''
+//   // таблица ПЭВМ
+//   let table = document.createElement("table");
+//   table.className = "table table-bordered table-hover table-responsive assemblytable"
+//   table.id = pc._id
 
-  let tr = table.insertRow(-1)
+//   let tr = table.insertRow(-1)
 
-  td = document.createElement("td")
-  td.innerHTML = pc.serial_number
-  td.id = 'serial_number'
-  td.style.cssText = 'font-size: 1.5rem;border-radius: 4px 0px 0px 0px;background-color:' + pc.back_color
-  tr.appendChild(td)
-  insCell('', tr, pc.arm, 'up', '', false)
-  insCell('', tr, pc.execution, 'up', '', false)
+//   td = document.createElement("td")
+//   td.innerHTML = pc.serial_number
+//   td.id = 'serial_number'
+//   td.style.cssText = 'font-size: 1.5rem;border-radius: 4px 0px 0px 0px;background-color:' + pc.back_color
+//   tr.appendChild(td)
+//   insCell('', tr, pc.arm, 'up', '', false)
+//   insCell('', tr, pc.execution, 'up', '', false)
 
-  td = document.createElement("td")
-  if (pc.attachment) {
-    td.innerHTML = pc.attachment
-    td.style.cssText = 'font-size: 1.1rem;border-radius: 0px 4px 0px 0px;background-color:' + pc.back_color
-  }
-  tr.appendChild(td)
-  if (pc.system_case_unit.length > 0) {
-    tr = table.insertRow(-1) // TABLE ROW.
-    insCell('', tr, 'Наименование изделия', 'header', '', false)
-    insCell('', tr, 'Характеристика', 'header', '', false)
-    insCell('', tr, 'Количество', 'header', '', false)
-    insCell('', tr, 'Заводской номер', 'header', '', false)
-  }
-  let arr_pc_unit = pc.pc_unit
-  let arr_system_case_unit = pc.system_case_unit
-  for (let j = 0; j < arr_pc_unit.length; j++) {
-    if (arr_pc_unit[j].apkzi && arr_pc_unit[j].serial_number != '') {
-      const apkziDiv = document.getElementById('apkziDiv')
-      apkziDiv.innerHTML = 'Номер АПКЗИ - ' + arr_pc_unit[j].serial_number
-      apkziDiv.style.display = 'block'
-    }
-  }
-  for (let j = 0; j < arr_system_case_unit.length; j++) {
-    tr = table.insertRow(-1)
-    insCell('', tr, arr_system_case_unit[j].type, 'type', '', false, {
-      'id': pc._id
-    })
-    insCell('', tr, arr_system_case_unit[j].name, 'name', '', false, {
-      'id': pc._id
-    })
-    insCell('', tr, arr_system_case_unit[j].quantity, '', '', false, {
-      'id': pc._id
-    })
-    let serial_numberCell = tr.insertCell(-1)
-    serial_numberCell.innerHTML = arr_system_case_unit[j].serial_number
-    serial_numberCell.dataset.id = pc._id
-    serial_numberCell.dataset.obj = j
-    serial_numberCell.dataset.unit = 'system_case_unit'
-    serial_numberCell.dataset.data = pc._id + ';' + j + ';' + 'system_case_unit'
-    if (arr_system_case_unit[j].szi) {
-      serial_numberCell.dataset.apkzi = 'szi'
-    }
-    serial_numberCell.className = 'serial_number'
-    serial_numberCell.contentEditable = "true"
-    serial_numberCell.addEventListener('keypress', function (e) {
-      if (e.key == 'Enter') {
-        e.preventDefault()
-        const id = e.target.dataset.id
-        const obj = e.target.dataset.obj
-        const unit = e.target.dataset.unit
-        const serial_number = e.target.innerText
-        const data_hidd = e.target.dataset.data
-        const data_apkzi = e.target.dataset.apkzi
-        document.getElementById('hidd_id').value = data_hidd
-        if (data_apkzi) {
-          edit_serial_number_apkzi(id, obj, unit, serial_number)
-        } else {
-          edit_serial_number(id, obj, unit, serial_number)
-        }
-      }
-    })
-  }
-  return table
-}
+//   td = document.createElement("td")
+//   if (pc.attachment) {
+//     td.innerHTML = pc.attachment
+//     td.style.cssText = 'font-size: 1.1rem;border-radius: 0px 4px 0px 0px;background-color:' + pc.back_color
+//   }
+//   tr.appendChild(td)
+//   if (pc.system_case_unit.length > 0) {
+//     tr = table.insertRow(-1) // TABLE ROW.
+//     insCell('', tr, 'Наименование изделия', 'header', '', false)
+//     insCell('', tr, 'Характеристика', 'header', '', false)
+//     insCell('', tr, 'Количество', 'header', '', false)
+//     insCell('', tr, 'Заводской номер', 'header', '', false)
+//   }
+//   let arr_pc_unit = pc.pc_unit
+//   let arr_system_case_unit = pc.system_case_unit
+//   for (let j = 0; j < arr_pc_unit.length; j++) {
+//     if (arr_pc_unit[j].apkzi && arr_pc_unit[j].serial_number != '') {
+//       const apkziDiv = document.getElementById('apkziDiv')
+//       apkziDiv.innerHTML = 'Номер АПКЗИ - ' + arr_pc_unit[j].serial_number
+//       apkziDiv.style.display = 'block'
+//     }
+//   }
+//   for (let j = 0; j < arr_system_case_unit.length; j++) {
+//     tr = table.insertRow(-1)
+//     insCell('', tr, arr_system_case_unit[j].type, 'type', '', false, {
+//       'id': pc._id
+//     })
+//     insCell('', tr, arr_system_case_unit[j].name, 'name', '', false, {
+//       'id': pc._id
+//     })
+//     insCell('', tr, arr_system_case_unit[j].quantity, '', '', false, {
+//       'id': pc._id
+//     })
+//     let serial_numberCell = tr.insertCell(-1)
+//     serial_numberCell.innerHTML = arr_system_case_unit[j].serial_number
+//     serial_numberCell.dataset.id = pc._id
+//     serial_numberCell.dataset.obj = j
+//     serial_numberCell.dataset.unit = 'system_case_unit'
+//     serial_numberCell.dataset.data = pc._id + ';' + j + ';' + 'system_case_unit'
+//     if (arr_system_case_unit[j].szi) {
+//       serial_numberCell.dataset.apkzi = 'szi'
+//     }
+//     serial_numberCell.className = 'serial_number'
+//     serial_numberCell.contentEditable = "true"
+//     serial_numberCell.addEventListener('keypress', function (e) {
+//       if (e.key == 'Enter') {
+//         e.preventDefault()
+//         const id = e.target.dataset.id
+//         const obj = e.target.dataset.obj
+//         const unit = e.target.dataset.unit
+//         const serial_number = e.target.innerText
+//         const data_hidd = e.target.dataset.data
+//         const data_apkzi = e.target.dataset.apkzi
+//         document.getElementById('hidd_id').value = data_hidd
+//         if (data_apkzi) {
+//           edit_serial_number_apkzi(id, obj, unit, serial_number)
+//         } else {
+//           edit_serial_number(id, obj, unit, serial_number)
+//         }
+//       }
+//     })
+//   }
+//   return table
+// }
 
 function painting() {
   const status = document.getElementById('status')
@@ -299,7 +305,12 @@ function flashAlert(data) {
 function UpdateCells(pc) {
   let divContainer = document.getElementById(pc._id)
   divContainer.innerHTML = ""
-  table = TablePc(pc)
+  table = tablePC(pc, 'systemCase', true,
+    'type',
+    'name',
+    'quantity',
+    'serial_number'
+  )
   let divCont = document.createElement("div")
   divCont.id = pc._id
   divCont.className = "tableContent"
