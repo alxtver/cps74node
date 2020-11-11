@@ -1,28 +1,3 @@
-function insCell(unit, parrent, html = '', classN, id, contentEditable, dataset) {
-  let cell = parrent.insertCell(-1)
-  if (classN) cell.className = classN
-  if (id) cell.id = id
-  if (contentEditable) cell.contentEditable = contentEditable
-  cell.innerHTML = html
-  if (id == 'serial_number') {
-    if (unit == 'Системный блок' || unit == 'Сетевой фильтр' || unit == 'Гарнитура' || unit == 'Корпус') {
-      cell.className = "serial_number number_mashine"
-    } else if (unit == 'Вентилятор процессора') {
-      cell.innerHTML = 'б/н'
-    } else {
-      cell.className = "serial_number"
-    }
-  }
-  if (id == 'notes' && unit == 'Системный блок') {
-    cell.innerHTML = 'с кабелем питания'
-  }
-  if (dataset) {
-    for (const [key, value] of Object.entries(dataset)) {
-      cell.dataset[key] = value
-    }
-  }
-}
-
 function addRow() {
   let records = document.querySelectorAll('input[name="record"]')
   for (const rec of records) {

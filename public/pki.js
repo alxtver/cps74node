@@ -54,30 +54,30 @@ function CreateTableFromJSON(data, callback) {
   let tbody = table.createTBody()
   for (let i = 0; i < data.length; i++) {
     tr = tbody.insertRow(-1)
-    insCell(tr, i + 1, '')
-    insCell(tr, data[i].type_pki, 'type_pki', '', true, {
+    insCell('', tr, i + 1, '')
+    insCell('', tr, data[i].type_pki, 'type_pki', '', true, {
       'id': data[i]._id
     })
-    insCell(tr, data[i].vendor, 'vendor', '', true, {
+    insCell('', tr, data[i].vendor, 'vendor', '', true, {
       'id': data[i]._id
     })
-    insCell(tr, data[i].model, 'model', '', true, {
+    insCell('', tr, data[i].model, 'model', '', true, {
       'id': data[i]._id
     })
-    insCell(tr, data[i].serial_number, 'serial_number', '', true, {
+    insCell('', tr, data[i].serial_number, 'serial_number', '', true, {
       'id': data[i]._id
     })
-    insCell(tr, data[i].country, 'country', '', true, {
+    insCell('', tr, data[i].country, 'country', '', true, {
       'id': data[i]._id
     })
-    insCell(tr, data[i].number_machine, 'number_machine')
+    insCell('', tr, data[i].number_machine, 'number_machine')
     let id = data[i]._id
     let part = data[i].part
     let html = (
       "<button class=\"btn_f\" onclick=\"location.href='/pkis/" + id + "/edit?allow=true';\"><i class=\"fa fa-pen\"></i></button>" +
       "<button class=\"btn_d delBtn\" data-id=\'" + id + "'\ data-part=\'" + part + "'\ data-toggle=\"modal\" data-target=\"#modalDel\"><i data-id=\'" + id + "'\ class=\"fa fa-trash\"></i></button>"
     )
-    insCell(tr, html, 'buttons')
+    insCell('', tr, html, 'buttons')
   }
   const divContainer = document.getElementById("showData")
   divContainer.innerHTML = ""
@@ -96,7 +96,9 @@ function CreateTableFromJSON(data, callback) {
 
 function delBtn() {
   let id = document.getElementById('hidId').value
-  postData('/pkis/del', {id})
+  postData('/pkis/del', {
+      id
+    })
     .then(() => {
       load_data()
     })
@@ -217,25 +219,25 @@ function addPkiSubmit() {
   }
   const pki = new PKI(ean_code, type_pki, vendor, model, country, part, serial_number)
   pki.addPKIToDB().then((data) => {
-      if (data.status == 'snExists') {
+    if (data.status == 'snExists') {
+      document.getElementById('sound').play()
+      document.getElementById('error_message').style.display = 'block'
+      // document.getElementById("serial_number").value = serial_number
+      document.getElementById('alert').innerHTML = data.flashErr
+    } else if (data.status == 'ok') {
+      if (data.flashErr) {
         document.getElementById('sound').play()
         document.getElementById('error_message').style.display = 'block'
-        // document.getElementById("serial_number").value = serial_number
         document.getElementById('alert').innerHTML = data.flashErr
-      } else if (data.status == 'ok') {
-        if (data.flashErr) {
-          document.getElementById('sound').play()
-          document.getElementById('error_message').style.display = 'block'
-          document.getElementById('alert').innerHTML = data.flashErr
-        }
-        // document.getElementById("serial_number").value = ''
       }
-      let array = sessionStorage.getItem('snList')
-      if (array) {
-        snList(array.split(','))
-      }
-      document.getElementById("formContent").style.boxShadow = '0 30px 60px 0 rgba(0, 0, 0, 0.9)'
-    })
+      // document.getElementById("serial_number").value = ''
+    }
+    let array = sessionStorage.getItem('snList')
+    if (array) {
+      snList(array.split(','))
+    }
+    document.getElementById("formContent").style.boxShadow = '0 30px 60px 0 rgba(0, 0, 0, 0.9)'
+  })
 }
 
 function searchAndReplace() {
@@ -243,7 +245,10 @@ function searchAndReplace() {
   overlay.style.display = 'block'
   const search = document.getElementById('searchInput').value
   const replace = document.getElementById('replaceInput').value
-  data = {search, replace}
+  data = {
+    search,
+    replace
+  }
   postData('/pkis/searchAndReplace', data)
     .then(() => {
       load_data()
