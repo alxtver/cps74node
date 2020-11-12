@@ -1,5 +1,5 @@
 function blur() {
-  let tds = document.querySelectorAll('.fdsi,.apkzi_name,.kont_name,.fdsiKontr,.zav_number,.kontr_zav_number')
+  const tds = document.querySelectorAll('.fdsi,.apkzi_name,.kont_name,.fdsiKontr,.zav_number,.kontr_zav_number')
   for (const td of tds) {
     td.addEventListener("blur", function (event) {
       let id = event.target.dataset.id
@@ -19,7 +19,7 @@ function editCell(id, value, field) {
 }
 
 function load_data(q, part) {
-  data = {
+  const data = {
     q: q,
     part: part
   }
@@ -32,9 +32,9 @@ function load_data(q, part) {
 }
 
 function delBtn() {
-  let id = document.getElementById('hidId').value
-  let part = document.getElementById('hidPart').value
-  data = {
+  const id = document.getElementById('hidId').value
+  const part = document.getElementById('hidPart').value
+  const data = {
     id: id,
     part: part
   }
@@ -45,7 +45,7 @@ function delBtn() {
 }
 
 function CreateTableFromJSON(data, callback) {
-  let col_rus = [
+  const col_rus = [
     "№",
     "ФДШИ",
     "Наим. АПКЗИ",
@@ -57,7 +57,7 @@ function CreateTableFromJSON(data, callback) {
     ''
   ]
   // CREATE DYNAMIC TABLE.
-  let table = document.createElement("table")
+  const table = document.createElement("table")
   table.className = "table table-sm table-bordered table-hover table-responsive table-striped"
   // TABLE ROW.
   let thead = table.createTHead()
@@ -65,7 +65,6 @@ function CreateTableFromJSON(data, callback) {
   thead.className = "thead-dark"
   for (let i = 0; i < col_rus.length; i++) {
     let th = document.createElement("th") // TABLE HEADER.
-    // th.className = "thead-dark"
     th.innerHTML = col_rus[i];
     tr.appendChild(th);
     thead.appendChild(tr)

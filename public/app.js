@@ -30,12 +30,8 @@ function addSession() {
     sessionStorage.getItem('snList')
     let array = sessionStorage.getItem('snList')
     let snArr = []
-    if (array && array.length > 0) {
-      snArr = array.split(',')
-    }
-    if (snArr.length > 10) {
-      snArr.pop()
-    }
+    if (array && array.length > 0) snArr = array.split(',')
+    if (snArr.length > 10) snArr.pop()
     snArr.unshift(field_serial_number)
     sessionStorage.setItem('snList', snArr)
   }
@@ -73,17 +69,13 @@ function loadSession() {
     document.getElementById("ean_code").focus()
   }
   let array = sessionStorage.getItem('snList')
-  if (array) {
-    snList(array.split(','))
-  }
+  if (array) snList(array.split(','))
 }
 
 function plusOne(number) {
   let indexChar = 0
   for (let index = 0; index < number.length; index++) {
-    if (!/\d/.test(number[index])) {
-      indexChar = index
-    }
+    if (!/\d/.test(number[index])) indexChar = index
   }
   let firstPart = number.slice(0, indexChar + 1)
   let secondPart = number.slice(indexChar + 1)
@@ -95,9 +87,7 @@ function plusOne(number) {
 function minusOne(number) {
   let indexChar = 0
   for (let index = 0; index < number.length; index++) {
-    if (!/\d/.test(number[index])) {
-      indexChar = index
-    }
+    if (!/\d/.test(number[index])) indexChar = index
   }
   let firstPart = number.slice(0, indexChar + 1)
   let secondPart = number.slice(indexChar + 1)
@@ -123,39 +113,32 @@ function loadSessionApkzi() {
   if (sessionStorage.getItem("fdsi")) {
     field_fdsi.value = sessionStorage.getItem("fdsi")
   }
-
   let field_apkzi_name = document.getElementById("apkzi_name")
   if (sessionStorage.getItem("apkzi_name")) {
     field_apkzi_name.value = sessionStorage.getItem("apkzi_name")
   }
-
   let field_kont_name = document.getElementById("kont_name")
   if (sessionStorage.getItem("kont_name")) {
     field_kont_name.value = sessionStorage.getItem("kont_name")
   }
-
   let field_fdsiKontr = document.getElementById("fdsiKontr")
   if (sessionStorage.getItem("fdsiKontr")) {
     field_fdsiKontr.value = sessionStorage.getItem("fdsiKontr")
   }
-
   let field_zav_number = document.getElementById("zav_number")
   if (sessionStorage.getItem("zav_number")) {
     let zav_number_number = plusOne(sessionStorage.getItem("zav_number"))
     field_zav_number.value = zav_number_number
   }
-
   let field_kontr_zav_number = document.getElementById("kontr_zav_number")
   if (sessionStorage.getItem("kontr_zav_number")) {
     let kontr_zav_number = plusOne(sessionStorage.getItem("kontr_zav_number"))
     field_kontr_zav_number.value = kontr_zav_number
   }
-
   let field_part = document.getElementById("part")
   if (sessionStorage.getItem("part")) {
     field_part.value = sessionStorage.getItem("part")
   }
-
   if (sessionStorage.getItem("fdsi")) {
     field_kontr_zav_number.focus();
   } else {
@@ -202,9 +185,9 @@ function load_part_navbar() {
 }
 
 function CreateSelectNavbar(data, callback) {
-  let select = document.getElementById('part_select_navbar')
+  const select = document.getElementById('part_select_navbar')
   for (let i = 0; i < data.length; i++) {
-    let option = document.createElement("option")
+    const option = document.createElement("option")
     option.text = data[i].part
     option.value = data[i]._id
     select.appendChild(option)
@@ -213,22 +196,19 @@ function CreateSelectNavbar(data, callback) {
 }
 
 function changeSelect(selectedItem) {
-  let data = {
+  const data = {
     selectedItem: selectedItem
   }
   postData('/insert_part_session', data)
-    .then((data) => {
+    .then(() => {
       location.reload()
     })
 }
 
 function setPage(page) {
-  if (page) {
-    let data = {
-      page: page
-    }
-    postData('/pcPa/setPage', data)
-  }
+  if (page) postData('/pcPa/setPage', {
+    page
+  })
 }
 
 function translate(text) {
@@ -237,20 +217,12 @@ function translate(text) {
   const ruLet = 'ЙЦУКЕНГШЩЗФЫВАПРОЛДЯЧСМИТЬ'
   const engLet = 'QWERTYUIOPASDFGHJKLZXCVBNM'
   for (const l of text.toUpperCase()) {
-    let ind = ruLet.indexOf(l)
-    if (ind >= 0) {
-      ruToEnSN += engLet[ind]
-    } else {
-      ruToEnSN += l
-    }
+    const ind = ruLet.indexOf(l)
+    ruToEnSN += (ind >= 0) ? engLet[ind] : l
   }
   for (const l of text.toUpperCase()) {
-    let ind = engLet.indexOf(l)
-    if (ind >= 0) {
-      enToRuSN += ruLet[ind]
-    } else {
-      enToRuSN += l
-    }
+    const ind = engLet.indexOf(l)
+    enToRuSN += (ind >= 0) ? ruLet[ind] : l
   }
   return {
     ruToEnSN: ruToEnSN,
@@ -374,24 +346,6 @@ function textToSpeech(text, rate) {
     ut.pitch = 1.3
     speechSynthesis.speak(ut)
   }
-}
-
-function translit(serialNumber) {
-  serialNumber = serialNumber.toUpperCase()
-  for (const letter of serialNumber) {
-    if (letter.charCodeAt() > 122) {
-      let ruToEnSN = ''
-      const ruLet = 'ЙЦУКЕНГШЩЗФЫВАПРОЛДЯЧСМИТЬ'
-      const engLet = 'QWERTYUIOPASDFGHJKLZXCVBNM'
-      for (const l of serialNumber) {
-        const ind = ruLet.indexOf(l)
-        ruToEnSN += (ind >= 0) ? engLet[ind] : l
-      }
-      serialNumber = ruToEnSN
-      break
-    }
-  }
-  return serialNumber
 }
 
 function tablePC(pc, units = 'all', contentEditable = true, ...rows) {
