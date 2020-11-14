@@ -707,9 +707,6 @@ function testPC() {
     })
 }
 
-function getSoundSession() {
-  sessionStorage.getItem("sound")
-}
 
 function ulPagination(page, pages) {
   const ul = document.createElement('ul')

@@ -145,7 +145,11 @@ router.get('/apkzi', auth, (req, res) => {
 
 
 router.post('/apkzi', auth, async (req, res) => {
-  const findApkzi = await Apkzi.find({part: req.body.part, kontr_zav_number: req.body.kontr_zav_number})
+  console.log(req.body);
+  const findApkzi = await Apkzi.find({
+    part: req.body.part,
+    kontr_zav_number: req.body.kontr_zav_number
+  })
   if (findApkzi.length != 0) {
     res.status(200).json({
       message: 'ok'

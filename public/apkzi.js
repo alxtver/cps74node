@@ -152,18 +152,18 @@ function addAPKZISubmit() {
   const kontr_zav_number = document.getElementById('kontr_zav_number').value
   const part = document.getElementById('part').value
 
-  sessionStorage.setItem("fdsi", fdsi)
-  sessionStorage.setItem("apkzi_name", apkzi_name)
-  sessionStorage.setItem("kont_name", kont_name)
-  sessionStorage.setItem("fdsiKontr", fdsiKontr)
-  sessionStorage.setItem("zav_number", zav_number)
-  sessionStorage.setItem("kontr_zav_number", kontr_zav_number)
-  sessionStorage.setItem("part", part)
+  localStorage.fdsi = fdsi
+  localStorage.apkzi_name = apkzi_name
+  localStorage.kont_name = kont_name
+  localStorage.fdsiKontr = fdsiKontr
+  localStorage.zav_number = zav_number
+  localStorage.kontr_zav_number = kontr_zav_number
+  localStorage.part = part
 
   let zavNumberInput = document.getElementById('zav_number')
   let kontrZavNumberInput = document.getElementById('kontr_zav_number')
-  zavNumberInput.value = plusOne(sessionStorage.getItem("zav_number"))
-  kontrZavNumberInput.value = plusOne(sessionStorage.getItem("kontr_zav_number"))
+  zavNumberInput.value = plusOne(localStorage.zav_number)
+  kontrZavNumberInput.value = plusOne(localStorage.kontr_zav_number)
   if (!fdsi) {
     validate(document.getElementById('fdsi'))
     return false

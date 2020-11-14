@@ -170,12 +170,12 @@ function addPkiSubmit() {
   const country = document.getElementById("country").value
   const part = document.getElementById("part").value
   const serial_number = document.getElementById("serial_number").value
-  sessionStorage.setItem("ean_code", ean_code)
-  sessionStorage.setItem("type_pki", type_pki)
-  sessionStorage.setItem("vendor", vendor)
-  sessionStorage.setItem("model", model)
-  sessionStorage.setItem("country", country)
-  sessionStorage.setItem("part", part)
+  localStorage.ean_code = ean_code
+  localStorage.type_pki = type_pki
+  localStorage.vendor = vendor
+  localStorage.model = model
+  localStorage.country = country
+  localStorage.part = part
 
   textToSpeech(serial_number.slice(-3), 5)
 
@@ -205,8 +205,7 @@ function addPkiSubmit() {
   }
   document.getElementById("serial_number").value = ''
   if (serial_number) {
-    sessionStorage.getItem('snList')
-    let array = sessionStorage.getItem('snList')
+    let array = localStorage.snList
     let snArr = []
     if (array && array.length > 0) {
       snArr = array.split(',')
@@ -215,14 +214,13 @@ function addPkiSubmit() {
       snArr.pop()
     }
     snArr.unshift(serial_number)
-    sessionStorage.setItem('snList', snArr)
+    localStorage.snList = snArr
   }
   const pki = new PKI(ean_code, type_pki, vendor, model, country, part, serial_number)
   pki.addPKIToDB().then((data) => {
     if (data.status == 'snExists') {
       document.getElementById('sound').play()
       document.getElementById('error_message').style.display = 'block'
-      // document.getElementById("serial_number").value = serial_number
       document.getElementById('alert').innerHTML = data.flashErr
     } else if (data.status == 'ok') {
       if (data.flashErr) {
@@ -230,9 +228,8 @@ function addPkiSubmit() {
         document.getElementById('error_message').style.display = 'block'
         document.getElementById('alert').innerHTML = data.flashErr
       }
-      // document.getElementById("serial_number").value = ''
     }
-    let array = sessionStorage.getItem('snList')
+    let array = localStorage.snList
     if (array) {
       snList(array.split(','))
     }

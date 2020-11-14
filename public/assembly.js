@@ -1,9 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
-  if (!sessionStorage.getItem("sound")) {
+  if (!localStorage.sound) {
     document.getElementById("soundOff").hidden = true
     document.getElementById("soundOn").hidden = false
     setSoundSessionOn()
-  } else if (sessionStorage.getItem("sound") == 'on') {
+  } else if (localStorage.sound === 'on') {
     document.getElementById("soundOff").hidden = true
     document.getElementById("soundOn").hidden = false
   } else {

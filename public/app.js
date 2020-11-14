@@ -12,63 +12,38 @@ function snList(arr) {
 }
 // добавление данных в сессию браузера
 function addSession() {
-  let field_ean_code = document.getElementById("ean_code").value
-  sessionStorage.setItem("ean_code", field_ean_code)
-  let field_type_pki = document.getElementById("type_pki").value
-  sessionStorage.setItem("type_pki", field_type_pki)
-  let field_vendor = document.getElementById("vendor").value
-  sessionStorage.setItem("vendor", field_vendor)
-  let field_model = document.getElementById("model").value
-  sessionStorage.setItem("model", field_model)
-  let field_country = document.getElementById("country").value
-  sessionStorage.setItem("country", field_country)
-  let field_part = document.getElementById("part").value
-  sessionStorage.setItem("part", field_part)
+  localStorage.ean_code = document.getElementById("ean_code").value
+  localStorage.type_pki = document.getElementById("type_pki").value
+  localStorage.vendor = document.getElementById("vendor").value
+  localStorage.model = document.getElementById("model").value
+  localStorage.country = document.getElementById("country").value
+  localStorage.part = document.getElementById("part").value
 
   let field_serial_number = document.getElementById("serial_number").value
   if (field_serial_number) {
-    sessionStorage.getItem('snList')
-    let array = sessionStorage.getItem('snList')
+    let array = localStorage.snList
     let snArr = []
     if (array && array.length > 0) snArr = array.split(',')
     if (snArr.length > 10) snArr.pop()
     snArr.unshift(field_serial_number)
-    sessionStorage.setItem('snList', snArr)
+    localStorage.snList = snArr
   }
 }
 
 // выгрузка данных из сессии браузера
 function loadSession() {
-  let field_ean_code = document.getElementById("ean_code")
-  if (sessionStorage.getItem("ean_code")) {
-    field_ean_code.value = sessionStorage.getItem("ean_code")
-  }
-  let field_type_pki = document.getElementById("type_pki")
-  if (sessionStorage.getItem("type_pki")) {
-    field_type_pki.value = sessionStorage.getItem("type_pki")
-  }
-  let field_vendor = document.getElementById("vendor")
-  if (sessionStorage.getItem("vendor")) {
-    field_vendor.value = sessionStorage.getItem("vendor")
-  }
-  let field_model = document.getElementById("model")
-  if (sessionStorage.getItem("model")) {
-    field_model.value = sessionStorage.getItem("model")
-  }
-  let field_country = document.getElementById("country")
-  if (sessionStorage.getItem("country")) {
-    field_country.value = sessionStorage.getItem("country")
-  }
-  let field_part = document.getElementById("part")
-  if (sessionStorage.getItem("part")) {
-    field_part.value = sessionStorage.getItem("part")
-  }
-  if (sessionStorage.getItem("type_pki")) {
+  document.getElementById("ean_code").value = localStorage.ean_code || ''
+  document.getElementById("type_pki").value = localStorage.type_pki || ''
+  document.getElementById("vendor").value = localStorage.vendor || ''
+  document.getElementById("model").value = localStorage.model || ''
+  document.getElementById("country").value = localStorage.country || ''
+  document.getElementById("part").value = localStorage.part || ''
+  if (localStorage.type_pki) {
     document.getElementById("serial_number").focus()
   } else {
     document.getElementById("ean_code").focus()
   }
-  let array = sessionStorage.getItem('snList')
+  let array = localStorage.snList
   if (array) snList(array.split(','))
 }
 
@@ -98,49 +73,27 @@ function minusOne(number) {
 
 // добавление данных в сессию браузера
 function addSessionApkzi() {
-  sessionStorage.setItem("fdsi", document.getElementById("fdsi").value)
-  sessionStorage.setItem("apkzi_name", document.getElementById("apkzi_name").value)
-  sessionStorage.setItem("kont_name", document.getElementById("kont_name").value)
-  sessionStorage.setItem("fdsiKontr", document.getElementById("fdsiKontr").value)
-  sessionStorage.setItem("zav_number", document.getElementById("zav_number").value)
-  sessionStorage.setItem("kontr_zav_number", document.getElementById("kontr_zav_number").value)
-  sessionStorage.setItem("part", document.getElementById("part").value)
+  localStorage.fdsi = document.getElementById("fdsi").value
+  localStorage.apkzi_name = document.getElementById("apkzi_name").value
+  localStorage.kont_name = document.getElementById("kont_name").value
+  localStorage.fdsiKontr = document.getElementById("fdsiKontr").value
+  localStorage.zav_number = document.getElementById("zav_number").value
+  localStorage.kontr_zav_number = document.getElementById("kontr_zav_number").value
+  localStorage.part = document.getElementById("part").value
 }
 
 // выгрузка данных из сессии браузера
 function loadSessionApkzi() {
-  let field_fdsi = document.getElementById("fdsi")
-  if (sessionStorage.getItem("fdsi")) {
-    field_fdsi.value = sessionStorage.getItem("fdsi")
-  }
-  let field_apkzi_name = document.getElementById("apkzi_name")
-  if (sessionStorage.getItem("apkzi_name")) {
-    field_apkzi_name.value = sessionStorage.getItem("apkzi_name")
-  }
-  let field_kont_name = document.getElementById("kont_name")
-  if (sessionStorage.getItem("kont_name")) {
-    field_kont_name.value = sessionStorage.getItem("kont_name")
-  }
-  let field_fdsiKontr = document.getElementById("fdsiKontr")
-  if (sessionStorage.getItem("fdsiKontr")) {
-    field_fdsiKontr.value = sessionStorage.getItem("fdsiKontr")
-  }
-  let field_zav_number = document.getElementById("zav_number")
-  if (sessionStorage.getItem("zav_number")) {
-    let zav_number_number = plusOne(sessionStorage.getItem("zav_number"))
-    field_zav_number.value = zav_number_number
-  }
-  let field_kontr_zav_number = document.getElementById("kontr_zav_number")
-  if (sessionStorage.getItem("kontr_zav_number")) {
-    let kontr_zav_number = plusOne(sessionStorage.getItem("kontr_zav_number"))
-    field_kontr_zav_number.value = kontr_zav_number
-  }
-  let field_part = document.getElementById("part")
-  if (sessionStorage.getItem("part")) {
-    field_part.value = sessionStorage.getItem("part")
-  }
-  if (sessionStorage.getItem("fdsi")) {
-    field_kontr_zav_number.focus();
+  document.getElementById("fdsi").value = localStorage.fdsi || ''
+  document.getElementById("apkzi_name").value = localStorage.apkzi_name || ''
+  document.getElementById("kont_name").value = localStorage.kont_name || ''
+  document.getElementById("fdsiKontr").value = localStorage.fdsiKontr || ''
+  document.getElementById("zav_number").value = plusOne(localStorage.zav_number) || ''
+  document.getElementById("kontr_zav_number").value = plusOne(localStorage.kontr_zav_number) || ''
+  document.getElementById("part").value = localStorage.part || ''
+
+  if (localStorage.fdsi) {
+    document.getElementById("kontr_zav_number").focus();
   } else {
     document.getElementById("fdsi").focus();
   }
@@ -324,20 +277,20 @@ function CreateSelectType(data, callback) {
 }
 
 function setSoundSessionOn() {
-  sessionStorage.setItem("sound", "on")
+  localStorage.sound = 'on'
   document.getElementById("soundOff").hidden = true
   document.getElementById("soundOn").hidden = false
 }
 
 function setSoundSessionOff() {
-  sessionStorage.setItem("sound", "off")
+  localStorage.sound = 'off'
   document.getElementById("soundOff").hidden = false
   document.getElementById("soundOn").hidden = true
   speechSynthesis.cancel()
 }
 
 function textToSpeech(text, rate) {
-  if (sessionStorage.getItem("sound") === 'on') {
+  if (localStorage.sound === 'on') {
     const textToSpeech = text
     const ut = new SpeechSynthesisUtterance(textToSpeech)
     ut.lang = 'ru-RU'
