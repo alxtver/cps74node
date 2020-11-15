@@ -145,10 +145,17 @@ router.get('/apkzi', auth, (req, res) => {
 
 
 router.post('/apkzi', auth, async (req, res) => {
-  console.log(req.body);
+  const fdsi = req.body.fdsi.trim()
+  const apkzi_name = req.body.apkzi_name.trim()
+  const kont_name = req.body.kont_name.trim()
+  const fdsiKontr = req.body.fdsiKontr.trim()
+  const zav_number = req.body.zav_number.trim()
+  const kontr_zav_number = req.body.kontr_zav_number.trim()
+  const part = req.body.part.trim()
+  const user = req.session.user.username
   const findApkzi = await Apkzi.find({
-    part: req.body.part,
-    kontr_zav_number: req.body.kontr_zav_number
+    part: part,
+    kontr_zav_number: kontr_zav_number
   })
   if (findApkzi.length != 0) {
     res.status(200).json({
@@ -156,26 +163,25 @@ router.post('/apkzi', auth, async (req, res) => {
     })
   } else {
     const apkzi = new Apkzi({
-      fdsi: req.body.fdsi,
-      apkzi_name: req.body.apkzi_name,
-      kont_name: req.body.kont_name,
-      fdsiKontr: req.body.fdsiKontr,
-      zav_number: req.body.zav_number,
-      kontr_zav_number: req.body.kontr_zav_number,
-      part: req.body.part
+      fdsi: fdsi,
+      apkzi_name: apkzi_name,
+      kont_name: kont_name,
+      fdsiKontr: fdsiKontr,
+      zav_number: zav_number,
+      kontr_zav_number: kontr_zav_number,
+      part: part
     })
     try {
       await apkzi.save()
-      let note = `APKZI ${apkzi.apkzi_name} ${apkzi.kont_name} заводской номер - ${apkzi.zav_number}, номер контроллера - ${apkzi.kontr_zav_number} added to DB`
+      const note = `APKZI ${apkzi.apkzi_name} ${apkzi.kont_name} заводской номер - ${apkzi.zav_number}, номер контроллера - ${apkzi.kontr_zav_number} added to DB`
       console.log(note)
-      let log = new LOG({
+      const log = new LOG({
         event: 'add APKZI',
         note: note,
-        user: req.session.user.username,
-        part: req.session.part
+        user: user,
+        part: part
       })
       log.save()
-      // res.redirect('/add/apkzi')
       res.status(200).json({
         message: 'ok'
       })
