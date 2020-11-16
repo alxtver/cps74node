@@ -102,7 +102,14 @@ function CreateTableFromJSON(data) {
   divContainer.innerHTML = ""
 
   for (let elem of data) {
-    table = TablePc(elem)
+    table = tablePC(elem, 'all', true,
+      'fdsi',
+      'type',
+      'name',
+      'quantity',
+      'serial_number',
+      'notes'
+    )
     let divContainer = document.getElementById("PC");
     let divCont = document.createElement("div")
     divCont.id = elem._id
