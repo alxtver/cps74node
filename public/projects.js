@@ -102,7 +102,7 @@ function CreateTableFromJSON(data) {
   divContainer.innerHTML = ""
 
   for (let elem of data) {
-    table = tablePC(elem, 'all', true,
+    table = tablePC(elem, 'all', false,
       'fdsi',
       'type',
       'name',
