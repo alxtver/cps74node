@@ -124,7 +124,6 @@ router.post('/add', auth, async (req, res) => {
   for (let i = 0; i < json_system.length; i++) {
     pc.system_case_unit.push(json_system[i])
   }
-  console.log(json_pc, json_system);
   try {
     await pc.save();
     res.status(200).json({
