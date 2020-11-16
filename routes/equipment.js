@@ -120,7 +120,10 @@ router.post('/edit', auth, async (req, res) => {
   const vendor = req.body.vendor
   const model = req.body.model
   const country = req.body.country
-  const sp_unit = req.body.sp_unit
+  let sp_unit = req.body.sp_unit
+  if (sp_unit.length == 1 && sp_unit[0].name == '') {
+    sp_unit = []
+  }
   if (req.body.sp_unit1) {
     await EAN.findOneAndUpdate({
       ean_code: ean_code

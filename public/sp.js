@@ -175,63 +175,63 @@ function CreateTableFromJSON(data) {
       "<button class=\"btn_f\" onclick=\"location.href='/sp/" + id + "/edit?allow=true';\"><i class=\"fa fa-pen\"></i></button>"
     )
 
-    if (data[i].sp_unit.length > 0) {
-      for (const unit of data[i].sp_unit) {
-        tr = tbody.insertRow(-1)
-        let numberCell = tr.insertCell(-1)
-        numberCell.innerHTML = ''
+    // if (data[i].sp_unit.length > 0) {
+    //   for (const unit of data[i].sp_unit) {
+    //     tr = tbody.insertRow(-1)
+    //     let numberCell = tr.insertCell(-1)
+    //     numberCell.innerHTML = ''
 
-        let nameCell = tr.insertCell(-1)
-        nameCell.innerHTML = unit.name
-        nameCell.dataset.id = data[i]._id
-        nameCell.className = "name"
-        nameCell.id = "name"
+    //     let nameCell = tr.insertCell(-1)
+    //     nameCell.innerHTML = unit.name
+    //     nameCell.dataset.id = data[i]._id
+    //     nameCell.className = "name"
+    //     nameCell.id = "name"
 
-        let vendorCell = tr.insertCell(-1)
-        vendorCell.innerHTML = unit.vendor
-        vendorCell.dataset.id = data[i]._id
-        vendorCell.className = "vendor"
-        vendorCell.id = "vendor"
+    //     let vendorCell = tr.insertCell(-1)
+    //     vendorCell.innerHTML = unit.vendor
+    //     vendorCell.dataset.id = data[i]._id
+    //     vendorCell.className = "vendor"
+    //     vendorCell.id = "vendor"
 
-        let modelCell = tr.insertCell(-1)
-        modelCell.innerHTML = unit.model
-        modelCell.dataset.id = data[i]._id
-        modelCell.className = "model"
-        modelCell.id = "model"
+    //     let modelCell = tr.insertCell(-1)
+    //     modelCell.innerHTML = unit.model
+    //     modelCell.dataset.id = data[i]._id
+    //     modelCell.className = "model"
+    //     modelCell.id = "model"
 
-        let quantityCell = tr.insertCell(-1)
-        quantityCell.innerHTML = unit.quantity
-        quantityCell.dataset.id = data[i]._id
-        quantityCell.className = "quantity"
-        quantityCell.id = "quantity"
+    //     let quantityCell = tr.insertCell(-1)
+    //     quantityCell.innerHTML = unit.quantity
+    //     quantityCell.dataset.id = data[i]._id
+    //     quantityCell.className = "quantity"
+    //     quantityCell.id = "quantity"
 
-        let serial_numberCell = tr.insertCell(-1)
-        serial_numberCell.innerHTML = unit.serial_number
-        serial_numberCell.dataset.id = data[i]._id
-        serial_numberCell.className = "serial_number"
-        serial_numberCell.id = "serial_number"
+    //     let serial_numberCell = tr.insertCell(-1)
+    //     serial_numberCell.innerHTML = unit.serial_number
+    //     serial_numberCell.dataset.id = data[i]._id
+    //     serial_numberCell.className = "serial_number"
+    //     serial_numberCell.id = "serial_number"
 
-        let countryCell = tr.insertCell(-1)
-        countryCell.innerHTML = ''
-        countryCell.dataset.id = data[i]._id
-        countryCell.className = "country"
-        countryCell.id = "country"
+    //     let countryCell = tr.insertCell(-1)
+    //     countryCell.innerHTML = ''
+    //     countryCell.dataset.id = data[i]._id
+    //     countryCell.className = "country"
+    //     countryCell.id = "country"
 
-        let szz1Cell = tr.insertCell(-1)
-        szz1Cell.innerHTML = ''
-        szz1Cell.dataset.id = data[i]._id
-        szz1Cell.id = "szz1"
+    //     let szz1Cell = tr.insertCell(-1)
+    //     szz1Cell.innerHTML = ''
+    //     szz1Cell.dataset.id = data[i]._id
+    //     szz1Cell.id = "szz1"
 
-        let szz2Cell = tr.insertCell(-1)
-        szz2Cell.innerHTML = unit.szz2
-        szz2Cell.dataset.id = data[i]._id
-        szz2Cell.id = "szz2"
-        szz2Cell.style.fontWeight = "700"
+    //     let szz2Cell = tr.insertCell(-1)
+    //     szz2Cell.innerHTML = unit.szz2
+    //     szz2Cell.dataset.id = data[i]._id
+    //     szz2Cell.id = "szz2"
+    //     szz2Cell.style.fontWeight = "700"
 
-        let blankCell = tr.insertCell(-1)
-        blankCell.innerHTML = ''
-      }
-    }
+    //     let blankCell = tr.insertCell(-1)
+    //     blankCell.innerHTML = ''
+    //   }
+    // }
   }
   const divContainer = document.getElementById("showData")
   divContainer.innerHTML = ""
@@ -495,43 +495,43 @@ function CreateTable_EAN(ean) {
     tr = tableRef.insertRow(-1)
 
 
-  let nameCell = tr.insertCell(-1)
-  nameCell.className = "name"
-  nameCell.innerHTML = unit.name
-  nameCell.id = "name"
-  nameCell.contentEditable = "true"
+    let nameCell = tr.insertCell(-1)
+    nameCell.className = "name"
+    nameCell.innerHTML = unit.name
+    nameCell.id = "name"
+    nameCell.contentEditable = "true"
 
-  let vendorCell = tr.insertCell(-1)
-  vendorCell.className = "vendor"
-  vendorCell.innerHTML = unit.vendor
-  vendorCell.id = "vendor"
-  vendorCell.contentEditable = "true"
+    let vendorCell = tr.insertCell(-1)
+    vendorCell.className = "vendor"
+    vendorCell.innerHTML = unit.vendor
+    vendorCell.id = "vendor"
+    vendorCell.contentEditable = "true"
 
-  let modelCell = tr.insertCell(-1)
-  modelCell.className = "model"
-  modelCell.innerHTML = unit.model
-  modelCell.id = "model"
-  modelCell.contentEditable = "true"
+    let modelCell = tr.insertCell(-1)
+    modelCell.className = "model"
+    modelCell.innerHTML = unit.model
+    modelCell.id = "model"
+    modelCell.contentEditable = "true"
 
-  let quantityCell = tr.insertCell(-1)
-  quantityCell.innerHTML = unit.quantity
-  quantityCell.className = "quantity"
-  quantityCell.id = "quantity"
-  quantityCell.contentEditable = "true"
+    let quantityCell = tr.insertCell(-1)
+    quantityCell.innerHTML = unit.quantity
+    quantityCell.className = "quantity"
+    quantityCell.id = "quantity"
+    quantityCell.contentEditable = "true"
 
-  let serial_numberCell = tr.insertCell(-1)
-  serial_numberCell.className = "serial_number"
-  serial_numberCell.innerHTML = unit.serial_number
-  serial_numberCell.id = "serial_number"
-  serial_numberCell.dataset.data = n
-  serial_numberCell.contentEditable = "true"
+    let serial_numberCell = tr.insertCell(-1)
+    serial_numberCell.className = "serial_number"
+    serial_numberCell.innerHTML = unit.serial_number
+    serial_numberCell.id = "serial_number"
+    serial_numberCell.dataset.data = n
+    serial_numberCell.contentEditable = "true"
 
-  let szz2Cell = tr.insertCell(-1)
-  szz2Cell.innerHTML = unit.szz2
-  szz2Cell.className = "szz2"
-  szz2Cell.id = "szz2"
-  szz2Cell.contentEditable = "true"
-  n += 1
+    let szz2Cell = tr.insertCell(-1)
+    szz2Cell.innerHTML = unit.szz2
+    szz2Cell.className = "szz2"
+    szz2Cell.id = "szz2"
+    szz2Cell.contentEditable = "true"
+    n += 1
   }
 }
 

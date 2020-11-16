@@ -193,7 +193,6 @@ router.get('/:id/edit', auth, async (req, res) => {
 
 
 router.post('/edit', auth, async (req, res) => {
-	console.log(req.body)
 	const id = req.body.id
 	await Pki.findByIdAndUpdate(id, req.body)
 	let pki = await Pki.findById(id)
@@ -734,20 +733,21 @@ router.get("/excelExport", auth, async function (req, res) {
 			}
 		}
 
-		if (pki.sp_unit && pki.sp_unit.length > 0) {
-			for (const unit of pki.sp_unit) {
-				n += 1
-				ws.cell(n, 2).string('').style(style)
-				ws.cell(n, 3).string(unit.name).style(style)
-				ws.cell(n, 4).string(unit.vendor).style(style)
-				ws.cell(n, 5).string(unit.model).style(style)
-				ws.cell(n, 6).string(unit.quantity).style(style)
-				ws.cell(n, 7).string(unit.serial_number).style(style)
-				ws.cell(n, 8).string('').style(style)
-				ws.cell(n, 9).string('').style(style)
-				ws.cell(n, 10).string(unit.szz2).style(style)
-			}
-		}
+
+		// if (pki.sp_unit && pki.sp_unit.length > 0) {
+		// 	for (const unit of pki.sp_unit) {
+		// 		n += 1
+		// 		ws.cell(n, 2).string('').style(style)
+		// 		ws.cell(n, 3).string(unit.name).style(style)
+		// 		ws.cell(n, 4).string(unit.vendor).style(style)
+		// 		ws.cell(n, 5).string(unit.model).style(style)
+		// 		ws.cell(n, 6).string(unit.quantity).style(style)
+		// 		ws.cell(n, 7).string(unit.serial_number).style(style)
+		// 		ws.cell(n, 8).string('').style(style)
+		// 		ws.cell(n, 9).string('').style(style)
+		// 		ws.cell(n, 10).string(unit.szz2).style(style)
+		// 	}
+		// }
 
 		type = pki.type_pki
 		n += 1
@@ -1101,16 +1101,16 @@ router.get("/excelExport1", auth, async function (req, res) {
 				ws.cell(n, 5).string(unit.quantity).style(style)
 				ws.cell(n, 6).string(unit.serial_number).style(style)
 				n += 1
-				if (pki.sp_unit && pki.sp_unit.length > 0) {
-					for (const u of pki.sp_unit) {
-						ws.cell(n, 2).string(u.name).style(style)
-						ws.cell(n, 3).string(u.vendor).style(style)
-						ws.cell(n, 4).string(u.model).style(style)
-						ws.cell(n, 5).string(u.quantity).style(style)
-						ws.cell(n, 6).string(u.serial_number).style(style)
-						n += 1
-					}
-				}
+				// if (pki.sp_unit && pki.sp_unit.length > 0) {
+				// 	for (const u of pki.sp_unit) {
+				// 		ws.cell(n, 2).string(u.name).style(style)
+				// 		ws.cell(n, 3).string(u.vendor).style(style)
+				// 		ws.cell(n, 4).string(u.model).style(style)
+				// 		ws.cell(n, 5).string(u.quantity).style(style)
+				// 		ws.cell(n, 6).string(u.serial_number).style(style)
+				// 		n += 1
+				// 	}
+				// }
 			} else if (!unit.apkzi && unit.type != 'Системный блок' && unit.type != 'Коврик для мыши') {
 				let name = unit.name.split(' ')
 				let vendor = name.splice(0, 1).join(' ')
@@ -1150,16 +1150,16 @@ router.get("/excelExport1", auth, async function (req, res) {
 				ws.cell(n, 5).string(unit.quantity).style(style)
 				ws.cell(n, 6).string(unit.serial_number).style(style)
 				n += 1
-				if (pki.sp_unit && pki.sp_unit.length > 0) {
-					for (const u of pki.sp_unit) {
-						ws.cell(n, 2).string(u.name).style(style)
-						ws.cell(n, 3).string(u.vendor).style(style)
-						ws.cell(n, 4).string(u.model).style(style)
-						ws.cell(n, 5).string(u.quantity).style(style)
-						ws.cell(n, 6).string(u.serial_number).style(style)
-						n += 1
-					}
-				}
+				// if (pki.sp_unit && pki.sp_unit.length > 0) {
+				// 	for (const u of pki.sp_unit) {
+				// 		ws.cell(n, 2).string(u.name).style(style)
+				// 		ws.cell(n, 3).string(u.vendor).style(style)
+				// 		ws.cell(n, 4).string(u.model).style(style)
+				// 		ws.cell(n, 5).string(u.quantity).style(style)
+				// 		ws.cell(n, 6).string(u.serial_number).style(style)
+				// 		n += 1
+				// 	}
+				// }
 			} else if (!unit.szi) {
 				let name = unit.name.split(' ')
 				let vendor = name.splice(0, 1).join(' ')
