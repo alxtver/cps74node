@@ -763,8 +763,6 @@ th {
   background-color: #86c023;
 }
 
-
-
 .PaUl li a {
   background-color: #343A40;
   padding: 5px 10px;
@@ -901,8 +899,6 @@ th {
   height: 100%;
   width: 6px;
   display: inline-block;
-
-
   -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
   animation: sk-stretchdelay 1.2s infinite ease-in-out;
 }
@@ -997,8 +993,20 @@ th {
 }
 
 .buttonsActive {
-  box-shadow: rgb(53 56 53) 0px 0px 0px 0px;
-  transform: translate(3px, 2px);
+  animation: push-the-button 5.2s infinite ease-in-out;
+}
+
+@keyframes push-the-button {
+
+  0%,
+  40%,
+  100% {
+    transform: scale3d(.9, .9, 1) translate(5px, -2px);
+  }
+
+  20% {
+    transform: scale3d(1, 1, 1);
+  }
 }
 
 .status {
@@ -1029,7 +1037,8 @@ th {
   margin-right: 1rem;
   grid-gap: 1px;
   height: calc(100vh - 85px);
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(130px, auto));
+  grid-auto-rows: minmax(20px, 150px);
 }
 
 .divGrid {
@@ -1056,21 +1065,21 @@ th {
 }
 
 .divGrid:hover {
-  transform: scale3d(1.1, 1.1, 1) translate(5px, -2px) rotate(-2deg);
+  transform: scale3d(1.1, 1.1, 1) translate(5px, -2px) rotate(-1deg);
   box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   font-weight: 700;
 }
 
 .divGrid:focus {
-  transform: scale3d(1.1, 1.1, 1) translate(5px, -2px) rotate(-2deg);
+  transform: scale3d(1.1, 1.1, 1) translate(5px, -2px) rotate(-1deg);
   box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   font-weight: 700;
 }
 
 .divGridAllOk {
-  background: rgb(114, 221, 131);
+  background: rgb(113, 188, 60);
 }
 
 .divGridSystemOk {

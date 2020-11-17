@@ -1,4 +1,5 @@
 function loadSN() {
+  document.querySelector('body').style.background = '#3d3d3d'
   document.getElementById('overlay').style.display = 'block'
   postData('/assembly/pc')
     .then((data) => {
@@ -10,23 +11,18 @@ function loadSN() {
 
 function createGrid(data) {
   const container = document.getElementById("grid")
-  const len = data.length
-  // if (len > 200) {
-  //   container.style.gridTemplateColumns = 'repeat(auto-fill, minmax(150px, 1fr))'
-  // } else if (len > 100) {
-  //   container.style.gridTemplateColumns = 'repeat(auto-fill, minmax(200px, 1fr))'
-  // } else if (len > 50) {
-  //   container.style.gridTemplateColumns = 'repeat(auto-fill, minmax(300px, 1fr))'
-  // } else if (len > 10) {
-  //   container.style.gridTemplateColumns = 'repeat(auto-fill, minmax(400px, 1fr))'
-  // } else {
-  //   container.style.gridTemplateColumns = 'repeat(auto-fill, minmax(500px, 1fr))'
-  // }
-  // container.style.gridTemplateColumns = 'repeat(auto-fill, minmax(130px, 1fr))'
   for (const i of data) {
+    let label = ''
+    if (i.attachment) {
+      let sp = i.attachment.split(' ')
+      label = (sp.length > 1) ? sp[0].slice(0, 3) + '. ' + sp[sp.length - 1] : sp[0] + '. '
+    }
     const div = document.createElement('div')
     div.className = 'divGrid'
-    div.innerHTML = i.serial_number
+    const sn = i.serial_number.split('-')
+    label += ' №'
+    label += (sn.length > 1) ? sn[sn.length - 1] : sn[0]
+    div.innerHTML = label
     div.id = i._id
     div.addEventListener("click", function (event) {
       div.dataset.target = '#modalPC'
