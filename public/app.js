@@ -32,6 +32,8 @@ function addSession() {
 
 // выгрузка данных из сессии браузера
 function loadSession() {
+
+
   document.getElementById("ean_code").value = localStorage.ean_code || ''
   document.getElementById("type_pki").value = localStorage.type_pki || ''
   document.getElementById("vendor").value = localStorage.vendor || ''
@@ -131,6 +133,13 @@ function load_part_navbar() {
             if (data.currentPartId) {
               document.getElementById('part_select_navbar').value = data.currentPartId
             }
+            const partInput = document.getElementById('part')
+            if (partInput) {
+              const select = document.getElementById('part_select_navbar')
+              const selectedPart = select.options[select.selectedIndex].innerHTML
+              partInput.value = selectedPart
+            }
+
           })
         }
       })
