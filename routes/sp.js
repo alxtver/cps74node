@@ -761,11 +761,7 @@ router.get("/excelExport", auth, async function (req, res) {
 	let unitsWPcSn = []
 	for (const pc of pcs) {
 		for (const unit of pc.pc_unit) {
-			if (unit.serial_number == 'б/н' ||
-				unit.serial_number == 'Б/н' ||
-				unit.serial_number == 'б/Н' ||
-				unit.serial_number == 'Б/Н'
-			) {
+			if (/[Бб].?[Нн]/g.test(unit.serial_number)) {
 				if (unit.type == 'Коврик для мыши') {} else {
 					unitsWOSn.push({
 						type: unit.type,
@@ -789,11 +785,7 @@ router.get("/excelExport", auth, async function (req, res) {
 			}
 		}
 		for (const unit of pc.system_case_unit) {
-			if (unit.serial_number == 'б/н' ||
-				unit.serial_number == 'Б/н' ||
-				unit.serial_number == 'б/Н' ||
-				unit.serial_number == 'Б/Н'
-			) {
+			if (/[Бб].?[Нн]/g.test(unit.serial_number)) {
 
 				unitsWOSn.push({
 					type: unit.type,
@@ -1077,12 +1069,7 @@ router.get("/excelExport1", auth, async function (req, res) {
 		n += 1
 		for (const unit of pc.pc_unit) {
 			let pki = ''
-			if (
-				unit.serial_number != 'б/н' &&
-				unit.serial_number != 'Б/н' &&
-				unit.serial_number != 'б/Н' &&
-				unit.serial_number != 'б/н'
-			) {
+			if (/[Бб].?[Нн]/g.test(unit.serial_number)) {
 				if (unit.apkzi != "apkzi" && unit.type != 'Системный блок' && unit.serial_number != pc.serial_number) {
 					for (const pk of pkis) {
 						if (pk.serial_number == unit.serial_number) {
@@ -1126,12 +1113,7 @@ router.get("/excelExport1", auth, async function (req, res) {
 		for (const unit of pc.system_case_unit) {
 			let pki = ''
 
-			if (
-				unit.serial_number != 'б/н' &&
-				unit.serial_number != 'Б/н' &&
-				unit.serial_number != 'б/Н' &&
-				unit.serial_number != 'б/н'
-			) {
+			if (/[Бб].?[Нн]/g.test(unit.serial_number)) {
 				if (unit.serial_number != pc.serial_number || unit.type == 'Корпус') {
 					for (const pk of pkis) {
 						if (pk.serial_number == unit.serial_number) {

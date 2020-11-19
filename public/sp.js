@@ -445,7 +445,7 @@ function load_table_sp(pki_id) {
             let id = serial.dataset.data
             let next_id = Number(id) + 1
             let nextCellText = document.querySelector(".serial_number[data-data='" + next_id + "']").innerText
-            while (nextCellText == 'б/н' || nextCellText == 'Б/Н' || nextCellText == 'Б/н') {
+            while (/[Бб].?[Нн]/g.test(nextCellText)) {
               next_id += 1
               nextCellText = document.querySelector(".serial_number[data-data='" + next_id + "']").innerText
             }
@@ -592,7 +592,7 @@ function CreateTableSP_EAN(ean) {
     let serial_numberCell = tr.insertCell(-1)
     serial_numberCell.className = "serial_number"
     serial_numberCell.id = "serial_number"
-    if (unit.serial_number == 'б/н' || unit.serial_number == 'Б/Н' || unit.serial_number == 'Б/н') {
+    if (/[Бб].?[Нн]/g.test(unit.serial_number)) {
       serial_numberCell.innerHTML = unit.serial_number
     }
     serial_numberCell.contentEditable = "true"

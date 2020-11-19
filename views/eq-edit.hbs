@@ -78,4 +78,11 @@
       document.querySelector('#pki_sp_table2 #sp_unit').id = 'sp_unit1'
     })
   })
+  document.onkeydown = function (e) {
+    e = e || window.event;
+    if (e.ctrlKey && (e.which == 83)) {
+      e.preventDefault()
+      submitEq()
+    }
+  }
 </script>

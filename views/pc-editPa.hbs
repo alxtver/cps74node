@@ -69,5 +69,11 @@
     }
   })
 
-
+  document.onkeydown = function (e) {
+    e = e || window.event;
+    if (e.ctrlKey && (e.which == 83)) {
+      e.preventDefault()
+      document.getElementById('edit').click()
+    }
+  }
 </script>

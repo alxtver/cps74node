@@ -69,3 +69,13 @@
 
   </div>
 </div>
+
+<script>
+  document.onkeydown = function (e) {
+    e = e || window.event;
+    if (e.ctrlKey && (e.which == 83)) {
+      e.preventDefault()
+      document.querySelector('.btn-outline-success').click()
+    }
+  }
+</script>

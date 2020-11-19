@@ -279,7 +279,7 @@ router.post("/searchEAN", auth, async function (req, res) {
   const ean = await EAN.findOne({
     ean_code: req.body.valueEAN
   })
-  if (!ean) return res.status(404).json({
+  if (!ean) return res.status(200).json({
     message: 'not found!'
   })
   res.send(JSON.stringify(ean))

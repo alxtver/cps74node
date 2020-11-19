@@ -502,7 +502,7 @@ router.post('/copy', auth, async (req, res) => {
           if (unit.serial_number == pc.serial_number) {
             unit.serial_number = number
             newPC.pc_unit.push(unit)
-          } else if (unit.serial_number == 'б/н' || unit.serial_number == 'Б/Н' || unit.serial_number == 'Б/н') {
+          } else if (/[Бб].?[Нн]/g.test(unit.serial_number)) {
             newPC.pc_unit.push(unit)
           } else {
             unit.name = ''
@@ -515,7 +515,7 @@ router.post('/copy', auth, async (req, res) => {
           if (unit.serial_number == pc.serial_number) {
             unit.serial_number = number
             newPC.system_case_unit.push(unit)
-          } else if (unit.serial_number == 'б/н' || unit.serial_number == 'Б/Н' || unit.serial_number == 'Б/н') {
+          } else if (/[Бб].?[Нн]/g.test(unit.serial_number)) {
             newPC.system_case_unit.push(unit)
           } else {
             unit.name = ''
@@ -551,7 +551,7 @@ router.post('/copy', auth, async (req, res) => {
       if (unit.serial_number == pc.serial_number) {
         unit.serial_number = req.body.serial_number
         newPC.pc_unit.push(unit)
-      } else if (unit.serial_number == 'б/н' || unit.serial_number == 'Б/Н' || unit.serial_number == 'Б/н') {
+      } else if (/[Бб].?[Нн]/g.test(unit.serial_number)) {
         newPC.pc_unit.push(unit)
       } else {
         unit.name = ''
@@ -564,7 +564,7 @@ router.post('/copy', auth, async (req, res) => {
       if (unit.serial_number == pc.serial_number) {
         unit.serial_number = req.body.serial_number
         newPC.system_case_unit.push(unit)
-      } else if (unit.serial_number == 'б/н' || unit.serial_number == 'Б/Н' || unit.serial_number == 'Б/н') {
+      } else if (/[Бб].?[Нн]/g.test(unit.serial_number)) {
         newPC.system_case_unit.push(unit)
       } else {
         unit.name = ''

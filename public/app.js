@@ -32,8 +32,6 @@ function addSession() {
 
 // выгрузка данных из сессии браузера
 function loadSession() {
-
-
   document.getElementById("ean_code").value = localStorage.ean_code || ''
   document.getElementById("type_pki").value = localStorage.type_pki || ''
   document.getElementById("vendor").value = localStorage.vendor || ''
@@ -118,6 +116,8 @@ function searchEAN(valueEAN) {
         model.value = data.model
         country.value = data.country
         serial_number.focus()
+        const textModel = data.model.split('-').join(' ')
+        textToSpeech(`${data.type_pki} ${data.vendor} ${textModel}`, 2)
       } else {
         type.value = vendor.value = model.value = country.value = ''
       }

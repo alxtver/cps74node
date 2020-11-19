@@ -326,7 +326,7 @@ function UpdateCells(pc) {
     let nextCellText
     if (nextCell) {
       nextCellText = nextCell.innerHTML
-      while (nextCellText == 'б/н' || nextCellText == 'Б/Н' || nextCellText == pc.serial_number) {
+      while (/[Бб].?[Нн]/g.test(nextCellText) || nextCellText == pc.serial_number) {
         next_id[1] = Number(next_id[1]) + 1 + ''
         nextCell = document.querySelector(".serial_number[data-data='" + next_id.join(';') + "']")
         if (!nextCell) {

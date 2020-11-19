@@ -165,10 +165,7 @@ router.post('/edit', auth, async (req, res) => {
         if (pki_unit) {
           if (
             pki_unit.serial_number == '' ||
-            pki_unit.serial_number == 'б/н' ||
-            pki_unit.serial_number == 'Б/Н' ||
-            pki_unit.serial_number == 'Б/н' ||
-            pki_unit.serial_number == 'б/Н'
+            /[Бб].?[Нн]/g.test(pki_unit.serial_number)
           ) {
             sp_units.push({
               i: i,
@@ -206,10 +203,7 @@ router.post('/edit', auth, async (req, res) => {
         if (pki_unit) {
           if (
             pki_unit.serial_number == '' ||
-            pki_unit.serial_number == 'б/н' ||
-            pki_unit.serial_number == 'Б/Н' ||
-            pki_unit.serial_number == 'Б/н' ||
-            pki_unit.serial_number == 'б/Н'
+            /[Бб].?[Нн]/g.test(pki_unit.serial_number)
           ) {
             sp_units.push({
               i: i,
