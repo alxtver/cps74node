@@ -120,6 +120,7 @@ router.post('/edit', auth, async (req, res) => {
   const vendor = req.body.vendor
   const model = req.body.model
   const country = req.body.country
+  const countSymbols = req.body.countSymbols
   let sp_unit = req.body.sp_unit
   if (sp_unit.length == 1 && sp_unit[0].name == '') {
     sp_unit = []
@@ -137,11 +138,11 @@ router.post('/edit', auth, async (req, res) => {
       vendor: vendor,
       model: model,
       country: country,
+      countSymbols: countSymbols,
       sp_unit: sp_unit,
       sp_unit1: ''
     })
   }
-
   //await EAN.findOneAndUpdate({ean_code: ean_code}, req.body)
   let ean = await EAN.findOne({
     ean_code: ean_code

@@ -103,6 +103,7 @@ function searchEAN(valueEAN) {
   const data = {
     valueEAN: valueEAN
   }
+  localStorage.removeItem('countSymbols')
   postData('/pkis/searchEAN', data)
     .then((data) => {
       const type = document.getElementById('type_pki')
@@ -116,8 +117,10 @@ function searchEAN(valueEAN) {
         model.value = data.model
         country.value = data.country
         serial_number.focus()
-        const textModel = data.model.split('-').join(' ')
-        textToSpeech(`${data.type_pki} ${data.vendor} ${textModel}`, 2)
+        textToSpeech(`${data.type_pki} ${data.vendor}`, 2)
+        if (data.countSymbols) {
+          localStorage.countSymbols = data.countSymbols
+        }
       } else {
         type.value = vendor.value = model.value = country.value = ''
       }

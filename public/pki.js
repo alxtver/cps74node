@@ -159,10 +159,9 @@ function validate(input) {
   input.style.borderWidth = 2;
 }
 
-function addPkiSubmit() {
+async function addPkiSubmit() {
   document.getElementById('error_message').style.display = 'none'
   document.getElementById("formContent").style.boxShadow = '0 13px 16px 0 rgba(0, 0, 0, 0.9)'
-
   const ean_code = document.getElementById("ean_code").value
   const type_pki = document.getElementById("type_pki").value
   const vendor = document.getElementById("vendor").value
@@ -170,6 +169,21 @@ function addPkiSubmit() {
   const country = document.getElementById("country").value
   const part = document.getElementById("part").value
   const serial_number = document.getElementById("serial_number").value
+  if (ean_code && !localStorage.countSymbols) {
+    const data = {
+      valueEAN: ean_code
+    }
+    await postData('/pkis/searchEAN', data)
+      .then((data) => {
+        if (data.countSymbols) {
+          localStorage.countSymbols = data.countSymbols
+        }
+      })
+  }
+  if (localStorage.countSymbols && serial_number.length != +localStorage.countSymbols) {
+    document.getElementById('sound').play()
+    return
+  }
   localStorage.ean_code = ean_code
   localStorage.type_pki = type_pki
   localStorage.vendor = vendor

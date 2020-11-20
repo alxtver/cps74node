@@ -81,12 +81,14 @@ function submitEq() {
   const modelInput = document.getElementById('model')
   const ean_codeInput = document.getElementById('ean_code')
   const countryInput = document.getElementById('country')
+  const countSymbolsInput = document.getElementById('countSymbols')
 
   const type_pki = type_pkiInput.value
   const vendor = vendorInput.value
   const model = modelInput.value
   const ean_code = ean_codeInput.value
   const country = countryInput.value
+  const countSymbols = countSymbolsInput.value
   if (!ean_codeInput.value) {
     validate(ean_codeInput)
     return false
@@ -156,6 +158,7 @@ function submitEq() {
     vendor: vendor,
     model: model,
     country: country,
+    countSymbols: countSymbols,
     sp_unit: sp_unit,
     sp_unit1: sp_unit1
   }

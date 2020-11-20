@@ -37,7 +37,8 @@ router.post('/', auth, async (req, res) => {
         type_pki: req.body.type_pki,
         vendor: req.body.vendor,
         model: req.body.model,
-        country: req.body.country
+        country: req.body.country,
+        countSymbols: String(serial_number.length)
       })
       new_ean.save()
     }

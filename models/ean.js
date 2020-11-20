@@ -1,4 +1,7 @@
-const {Schema, model} = require('mongoose')
+const {
+  Schema,
+  model
+} = require('mongoose')
 
 const ean = new Schema({
   ean_code: {
@@ -22,11 +25,12 @@ const ean = new Schema({
     type: String,
     required: true
   },
+  countSymbols: String,
   sp_unit: Array,
   sp_unit1: Array,
   created: {
     type: Date,
-    default: () => Date.now() + 3*60*60*1000 //время МСК
+    default: () => Date.now() + 3 * 60 * 60 * 1000 //время МСК
   },
 })
 

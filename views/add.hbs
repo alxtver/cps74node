@@ -74,7 +74,8 @@
     loadSession()
     autoComplete()
     let eanInput = document.getElementById('ean_code')
-    eanInput.addEventListener("keypress", function (e) {
+    eanInput.addEventListener("keydown", function (e) {
+      localStorage.removeItem('countSymbols')
       if (e.key == 'Enter') {
         e.preventDefault()
         searchEAN(eanInput.value)
@@ -87,13 +88,12 @@
       }
     })
 
-    let inputs = document.querySelectorAll('#type_pki, #vendor, #model, #country, #part, #serial_number')
+    const inputs = document.querySelectorAll('#type_pki, #vendor, #model, #country, #part, #serial_number')
     for (input of inputs) {
       input.addEventListener('keyup', (event) => {
         event.target.style.borderColor = "#ced4da"
         event.target.style.backgroundColor = "#fff"
       })
     }
-
   })
 </script>
