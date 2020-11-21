@@ -11,7 +11,7 @@
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Удалить АПКЗИ?</h5>
 
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button type="button" id="closeBtn" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -35,4 +35,18 @@
   document.addEventListener("DOMContentLoaded", function () {
     load_data()
   })
+
+  document.onkeydown = function (e) {
+    e = e || window.event;
+    if (e.ctrlKey && (e.which == 68)) {
+      e.preventDefault()
+      const classes = document.querySelector('body').classList
+      if (classes.contains('modal-open')) {
+        delBtn()
+        setTimeout(() => {
+          document.getElementById('closeBtn').click()
+        }, 300)
+      }
+    }
+  }
 </script>

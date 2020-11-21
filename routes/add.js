@@ -41,6 +41,11 @@ router.post('/', auth, async (req, res) => {
         countSymbols: String(serial_number.length)
       })
       new_ean.save()
+    } else {
+      if (!ean.countSymbols) {
+        ean.countSymbols = String(serial_number.length)
+        ean.save()
+      }
     }
   }
   // модифицирование серийников в зависимости от условий

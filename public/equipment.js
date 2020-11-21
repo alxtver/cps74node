@@ -309,7 +309,11 @@ function load_data(q) {
   postData('/equipment/load', data)
     .then((data) => {
       CreateTableFromJSON(data.eans)
-      CreateSelectType(data.types, function () {})
+      CreateSelectType(data.types, () => {
+        if (q) {
+          document.getElementById('type_select_navbar').value = q
+        }
+      })
     })
 }
 
