@@ -104,6 +104,7 @@ function searchEAN(valueEAN) {
     valueEAN: valueEAN
   }
   localStorage.removeItem('countSymbols')
+  localStorage.removeItem('snList')
   postData('/pkis/searchEAN', data)
     .then((data) => {
       const type = document.getElementById('type_pki')
