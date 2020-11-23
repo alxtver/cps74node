@@ -182,6 +182,7 @@ async function addPkiSubmit() {
   }
   if (localStorage.countSymbols && serial_number.length != +localStorage.countSymbols) {
     document.getElementById('sound').play()
+    document.getElementById("serial_number").value = ''
     return
   }
   localStorage.ean_code = ean_code
