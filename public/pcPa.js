@@ -163,7 +163,9 @@ function painting() {
 function loadPage(page, pages) {
   let overlay = document.getElementById('overlay')
   overlay.style.display = 'block'
-  let data = {
+  console.log('Страница', page);
+  console.log('Страниц', pages)
+  const data = {
     page: page,
     pages: pages
   }
@@ -562,6 +564,7 @@ function updateOnePC(id, reqUser) {
 }
 
 function UpdateCells(pc, oldNumberMachine, voice = true) {
+
   if (oldNumberMachine) {
     // Обновление всех таблиц
     let page = document.getElementById('page').value
@@ -818,7 +821,6 @@ function ulPagination(page, pages) {
 
 function createPagination(page) {
   page = parseInt(page)
-
   const pages = parseInt(document.getElementById('pagesCount').value)
   const containerTop = document.getElementById('paginationTop')
   const containerBottom = document.getElementById('paginationBottom')

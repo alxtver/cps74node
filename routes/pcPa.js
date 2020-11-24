@@ -146,7 +146,7 @@ router.post("/search", auth, async function (req, res) {
 
 
 router.post("/pagination", auth, async function (req, res) {
-  let page = parseInt(req.body.page)
+  let page = parseInt(req.body.page) || 1
   let user = await User.findOne({
     username: req.session.user.username
   })
