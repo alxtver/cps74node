@@ -163,8 +163,6 @@ function painting() {
 function loadPage(page, pages) {
   let overlay = document.getElementById('overlay')
   overlay.style.display = 'block'
-  console.log('Страница', page);
-  console.log('Страниц', pages)
   const data = {
     page: page,
     pages: pages

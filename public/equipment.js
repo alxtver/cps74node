@@ -347,35 +347,30 @@ function CreateTableFromJSON(data) {
 
     let numberCell = tr.insertCell(-1)
     numberCell.innerHTML = i + 1
-    numberCell.style.fontWeight = "700"
 
     let eanCell = tr.insertCell(-1)
     eanCell.innerHTML = data[i].ean_code
     eanCell.dataset.id = data[i]._id
     eanCell.className = "ean"
     eanCell.id = "ean"
-    eanCell.style.fontWeight = "700"
 
     let typeCell = tr.insertCell(-1)
     typeCell.innerHTML = data[i].type_pki
     typeCell.dataset.id = data[i]._id
     typeCell.className = "type"
     typeCell.id = "type"
-    typeCell.style.fontWeight = "700"
 
     let vendorCell = tr.insertCell(-1)
     vendorCell.innerHTML = data[i].vendor
     vendorCell.dataset.id = data[i]._id
     vendorCell.className = "vendor"
     vendorCell.id = "vendor"
-    vendorCell.style.fontWeight = "700"
 
     let modelCell = tr.insertCell(-1)
     modelCell.innerHTML = data[i].model
     modelCell.dataset.id = data[i]._id
     modelCell.className = "model"
     modelCell.id = "model"
-    modelCell.style.fontWeight = "700"
 
     let countryCell = tr.insertCell(-1)
     countryCell.innerHTML = data[i].country
@@ -383,7 +378,6 @@ function CreateTableFromJSON(data) {
     countryCell.className = "country"
     countryCell.id = "country"
     countryCell.contentEditable = "true"
-    countryCell.style.fontWeight = "700"
 
     let buttonCell = tr.insertCell(-1)
     let id = data[i]._id

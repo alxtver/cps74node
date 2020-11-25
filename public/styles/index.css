@@ -158,6 +158,7 @@ input[type=text]:focus {
 input[type=text]:placeholder {
   color: #cccccc;
 }
+
 /* ANIMATIONS */
 
 /* Simple CSS3 Fade-in-down Animation */
@@ -843,7 +844,6 @@ th {
   font-size: 10px;
 }
 
-
 #overlay {
   position: fixed;
   display: block;
@@ -1003,40 +1003,20 @@ th {
   grid-gap: 1px;
   height: calc(100vh - 85px);
   grid-template-columns: repeat(auto-fill, minmax(130px, auto));
-  grid-auto-rows: minmax(20px, 150px);
+  grid-auto-rows: minmax(3px, 150px);
 }
 
 .divGrid {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: min(max(.1rem, 2vw), 1.1rem);
   box-shadow: rgba(60, 64, 67, .3) 0 1px 2px 0, rgba(0, 0, 0, 0.15) 0 1px 3px 1px;
   border-radius: 4px;
   transition: transform .2s ease-in-out .1s, box-shadow .2s;
 }
 
-.count {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 5vh;
-  font-size: 2rem;
-  font-weight: 900;
-  margin: auto;
-  max-width: 250px;
-  border-radius: 0 0 4px 4px;
-  box-shadow: rgba(60, 64, 67, .3) 0 1px 2px 0, rgba(0, 0, 0, 0.15) 0 1px 3px 1px;
-  color: #616569;
-}
-
 .divGrid:hover {
-  transform: scale3d(1.1, 1.1, 1) translate(5px, -2px) rotate(-1deg);
-  box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  font-weight: 700;
-}
-
-.divGrid:focus {
   transform: scale3d(1.1, 1.1, 1) translate(5px, -2px) rotate(-1deg);
   box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.3);
   cursor: pointer;
@@ -1053,4 +1033,18 @@ th {
 
 .divGridNotOk {
   background: rgb(222, 76, 65);
+}
+
+.count {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 3.75rem;
+  font-size: 3rem;
+  font-weight: 700;
+  margin: auto;
+  max-width: 250px;
+  border-radius: 0 0 4px 4px;
+  box-shadow: rgba(60, 64, 67, .3) 0 1px 2px 0, rgba(0, 0, 0, 0.15) 0 1px 3px 1px;
+  color: #616569;
 }
