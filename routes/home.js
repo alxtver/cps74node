@@ -84,10 +84,10 @@ router.get('/diagram', auth, async (req, res) => {
 
 router.get('/monitoring', auth, async (req, res) => {
   let args_devel = {
-      title: 'Мониторинг',
-      part: req.session.part,
-      userName: req.session.user.username
-    }
+    title: 'Мониторинг',
+    part: req.session.part,
+    userName: req.session.user.username
+  }
   res.render('monitoring', args_devel)
 })
 
@@ -124,40 +124,74 @@ router.get('/script', authAdmin, async (req, res) => {
 
   //скрипт для изменения пки у пс
 
-  // let pcs = await PC.find({part: req.session.part})
-  // let n = 0
-  // for (const pc of pcs) {
-  //   if (pc.system_case_unit && pc.system_case_unit[2]) {
-  //     console.log(n);
-  //     n += 1
-  //     pc.system_case_unit[2].name = 'Intel E97378-001'
-
-  //     console.log(pc._id);
-  //     pc_copy = await PC.findById(pc.id)
-  //     pc_copy.system_case_unit = pc.system_case_unit
-  //     await pc_copy.save()
-  //   }    
-  // }
-
   let pcs = await PC.find({
-    part: req.session.part
+    part: 'АСО МСК 2020'
   })
-  let n = 0
   for (const pc of pcs) {
-    if (pc.system_case_unit && pc.system_case_unit[0]) {
-      let arr = pc.system_case_unit
-      console.log(n);
-      n += 1
-
-      pc.system_case_unit[arr.length - 1].fdsi = 'ФДШИ.468353.020'
-
-      console.log(pc.system_case_unit[arr.length - 1]);
+    console.log('\x1b[35m%s\x1b[0m', 'PC #' + pc.serial_number)
+    if (pc.pc_unit) {
+      if (pc.pc_unit[2].type == 'Клавиатура') {
+        console.log('\x1b[33m%s\x1b[0m', 'Клавиатура => Мышь')
+        pc.pc_unit[2].type = 'Мышь'
+      }
+      for (const unit of pc.pc_unit) {
+        if (unit.type == 'Сетевой фильтр') {
+          console.log('\x1b[33m%s\x1b[0m', 'Сетевой фильтр => PILOT S 3m')
+          unit.name = 'PILOT S 3m'
+        }
+        if (unit.type == 'ИБП' || unit.type == 'Источник бесперебойного питания') {
+          console.log('\x1b[33m%s\x1b[0m', 'ИБП => с кабелями: USB\u002FRJ45, RJ12')
+          unit.notes = 'кабелями: USB\RJ45, RJ12'
+        }
+        if (unit.type == 'Гарнитура') {
+          console.log('\x1b[33m%s\x1b[0m', 'Гарнитура => ОКЛИК HS-M150');
+          unit.name = 'ОКЛИК HS-M150'
+        }
+        if (unit.type == 'Крамер') {
+          console.log('\x1b[33m%s\x1b[0m', 'Крамер => KRAMER PT-2H')
+          unit.name = 'KRAMER PT-2H'
+          unit.serial_number = pc.serial_number
+        }
+        if (unit.type == 'Коврик для мыши') {
+          console.log('\x1b[33m%s\x1b[0m', 'Коврик для мыши => DEFENDER ERGO OPTI-LASER')
+          unit.name = 'DEFENDER ERGO OPTI-LASER'
+        }
+      }
       pc_copy = await PC.findById(pc.id)
-      pc_copy.system_case_unit = pc.system_case_unit
+      pc_copy.pc_unit = pc.pc_unit
       await pc_copy.save()
+      console.log('\x1b[35m%s\x1b[0m', pc.serial_number + ' - DONE!!!')
+      console.log('\x1b[31m%s\x1b[0m', '<><><><><><><><><><><><><><><><><><><><><>');
     }
   }
 
+  // копирование создание мышей на основе клавиатур
+  const pkis = await PKI.find({
+    type_pki: 'Клавиатура',
+    part: 'АСО МСК 2020'
+  })
+  for (const pki of pkis) {
+    const checkPki = await PKI.find({
+      type_pki: 'Мышь',
+      part: 'АСО МСК 2020',
+      serial_number: pki.serial_number
+    })
+    if (checkPki.length === 0) {
+      console.log('Клавиатура ' + pki.serial_number + ' => Мышь')
+      const pkiNew = new PKI({
+        type_pki: 'Мышь',
+        vendor: pki.vendor,
+        model: pki.model,
+        serial_number: pki.serial_number,
+        part: pki.part,
+        country: pki.country,
+        ean_code: pki.ean_code,
+        sp_unit: pki.sp_unit1,
+        number_machine: pki.number_machine || ''
+      })
+      await pkiNew.save()
+    }
+  }
 
 
   // скрипт импорта ПКИ из CSV файла

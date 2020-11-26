@@ -37,6 +37,24 @@ function snModifer(serialNumber, vendor, eanCode, typePKI) {
       }
     }
   }
+  // серийники APC Back-UPS BE700G-RS удаление буквы S
+  if (eanCode == '731304271659' && serialNumber[0] == 'S') {
+    let modifiedSN = serialNumber.substring(1)
+    return {
+      SN: modifiedSN,
+      flash: false
+    }
+  }
+  // серийники Canon
+  if (eanCode == '4549292119855') {
+    if (serialNumber.substring(0, 3) == ']C1' && serialNumber.substring(serialNumber.length - 1)) {
+      const modifiedSN = serialNumber.substring(3, 12)
+      return {
+        SN: modifiedSN,
+        flash: false
+      }
+    }
+  }
   // мониторы DELL
   if ((vendor == 'Dell' || vendor == 'DELL') && typePKI == 'Монитор') {
     let modifiedSN = ''

@@ -1,7 +1,7 @@
 const PKI = require('../../models/pki')
 
 async function snReModifer(serial_number, part) {
-  // проверка на гребаные сидюки два запроса вместо одного
+  // проверка на гребаные сидюки
   let pki = await PKI.findOne({
     part: part,
     serial_number: serial_number.split(' ').reverse().join(' ')
@@ -12,7 +12,6 @@ async function snReModifer(serial_number, part) {
       pki: pki
     }
   }
-
   // проверка на левый серийник Gigabyte
   let regex = /SN\w*/g
   if (serial_number.match(regex)) {
@@ -25,6 +24,28 @@ async function snReModifer(serial_number, part) {
         SN: serial_number.match(regex)[0],
         pki: pki
       }
+    }
+  }
+  // серийники APC Back-UPS BE700G-RS удаление буквы S
+  pki = await PKI.findOne({
+    part: part,
+    serial_number: serial_number.substr(1)
+  })
+  if (pki) {
+    return {
+      SN: serial_number.substr(1),
+      pki: pki
+    }
+  }
+  // серийники Canon
+  pki = await PKI.findOne({
+    part: part,
+    serial_number: serial_number.substring(3, 12)
+  })
+  if (pki) {
+    return {
+      SN: serial_number.substring(3, 12),
+      pki: pki
     }
   }
 

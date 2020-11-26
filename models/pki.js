@@ -1,4 +1,7 @@
-const {Schema, model} = require('mongoose')
+const {
+  Schema,
+  model
+} = require('mongoose')
 
 const pki = new Schema({
   type_pki: {
@@ -27,17 +30,17 @@ const pki = new Schema({
   },
 
   country: {
-    type: String    
+    type: String
   },
 
   number_machine: String,
   ean_code: String,
   szz1: String,
-  sp_unit: Array,  
-  
+  sp_unit: Array,
+
   created: {
     type: Date,
-    default: () => Date.now() + 3*60*60*1000 //время МСК
+    default: () => Date.now() + 3 * 60 * 60 * 1000 //время МСК
   },
 
   viborka: {
@@ -45,7 +48,9 @@ const pki = new Schema({
     default: false
   }
 
-}, { versionKey: false })
+}, {
+  versionKey: false
+})
 
 
 module.exports = model('Pki', pki)
