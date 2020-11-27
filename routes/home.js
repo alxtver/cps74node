@@ -147,11 +147,6 @@ router.get('/script', authAdmin, async (req, res) => {
           console.log('\x1b[33m%s\x1b[0m', 'Гарнитура => ОКЛИК HS-M150');
           unit.name = 'ОКЛИК HS-M150'
         }
-        if (unit.type == 'Крамер') {
-          console.log('\x1b[33m%s\x1b[0m', 'Крамер => KRAMER PT-2H')
-          unit.name = 'KRAMER PT-2H'
-          unit.serial_number = pc.serial_number
-        }
         if (unit.type == 'Коврик для мыши') {
           console.log('\x1b[33m%s\x1b[0m', 'Коврик для мыши => DEFENDER ERGO OPTI-LASER')
           unit.name = 'DEFENDER ERGO OPTI-LASER'
