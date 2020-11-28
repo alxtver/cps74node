@@ -1,115 +1,209 @@
 {{#if isAuth}}
-<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
-    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNavDropdown">
-    <ul class="navbar-nav">
-
-      {{/if}}
-
-      {{#if admin}}
-      {{#if isAuth}}
-      {{#if isPkis}}
-      <li class="nav-item active"><a class="nav-link" href="/pkis">ПКИ</a></li>
-      {{else}}
-      <li class="nav-item"><a class="nav-link" href="/pkis">ПКИ</a></li>
-      {{/if}}
-
-      {{#if isApkzi}}
-      <li class="nav-item active"><a class="nav-link" href="/apkzi">АПКЗИ</a></li>
-      {{else}}
-      <li class="nav-item"><a class="nav-link" href="/apkzi">АПКЗИ</a></li>
-      {{/if}}
-
-      {{#if isPC}}
-      <li class="nav-item active"><a class="nav-link" href="/pcPa">Производство</a></li>
-      {{else}}
-      <li class="nav-item"><a class="nav-link" href="/pcPa">Производство</a></li>
-      {{/if}}
-      {{#if isAssembly}}
-      <li class="nav-item active"><a class="nav-link" href="/assembly">Сборка СБ</a></li>
-      {{else}}
-      <li class="nav-item"><a class="nav-link" href="/assembly">Сборка СБ</a></li>
-      {{/if}}
-      <li class="nav-item dropdown">
-        {{#if isEquipment}}
-        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">БД</a>
-        {{else}}
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">БД</a>
+  <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarNavDropdown"
+      aria-controls="navbarNavDropdown"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        {{#if admin}}
+          {{#if isAuth}}
+            {{#if isPkis}}
+              <li class="nav-item active">
+                <a class="nav-link" href="/pkis">
+                  ПКИ
+                </a>
+              </li>
+            {{else}}
+              <li class="nav-item">
+                <a class="nav-link" href="/pkis">
+                  ПКИ
+                </a>
+              </li>
+            {{/if}}
+            {{#if isApkzi}}
+              <li class="nav-item active">
+                <a class="nav-link" href="/apkzi">
+                  АПКЗИ
+                </a>
+              </li>
+            {{else}}
+              <li class="nav-item">
+                <a class="nav-link" href="/apkzi">
+                  АПКЗИ
+                </a>
+              </li>
+            {{/if}}
+            {{#if isPC}}
+              <li class="nav-item active">
+                <a class="nav-link" href="/pcPa">
+                  Производство
+                </a>
+              </li>
+            {{else}}
+              <li class="nav-item">
+                <a class="nav-link" href="/pcPa">
+                  Производство
+                </a>
+              </li>
+            {{/if}}
+            {{#if isAssembly}}
+              <li class="nav-item active">
+                <a class="nav-link" href="/assembly">
+                  Сборка СБ
+                </a>
+              </li>
+            {{else}}
+              <li class="nav-item">
+                <a class="nav-link" href="/assembly">
+                  Сборка СБ
+                </a>
+              </li>
+            {{/if}}
+            <li class="nav-item dropdown">
+              {{#if isEquipment}}
+                <a
+                  class="nav-link dropdown-toggle active"
+                  href="#"
+                  id="navbarDropdown"
+                  role="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  БД
+                </a>
+              {{else}}
+                <a
+                  class="nav-link dropdown-toggle"
+                  href="#"
+                  id="navbarDropdown"
+                  role="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  БД
+                </a>
+              {{/if}}
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="/equipment">
+                  БД Штрихкоды
+                </a>
+                <a class="dropdown-item" href="/countries">
+                  БД Страны
+                </a>
+                <a class="dropdown-item" href="/monitoring">
+                  Мониторинг
+                </a>
+              </div>
+            </li>
+            <li class="nav-item">
+              {{#if isSearch}}
+                <li class="nav-item active">
+                  <a class="nav-link" href="/search">
+                    Поиск
+                  </a>
+                </li>
+              {{else}}
+                <li class="nav-item">
+                  <a class="nav-link" href="/search">
+                    Поиск
+                  </a>
+                </li>
+              {{/if}}
+            </li>
+          {{/if}}
         {{/if}}
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="/equipment">БД Штрихкоды</a>
-          <a class="dropdown-item" href="/countries">БД Страны</a>
-          <a class="dropdown-item" href="/monitoring">Мониторинг</a>
-        </div>
-      </li>
-      <li class="nav-item ">
-        {{#if isSearch}}
-      <li class="nav-item active"><a class="nav-link" href="/search">Поиск</a></li>
-      {{else}}
-      <li class="nav-item"><a class="nav-link" href="/search">Поиск</a></li>
-      {{/if}}
-      </li>
-      {{/if}}
-      {{/if}}
-
-
-      {{#if sp}}
-      {{#if isSP}}
-      <li class="nav-item active"><a class="nav-link" href="/sp">Спецпроверка</a></li>
-      {{else}}
-      <li class="nav-item"><a class="nav-link" href="/sp">Спецпроверка</a></li>
-      {{/if}}
-      {{#if isEquipment}}
-      <li class="nav-item active"><a class="nav-link" href="/equipment">Оборудование</a></li>
-      {{else}}
-      <li class="nav-item"><a class="nav-link" href="/equipment">Оборудование</a></li>
-      {{/if}}
-
-      {{/if}}
+        {{#if sp}}
+          {{#if isSP}}
+            <li class="nav-item active">
+              <a class="nav-link" href="/sp">
+                Спецпроверка
+              </a>
+            </li>
+          {{else}}
+            <li class="nav-item">
+              <a class="nav-link" href="/sp">
+                Спецпроверка
+              </a>
+            </li>
+          {{/if}}
+          {{#if isEquipment}}
+            <li class="nav-item active">
+              <a class="nav-link" href="/equipment">
+                Оборудование
+              </a>
+            </li>
+          {{else}}
+            <li class="nav-item">
+              <a class="nav-link" href="/equipment">
+                Оборудование
+              </a>
+            </li>
+          {{/if}}
+        {{/if}}
+        {{#if isAuth}}
+          {{#if isProjects}}
+            <li class="nav-item active">
+              <a class="nav-link" href="/projects">
+                Проекты
+              </a>
+            </li>
+          {{else}}
+            <li class="nav-item">
+              <a class="nav-link" href="/projects">
+                Проекты
+              </a>
+            </li>
+          {{/if}}
+        {{/if}}
+      </ul>
       {{#if isAuth}}
-      {{#if isProjects}}
-      <li class="nav-item active"><a class="nav-link" href="/projects">Проекты</a></li>
-      {{else}}
-      <li class="nav-item"><a class="nav-link" href="/projects">Проекты</a></li>
+        <ul class="navbar-nav ml-auto">
+          {{#if isPC}}
+            <select
+              class="selectpicker custom-select mr-2"
+              id="serials"
+              data-live-search="true"
+            ></select>
+          {{/if}}
+          {{#if isProjects}}
+            <select
+              class="selectpicker custom-select mr-2"
+              id="serials"
+              data-live-search="true"
+            ></select>
+          {{/if}}
+          {{#if isAssembly}}
+            <select
+              class="selectpicker custom-select mr-2"
+              id="serials"
+              data-live-search="true"
+            ></select>
+          {{/if}}
+          <select id="part_select_navbar" class="custom-select"></select>
+        </ul>
       {{/if}}
-      {{!-- <li class="nav-item"><a class="nav-link" href="/auth/logout">Выйти</a></li> --}}
-      {{else}}
-
-      {{/if}}
-
-      {{#if isAuth}}
-    </ul>
-
-    <ul class="navbar-nav ml-auto">
-      {{#if isPC}}
-      <select class="selectpicker custom-select mr-2" id="serials" data-live-search="true"></select>
-      {{/if}}
-      {{#if isProjects}}
-      <select class="selectpicker custom-select mr-2" id="serials" data-live-search="true"></select>
-      {{/if}}
-      {{#if isAssembly}}
-      <select class="selectpicker custom-select mr-2" id="serials" data-live-search="true"></select>
-      {{/if}}
-      <select id="part_select_navbar" class="custom-select"></select>
-    </ul>
-    {{/if}}
-
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        load_part_navbar()
-      })
-      const partSelect = document.getElementById('part_select_navbar')
-      if (partSelect) {
-        partSelect.addEventListener('change', (event) => {
-          changeSelect(partSelect.options[partSelect.selectedIndex].innerHTML)
-          setPage(1)
-        })
-      }
-    </script>
-  </div>
-</nav>
+    </div>
+  </nav>
+{{/if}}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    load_part_navbar()
+  })
+  const partSelect = document.getElementById('part_select_navbar')
+  if (partSelect) {
+    partSelect.addEventListener('change', (event) => {
+      changeSelect(partSelect.options[partSelect.selectedIndex].innerHTML)
+      setPage(1)
+    })
+  }
+</script>
