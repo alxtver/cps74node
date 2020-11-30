@@ -134,32 +134,32 @@ router.get('/script', authAdmin, async (req, res) => {
         console.log('\x1b[33m%s\x1b[0m', 'Клавиатура => Мышь')
         pc.pc_unit[2].type = 'Мышь'
       }
-      for (const unit of pc.pc_unit) {
-        if (unit.type == 'Сетевой фильтр') {
-          console.log('\x1b[33m%s\x1b[0m', 'Сетевой фильтр => PILOT S 3m')
-          unit.name = 'PILOT S 3m'
-        }
-        if (unit.type == 'ИБП' || unit.type == 'Источник бесперебойного питания') {
-          console.log('\x1b[33m%s\x1b[0m', 'ИБП => с кабелями: USB\u002FRJ45, RJ12')
-          unit.notes = 'кабелями: USB\u002FRJ45, RJ12'
-        }
-        if (unit.type == 'Гарнитура') {
-          console.log('\x1b[33m%s\x1b[0m', 'Гарнитура => ОКЛИК HS-M150');
-          unit.name = 'ОКЛИК HS-M150'
-        }
-        if (unit.type == 'Коврик для мыши') {
-          console.log('\x1b[33m%s\x1b[0m', 'Коврик для мыши => DEFENDER ERGO OPTI-LASER')
-          unit.name = 'DEFENDER ERGO OPTI-LASER'
-        }
-        if (unit.type == 'Монитор') {
-          console.log('\x1b[33m%s\x1b[0m', 'Монитор => DEFENDER ERGO OPTI-LASER')
-          unit.notes = 'с кабелями: питания, VGA'
-        }
-        if (unit.type == 'Сканер') {
-          console.log('\x1b[33m%s\x1b[0m', 'Сканер => с кабелем USB')
-          unit.notes = 'с кабелем USB'
-        }
-      }
+      // for (const unit of pc.pc_unit) {
+      //   if (unit.type == 'Сетевой фильтр') {
+      //     console.log('\x1b[33m%s\x1b[0m', 'Сетевой фильтр => PILOT S 3m')
+      //     unit.name = 'PILOT S 3m'
+      //   }
+      //   if (unit.type == 'ИБП' || unit.type == 'Источник бесперебойного питания') {
+      //     console.log('\x1b[33m%s\x1b[0m', 'ИБП => с кабелями: USB\u002FRJ45, RJ12')
+      //     unit.notes = 'кабелями: USB\u002FRJ45, RJ12'
+      //   }
+      //   if (unit.type == 'Гарнитура') {
+      //     console.log('\x1b[33m%s\x1b[0m', 'Гарнитура => ОКЛИК HS-M150');
+      //     unit.name = 'ОКЛИК HS-M150'
+      //   }
+      // if (unit.type == 'Коврик для мыши') {
+      //   console.log('\x1b[33m%s\x1b[0m', 'Коврик для мыши => DEFENDER ERGO OPTI-LASER')
+      //   unit.name = 'DEFENDER ERGO OPTI-LASER'
+      // }
+      // if (unit.type == 'Монитор') {
+      //   console.log('\x1b[33m%s\x1b[0m', 'Монитор => DEFENDER ERGO OPTI-LASER')
+      //   unit.notes = 'с кабелями: питания, VGA'
+      // }
+      // if (unit.type == 'Сканер') {
+      //   console.log('\x1b[33m%s\x1b[0m', 'Сканер => с кабелем USB')
+      //   unit.notes = 'с кабелем USB'
+      // }
+      // }
       pc_copy = await PC.findById(pc.id)
       pc_copy.pc_unit = pc.pc_unit
       await pc_copy.save()
