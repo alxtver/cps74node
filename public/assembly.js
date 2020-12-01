@@ -197,7 +197,7 @@ function CreateTableFromJSON(data, callback) {
 function painting() {
   const status = document.getElementById('status')
   const statusName = document.getElementById('statusName')
-  const count = document.getElementById('count');
+  const count = document.getElementById('count')
   const serialsSelect = document.getElementById('serials')
   const selectedSerialIndex = serialsSelect.selectedIndex + 1
   count.innerHTML = selectedSerialIndex + ' / ' + serialsSelect.options.length

@@ -20,6 +20,7 @@ const searchRoutes = require('./routes/search')
 const equipmentRoutes = require('./routes/equipment')
 const projectsRoutes = require('./routes/projects')
 const countriesRoutes = require('./routes/countries')
+const specRoutes = require('./routes/spec')
 const favicon = require('express-favicon')
 const varMiddleware = require('./middleware/variables')
 const userMiddleware = require('./middleware/user')
@@ -29,7 +30,7 @@ const config = require('./config.js')
 const io = require('socket.io')(3001)
 
 io.on('connect', socket => {
-  socket.on('updateAssemblyPC', function(data){
+  socket.on('updateAssemblyPC', function (data) {
     io.emit('updateAssemblyPC', data)
   })
 })
@@ -81,7 +82,7 @@ app.use('/add', addRoutes)
 app.use('/pkis', pkiRoutes)
 app.use('/apkzi', apkziRoutes)
 app.use('/assembly', assemblyRoutes)
-// app.use('/pc', pcRoutes)
+app.use('/spec', specRoutes)
 app.use('/pcPa', pcPaRoutes)
 app.use('/projects', projectsRoutes)
 app.use('/auth', authRoutes)
@@ -90,7 +91,7 @@ app.use('/equipment', equipmentRoutes)
 app.use('/logs', logsRoutes)
 app.use('/countries', countriesRoutes)
 app.use('/search', searchRoutes)
-app.use(function(req,res){
+app.use(function (req, res) {
   res.status(404).render('404');
 });
 
