@@ -31,9 +31,13 @@ function createSelect(selector, data) {
 function changeSNSelect() {
   const fromSelect = document.querySelector('#from-select')
   const toSelect = document.querySelector('#to-select')
-  const fromValue = fromSelect.value
-  const toValue = toSelect.value
+  let fromValue = fromSelect.value
+  let toValue = toSelect.value
   const checkBox = document.querySelector('#checkbox')
+  if (Number(fromValue) > Number(toValue)) {
+    toSelect.value = fromValue
+    toValue = fromValue
+  }
   data = {
     fromValue: fromValue,
     toValue: toValue,
