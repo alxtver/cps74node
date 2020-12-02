@@ -26,7 +26,7 @@ async function snReModifer(serial_number, part) {
       }
     }
   }
-  // серийники APC Back-UPS BE700G-RS удаление буквы S
+  // серийники APC удаление буквы S
   pki = await PKI.findOne({
     part: part,
     serial_number: serial_number.substr(1)

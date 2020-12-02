@@ -37,8 +37,8 @@ function snModifer(serialNumber, vendor, eanCode, typePKI) {
       }
     }
   }
-  // серийники APC Back-UPS BE700G-RS удаление буквы S
-  if (eanCode == '731304271659' && serialNumber[0] == 'S') {
+  // серийники APC  удаление буквы S
+  if ((vendor == 'APC' || vendor == 'APC Back-UPS') && serialNumber[0] == 'S') {
     let modifiedSN = serialNumber.substring(1)
     return {
       SN: modifiedSN,

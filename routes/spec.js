@@ -57,7 +57,7 @@ router.post('/getSpec', auth, async (req, res) => {
             const name = (unit.name == 'Н/Д') ? '' : unit.name
             const pki = type + ' ' + name
             if (spec[pki]) {
-              spec[pki] += 1
+              spec[pki] += Number(unit.quantity)
             } else {
               spec[pki] = 1
             }
@@ -69,7 +69,7 @@ router.post('/getSpec', auth, async (req, res) => {
             const name = (unit.name == 'Н/Д') ? '' : unit.name
             const pki = type + ' ' + name
             if (spec[pki]) {
-              spec[pki] += 1
+              spec[pki] += Number(unit.quantity)
             } else {
               spec[pki] = 1
             }
@@ -84,21 +84,20 @@ router.post('/getSpec', auth, async (req, res) => {
             const name = (unit.name == 'Н/Д') ? '' : unit.name
             const pki = type + ' ' + name
             if (spec[pki]) {
-              spec[pki] += 1
+              spec[pki] += Number(unit.quantity)
             } else {
               spec[pki] = 1
             }
           }
         } else {
           if (spec['Системный блок']) {
-            spec[pki] += 1
+            spec[pki] += Number(unit.quantity)
           } else {
             spec['Системный блок'] = 1
           }
         }
       }
     }
-
     res.send(JSON.stringify({
       message: 'ok',
       spec: spec,
