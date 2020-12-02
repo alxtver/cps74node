@@ -1,4 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
+  const checkBox = document.querySelector('#checkbox')
+  checkBox.addEventListener('change', () => {
+    changeSNSelect()
+  })
   postData('/spec/getSerials')
     .then((data) => {
       createSelect('#from-select', data.serials)
@@ -29,9 +33,11 @@ function changeSNSelect() {
   const toSelect = document.querySelector('#to-select')
   const fromValue = fromSelect.value
   const toValue = toSelect.value
+  const checkBox = document.querySelector('#checkbox')
   data = {
     fromValue: fromValue,
-    toValue: toValue
+    toValue: toValue,
+    checkBox: checkBox.checked
   }
   postData('/spec/getSpec', data)
     .then((data) => {
@@ -51,10 +57,10 @@ function changeSNSelect() {
 }
 
 function CreateTableFromJSON(data) {
-  let col_rus = ["ПКИ", "Количество"]
-  let table = document.createElement("table")
+  const col_rus = ["ПКИ", "Количество"]
+  const table = document.createElement("table")
   table.className = "table table-bordered table-hover table-striped"
-  let thead = table.createTHead()
+  const thead = table.createTHead()
   let tr = thead.insertRow(-1)
   thead.className = "thead-dark"
   for (let i = 0; i < col_rus.length; i++) {
@@ -66,14 +72,21 @@ function CreateTableFromJSON(data) {
   // Заполнение таблицы
   let tbody = table.createTBody()
   let sortedData = {}
-  Object.keys(data.spec).sort().forEach(function (key) {
-    sortedData[key] = data.spec[key];
-  });
+  if (!data.checkBox) {
+    Object.keys(data.spec).sort().forEach(function (key) {
+      sortedData[key] = data.spec[key];
+    })
+  } else {
+    sortedData = data.spec
+  }
+
   for (const [key, value] of Object.entries(sortedData)) {
     tr = tbody.insertRow(-1)
     const pki = tr.insertCell(-1)
+    pki.style.textAlign = 'center'
     pki.innerHTML = key
     const count = tr.insertCell(-1)
+    count.style.textAlign = 'center'
     count.innerHTML = value
   }
   const divContainer = document.getElementById("data")

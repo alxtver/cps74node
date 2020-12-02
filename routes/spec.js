@@ -26,6 +26,7 @@ router.post('/getSerials', auth, async (req, res) => {
 })
 
 router.post('/getSpec', auth, async (req, res) => {
+
   let allPCinTheme
   await PC.countDocuments({
     part: req.session.part
@@ -48,30 +49,61 @@ router.post('/getSpec', auth, async (req, res) => {
       'created': 1
     }).skip(indexfromValue).limit(countPC)
     let spec = {}
-    for (const pc of pcs) {
-      if (pc.pc_unit) {
-        for (const unit of pc.pc_unit) {
-          const type = unit.type
-          const name = (unit.name == 'Н/Д') ? '' : unit.name
-          const pki = type + ' ' + name
-          if (spec[pki]) {
-            spec[pki] += 1
-          } else {
-            spec[pki] = 1
+    if (req.body.checkBox) {
+      for (const pc of pcs) {
+        if (pc.pc_unit) {
+          for (const unit of pc.pc_unit) {
+            const type = unit.type
+            const name = (unit.name == 'Н/Д') ? '' : unit.name
+            const pki = type + ' ' + name
+            if (spec[pki]) {
+              spec[pki] += 1
+            } else {
+              spec[pki] = 1
+            }
           }
         }
-      } else {
-        if (spec['Системный блок']) {
-          spec[pki] += 1
+        if (pc.system_case_unit) {
+          for (const unit of pc.system_case_unit) {
+            const type = unit.type
+            const name = (unit.name == 'Н/Д') ? '' : unit.name
+            const pki = type + ' ' + name
+            if (spec[pki]) {
+              spec[pki] += 1
+            } else {
+              spec[pki] = 1
+            }
+          }
+        }
+      }
+    } else {
+      for (const pc of pcs) {
+        if (pc.pc_unit) {
+          for (const unit of pc.pc_unit) {
+            const type = unit.type
+            const name = (unit.name == 'Н/Д') ? '' : unit.name
+            const pki = type + ' ' + name
+            if (spec[pki]) {
+              spec[pki] += 1
+            } else {
+              spec[pki] = 1
+            }
+          }
         } else {
-          spec['Системный блок'] = 1
+          if (spec['Системный блок']) {
+            spec[pki] += 1
+          } else {
+            spec['Системный блок'] = 1
+          }
         }
       }
     }
+
     res.send(JSON.stringify({
       message: 'ok',
       spec: spec,
-      countPC: countPC
+      countPC: countPC,
+      checkBox: req.body.checkBox
     }))
   }
 })
