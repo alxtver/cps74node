@@ -65,8 +65,8 @@ function CreateTableFromJSON(data) {
   }
 }
 
-function insCell(parrent, html = '', classN) {
-  let cell = parrent.insertCell(-1)
-  if (classN) cell.className = classN
-  cell.innerHTML = html
-}
+// function insCell(parrent, html = '', classN) {
+//   let cell = parrent.insertCell(-1)
+//   if (classN) cell.className = classN
+//   cell.innerHTML = html
+// }

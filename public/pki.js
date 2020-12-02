@@ -140,18 +140,18 @@ function autoComplete() {
     })
 }
 
-function insCell(parrent, html = '', classN, id, contentEditable, dataset) {
-  let cell = parrent.insertCell(-1)
-  if (classN) cell.className = classN
-  if (id) cell.id = id
-  if (contentEditable) cell.contentEditable = contentEditable
-  cell.innerHTML = html
-  if (dataset) {
-    for (const [key, value] of Object.entries(dataset)) {
-      cell.dataset[key] = value
-    }
-  }
-}
+// function insCell(parrent, html = '', classN, id, contentEditable, dataset) {
+//   let cell = parrent.insertCell(-1)
+//   if (classN) cell.className = classN
+//   if (id) cell.id = id
+//   if (contentEditable) cell.contentEditable = contentEditable
+//   cell.innerHTML = html
+//   if (dataset) {
+//     for (const [key, value] of Object.entries(dataset)) {
+//       cell.dataset[key] = value
+//     }
+//   }
+// }
 
 function validate(input) {
   input.style.borderColor = "#f57e7e";
