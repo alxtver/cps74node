@@ -267,9 +267,7 @@ function TableEditPcUnit(pc) {
     let serial_numberCell = tr.insertCell(-1)
     let sn = arr_pc_unit[j].serial_number
     serial_numberCell.innerHTML = sn
-    if (sn == pc.serial_number) {
-      serial_numberCell.dataset.number_machine = 'numberMachine'
-    }
+
     serial_numberCell.dataset.id = pc._id
     serial_numberCell.dataset.obj = j
     serial_numberCell.dataset.unit = 'pc_unit'
@@ -322,9 +320,7 @@ function TableEditSystemCase(pc) {
     let serial_numberCell = tr.insertCell(-1)
     let sn = arrSystemCaseUnit[j].serial_number
     serial_numberCell.innerHTML = sn
-    if (sn == pc.serial_number) {
-      serial_numberCell.dataset.number_machine = 'numberMachine'
-    }
+
     serial_numberCell.dataset.id = pc._id
     serial_numberCell.dataset.obj = j
     serial_numberCell.dataset.unit = 'system_case_unit'

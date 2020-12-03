@@ -53,21 +53,31 @@
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     load_pc(`{{pc._id}}`)
+    localStorage.number_machine = `{{pc.serial_number}}`
+    eventOnSerials()
   })
   document.addEventListener('click', function (e) {
     setColor()
   })
 
-  const snInput = document.getElementById('serial_number')
-  snInput.addEventListener('keyup', (e) => {
-    const sn = e.target.value
-    const numbers = document.getElementsByClassName('serial_number')
-    for (const number of numbers) {
-      if (number.dataset.number_machine) {
-        number.innerHTML = sn
-      }
-    }
-  })
+  function eventOnSerials() {
+    const snInput = document.getElementById('serial_number')
+      snInput.addEventListener('keyup', (e) => {
+        const newSN = e.target.value
+        const oldSN = localStorage.number_machine
+        console.log(oldSN)
+        const numbers = document.getElementsByClassName('serial_number')
+        for (const number of numbers) {
+          if (number.innerHTML === oldSN) {
+            number.innerHTML = newSN
+          }
+        }
+        localStorage.number_machine = newSN
+      })
+  }
+document.addEventListener('keyup', (e) => {
+  eventOnSerials()
+})
 
   document.onkeydown = function (e) {
     e = e || window.event;
