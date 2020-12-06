@@ -303,6 +303,13 @@ function setSoundSessionOff() {
 }
 
 function textToSpeech(text, rate) {
+  console.log(rate / 10 + 1)
+  if (navigator.userAgent.indexOf('Windows') + 1) {
+    console.log('windows', rate)
+  } else {
+    rate = rate / 10 + 1
+    console.log('linux', rate)
+  }
   if (localStorage.sound === 'on') {
     const textToSpeech = text
     const ut = new SpeechSynthesisUtterance(textToSpeech)
