@@ -306,7 +306,7 @@ function textToSpeech(text, rate) {
   if (navigator.platform.indexOf('Win') + 1) {
     console.log(navigator.platform, rate)
   } else {
-    rate = rate / 10 + 1
+    rate = rate / 10 + 0.8
     console.log(navigator.platform, rate)
   }
   if (localStorage.sound === 'on') {
