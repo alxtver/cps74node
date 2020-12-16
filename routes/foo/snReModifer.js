@@ -1,6 +1,26 @@
 const PKI = require('../../models/pki')
 
 async function snReModifer(serial_number, part) {
+  //перевод русских букв в английские
+  for (const letter of serial_number) {
+    let codeOfLetter = letter.charCodeAt(0)
+    if (codeOfLetter > 122) {
+      let ruToEnSN = ''
+      const ruLet = 'ЙЦУКЕНГШЩЗФЫВАПРОЛДЯЧСМИТЬ'
+      const engLet = 'QWERTYUIOPASDFGHJKLZXCVBNM'
+      for (const l of serial_number.toUpperCase()) {
+        ind = ruLet.indexOf(l)
+        if (ind >= 0) {
+          ruToEnSN += engLet[ind]
+        } else {
+          ruToEnSN += l
+        }
+      }
+      serial_number = ruToEnSN
+      break
+    }
+  }
+
   // проверка на гребаные сидюки
   let pki = await PKI.findOne({
     part: part,
