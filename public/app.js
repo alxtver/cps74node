@@ -112,16 +112,21 @@ function searchEAN(valueEAN) {
       const model = document.getElementById('model')
       const country = document.getElementById('country')
       const serial_number = document.getElementById('serial_number')
-      if (!data.message) {
-        type.value = data.type_pki
-        vendor.value = data.vendor
-        model.value = data.model
-        country.value = data.country
+      if (data.ean) {
+        type.value = data.ean.type_pki
+        vendor.value = data.ean.vendor
+        model.value = data.ean.model
+        country.value = data.ean.country
         serial_number.focus()
-        textToSpeech(`${data.type_pki} ${data.vendor}`, 2)
+        textToSpeech(`${data.ean.type_pki} ${data.ean.vendor}`, 2)
         if (data.countSymbols) {
           localStorage.countSymbols = data.countSymbols
         }
+      } else if (data.upcitemdbValue) {
+        type.value = ''
+        vendor.value = data.upcitemdbValue.items[0].brand.toUpperCase()
+        model.value = data.upcitemdbValue.items[0].title.toUpperCase()
+        country.value = ''
       } else {
         type.value = vendor.value = model.value = country.value = ''
       }
