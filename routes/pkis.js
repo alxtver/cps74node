@@ -12,6 +12,7 @@ const path = require('path')
 const fs = require('fs')
 const excel = require('excel4node')
 const fetch = require('node-fetch')
+const app = require('./foo/app')
 
 
 router.get('/', auth, async (req, res) => {
@@ -282,6 +283,8 @@ router.post("/searchEAN", auth, async function (req, res) {
   })
   const valueEAN = req.body.valueEAN
   if (!ean) {
+    // const country = app(valueEAN)
+    // console.log(country)
     let upcitemdbValue
     const url = "https://api.upcitemdb.com/prod/trial/lookup?upc="
     await fetch(url + valueEAN)
@@ -290,11 +293,13 @@ router.post("/searchEAN", auth, async function (req, res) {
         upcitemdbValue = JSON.parse(result)
         if (upcitemdbValue.code == 'OK' && upcitemdbValue.total > 0) {
           res.status(200).json({
-            upcitemdbValue: upcitemdbValue
+            upcitemdbValue: upcitemdbValue,
+            country: app(valueEAN)
           })
         } else {
           res.status(200).json({
-            message: 'not found!'
+            message: 'not found!',
+            country: app(valueEAN)
           })
         }
       })
@@ -304,13 +309,6 @@ router.post("/searchEAN", auth, async function (req, res) {
       ean: ean
     })
   }
-
-
-
-  // if (!ean) return res.status(200).json({
-  //   message: 'not found!'
-  // })
-
 })
 
 router.get("/excelImport", auth, async function (req, res) {

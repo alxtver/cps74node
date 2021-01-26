@@ -107,6 +107,7 @@ function searchEAN(valueEAN) {
   localStorage.removeItem('snList')
   postData('/pkis/searchEAN', data)
     .then((data) => {
+      console.log(data);
       const type = document.getElementById('type_pki')
       const vendor = document.getElementById('vendor')
       const model = document.getElementById('model')
@@ -126,9 +127,10 @@ function searchEAN(valueEAN) {
         type.value = ''
         vendor.value = data.upcitemdbValue.items[0].brand.toUpperCase()
         model.value = data.upcitemdbValue.items[0].title.toUpperCase()
-        country.value = ''
+        country.value = data.country
       } else {
-        type.value = vendor.value = model.value = country.value = ''
+        type.value = vendor.value = model.value = ''
+        country.value = data.country
       }
     })
 }
