@@ -126,7 +126,11 @@ function searchEAN(valueEAN) {
       } else if (data.upcitemdbValue) {
         type.value = ''
         vendor.value = data.upcitemdbValue.items[0].brand.toUpperCase()
-        model.value = data.upcitemdbValue.items[0].title.toUpperCase()
+        if (data.upcitemdbValue.items[0].model) {
+          model.value = data.upcitemdbValue.items[0].model.toUpperCase()
+        } else {
+          model.value = data.upcitemdbValue.items[0].title.toUpperCase()
+        }
         country.value = data.country
       } else {
         type.value = vendor.value = model.value = ''
