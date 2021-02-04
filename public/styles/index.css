@@ -474,15 +474,6 @@ input[type=text]:placeholder {
   font-size: 1rem;
 }
 
-.pctable td {
-  vertical-align: bottom;
-}
-
-.pctable {
-  border: 2px solid rgb(255 0 0 / 0%);
-  border-bottom: 1px solid;
-}
-
 #icon {
   width: 64px;
 }
@@ -735,6 +726,8 @@ th {
   font-weight: 500;
   border-right: 0;
   cursor: pointer;
+  color: lightgray;
+  text-decoration: none;
 }
 
 .PaUl li.active a {
@@ -773,14 +766,9 @@ th {
 }
 
 
-@media (min-width: 992px) {
-  .table-responsive {
-    display: inline-table;
-  }
-
-  .selectpicker {
-    max-width: 200px;
-  }
+.selectpicker {
+  max-width: 200px;
+}
 }
 
 #colorpicker {

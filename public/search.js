@@ -51,7 +51,7 @@ function CreateTablePKI(data, container) {
   table.className = "table table-sm table-bordered table-hover table-responsive table-striped"
   let thead = table.createTHead()
   let tr = thead.insertRow(-1)
-  thead.className = "thead-dark"
+  thead.className = "table-dark"
   for (let i = 0; i < col_rus.length; i++) {
     let th = document.createElement("th")
     th.innerHTML = col_rus[i];
@@ -92,7 +92,7 @@ function CreateTableAPKZI(data, container) {
   // TABLE ROW.
   let thead = table.createTHead()
   let tr = thead.insertRow(-1)
-  thead.className = "thead-dark"
+  thead.className = "table-dark"
   for (let i = 0; i < col_rus.length; i++) {
     let th = document.createElement("th") // TABLE HEADER.
     th.innerHTML = col_rus[i];

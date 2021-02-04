@@ -22,7 +22,7 @@ function CreateTable1SP() {
   // Заголовок таблицы
   let tr = table.insertRow(-1)
   let thead = table.createTHead()
-  thead.className = "thead-dark"
+  thead.className = "table-dark"
   for (let i = 0; i < col_rus.length; i++) {
     let th = document.createElement("th")
     th.innerHTML = col_rus[i]
@@ -188,7 +188,7 @@ function CreateTableSP_EAN(ean) {
   // Заголовок таблицы
   let tr = table.insertRow(-1)
   let thead = table.createTHead()
-  thead.className = "thead-dark"
+  thead.className = "table-dark"
   for (let i = 0; i < col_rus.length; i++) {
     let th = document.createElement("th")
     th.innerHTML = col_rus[i]
@@ -247,7 +247,7 @@ function CreateTableSP_EAN(ean) {
   // Заголовок таблицы
   tr = table.insertRow(-1)
   thead = table.createTHead()
-  thead.className = "thead-dark"
+  thead.className = "table-dark"
   for (let i = 0; i < col_rus.length; i++) {
     let th = document.createElement("th")
     th.innerHTML = col_rus[i]
@@ -327,7 +327,7 @@ function CreateTableFromJSON(data) {
   // TABLE ROW.
   let thead = table.createTHead()
   let tr = thead.insertRow(-1)
-  thead.className = "thead-dark"
+  thead.className = "table-dark"
   for (let i = 0; i < col_rus.length; i++) {
     let th = document.createElement("th") // TABLE HEADER.
     th.rowSpan = 2

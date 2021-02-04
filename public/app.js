@@ -334,9 +334,9 @@ function textToSpeech(text, rate) {
 function tablePC(pc, units = 'all', contentEditable = true, ...rows) {
   // таблица ПЭВМ
   let table = document.createElement("table")
-  table.className = "table table-sm table-bordered table-hover table-responsive pctable"
+  table.className = "table table-sm table-bordered table-hover"
   if (units === 'systemCase') {
-    table.classList.remove('pctable', 'table-sm')
+    table.classList.remove('table-sm')
     table.classList.add('assemblytable')
   }
   table.id = pc._id

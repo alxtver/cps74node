@@ -209,8 +209,13 @@
   copyInput.addEventListener('keyup', (e) => {
     find_serial(e.target.value)
   })
-  let uri = 'ws://' + location.hostname + ':3001'
-  const socket = io(uri)
+  const uri = 'ws://' + location.hostname + ':3001'
+  const socket = io(uri, {
+    withCredentials: true,
+    extraHeaders: {
+      "my-custom-header": "abcd"
+    }
+  })
   socket.on('updateAssemblyPC', function (data) {
     updateOnePC(data.id, data.user)
   })

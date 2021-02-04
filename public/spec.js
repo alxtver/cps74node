@@ -66,7 +66,7 @@ function CreateTableFromJSON(data) {
   table.className = "table table-bordered table-hover table-striped"
   const thead = table.createTHead()
   let tr = thead.insertRow(-1)
-  thead.className = "thead-dark"
+  thead.className = "table-dark"
   for (let i = 0; i < col_rus.length; i++) {
     let th = document.createElement("th")
     th.innerHTML = col_rus[i];

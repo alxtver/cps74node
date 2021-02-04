@@ -40,7 +40,7 @@ function CreateTablePC() {
   // Заголовок таблицы
   let tr = table.insertRow(-1)
   let thead = table.createTHead()
-  thead.className = "thead-dark"
+  thead.className = "table-dark"
   for (let i = 0; i < col_rus.length; i++) {
     let th = document.createElement("th")
     th.innerHTML = col_rus[i]
@@ -96,7 +96,7 @@ function CreateTableSystemCase() {
   // Заголовок таблицы
   let tr = table.insertRow(-1)
   let thead = table.createTHead()
-  thead.className = "thead-dark"
+  thead.className = "table-dark"
   for (let i = 0; i < col_rus.length; i++) {
     let th = document.createElement("th")
     th.innerHTML = col_rus[i]
@@ -233,7 +233,7 @@ function load_pc(id) {
 function TableEditPcUnit(pc) {
   // таблица ПЭВМ
   let table = document.createElement("table");
-  table.className = "table table-sm table-bordered table-hover table-responsive pctable"
+  table.className = "table table-sm table-bordered table-hover"
   table.id = "pc_unit"
 
   let tr = table.insertRow(-1) // TABLE ROW.
@@ -287,7 +287,7 @@ function TableEditPcUnit(pc) {
 function TableEditSystemCase(pc) {
   // таблица ПЭВМ
   let table = document.createElement("table")
-  table.className = "table table-sm table-bordered table-hover table-responsive pctable"
+  table.className = "table table-sm table-bordered table-hover"
   table.id = "system_case_unit"
   let tr = table.insertRow(-1) // TABLE ROW.
   insCell('', tr, '', 'header', '', false)
@@ -353,7 +353,7 @@ function CreateTableFromJSON(data, callback) {
     let divContainer = document.getElementById("PC");
     let divCont = document.createElement("div")
     divCont.id = data[i]._id
-    divCont.className = "pcCard mb-3"
+    divCont.className = "pcCard mb-3 table-responsive"
     divCont.style.cssText = '-webkit-box-shadow: 0 30px 60px 0' + data[i].back_color + ';box-shadow: 0 30px 60px 0' + data[i].back_color
     divContainer.appendChild(divCont);
     divCont.innerHTML = ""
@@ -527,7 +527,7 @@ function buttons(container, pc) {
 
   let button_del = document.createElement('input')
   button_del.type = 'button'
-  button_del.className = 'btn btn-outline-danger me-2 mb-2 delBtn float-right'
+  button_del.className = 'btn btn-outline-danger me-2 mb-2 delBtn float-end'
   button_del.value = 'Удалить'
   button_del.dataset.id = pc._id
   button_del.dataset.serial_number = pc.serial_number
@@ -680,7 +680,7 @@ function testPC() {
       let divContainer = document.getElementById('testData')
       divContainer.innerHTML = ""
       let table = document.createElement("table");
-      table.className = "table table-sm table-bordered table-hover table-responsive pctable"
+      table.className = "table table-sm table-bordered table-hover"
       for (let i = 0; i < serials.length; i++) {
         let tr = table.insertRow(-1)
         let td = document.createElement("td")
