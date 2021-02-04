@@ -26,7 +26,7 @@
           <input type="hidden" name="_csrf" value="{{csrf}}">
           <input type="hidden" name="id" id="hidId">
           <div class="modal-footer">
-            <button type="button" class="btn btn-success" data-bs-dismiss="modal">Закрыть</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
             <button type="button" id="btnSubmit" onclick="delBtn()" data-bs-dismiss="modal"
               class="btn btn-danger">Удалить</button>
           </div>
@@ -50,8 +50,8 @@
             <option value="byPC">По ПЭВМ</option>
           </select>
           <div class="modal-footer">
-            <button type="button" class="btn btn-success" id="close2" data-bs-dismiss="modal">Назад</button>
-            <button onclick="modalHide()" class="btn btn-outline-success" id="btnSort">Экспорт</button>
+            <button type="button" class="btn btn-secondary" id="close2" data-bs-dismiss="modal">Назад</button>
+            <button onclick="modalHide()" class="btn btn-primary" id="btnSort">Экспорт</button>
 
           </div>
         </form>
@@ -84,8 +84,8 @@
           </div>
           <input type="hidden" name="_csrf" value="{{csrf}}">
           <div class="modal-footer">
-            <button type="button" class="btn btn-success" id="close1" data-bs-dismiss="modal">Назад</button>
-            <button onclick="searchAndReplace()" class="btn btn-outline-success" data-bs-dismiss="modal"
+            <button type="button" class="btn btn-secondary" id="close1" data-bs-dismiss="modal">Назад</button>
+            <button onclick="searchAndReplace()" class="btn btn-primary" data-bs-dismiss="modal"
               id="btnSearchAndReplace">Поиск и
               замена</button>
           </div>
