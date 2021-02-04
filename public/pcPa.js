@@ -386,7 +386,7 @@ function CreateTableEditPC(data, color) {
   let buttonAddRow = document.createElement('input')
   buttonAddRow.type = 'button'
   buttonAddRow.id = 'add-row'
-  buttonAddRow.className = 'btn btn-outline-primary ml-2 mr-2 mb-2'
+  buttonAddRow.className = 'btn btn-outline-primary ms-2 me-2 mb-2'
   buttonAddRow.onclick = () => addRow()
   buttonAddRow.value = 'Добавить строку'
   divCont.appendChild(buttonAddRow)
@@ -394,7 +394,7 @@ function CreateTableEditPC(data, color) {
   let buttonDelRow = document.createElement('input')
   buttonDelRow.type = 'button'
   buttonDelRow.id = 'delete-row'
-  buttonDelRow.className = 'btn btn-outline-danger ml-2 mr-2 mb-2'
+  buttonDelRow.className = 'btn btn-outline-danger ms-2 me-2 mb-2'
   buttonDelRow.onclick = () => delRow()
   buttonDelRow.value = 'Удалить строку'
   divCont.appendChild(buttonDelRow)
@@ -504,7 +504,7 @@ function edit_serial_number_apkzi(id, obj, unit, serial_number) {
 function buttons(container, pc) {
   let button_copy = document.createElement('input')
   button_copy.type = "button"
-  button_copy.className = 'btn btn-outline-primary mr-2 mb-2 ml-3 copyBtn'
+  button_copy.className = 'btn btn-outline-primary me-2 mb-2 ms-3 copyBtn'
   button_copy.onchange = "clkCopy()"
   button_copy.value = 'Копировать'
   button_copy.dataset.id = pc._id
@@ -519,7 +519,7 @@ function buttons(container, pc) {
 
   let button_edit = document.createElement('input')
   button_edit.type = 'button'
-  button_edit.className = 'btn btn-outline-success mr-2 mb-2'
+  button_edit.className = 'btn btn-outline-success me-2 mb-2'
   button_edit.value = 'Редактировать'
   button_edit.setAttribute("onclick", "location.href='/pcPa/" + pc._id + "/edit?allow=true'")
   button_edit.dataset.id = pc._id
@@ -527,7 +527,7 @@ function buttons(container, pc) {
 
   let button_del = document.createElement('input')
   button_del.type = 'button'
-  button_del.className = 'btn btn-outline-danger mr-2 mb-2 delBtn float-right'
+  button_del.className = 'btn btn-outline-danger me-2 mb-2 delBtn float-right'
   button_del.value = 'Удалить'
   button_del.dataset.id = pc._id
   button_del.dataset.serial_number = pc.serial_number

@@ -55,7 +55,7 @@ function CreateTableFromJSON(data) {
     })
     editBtn.className = 'btn_f'
     const faEdit = document.createElement('i')
-    faEdit.className = 'fa fa-pen'
+    faEdit.className = 'bi bi-pencil-fill'
     editBtn.appendChild(faEdit)
     buttonCell.appendChild(editBtn)
     const delBtn = document.createElement('button')
@@ -64,7 +64,7 @@ function CreateTableFromJSON(data) {
     delBtn.dataset.toggle = 'modal'
     delBtn.dataset.target = '#modalDel'
     const faDel = document.createElement('i')
-    faDel.className = 'fa fa-trash'
+    faDel.className = 'bi bi-trash-fill'
     delBtn.appendChild(faDel)
     delBtn.addEventListener('click', () => {
       document.getElementById('hidId').value = id

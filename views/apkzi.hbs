@@ -10,18 +10,15 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Удалить АПКЗИ?</h5>
-
-          <button type="button" id="closeBtn" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+          <button type="button" id="closeBtn" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <form>
           <input type="hidden" name="_csrf" value="{{csrf}}">
           <input type="hidden" name="id" id="hidId">
           <input type="hidden" name="part" id="hidPart">
           <div class="modal-footer">
-            <button type="button" class="btn btn-success" data-dismiss="modal">Закрыть</button>
-            <button type="button" id="btnSubmit" onclick="delBtn()" data-dismiss="modal"
+            <button type="button" class="btn btn-success" data-bs-dismiss="modal">Закрыть</button>
+            <button type="button" id="btnSubmit" onclick="delBtn()" data-bs-dismiss="modal"
               class="btn btn-danger">Удалить</button>
           </div>
         </form>

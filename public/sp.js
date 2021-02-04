@@ -172,7 +172,7 @@ function CreateTableFromJSON(data) {
     let id = data[i]._id
     let part = data[i].part
     buttonCell.innerHTML = (
-      "<button class=\"btn_f\" onclick=\"location.href='/sp/" + id + "/edit?allow=true';\"><i class=\"fa fa-pen\"></i></button>"
+      "<button class=\"btn_f\" onclick=\"location.href='/sp/" + id + "/edit?allow=true';\"><i class=\"bi bi-pencil-fill\"></i></button>"
     )
 
     // if (data[i].sp_unit.length > 0) {

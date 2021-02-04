@@ -392,7 +392,7 @@ function tablePC(pc, units = 'all', contentEditable = true, ...rows) {
     if (pc.pc_unit.length > 0) {
       tr = table.insertRow(-1)
       for (row of rows) {
-        insCell('', tr, rowsHeaders[row], 'header', '', false)
+        insCell('', tr, rowsHeaders[row], 'table-dark', '', false)
       }
     }
     // таблица ПЭВМ
@@ -445,7 +445,7 @@ function tablePC(pc, units = 'all', contentEditable = true, ...rows) {
     if (pc.system_case_unit.length > 0) {
       tr = table.insertRow(-1)
       for (row of rows) {
-        insCell('', tr, rowsHeaders[row], 'header', '', false)
+        insCell('', tr, rowsHeaders[row], 'table-dark', '', false)
       }
     }
     let arr_system_case_unit = pc.system_case_unit
