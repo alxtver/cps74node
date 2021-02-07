@@ -162,8 +162,8 @@ function addAPKZISubmit() {
 
   let zavNumberInput = document.getElementById('zav_number')
   let kontrZavNumberInput = document.getElementById('kontr_zav_number')
-  zavNumberInput.value = plusOne(localStorage.zav_number)
-  kontrZavNumberInput.value = plusOne(localStorage.kontr_zav_number)
+  zavNumberInput.value = calc(localStorage.zav_number).plusOne()
+  kontrZavNumberInput.value = calc(localStorage.kontr_zav_number).plusOne()
   if (!fdsi) {
     validate(document.getElementById('fdsi'))
     return false
