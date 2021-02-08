@@ -24,9 +24,9 @@ function createGrid(data) {
     label += (sn.length > 1) ? sn[sn.length - 1] : sn[0]
     div.innerHTML = label
     div.id = i._id
+    div.dataset.bsTarget = '#modalPC'
+    div.dataset.bsToggle = 'modal'
     div.addEventListener("click", function (event) {
-      div.dataset.target = '#modalPC'
-      div.dataset.toggle = 'modal'
       const id = event.target.id
       loadModalPage(id)
     }, true)

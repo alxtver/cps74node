@@ -474,15 +474,6 @@ input[type=text]:placeholder {
   font-size: 1rem;
 }
 
-.pctable td {
-  vertical-align: bottom;
-}
-
-.pctable {
-  border: 2px solid rgb(255 0 0 / 0%);
-  border-bottom: 1px solid;
-}
-
 #icon {
   width: 64px;
 }
@@ -673,7 +664,7 @@ th {
   color: #fff;
 }
 
-.custom-select option {
+.form-select option {
   background: #3d3d3d;
   color: #fff;
 }
@@ -735,6 +726,8 @@ th {
   font-weight: 500;
   border-right: 0;
   cursor: pointer;
+  color: lightgray;
+  text-decoration: none;
 }
 
 .PaUl li.active a {
@@ -766,10 +759,16 @@ th {
   }
 }
 
-@media (min-width: 992px) {
-  .table-responsive {
-    display: inline-table;
+@media (max-width: 992px) {
+  .selectpicker {
+    margin-top: .5rem;
   }
+}
+
+
+.selectpicker {
+  max-width: 200px;
+}
 }
 
 #colorpicker {

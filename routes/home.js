@@ -86,6 +86,7 @@ router.get('/monitoring', auth, async (req, res) => {
   let args_devel = {
     title: 'Мониторинг',
     part: req.session.part,
+    isEquipment: true,
     userName: req.session.user.username
   }
   res.render('monitoring', args_devel)

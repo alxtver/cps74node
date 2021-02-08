@@ -43,7 +43,7 @@ function CreateTableFromJSON(data, callback) {
   // TABLE ROW.
   let thead = table.createTHead()
   let tr = thead.insertRow(-1)
-  thead.className = "thead-dark"
+  thead.className = "table-dark"
   for (let i = 0; i < col_rus.length; i++) {
     let th = document.createElement("th") // TABLE HEADER.
     th.innerHTML = col_rus[i];
@@ -74,8 +74,8 @@ function CreateTableFromJSON(data, callback) {
     let id = data[i]._id
     let part = data[i].part
     let html = (
-      "<button class=\"btn_f\" onclick=\"location.href='/pkis/" + id + "/edit?allow=true';\"><i class=\"fa fa-pen\"></i></button>" +
-      "<button class=\"btn_d delBtn\" data-id=\'" + id + "'\ data-part=\'" + part + "'\ data-toggle=\"modal\" data-target=\"#modalDel\"><i data-id=\'" + id + "'\ class=\"fa fa-trash\"></i></button>"
+      "<button class=\"btn_f\" onclick=\"location.href='/pkis/" + id + "/edit?allow=true';\"><i class=\"bi bi-pencil-fill\"></i></button>" +
+      "<button class=\"btn_d delBtn\" data-id=\'" + id + "'\ data-part=\'" + part + "'\ data-bs-toggle=\"modal\" data-bs-target=\"#modalDel\"><i data-id=\'" + id + "'\ class=\"bi bi-trash-fill\"></i></button>"
     )
     insCell('', tr, html, 'buttons')
   }

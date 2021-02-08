@@ -59,7 +59,7 @@ function CreateTableFromJSON(data) {
   // TABLE ROW.
   let thead = table.createTHead()
   let tr = thead.insertRow(-1)
-  thead.className = "thead-dark"
+  thead.className = "table-dark"
   for (let i = 0; i < col_rus.length; i++) {
     let th = document.createElement("th") // TABLE HEADER.
     th.rowSpan = 2
@@ -172,7 +172,7 @@ function CreateTableFromJSON(data) {
     let id = data[i]._id
     let part = data[i].part
     buttonCell.innerHTML = (
-      "<button class=\"btn_f\" onclick=\"location.href='/sp/" + id + "/edit?allow=true';\"><i class=\"fa fa-pen\"></i></button>"
+      "<button class=\"btn_f\" onclick=\"location.href='/sp/" + id + "/edit?allow=true';\"><i class=\"bi bi-pencil-fill\"></i></button>"
     )
 
     // if (data[i].sp_unit.length > 0) {
@@ -267,7 +267,7 @@ function CreateTableSP() {
   // Заголовок таблицы
   let tr = table.insertRow(-1)
   let thead = table.createTHead()
-  thead.className = "thead-dark"
+  thead.className = "table-dark"
   for (let i = 0; i < col_rus.length; i++) {
     let th = document.createElement("th")
     th.innerHTML = col_rus[i]
@@ -367,7 +367,7 @@ function CreateTableSP_PKI(pki) {
   // Заголовок таблицы
   let tr = table.insertRow(-1)
   let thead = table.createTHead()
-  thead.className = "thead-dark"
+  thead.className = "table-dark"
   for (let i = 0; i < col_rus.length; i++) {
     let th = document.createElement("th")
     th.innerHTML = col_rus[i]
@@ -477,7 +477,7 @@ function CreateTable_EAN(ean) {
   // Заголовок таблицы
   let tr = table.insertRow(-1)
   let thead = table.createTHead()
-  thead.className = "thead-dark"
+  thead.className = "table-dark"
   for (let i = 0; i < col_rus.length; i++) {
     let th = document.createElement("th")
     th.innerHTML = col_rus[i]
@@ -545,11 +545,11 @@ function CreateTableSP_EAN(ean) {
   // Заголовок таблицы
   let tr = table.insertRow(-1)
   let thead = table.createTHead()
-  thead.className = "thead-dark"
+  thead.className = "table-dark"
   for (let i = 0; i < col_rus.length; i++) {
     let th = document.createElement("th")
     //th.rowSpan = 2
-    // th.className = "thead-dark"
+    // th.className = "table-dark"
     th.innerHTML = col_rus[i]
     tr.appendChild(th)
     thead.appendChild(tr)

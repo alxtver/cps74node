@@ -47,7 +47,31 @@ function loadSession() {
   if (array) snList(array.split(','))
 }
 
-function plusOne(number) {
+// function plusOne(number) {
+//   let indexChar = 0
+//   for (let index = 0; index < number.length; index++) {
+//     if (!/\d/.test(number[index])) indexChar = index
+//   }
+//   let firstPart = number.slice(0, indexChar + 1)
+//   let secondPart = number.slice(indexChar + 1)
+//   const lengthSecondPart = secondPart.length
+//   const secondPartPlusOne = parseInt(secondPart) + 1
+//   return firstPart + secondPartPlusOne.toString().padStart(lengthSecondPart, '0')
+// }
+
+// function minusOne(number) {
+//   let indexChar = 0
+//   for (let index = 0; index < number.length; index++) {
+//     if (!/\d/.test(number[index])) indexChar = index
+//   }
+//   let firstPart = number.slice(0, indexChar + 1)
+//   let secondPart = number.slice(indexChar + 1)
+//   const lengthSecondPart = secondPart.length
+//   const secondPartMinusOne = parseInt(secondPart) - 1
+//   return firstPart + secondPartMinusOne.toString().padStart(lengthSecondPart, '0')
+// }
+
+function calc(number) {
   let indexChar = 0
   for (let index = 0; index < number.length; index++) {
     if (!/\d/.test(number[index])) indexChar = index
@@ -56,19 +80,15 @@ function plusOne(number) {
   let secondPart = number.slice(indexChar + 1)
   const lengthSecondPart = secondPart.length
   const secondPartPlusOne = parseInt(secondPart) + 1
-  return firstPart + secondPartPlusOne.toString().padStart(lengthSecondPart, '0')
-}
-
-function minusOne(number) {
-  let indexChar = 0
-  for (let index = 0; index < number.length; index++) {
-    if (!/\d/.test(number[index])) indexChar = index
+  const secondPartMinusOne = parseInt(secondPart) - 1
+  return {
+    plusOne: function () {
+      return firstPart + secondPartPlusOne.toString().padStart(lengthSecondPart, '0')
+    },
+    minusOne: function () {
+      return firstPart + secondPartMinusOne.toString().padStart(lengthSecondPart, '0')
+    }
   }
-  let firstPart = number.slice(0, indexChar + 1)
-  let secondPart = number.slice(indexChar + 1)
-  const lengthSecondPart = secondPart.length
-  const secondPartPlusOne = parseInt(secondPart) - 1
-  return firstPart + secondPartPlusOne.toString().padStart(lengthSecondPart, '0')
 }
 
 // добавление данных в сессию браузера
@@ -88,8 +108,8 @@ function loadSessionApkzi() {
   document.getElementById("apkzi_name").value = localStorage.apkzi_name || ''
   document.getElementById("kont_name").value = localStorage.kont_name || ''
   document.getElementById("fdsiKontr").value = localStorage.fdsiKontr || ''
-  document.getElementById("zav_number").value = plusOne(localStorage.zav_number) || ''
-  document.getElementById("kontr_zav_number").value = plusOne(localStorage.kontr_zav_number) || ''
+  document.getElementById("zav_number").value = calc(localStorage.zav_number).plusOne() || ''
+  document.getElementById("kontr_zav_number").value = calc(localStorage.kontr_zav_number).plusOne() || ''
   document.getElementById("part").value = localStorage.part || ''
 
   if (localStorage.fdsi) {
@@ -334,9 +354,9 @@ function textToSpeech(text, rate) {
 function tablePC(pc, units = 'all', contentEditable = true, ...rows) {
   // таблица ПЭВМ
   let table = document.createElement("table")
-  table.className = "table table-sm table-bordered table-hover table-responsive pctable"
+  table.className = "table table-sm table-bordered table-hover"
   if (units === 'systemCase') {
-    table.classList.remove('pctable', 'table-sm')
+    table.classList.remove('table-sm')
     table.classList.add('assemblytable')
   }
   table.id = pc._id
@@ -392,7 +412,7 @@ function tablePC(pc, units = 'all', contentEditable = true, ...rows) {
     if (pc.pc_unit.length > 0) {
       tr = table.insertRow(-1)
       for (row of rows) {
-        insCell('', tr, rowsHeaders[row], 'header', '', false)
+        insCell('', tr, rowsHeaders[row], 'table-dark', '', false)
       }
     }
     // таблица ПЭВМ
@@ -445,7 +465,7 @@ function tablePC(pc, units = 'all', contentEditable = true, ...rows) {
     if (pc.system_case_unit.length > 0) {
       tr = table.insertRow(-1)
       for (row of rows) {
-        insCell('', tr, rowsHeaders[row], 'header', '', false)
+        insCell('', tr, rowsHeaders[row], 'table-dark', '', false)
       }
     }
     let arr_system_case_unit = pc.system_case_unit

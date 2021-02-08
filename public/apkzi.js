@@ -62,7 +62,7 @@ function CreateTableFromJSON(data, callback) {
   // TABLE ROW.
   let thead = table.createTHead()
   let tr = thead.insertRow(-1)
-  thead.className = "thead-dark"
+  thead.className = "table-dark"
   for (let i = 0; i < col_rus.length; i++) {
     let th = document.createElement("th") // TABLE HEADER.
     th.innerHTML = col_rus[i];
@@ -123,8 +123,8 @@ function CreateTableFromJSON(data, callback) {
     let part = data[i].part
     buttonCell.dataset.id = id
     buttonCell.innerHTML = (
-      "<button class=\"btn_f\" onclick=\"location.href='/apkzi/" + id + "/edit?allow=true';\"><i class=\"fa fa-pen\"></i></button>" +
-      "<button class=\"btn_d delBtn\" data-id=\'" + id + "'\ data-part=\'" + part + "'\ data-toggle=\"modal\" data-target=\"#modalDel\"><i data-id=\'" + id + "'\ class=\"fa fa-trash\"></i></button>"
+      "<button class=\"btn_f\" onclick=\"location.href='/apkzi/" + id + "/edit?allow=true';\"><i class=\"bi bi-pencil-fill\"></i></button>" +
+      "<button class=\"btn_d delBtn\" data-id=\'" + id + "'\ data-part=\'" + part + "'\ data-bs-toggle=\"modal\" data-bs-target=\"#modalDel\"><i data-id=\'" + id + "'\ class=\"bi bi-trash-fill\"></i></button>"
     )
   }
   const divContainer = document.getElementById("showData")
@@ -162,8 +162,8 @@ function addAPKZISubmit() {
 
   let zavNumberInput = document.getElementById('zav_number')
   let kontrZavNumberInput = document.getElementById('kontr_zav_number')
-  zavNumberInput.value = plusOne(localStorage.zav_number)
-  kontrZavNumberInput.value = plusOne(localStorage.kontr_zav_number)
+  zavNumberInput.value = calc(localStorage.zav_number).plusOne()
+  kontrZavNumberInput.value = calc(localStorage.kontr_zav_number).plusOne()
   if (!fdsi) {
     validate(document.getElementById('fdsi'))
     return false
