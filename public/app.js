@@ -127,7 +127,7 @@ function searchEAN(valueEAN) {
   localStorage.removeItem('snList')
   postData('/pkis/searchEAN', data)
     .then((data) => {
-      console.log(data);
+      // console.log(data.ean.countSymbols);
       const type = document.getElementById('type_pki')
       const vendor = document.getElementById('vendor')
       const model = document.getElementById('model')
@@ -140,8 +140,8 @@ function searchEAN(valueEAN) {
         country.value = data.ean.country
         serial_number.focus()
         textToSpeech(`${data.ean.type_pki} ${data.ean.vendor}`, 2)
-        if (data.countSymbols) {
-          localStorage.countSymbols = data.countSymbols
+        if (data.ean.countSymbols) {
+          localStorage.countSymbols = data.ean.countSymbols
         }
       } else if (data.upcitemdbValue) {
         type.value = ''
