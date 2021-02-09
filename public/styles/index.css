@@ -21,6 +21,13 @@ body {
   padding: .5rem;
 }
 
+.buttons {
+  display: grid;
+  /* grid-template-rows: 1fr 1fr; */
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 2px;
+}
+
 /* Style buttons */
 .btn_f,
 .btn_d {

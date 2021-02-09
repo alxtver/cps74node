@@ -1,4 +1,6 @@
-const {Router} = require('express')
+const {
+  Router
+} = require('express')
 const auth = require('../middleware/auth')
 const router = Router()
 const PC = require('../models/pc')
@@ -256,7 +258,11 @@ router.get('/import', auth, async (req, res) => {
       size: 18
     },
   })
-  const allPC = await PC.find({part: part}).sort({'created': 1})
+  const allPC = await PC.find({
+    part: part
+  }).sort({
+    'created': 1
+  })
 
   ws.row(1).setHeight(30)
   ws.cell(1, 2).string(part).style(styleHead)
@@ -320,7 +326,7 @@ router.get('/import', auth, async (req, res) => {
     ws.cell(n, 6).string('').style(styleBot)
     ws.cell(n, 7).string(pc.attachment).style(styleBotRight)
     if (col7width < pc.attachment.length) {
-      col7width = pc.attachment.length+1
+      col7width = pc.attachment.length + 1
     }
     n += 1
     if (pc.pc_unit.length > 0) {
@@ -359,7 +365,7 @@ router.get('/import', auth, async (req, res) => {
           col7width = unit.notes.length
         }
         n += 1
-      }      
+      }
     }
     if (pc.system_case_unit.length > 0) {
       ws.cell(n, 1).string("").style(firstCellColor)
@@ -398,12 +404,12 @@ router.get('/import', auth, async (req, res) => {
         }
         n += 1
         ws.cell(n, 2).string('').style(styleBot1)
-        ws.cell(n, 3).string('').style(styleBot1)  
-        ws.cell(n, 4).string('').style(styleBot1)  
-        ws.cell(n, 5).string('').style(styleBot1)  
-        ws.cell(n, 6).string('').style(styleBot1)  
-        ws.cell(n, 7).string('').style(styleBot1)  
-      }      
+        ws.cell(n, 3).string('').style(styleBot1)
+        ws.cell(n, 4).string('').style(styleBot1)
+        ws.cell(n, 5).string('').style(styleBot1)
+        ws.cell(n, 6).string('').style(styleBot1)
+        ws.cell(n, 7).string('').style(styleBot1)
+      }
     }
     n += 1
   }
@@ -414,7 +420,7 @@ router.get('/import', auth, async (req, res) => {
   ws.column(5).setWidth(col5width)
   ws.column(6).setWidth(col6width)
   ws.column(7).setWidth(col7width)
-  
+
   const appDir = path.dirname(require.main.filename)
   const docDir = appDir + '/public/docx'
   pathToExcel = `${docDir}/excel.xlsx`
@@ -429,33 +435,36 @@ router.get('/import', auth, async (req, res) => {
 
 router.get('/:id/passportDocx', auth, async (req, res) => {
   const appDir = path.dirname(require.main.filename)
-  const docDir = appDir + '/public/docx' 
-  const pc = await PC.findById(req.params.id)    
+  const docDir = appDir + '/public/docx'
+  const pc = await PC.findById(req.params.id)
   const content = fs.readFileSync(path.resolve(docDir, 'input.docx'), 'binary')
   const zip = new PizZip(content)
   let doc = new Docxtemplater()
   doc.loadZip(zip)
   //set the templateVariables
   doc.setData({
-      fdsi: pc.fdsi,
-      serial_number: pc.serial_number,
-      pc_unit: pc.pc_unit,
-      system_case_unit: pc.system_case_unit
+    fdsi: pc.fdsi,
+    serial_number: pc.serial_number,
+    pc_unit: pc.pc_unit,
+    system_case_unit: pc.system_case_unit
   })
   try {
-      doc.render()
+    doc.render()
+  } catch (error) {
+    const e = {
+      message: error.message,
+      name: error.name,
+      stack: error.stack,
+      properties: error.properties,
+    }
+    console.log(JSON.stringify({
+      error: e
+    }))
+    throw error
   }
-  catch (error) {
-      const e = {
-          message: error.message,
-          name: error.name,
-          stack: error.stack,
-          properties: error.properties,
-      }
-      console.log(JSON.stringify({error: e}))
-      throw error
-  }
-  let buf = doc.getZip().generate({type: 'nodebuffer'});
+  let buf = doc.getZip().generate({
+    type: 'nodebuffer'
+  });
   // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
   fs.writeFileSync(path.resolve(docDir, 'output.docx'), buf)
   const file = `${docDir}/output.docx`
@@ -468,9 +477,9 @@ router.get('/:id/passportDocx', auth, async (req, res) => {
 router.get('/:id/zipPCEDocx', auth, async (req, res) => {
   const appDir = path.dirname(require.main.filename)
   const docDir = appDir + '/public/docx'
- 
+
   const pc = await PC.findById(req.params.id)
-    
+
   var content = fs.readFileSync(path.resolve(docDir, 'inpitcbZip.docx'), 'binary');
 
   var zip = new PizZip(content);
@@ -480,29 +489,32 @@ router.get('/:id/zipPCEDocx', auth, async (req, res) => {
 
   //set the templateVariables
   doc.setData({
-      fdsi: pc.fdsi,
-      serial_number: pc.serial_number,
-      pc_unit: pc.pc_unit,
-      system_case_unit: pc.system_case_unit
+    fdsi: pc.fdsi,
+    serial_number: pc.serial_number,
+    pc_unit: pc.pc_unit,
+    system_case_unit: pc.system_case_unit
   })
 
   try {
-      // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
-      doc.render()
-  }
-  catch (error) {
-      const e = {
-          message: error.message,
-          name: error.name,
-          stack: error.stack,
-          properties: error.properties,
-      }
-      console.log(JSON.stringify({error: e}))
-      // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
-      throw error
+    // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
+    doc.render()
+  } catch (error) {
+    const e = {
+      message: error.message,
+      name: error.name,
+      stack: error.stack,
+      properties: error.properties,
+    }
+    console.log(JSON.stringify({
+      error: e
+    }))
+    // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
+    throw error
   }
 
-  let buf = doc.getZip().generate({type: 'nodebuffer'});
+  let buf = doc.getZip().generate({
+    type: 'nodebuffer'
+  });
 
   // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
   fs.writeFileSync(path.resolve(docDir, 'output.docx'), buf)
@@ -516,9 +528,9 @@ router.get('/:id/zipPCEDocx', auth, async (req, res) => {
 router.get('/:id/zipDocx', auth, async (req, res) => {
   const appDir = path.dirname(require.main.filename)
   const docDir = appDir + '/public/docx'
- 
+
   const pc = await PC.findById(req.params.id)
-    
+
   var content = fs.readFileSync(path.resolve(docDir, 'inputZIP.docx'), 'binary');
 
   var zip = new PizZip(content);
@@ -528,28 +540,31 @@ router.get('/:id/zipDocx', auth, async (req, res) => {
 
   //set the templateVariables
   doc.setData({
-      fdsi: pc.fdsi,
-      serial_number: pc.serial_number,
-      pc_unit: pc.pc_unit,
-      system_case_unit: pc.system_case_unit
+    fdsi: pc.fdsi,
+    serial_number: pc.serial_number,
+    pc_unit: pc.pc_unit,
+    system_case_unit: pc.system_case_unit
   })
 
   try {
-      // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
-      doc.render()
+    // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
+    doc.render()
+  } catch (error) {
+    const e = {
+      message: error.message,
+      name: error.name,
+      stack: error.stack,
+      properties: error.properties,
+    }
+    console.log(JSON.stringify({
+      error: e
+    }))
+    // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
+    throw error
   }
-  catch (error) {
-      const e = {
-          message: error.message,
-          name: error.name,
-          stack: error.stack,
-          properties: error.properties,
-      }
-      console.log(JSON.stringify({error: e}))
-      // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
-      throw error
-  }
-  let buf = doc.getZip().generate({type: 'nodebuffer'})
+  let buf = doc.getZip().generate({
+    type: 'nodebuffer'
+  })
   // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
   fs.writeFileSync(path.resolve(docDir, 'output.docx'), buf)
   const file = `${docDir}/output.docx`
