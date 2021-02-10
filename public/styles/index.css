@@ -25,7 +25,7 @@ body {
   display: grid;
   /* grid-template-rows: 1fr 1fr; */
   grid-template-columns: 1fr 1fr;
-  grid-gap: 2px;
+  grid-gap: 1px;
 }
 
 /* Style buttons */
@@ -33,13 +33,13 @@ body {
 .btn_d {
   background-color: #343a40;
   border: none;
+  border-radius: 1px;
   /* Remove borders */
   color: white;
   /* White text */
   cursor: pointer;
   /* Mouse pointer on hover */
-  width: 20px;
-  height: 20px;
+
 }
 
 /* Darker background on mouse-over */

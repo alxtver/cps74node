@@ -389,7 +389,7 @@ function CreateTableFromJSON(data) {
 
   const divContainer = document.getElementById("showData")
   divContainer.innerHTML = ""
-  divContainer.className = "tableContent"
+  divContainer.className = "tableContent table-responsive"
   divContainer.appendChild(table)
 }
 

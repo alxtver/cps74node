@@ -81,7 +81,7 @@ function CreateTableFromJSON(data, callback) {
   }
   const divContainer = document.getElementById("showData")
   divContainer.innerHTML = ""
-  divContainer.className = "tableContent"
+  divContainer.className = "tableContent table-responsive"
   divContainer.appendChild(table)
 
   //событие по клику на кнопку удалить

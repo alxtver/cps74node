@@ -119,6 +119,7 @@ function CreateTableFromJSON(data, callback) {
     number_machineCell.innerHTML = data[i].number_machine ? data[i].number_machine : ''
 
     let buttonCell = tr.insertCell(-1)
+    buttonCell.className = 'buttons'
     let id = data[i]._id
     let part = data[i].part
     buttonCell.dataset.id = id
@@ -129,7 +130,7 @@ function CreateTableFromJSON(data, callback) {
   }
   const divContainer = document.getElementById("showData")
   divContainer.innerHTML = ""
-  divContainer.className = "tableContent"
+  divContainer.className = "tableContent table-responsive"
   divContainer.appendChild(table)
 
   //событие по клику на кнопку удалить

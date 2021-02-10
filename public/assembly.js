@@ -312,7 +312,7 @@ function UpdateCells(pc) {
   )
   let divCont = document.createElement("div")
   divCont.id = pc._id
-  divCont.className = "tableContent"
+  divContainer.className = "tableContent table-responsive"
   divContainer.appendChild(divCont)
   divCont.innerHTML = ""
   divCont.appendChild(table)

@@ -48,6 +48,7 @@ function CreateTableFromJSON(data) {
     countryCell.style.fontWeight = "700"
 
     const buttonCell = tr.insertCell(-1)
+    buttonCell.className = 'buttons'
     const id = data[i]._id
     const editBtn = document.createElement('button')
     editBtn.addEventListener('click', () => {
@@ -73,7 +74,7 @@ function CreateTableFromJSON(data) {
   }
   const divContainer = document.getElementById("showData")
   divContainer.innerHTML = ""
-  divContainer.className = "tableContent"
+  divContainer.className = "tableContent table-responsive"
   divContainer.appendChild(table)
 }
 
