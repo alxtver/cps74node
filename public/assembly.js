@@ -52,7 +52,7 @@ function loadPage() {
         document.getElementById('overlay').style.display = 'none'
         document.querySelectorAll('[data-obj="1"]')[0].focus()
       })
-      if (data.firstPC.serial_number == data.firstSN) {
+      if (data.firstPC.serial_number === data.firstSN) {
         document.getElementById('PreviousPC').style.display = 'none'
         document.getElementById('NextPC').style.display = 'inline'
       } else if (data.firstPC.serial_number == data.lastSN) {

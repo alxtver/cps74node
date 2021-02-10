@@ -25,7 +25,7 @@ function CreateTableFromJSON(data) {
     tr.appendChild(th);
     thead.appendChild(tr)
   }
-  th = document.createElement("th")
+  let th = document.createElement("th")
   th.innerHTML = ''
   th.rowSpan = 2
   tr.appendChild(th)
