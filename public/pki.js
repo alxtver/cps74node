@@ -233,11 +233,11 @@ async function addPkiSubmit() {
   }
   const pki = new PKI(ean_code, type_pki, vendor, model, country, part, serial_number)
   pki.addPKIToDB().then((data) => {
-    if (data.status == 'snExists') {
+    if (data.status === 'snExists') {
       document.getElementById('sound').play()
       document.getElementById('error_message').style.display = 'block'
       document.getElementById('alert').innerHTML = data.flashErr
-    } else if (data.status == 'ok') {
+    } else if (data.status === 'ok') {
       if (data.flashErr) {
         document.getElementById('sound').play()
         document.getElementById('error_message').style.display = 'block'
@@ -257,7 +257,7 @@ function searchAndReplace() {
   overlay.style.display = 'block'
   const search = document.getElementById('searchInput').value
   const replace = document.getElementById('replaceInput').value
-  data = {
+  const data = {
     search,
     replace
   }

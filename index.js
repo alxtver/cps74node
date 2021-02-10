@@ -6,6 +6,14 @@ const session = require('express-session')
 const MongoStore = require('connect-mongodb-session')(session)
 const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
+const favicon = require('express-favicon')
+const varMiddleware = require('./middleware/variables')
+const userMiddleware = require('./middleware/user')
+const partMiddleware = require('./middleware/part')
+const bodyParser = require('body-parser')
+const config = require('./config.js')
+const io = require('socket.io')(3001)
+
 const homeRoutes = require('./routes/home')
 const apkziRoutes = require('./routes/apkzi')
 const addRoutes = require('./routes/add')
@@ -21,13 +29,6 @@ const equipmentRoutes = require('./routes/equipment')
 const projectsRoutes = require('./routes/projects')
 const countriesRoutes = require('./routes/countries')
 const specRoutes = require('./routes/spec')
-const favicon = require('express-favicon')
-const varMiddleware = require('./middleware/variables')
-const userMiddleware = require('./middleware/user')
-const partMiddleware = require('./middleware/part')
-const bodyParser = require('body-parser')
-const config = require('./config.js')
-const io = require('socket.io')(3001)
 
 io.on('connect', socket => {
   socket.on('updateAssemblyPC', function (data) {
@@ -41,8 +42,6 @@ app.use(bodyParser.urlencoded({
   extended: true
 }))
 app.use(bodyParser.json())
-
-
 
 const hbs = exphbs.create({
   defaultLayout: 'main',
