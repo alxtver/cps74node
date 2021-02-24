@@ -63,7 +63,8 @@ router.post('/searchPKI', auth, async (req, res) => {
   const pkis = await PKI.find({
     serial_number: val.trim()
   })
-  if (pkis.length == 1 && pkis[0].number_machine) {
+  console.log(pkis.length);
+  if (pkis.length === 1 && pkis[0].number_machine) {
     const pcs = await PC.find({
       serial_number: pkis[0].number_machine
     })
@@ -73,7 +74,7 @@ router.post('/searchPKI', auth, async (req, res) => {
       apkzis: false
     }))
     return false
-  } else if (pkis.length > 1) {
+  } else if (pkis.length >= 1) {
     res.send(JSON.stringify({
       pkis: pkis,
       pcs: false,
