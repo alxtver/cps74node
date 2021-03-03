@@ -102,7 +102,7 @@ router.post("/insert_part_session", async function (req, res) {
 })
 
 
-router.get('/script', authAdmin, async (req, res) => {
+router.get('/script', auth, async (req, res) => {
   //  скрипт для удаления PC по партии
   // PC.deleteMany({ part: 'АСО МСК' }, function (err) {
   //   if (err) {
