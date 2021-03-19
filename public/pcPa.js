@@ -509,8 +509,8 @@ function buttons(container, pc) {
   button_copy.value = 'Копировать'
   button_copy.dataset.id = pc._id
   button_copy.dataset.serial_number = pc.serial_number
-  button_copy.dataset.toggle = 'modal'
-  button_copy.dataset.target = '#modalCopy'
+  button_copy.dataset.bsToggle = 'modal'
+  button_copy.dataset.bsTarget = '#modalCopy'
   button_copy.addEventListener('click', (e) => {
     document.getElementById('hidInputCopy').value = e.target.dataset.id
     document.getElementById('inputCopy').value = e.target.dataset.serial_number
@@ -531,8 +531,8 @@ function buttons(container, pc) {
   button_del.value = 'Удалить'
   button_del.dataset.id = pc._id
   button_del.dataset.serial_number = pc.serial_number
-  button_del.dataset.target = '#modalDel'
-  button_del.dataset.toggle = 'modal'
+  button_del.dataset.bsToggle = '#modalDel'
+  button_del.dataset.bsTarget = 'modal'
   button_del.addEventListener('click', (e) => {
     document.getElementById('hidId').value = e.target.dataset.id
     document.getElementById('serial').innerHTML = 'Серийный номер - ' + e.target.dataset.serial_number

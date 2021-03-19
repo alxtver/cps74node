@@ -62,8 +62,8 @@ function CreateTableFromJSON(data) {
     const delBtn = document.createElement('button')
     delBtn.className = 'btn_d delBtn'
     delBtn.dataset.id = id
-    delBtn.dataset.toggle = 'modal'
-    delBtn.dataset.target = '#modalDel'
+    delBtn.dataset.bsToggle = 'modal'
+    delBtn.dataset.bsTarget = '#modalDel'
     const faDel = document.createElement('i')
     faDel.className = 'bi bi-trash-fill'
     delBtn.appendChild(faDel)
