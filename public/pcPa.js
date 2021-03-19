@@ -531,8 +531,8 @@ function buttons(container, pc) {
   button_del.value = 'Удалить'
   button_del.dataset.id = pc._id
   button_del.dataset.serial_number = pc.serial_number
-  button_del.dataset.bsToggle = '#modalDel'
-  button_del.dataset.bsTarget = 'modal'
+  button_del.dataset.bsTarget = '#modalDel'
+  button_del.dataset.bsToggle = 'modal'
   button_del.addEventListener('click', (e) => {
     document.getElementById('hidId').value = e.target.dataset.id
     document.getElementById('serial').innerHTML = 'Серийный номер - ' + e.target.dataset.serial_number
