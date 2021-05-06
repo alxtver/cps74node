@@ -437,10 +437,7 @@ router.get('/:id/passportDocx', auth, async (req, res) => {
   const appDir = path.dirname(require.main.filename)
   const docDir = appDir + '/public/docx'
   const pc = await PC.findById(req.params.id)
-  const content = fs.readFileSync(path.resolve(docDir, 'inputNew written as follows: Control-key sequences are notated with
- a '^' and can be entered either by using the Ctrl key or pressing the Esc
- key twice.  Meta-key sequences are notated with 'M-' and can be entered
- using either the Alt, Cmd, or Esc key, depending on your keyboard setup.Pass.docx'), 'binary')
+  const content = fs.readFileSync(path.resolve(docDir, 'inputNewPass.docx'), 'binary')
   const zip = new PizZip(content)
   let doc = new Docxtemplater()
   doc.loadZip(zip)
