@@ -341,13 +341,13 @@ function textToSpeech(text, rate) {
     console.log(navigator.platform, rate)
   }
   if (localStorage.sound === 'on') {
-    const textToSpeech = text
-    const ut = new SpeechSynthesisUtterance(textToSpeech)
+    const ut = new SpeechSynthesisUtterance(text)
     ut.lang = 'ru-RU'
     ut.volume = 1
     ut.rate = rate
-    ut.pitch = 1.3
+    ut.pitch = 1
     speechSynthesis.speak(ut)
+    // speechSynthesis.cancel()
   }
 }
 
