@@ -28,8 +28,7 @@ function delRow() {
 function setColor() {
   let c = document.getElementById('color-input').value
   let content = document.querySelector('.tableContent')
-  let shadow = '0px 30px 60px ' + c
-  content.style.boxShadow = shadow
+  content.style.boxShadow = '0px 30px 60px ' + c
 }
 
 function CreateTablePC() {
@@ -342,7 +341,7 @@ function CreateTableFromJSON(data, callback) {
   let divContainer = document.getElementById("PC")
   divContainer.innerHTML = ""
   for (let i = 0; i < data.length; i++) {
-    table = tablePC(data[i], 'all', true,
+    const table = tablePC(data[i], 'all', true,
       'fdsi',
       'type',
       'name',
@@ -438,19 +437,27 @@ function CreateTableEditPC(data, color) {
 }
 
 function flashAlert(data) {
-  let oldNumberMachine = data.oldNumberMachine
-  const pcSN = data.pc.serial_number
-  if (oldNumberMachine) {
-    if (oldNumberMachine != pcSN) {
-      document.querySelector('.popup-checkbox').checked = true
-      const msg_txt = 'Серийник был привязан к машине с номером ' + oldNumberMachine
-      document.getElementById('oldNumber').innerHTML = msg_txt
-      const audio = {};
-      audio["alert"] = new Audio();
-      audio["alert"].src = "/sounds/alert.mp3"
-      audio["alert"].play()
-    } else {
-      oldNumberMachine = null
+  if (data.duplicatePki) {
+    document.querySelector('.popup-checkbox').checked = true
+    document.getElementById('oldNumber').innerHTML = 'Такой серийник уже есть!!!'
+    const audio = {};
+    audio["alert"] = new Audio();
+    audio["alert"].src = "/sounds/alert.mp3"
+    audio["alert"].play()
+  } else {
+    let oldNumberMachine = data.oldNumberMachine
+    const pcSN = data.pc.serial_number
+    if (oldNumberMachine) {
+      if (oldNumberMachine !== pcSN) {
+        document.querySelector('.popup-checkbox').checked = true
+        document.getElementById('oldNumber').innerHTML = 'Серийник был привязан к машине с номером ' + oldNumberMachine
+        const audio = {};
+        audio["alert"] = new Audio();
+        audio["alert"].src = "/sounds/alert.mp3"
+        audio["alert"].play()
+      } else {
+        oldNumberMachine = null
+      }
     }
   }
 }
@@ -465,16 +472,18 @@ function edit_serial_number(id, obj, unit, serial_number) {
   postData('/pcPa/insert_serial', data)
     .then((data) => {
       flashAlert(data)
-      const serialNumber = data.pc.serial_number
-      const oldNumberMachine = (data.oldNumberMachine != serialNumber) ? data.oldNumberMachine : null
-      UpdateCells(data.pc, oldNumberMachine)
-      const user = document.getElementById('userName').value
-      const id = data.pc._id
-      socket.emit('updateAssemblyPC', {
-        serialNumber,
-        user,
-        id
-      })
+      if (!data.duplicatePki) {
+        const serialNumber = data.pc.serial_number
+        const oldNumberMachine = (data.oldNumberMachine !== serialNumber) ? data.oldNumberMachine : null
+        UpdateCells(data.pc, oldNumberMachine)
+        const user = document.getElementById('userName').value
+        const id = data.pc._id
+        socket.emit('updateAssemblyPC', {
+          serialNumber,
+          user,
+          id
+        })
+      }
     })
 }
 
@@ -609,7 +618,7 @@ function UpdateCells(pc, oldNumberMachine, voice = true) {
           let rows = document.querySelector(".serial_number[data-data='" + next_id.join(';') + "']").parentElement
           let row = rows.children
           if (row) {
-            textToSpeech(row[1].innerText, 5)
+            textToSpeech(row[1].innerText, 1)
           }
         }
       }

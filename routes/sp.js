@@ -3,17 +3,14 @@ const {
 } = require('express')
 const router = Router()
 const auth = require('../middleware/auth')
-const authAdmin = require('../middleware/authAdmin')
 const Pki = require('../models/pki')
 const EAN = require('../models/ean')
 const PC = require('../models/pc')
-const APKZI = require('../models/apkzi')
 const User = require('../models/user')
 const path = require('path')
 const fs = require('fs')
 const PizZip = require('pizzip')
 const Docxtemplater = require('docxtemplater')
-const http = require('http')
 const excel = require('excel4node')
 
 
@@ -37,35 +34,35 @@ router.post("/search", auth, async (req, res) => {
 	}).distinct('type_pki')
 
 	let pkis
-	if ((!req.body.q && selectedType == '...') || (!req.body.q && !selectedType)) {
+	if ((!req.body.q && selectedType === '...') || (!req.body.q && !selectedType)) {
 		pkis = await Pki.find({
 			part: selected
 		}).sort({
 			type_pki: 1
 		})
 
-	} else if (!req.body.q && selectedType != '...') {
+	} else if (!req.body.q && selectedType !== '...') {
 		pkis = await Pki.find({
 			part: selected,
 			type_pki: selectedType
 		}).sort({
 			type_pki: 1
 		})
-	} else if (req.body.q == '...' && selectedType == '...') {
+	} else if (req.body.q === '...' && selectedType === '...') {
 		pkis = await Pki.find({
 			part: selected
 		}).sort({
 			type_pki: 1
 		})
-	} else if (req.body.q == selectedType) {
+	} else if (req.body.q === selectedType) {
 		pkis = await Pki.find({
 			part: selected,
 			type_pki: selectedType
 		}).sort({
 			type_pki: 1
 		})
-	} else if (req.body.q && req.body.q != 'null' && selectedType == '...') {
-		query = {
+	} else if (req.body.q && req.body.q !== 'null' && selectedType === '...') {
+		const query = {
 			$and: [{
 					$or: [{
 							type_pki: new RegExp(req.body.q + '.*', "i")
@@ -98,13 +95,13 @@ router.post("/search", auth, async (req, res) => {
 		pkis = await Pki.find(query).sort({
 			type_pki: 1
 		})
-	} else if (req.body.q == 'null' && selectedType == '...') {
+	} else if (req.body.q === 'null' && selectedType === '...') {
 		pkis = await Pki.find({
 			part: selected
 		}).sort({
 			type_pki: 1
 		})
-	} else if (req.body.q == 'null' && selectedType) {
+	} else if (req.body.q === 'null' && selectedType) {
 		pkis = await Pki.find({
 			part: selected,
 			type_pki: selectedType
@@ -112,7 +109,7 @@ router.post("/search", auth, async (req, res) => {
 			type_pki: 1
 		})
 	} else {
-		query = {
+		const query = {
 			$and: [{
 					$or: [{
 							type_pki: new RegExp(req.body.q + '.*', "i")
@@ -196,7 +193,7 @@ router.post('/edit', auth, async (req, res) => {
 	const id = req.body.id
 	await Pki.findByIdAndUpdate(id, req.body)
 	let pki = await Pki.findById(id)
-	if (req.body.ean_code != '' && pki.sp_unit.length == 0) {
+	if (req.body.ean_code !== '' && pki.sp_unit.length === 0) {
 		let ean = await EAN.find({
 			ean_code: req.body.ean_code
 		})
@@ -214,7 +211,7 @@ router.post('/sp_unit', auth, async (req, res) => {
 	if (pki.sp_unit && pki.sp_unit.length > 0) {
 		res.send(pki)
 	} else if (pki.ean_code) {
-		ean = await EAN.findOne({
+		const ean = await EAN.findOne({
 			ean_code: pki.ean_code
 		})
 		if (ean && ean.sp_unit.length > 0) {
@@ -237,7 +234,7 @@ router.post('/viborka', auth, async (req, res) => {
 	const ean = await EAN.findOne({
 		ean_code: pki.ean_code
 	})
-	if (req.body.viborka == 'true') {
+	if (req.body.viborka === 'true') {
 		res.send(ean.sp_unit)
 	} else {
 		res.send(ean.sp_unit1)
@@ -255,7 +252,7 @@ router.post('/check_ean', auth, async (req, res) => {
 	})
 	console.log(ean);
 	if (ean) {
-		if (req.body.viborka == 'true') {
+		if (req.body.viborka === 'true') {
 			res.send(ean.sp_unit)
 		} else {
 			res.send(ean.sp_unit1)
@@ -267,264 +264,7 @@ router.post('/check_ean', auth, async (req, res) => {
 	}
 })
 
-
-router.get('/reportSPDoc1', auth, async (req, res) => {
-	const appDir = path.dirname(require.main.filename)
-	const docDir = appDir + '/public/docx'
-
-	const pkis = await Pki.find({
-		part: req.session.part
-	}).sort({
-		type_pki: 1
-	})
-
-	var content = fs.readFileSync(path.resolve(docDir, 'inputSP.docx'), 'binary');
-
-	var zip = new PizZip(content);
-
-	var doc = new Docxtemplater();
-	doc.loadZip(zip);
-
-	//set the templateVariables
-	doc.setData({
-		data: pkis
-	})
-
-	try {
-		// render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
-		doc.render()
-	} catch (error) {
-		const e = {
-			message: error.message,
-			name: error.name,
-			stack: error.stack,
-			properties: error.properties,
-		}
-		console.log(JSON.stringify({
-			error: e
-		}))
-		// The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
-		throw error
-	}
-
-	let buf = doc.getZip().generate({
-		type: 'nodebuffer'
-	});
-
-	// buf is a nodejs buffer, you can either write it to a file or do anything else with it.
-	fs.writeFileSync(path.resolve(docDir, 'outputSP.docx'), buf)
-	const file = `${docDir}/outputSP.docx`
-	const fileName = req.session.part + '.docx'
-	console.log(`Passport #${req.session.part} was formed`)
-	res.download(file, fileName)
-})
-
-
-router.get('/reportSPDoc', auth, async (req, res) => {
-	var officegen = require('officegen')
-
-	var fs = require('fs')
-	var path = require('path')
-
-	var docx = officegen('docx')
-	const appDir = path.dirname(require.main.filename)
-	var outDir = appDir + '/public/docx'
-	const file = `${outDir}/example_json.docx`
-	const fileName = req.session.part + '.docx'
-
-
-
-	docx.on('error', function (err) {
-		console.log(err)
-	})
-
-	let opts = {
-		cellColWidth: 1261,
-		b: true,
-		sz: '16',
-		rowSpan: 2
-	}
-
-	let opts3 = {
-		cellColWidth: 1,
-		b: true,
-		sz: '16',
-	}
-
-	let opts1 = {
-		cellColWidth: 300,
-		b: true,
-		sz: '0',
-		rowSpan: 2
-	}
-
-	let optsSpan = {
-		cellColWidth: 1261,
-		b: true,
-		sz: '16',
-		gridSpan: 2
-	}
-
-	const pkis = await Pki.find({
-		part: req.session.part
-	}).sort({
-		type_pki: 1
-	})
-
-	let dataSP = []
-	dataSP.push([{
-				val: '№ п/п',
-				opts: opts1
-			},
-			{
-				val: 'Наименование',
-				opts: opts1
-			},
-			{
-				val: 'Фирма',
-				opts: opts1
-			},
-			{
-				val: 'Модель',
-				opts: opts1
-			},
-			{
-				val: 'Кол во',
-				opts: opts1
-			},
-			{
-				val: 'Серийный (инв.) номер',
-				opts: opts1
-			},
-			{
-				val: 'Страна',
-				opts: optsSpan
-			},
-			{
-				val: '',
-				opts: opts
-			},
-		],
-		[
-
-			{},
-			{},
-			{}
-		]
-	)
-
-	var table = [
-		[{
-				val: 'No.',
-				opts: {
-					cellColWidth: 4261,
-					b: true,
-					sz: '48',
-					shd: {
-						fill: '7F7F7F',
-						themeFill: 'text1',
-						themeFillTint: '80'
-					},
-					fontFamily: 'Avenir Book'
-				}
-			},
-			{
-				val: 'Title1',
-				opts: {
-					b: true,
-					color: 'A00000',
-					align: 'right',
-					shd: {
-						fill: '92CDDC',
-						themeFill: 'text1',
-						themeFillTint: '80'
-					}
-				}
-			},
-			{
-				val: 'Title2',
-				opts: {
-					align: 'center',
-					cellColWidth: 42,
-					b: true,
-					sz: '48',
-					shd: {
-						fill: '92CDDC',
-						themeFill: 'text1',
-						themeFillTint: '80'
-					}
-				}
-			}
-		],
-		[1, {
-			val: 'I have two spans.',
-			opts: {
-				gridSpan: 2
-			}
-		}],
-		[{
-			val: 'I have three spans.',
-			opts: {
-				gridSpan: 3
-			}
-		}],
-		[{
-			val: 'I have two spans.',
-			opts: {
-				gridSpan: 2
-			}
-		}, '3'],
-		[4, 'watch out for the baobabs!', 'END']
-	]
-
-	var tableStyle = {
-		tableColWidth: 4261,
-		tableSize: 24,
-		tableAlign: 'left',
-		tableFontFamily: 'Times New Roman',
-		borders: true
-	}
-
-	var data = [{
-			type: 'text',
-			val: req.session.part,
-			opt: {
-				font_face: 'Arial',
-				font_size: 16
-			},
-			lopt: {
-				align: 'center'
-			}
-		},
-		{
-			type: 'horizontalline'
-		},
-		{
-			type: 'table',
-			val: dataSP,
-			opt: tableStyle
-		}
-	]
-
-	await docx.createByJson(data)
-
-	var out = await fs.createWriteStream(path.join(outDir, 'example_json.docx'))
-
-	out.on('error', function (err) {
-		console.log(err)
-	})
-
-	out.on('close', function () {
-		res.download(file, fileName)
-	})
-
-	docx.generate(out)
-	console.log(`Passport #${req.session.part} was formed`)
-})
-
-
 router.get("/excelExport", auth, async function (req, res) {
-	const sortSelect = req.query.sortSelect
 	let workbook = new excel.Workbook({
 		defaultFont: {
 			size: 12,
@@ -667,7 +407,7 @@ router.get("/excelExport", auth, async function (req, res) {
 		},
 	})
 
-	let pkis = await Pki.find({
+	const pkis = await Pki.find({
 		part: req.session.part
 	}).sort({
 		type_pki: 1
@@ -707,7 +447,7 @@ router.get("/excelExport", auth, async function (req, res) {
 	let st = style
 	let stB = styleB
 	for (const pki of pkis) {
-		if (pki.type_pki == type) {
+		if (pki.type_pki === type) {
 			st = style
 			stB = styleB
 		} else {
@@ -726,28 +466,12 @@ router.get("/excelExport", auth, async function (req, res) {
 			ws.cell(n, 10).string('').style(st)
 		} else {
 			ws.cell(n, 9).string('').style(st)
-			if (pki.type_pki == 'Процессор') {
+			if (pki.type_pki === 'Процессор') {
 				ws.cell(n, 10).string('').style(st)
 			} else {
 				ws.cell(n, 10).string('1').style(st)
 			}
 		}
-
-
-		// if (pki.sp_unit && pki.sp_unit.length > 0) {
-		// 	for (const unit of pki.sp_unit) {
-		// 		n += 1
-		// 		ws.cell(n, 2).string('').style(style)
-		// 		ws.cell(n, 3).string(unit.name).style(style)
-		// 		ws.cell(n, 4).string(unit.vendor).style(style)
-		// 		ws.cell(n, 5).string(unit.model).style(style)
-		// 		ws.cell(n, 6).string(unit.quantity).style(style)
-		// 		ws.cell(n, 7).string(unit.serial_number).style(style)
-		// 		ws.cell(n, 8).string('').style(style)
-		// 		ws.cell(n, 9).string('').style(style)
-		// 		ws.cell(n, 10).string(unit.szz2).style(style)
-		// 	}
-		// }
 
 		type = pki.type_pki
 		n += 1
@@ -761,8 +485,8 @@ router.get("/excelExport", auth, async function (req, res) {
 	let unitsWPcSn = []
 	for (const pc of pcs) {
 		for (const unit of pc.pc_unit) {
-			if (/[Бб].?[Нн]/g.test(unit.serial_number)) {
-				if (unit.type == 'Коврик для мыши') {} else {
+			if (!/[Бб].?[Нн]/g.test(unit.serial_number)) {
+				if (unit.type === 'Коврик для мыши') {} else {
 					unitsWOSn.push({
 						type: unit.type,
 						name: unit.name,
@@ -771,10 +495,10 @@ router.get("/excelExport", auth, async function (req, res) {
 					})
 				}
 			} else if (
-				unit.serial_number == pc.serial_number &&
-				unit.type != 'Системный блок' &&
-				unit.type != 'Корпус' &&
-				unit.type != 'Коврик для мыши'
+				unit.serial_number === pc.serial_number &&
+				unit.type !== 'Системный блок' &&
+				unit.type !== 'Корпус' &&
+				unit.type !== 'Коврик для мыши'
 			) {
 				unitsWPcSn.push({
 					type: unit.type,
@@ -785,7 +509,7 @@ router.get("/excelExport", auth, async function (req, res) {
 			}
 		}
 		for (const unit of pc.system_case_unit) {
-			if (/[Бб].?[Нн]/g.test(unit.serial_number)) {
+			if (!/[Бб].?[Нн]/g.test(unit.serial_number)) {
 
 				unitsWOSn.push({
 					type: unit.type,
@@ -794,9 +518,9 @@ router.get("/excelExport", auth, async function (req, res) {
 					serial_number: unit.serial_number
 				})
 			} else if (
-				unit.serial_number == pc.serial_number &&
-				unit.type != 'Системный блок' &&
-				unit.type != 'Корпус'
+				unit.serial_number === pc.serial_number &&
+				unit.type !== 'Системный блок' &&
+				unit.type !== 'Корпус'
 			) {
 				unitsWPcSn.push({
 					type: unit.type,
@@ -827,7 +551,7 @@ router.get("/excelExport", auth, async function (req, res) {
 
 	// выгрузка в отчет комплектухи c номерами машин
 	for (const un of unitsWPcSn) {
-		if (un.type == type) {
+		if (un.type === type) {
 			st = style
 			stB = styleB
 		} else {
@@ -871,7 +595,7 @@ router.get("/excelExport", auth, async function (req, res) {
 
 	const appDir = path.dirname(require.main.filename)
 	const docDir = appDir + '/public/docx'
-	pathToExcel = `${docDir}/excel.xlsx`
+	const pathToExcel = `${docDir}/excel.xlsx`
 
 	workbook.write(pathToExcel, function () {
 		console.log('PKI report xlsx generated')
@@ -880,9 +604,7 @@ router.get("/excelExport", auth, async function (req, res) {
 	})
 })
 
-
 router.get("/excelExport1", auth, async function (req, res) {
-	const sortSelect = req.query.sortSelect
 	let workbook = new excel.Workbook({
 		defaultFont: {
 			size: 12,
@@ -916,30 +638,6 @@ router.get("/excelExport1", auth, async function (req, res) {
 		}
 	})
 
-	let style1 = workbook.createStyle({
-		font: {
-			size: 12
-		},
-		border: {
-			left: {
-				style: 'thin',
-				color: 'black',
-			},
-			right: {
-				style: 'thin',
-				color: 'black',
-			},
-			top: {
-				style: 'thick',
-				color: 'black',
-			},
-			bottom: {
-				style: 'thin',
-				color: 'black',
-			},
-		}
-	})
-
 	let styleB = workbook.createStyle({
 		font: {
 			size: 12,
@@ -956,31 +654,6 @@ router.get("/excelExport1", auth, async function (req, res) {
 			},
 			top: {
 				style: 'thin',
-				color: 'black',
-			},
-			bottom: {
-				style: 'thin',
-				color: 'black',
-			},
-		}
-	})
-
-	let style1B = workbook.createStyle({
-		font: {
-			size: 12,
-			bold: true
-		},
-		border: {
-			left: {
-				style: 'thin',
-				color: 'black',
-			},
-			right: {
-				style: 'thin',
-				color: 'black',
-			},
-			top: {
-				style: 'thick',
 				color: 'black',
 			},
 			bottom: {
@@ -1035,21 +708,12 @@ router.get("/excelExport1", auth, async function (req, res) {
 		'created': 1
 	})
 
-
-	// ws.column(1).setWidth(3)
-	// ws.column(2).setWidth(30)
-	// ws.column(3).setWidth(20)
-	// ws.column(4).setWidth(25)
-	// ws.column(5).setWidth(5)
-	// ws.column(6).setWidth(25)
-
 	ws.column(1).setWidth(3)
 	ws.column(2).setWidth(18.5)
 	ws.column(3).setWidth(16.6)
 	ws.column(4).setWidth(16.5)
 	ws.column(5).setWidth(4.6)
 	ws.column(6).setWidth(24.5)
-
 
 	ws.row(1).setHeight(30)
 	ws.cell(1, 2).string(req.session.part).style(styleHead)
@@ -1069,15 +733,14 @@ router.get("/excelExport1", auth, async function (req, res) {
 		n += 1
 		for (const unit of pc.pc_unit) {
 			let pki = ''
-			if (/[Бб].?[Нн]/g.test(unit.serial_number)) {
-				if (unit.apkzi != "apkzi" && unit.type != 'Системный блок' && unit.serial_number != pc.serial_number) {
+			if (!/[Бб].?[Нн]/g.test(unit.serial_number)) {
+				if (unit.apkzi !== "apkzi" && unit.type !== 'Системный блок' && unit.serial_number !== pc.serial_number) {
 					for (const pk of pkis) {
-						if (pk.serial_number == unit.serial_number) {
+						if (pk.serial_number === unit.serial_number) {
 							pki = pk
 							break
 						}
 					}
-					//	pki = await Pki.findOne({part: req.session.part, serial_number: unit.serial_number})
 				}
 			}
 
@@ -1088,17 +751,8 @@ router.get("/excelExport1", auth, async function (req, res) {
 				ws.cell(n, 5).string(unit.quantity).style(style)
 				ws.cell(n, 6).string(unit.serial_number).style(style)
 				n += 1
-				// if (pki.sp_unit && pki.sp_unit.length > 0) {
-				// 	for (const u of pki.sp_unit) {
-				// 		ws.cell(n, 2).string(u.name).style(style)
-				// 		ws.cell(n, 3).string(u.vendor).style(style)
-				// 		ws.cell(n, 4).string(u.model).style(style)
-				// 		ws.cell(n, 5).string(u.quantity).style(style)
-				// 		ws.cell(n, 6).string(u.serial_number).style(style)
-				// 		n += 1
-				// 	}
-				// }
-			} else if (!unit.apkzi && unit.type != 'Системный блок' && unit.type != 'Коврик для мыши') {
+
+			} else if (!unit.apkzi && unit.type !== 'Системный блок' && unit.type !== 'Коврик для мыши') {
 				let name = unit.name.split(' ')
 				let vendor = name.splice(0, 1).join(' ')
 				let model = name.join(' ')
@@ -1112,18 +766,15 @@ router.get("/excelExport1", auth, async function (req, res) {
 		}
 		for (const unit of pc.system_case_unit) {
 			let pki = ''
-
-			if (/[Бб].?[Нн]/g.test(unit.serial_number)) {
-				if (unit.serial_number != pc.serial_number || unit.type == 'Корпус') {
+			if (!/[Бб].?[Нн]/g.test(unit.serial_number)) {
+				if (unit.serial_number !== pc.serial_number || unit.type === 'Корпус') {
 					for (const pk of pkis) {
-						if (pk.serial_number == unit.serial_number) {
+						if (pk.serial_number === unit.serial_number) {
 							pki = pk
 							break
 						}
 					}
-					//pki = await Pki.findOne({part: req.session.part, serial_number: unit.serial_number})
 				}
-
 			}
 			if (pki) {
 				ws.cell(n, 2).string(unit.type).style(styleB)
@@ -1132,16 +783,6 @@ router.get("/excelExport1", auth, async function (req, res) {
 				ws.cell(n, 5).string(unit.quantity).style(style)
 				ws.cell(n, 6).string(unit.serial_number).style(style)
 				n += 1
-				// if (pki.sp_unit && pki.sp_unit.length > 0) {
-				// 	for (const u of pki.sp_unit) {
-				// 		ws.cell(n, 2).string(u.name).style(style)
-				// 		ws.cell(n, 3).string(u.vendor).style(style)
-				// 		ws.cell(n, 4).string(u.model).style(style)
-				// 		ws.cell(n, 5).string(u.quantity).style(style)
-				// 		ws.cell(n, 6).string(u.serial_number).style(style)
-				// 		n += 1
-				// 	}
-				// }
 			} else if (!unit.szi) {
 				let name = unit.name.split(' ')
 				let vendor = name.splice(0, 1).join(' ')
@@ -1156,10 +797,9 @@ router.get("/excelExport1", auth, async function (req, res) {
 		}
 	}
 
-
 	const appDir = path.dirname(require.main.filename)
 	const docDir = appDir + '/public/docx'
-	pathToExcel = `${docDir}/excel.xlsx`
+	const pathToExcel = `${docDir}/excel.xlsx`
 
 	workbook.write(pathToExcel, function () {
 		console.log('PKI report xlsx generated')

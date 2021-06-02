@@ -192,7 +192,7 @@ async function addPkiSubmit() {
   localStorage.country = country
   localStorage.part = part
 
-  textToSpeech(serial_number.slice(-3), 5)
+  textToSpeech(serial_number.slice(-3), 1)
 
   if (!type_pki) {
     validate(document.getElementById("type_pki"))

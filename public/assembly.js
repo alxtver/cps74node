@@ -222,17 +222,17 @@ function edit_serial_number(id, obj, unit, serialNumber) {
   }
   postData('/pcPa/insert_serial', data).then((data) => {
     flashAlert(data)
-    UpdateCells(data.pc)
-    const pc = document.getElementById('serial_number')
-    const serialNumber = pc.innerHTML
-    const user = document.getElementById('userName').value
-    socket.emit('updateAssemblyPC', {
-      serialNumber,
-      user,
-      id
-    })
-    if (allOK()) {
-      textToSpeech('Все серийники введены!', 2)
+    if (!data.duplicatePki) {
+      const serialNumber = data.pc.serial_number
+      const oldNumberMachine = (data.oldNumberMachine !== serialNumber) ? data.oldNumberMachine : null
+      UpdateCells(data.pc, oldNumberMachine)
+      const user = document.getElementById('userName').value
+      const id = data.pc._id
+      socket.emit('updateAssemblyPC', {
+        serialNumber,
+        user,
+        id
+      })
     }
   })
 }
@@ -258,7 +258,7 @@ function edit_serial_number_apkzi(id, obj, unit, serialNumber) {
       })
       textToSpeech(document.getElementById('apkziDiv').innerHTML, 2)
       if (allOK()) {
-        textToSpeech('Все серийники введены!', 2)
+        textToSpeech('Все серийники введены!', 1)
       }
     })
 }
@@ -284,19 +284,27 @@ function allOK() {
 }
 
 function flashAlert(data) {
-  let oldNumberMachine = data.oldNumberMachine
-  const pcSN = data.pc.serial_number
-  if (oldNumberMachine) {
-    if (oldNumberMachine != pcSN) {
-      document.querySelector('.popup-checkbox').checked = true
-      const msg_txt = 'Серийник был привязан к машине с номером ' + oldNumberMachine
-      document.getElementById('oldNumber').innerHTML = msg_txt
-      const audio = {};
-      audio["alert"] = new Audio();
-      audio["alert"].src = "/sounds/alert.mp3"
-      audio["alert"].play()
-    } else {
-      oldNumberMachine = null
+  if (data.duplicatePki) {
+    document.querySelector('.popup-checkbox').checked = true
+    document.getElementById('oldNumber').innerHTML = 'Такой серийник уже есть!!!'
+    const audio = {};
+    audio["alert"] = new Audio();
+    audio["alert"].src = "/sounds/alert.mp3"
+    audio["alert"].play()
+  } else {
+    let oldNumberMachine = data.oldNumberMachine
+    const pcSN = data.pc.serial_number
+    if (oldNumberMachine) {
+      if (oldNumberMachine !== pcSN) {
+        document.querySelector('.popup-checkbox').checked = true
+        document.getElementById('oldNumber').innerHTML = 'Серийник был привязан к машине с номером ' + oldNumberMachine
+        const audio = {};
+        audio["alert"] = new Audio();
+        audio["alert"].src = "/sounds/alert.mp3"
+        audio["alert"].play()
+      } else {
+        oldNumberMachine = null
+      }
     }
   }
 }
@@ -341,7 +349,7 @@ function UpdateCells(pc) {
       let rows = document.querySelector(".serial_number[data-data='" + next_id.join(';') + "']").parentElement
       let row = rows.children
       if (row) {
-        textToSpeech(row[0].innerText, 5)
+        textToSpeech(row[0].innerText, 1)
       }
     }
     painting()

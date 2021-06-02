@@ -59,7 +59,7 @@ router.post('/getSpec', auth, async (req, res) => {
             if (spec[pki]) {
               spec[pki] += Number(unit.quantity)
             } else {
-              spec[pki] = 1
+              spec[pki] = Number(unit.quantity)
             }
           }
         }
@@ -71,7 +71,7 @@ router.post('/getSpec', auth, async (req, res) => {
             if (spec[pki]) {
               spec[pki] += Number(unit.quantity)
             } else {
-              spec[pki] = 1
+              spec[pki] = Number(unit.quantity)
             }
           }
         }
@@ -86,7 +86,7 @@ router.post('/getSpec', auth, async (req, res) => {
             if (spec[pki]) {
               spec[pki] += Number(unit.quantity)
             } else {
-              spec[pki] = 1
+              spec[pki] = Number(unit.quantity)
             }
           }
         } else {
