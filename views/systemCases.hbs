@@ -1,0 +1,94 @@
+<script src="/systemCase.js"></script>
+<script type="text/javascript" src="/lib/socketIO/socket.io.js"></script>
+<div class="container">
+    <div class="input-group mt-2 mb-3">
+        <button class="btn btn-outline-dark me-1 mt-1" onclick="location.href='/systemCases/add';">Добавить системный блок</button>
+    </div>
+
+    <div class="popup-wrapper">
+        <input type="checkbox" class="popup-checkbox" id="popupCheckboxOne">
+        <div class="popup">
+            <div class="popup-content">
+                <label for="popupCheckboxOne" class="popup-closer">&times;</label>
+                <p id="oldNumber" class="alert alert-danger mt-1"></p>
+                <input id="hiddInp" type="hidden" value="">
+            </div>
+        </div>
+    </div>
+
+    <div id="overlay">
+        <div class="spinner " id="spinner">
+            <div class="rect1"></div>
+            <div class="rect2"></div>
+            <div class="rect3"></div>
+            <div class="rect4"></div>
+            <div class="rect5"></div>
+        </div>
+    </div>
+    <div id="PC"></div>
+    <form>
+        <input type="hidden" name="_csrf" value="{{csrf}}">
+    </form>
+
+    {{!-- модальное окно копирования--}}
+    <div class="modal fade" id="modalCopy" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Серийный номер</h5>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/pcPa/copy" method="post">
+          <span>Введите серийный номер нового системного блока или диапазон номеров через ";" (например: XXXX-XXX-0001;
+            XXXX-XXX-0005)</span>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <div class="modal-body">
+                        <input id="inputCopy" name="serial_number" type="text" value="" class="form-control">
+                        <div class="mb-2" id="hidd"></div>
+                    </div>
+                    <input type="hidden" name="id" id="hidInputCopy">
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Закрыть</button>
+                        <button type="submit" id="btnSubmit" class="btn btn-primary" disabled>Сохранить</button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{!-- модальное окно удаления--}}
+    <div class="modal fade" id="modalDel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Удалить Системный блок?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <form>
+                    <p id="serial"></p>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <input type="hidden" name="id" id="hidId">
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Закрыть</button>
+                        <button type="button" id="btnSub" onclick="delBtn()" data-bs-dismiss="modal"
+                                class="btn btn-danger">Удалить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        loadSystemCaseData()
+    })
+</script>
