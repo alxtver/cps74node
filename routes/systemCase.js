@@ -6,6 +6,7 @@ const SystemCase = require("../models/systemCase");
 router.get("/", auth, async (req, res) => {
   res.render("systemCases", {
     title: "Системные блоки",
+    isSystemCase: true,
   });
 });
 

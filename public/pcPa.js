@@ -1,30 +1,3 @@
-function addRow() {
-  let records = document.querySelectorAll('input[name="record"]')
-  for (const rec of records) {
-    if (rec.checked) {
-      let checkedRow = rec.closest("tr")
-      let newRow = document.createElement("tr")
-      insCell('', newRow, "<input type='checkbox' name='record'>", 'record')
-      insCell('', newRow, '', 'fdsi', 'fdsi', true)
-      insCell('', newRow, '', 'type', 'type', true)
-      insCell('', newRow, '', 'name', 'name', true)
-      insCell('', newRow, '1', 'quantity', 'quantity', true)
-      insCell('', newRow, '', 'serial_number', 'serial_number', true)
-      insCell('', newRow, '', 'notes', 'notes', true)
-      checkedRow.parentNode.insertBefore(newRow, checkedRow.nextSibling)
-    }
-  }
-}
-
-function delRow() {
-  let records = document.querySelectorAll('input[name="record"]')
-  for (const rec of records) {
-    if (rec.checked) {
-      rec.closest("tr").remove()
-    }
-  }
-}
-
 function setColor() {
   let c = document.getElementById('color-input').value
   let content = document.querySelector('.tableContent')
@@ -61,16 +34,9 @@ function CreateTablePC() {
     'Сетевой фильтр',
     'Гарнитура'
   ]
-  for (const unit of complectPCUnit) {
-    let tr = tableRef.insertRow(-1)
-    insCell(unit, tr, "<input type='checkbox' name='record'>", 'record')
-    insCell(unit, tr, '', 'fdsi', 'fdsi', true)
-    insCell(unit, tr, unit, 'type', 'type', true)
-    insCell(unit, tr, '', 'name', 'name', true)
-    insCell(unit, tr, '1', 'quantity', 'quantity', true)
-    insCell(unit, tr, '', 'serial_number', 'serial_number', true)
-    insCell(unit, tr, '', 'notes', 'notes', true)
-  }
+
+  createTableBody(complectPCUnit, tableRef)
+
   tr = tableRef.insertRow(-1)
   tr.className = 'apkzi'
   insCell('', tr, "<input type='checkbox' name='record'>", 'record', 'record')
@@ -119,41 +85,20 @@ function CreateTableSystemCase() {
     'Корзина для НЖМД',
     'Оптический привод'
   ]
-  for (const unit of complectSystemCaseUnit) {
-    tr = tableRef.insertRow(-1)
-    insCell(unit, tr, "<input type='checkbox' name='record'>", 'record')
-    insCell(unit, tr, '', 'fdsi', 'fdsi', true)
-    insCell(unit, tr, unit, 'type', 'type', true)
-    insCell(unit, tr, '', 'name', 'name', true)
-    insCell(unit, tr, '1', 'quantity', 'quantity', true)
-    insCell(unit, tr, '', 'serial_number', 'serial_number', true)
-    insCell(unit, tr, '', 'notes', 'notes', true)
-  }
-  tr = tableRef.insertRow(-1)
-  tr.className = 'apkzi'
-  insCell('', tr, "<input type='checkbox' name='record'>", 'record', 'record')
-  insCell('', tr, '', 'fdsi', 'fdsi', true)
-  insCell('', tr, 'Контроллер СЗИ10 PCI', 'type', 'type', true, {
-    'apkzi': 'szi'
-  })
-  insCell('', tr, '', 'name', 'name', true)
-  insCell('', tr, '1', 'quantity', 'quantity', true)
-  insCell('', tr, '', 'serial_number', 'serial_number', true, {
-    'apkzi': 'szi'
-  })
-  insCell('', tr, '', 'notes', 'notes', true)
+  createTableBody(complectSystemCaseUnit, tableRef)
+  createSZIRow(tableRef)
 }
 
 function painting() {
   let nameCells = document.querySelectorAll('td.name')
   let snCells = document.querySelectorAll('td.serial_number')
   for (const cell of nameCells) {
-    if (cell.innerHTML == 'Н/Д') {
+    if (cell.innerHTML === 'Н/Д') {
       cell.style.backgroundColor = 'coral'
     }
   }
   for (const cell of snCells) {
-    if (cell.innerHTML == '') {
+    if (cell.innerHTML === '') {
       cell.style.backgroundColor = 'darkgray'
     }
   }
