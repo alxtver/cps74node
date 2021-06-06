@@ -65,7 +65,7 @@ router.post('/edit_ajax', auth, async (req, res) => {
     if (pc) {
       let unit = 'pc_unit'
       for (let i in pc[unit]) {
-        if (pki.serial_number == pc[unit][i].serial_number) {
+        if (pki.serial_number === pc[unit][i].serial_number) {
           pc[unit][i].name = pki.vendor + " " + pki.model
           pc[unit][i].type = pki.type_pki
           break
@@ -73,7 +73,7 @@ router.post('/edit_ajax', auth, async (req, res) => {
       }
       unit = 'system_case_unit'
       for (let i in pc[unit]) {
-        if (pki.serial_number == pc[unit][i].serial_number) {
+        if (pki.serial_number === pc[unit][i].serial_number) {
           pc[unit][i].name = pki.vendor + " " + pki.model
           pc[unit][i].type = pki.type_pki
           break

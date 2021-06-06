@@ -455,44 +455,7 @@ function edit_serial_number_apkzi(id, obj, unit, serial_number) {
     })
 }
 
-function buttons(container, pc) {
-  let button_copy = document.createElement('input')
-  button_copy.type = "button"
-  button_copy.className = 'btn btn-outline-primary me-2 mb-2 ms-3 copyBtn'
-  button_copy.onchange = "clkCopy()"
-  button_copy.value = 'Копировать'
-  button_copy.dataset.id = pc._id
-  button_copy.dataset.serial_number = pc.serial_number
-  button_copy.dataset.bsToggle = 'modal'
-  button_copy.dataset.bsTarget = '#modalCopy'
-  button_copy.addEventListener('click', (e) => {
-    document.getElementById('hidInputCopy').value = e.target.dataset.id
-    document.getElementById('inputCopy').value = e.target.dataset.serial_number
-  })
-  container.appendChild(button_copy)
 
-  let button_edit = document.createElement('input')
-  button_edit.type = 'button'
-  button_edit.className = 'btn btn-outline-success me-2 mb-2'
-  button_edit.value = 'Редактировать'
-  button_edit.setAttribute("onclick", "location.href='/pcPa/" + pc._id + "/edit?allow=true'")
-  button_edit.dataset.id = pc._id
-  container.appendChild(button_edit)
-
-  let button_del = document.createElement('input')
-  button_del.type = 'button'
-  button_del.className = 'btn btn-outline-danger me-2 mb-2 delBtn float-end'
-  button_del.value = 'Удалить'
-  button_del.dataset.id = pc._id
-  button_del.dataset.serial_number = pc.serial_number
-  button_del.dataset.bsTarget = '#modalDel'
-  button_del.dataset.bsToggle = 'modal'
-  button_del.addEventListener('click', (e) => {
-    document.getElementById('hidId').value = e.target.dataset.id
-    document.getElementById('serial').innerHTML = 'Серийный номер - ' + e.target.dataset.serial_number
-  })
-  container.appendChild(button_del)
-}
 
 function updateOnePC(id, reqUser) {
   postData('/pcPa/getPC', {
@@ -500,7 +463,7 @@ function updateOnePC(id, reqUser) {
     })
     .then((data) => {
       const user = document.getElementById('userName').value
-      if (user != reqUser) {
+      if (user !== reqUser) {
         const card = document.getElementById(data.pc._id)
         card.classList.add('pcCardAssemblyUpdate')
         UpdateCells(data.pc, null, false)
@@ -638,7 +601,7 @@ function testPC() {
       for (let i = 0; i < serials.length; i++) {
         let tr = table.insertRow(-1)
         let td = document.createElement("td")
-        if (results[i] == 'ok') {
+        if (results[i] === 'ok') {
           td.className = 'cellOK'
         } else {
           td.className = 'cellNotOK'
@@ -646,7 +609,7 @@ function testPC() {
         td.innerHTML = serials[i]
         tr.appendChild(td)
         td = document.createElement("td")
-        if (results[i] == 'ok') {
+        if (results[i] === 'ok') {
           td.className = 'cellOK'
         } else {
           td.className = 'cellNotOK'
@@ -839,14 +802,14 @@ function submitFormAddPc() {
     let system_case_unit = []
     const systemCaseUnitTr = document.querySelectorAll('#system_case_unit tr')
     systemCaseUnitTr.forEach((tr, i) => {
-      if (i == 0) return true
+      if (i === 0) return true
       let fdsi = tr.querySelector('.fdsi').innerText
       let type = tr.querySelector('.type').innerText
       let name = tr.querySelector('.name').innerText
       let quantity = tr.querySelector('.quantity').innerText
       let serial_number = tr.querySelector('.serial_number').innerText
       let notes = tr.querySelector('.notes').innerText
-      if (tr.className == 'apkzi') {
+      if (tr.className === 'apkzi') {
         system_case_unit.push({
           i: i,
           fdsi: fdsi,
@@ -881,7 +844,7 @@ function submitFormAddPc() {
     }
     postData('/pcPa/add', data)
       .then((res) => {
-        if (res.message == 'ok') {
+        if (res.message === 'ok') {
           window.location = "/pcPa?part=" + data.part + "&serial_number=" + data.serial_number + "'"
         }
       })

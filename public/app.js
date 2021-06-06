@@ -483,7 +483,7 @@ function tablePC(pc, units = "all", contentEditable = true, ...rows) {
     }
     let arr_system_case_unit = pc.system_case_unit;
     for (let j = 0; j < arr_system_case_unit.length; j++) {
-      tr = table.insertRow(-1);
+      tr = table.insertRow();
       for (const row of rows) {
         if (row !== "serial_number") {
           insCell("", tr, arr_system_case_unit[j][row], row, "", false, {
@@ -645,4 +645,43 @@ function delRow() {
       rec.closest("tr").remove()
     }
   }
+}
+
+function buttons(container, pc) {
+  let button_copy = document.createElement('input')
+  button_copy.type = "button"
+  button_copy.className = 'btn btn-outline-primary me-2 mb-2 ms-3 copyBtn'
+  button_copy.onchange = "clkCopy()"
+  button_copy.value = 'Копировать'
+  button_copy.dataset.id = pc._id
+  button_copy.dataset.serial_number = pc.serial_number
+  button_copy.dataset.bsToggle = 'modal'
+  button_copy.dataset.bsTarget = '#modalCopy'
+  button_copy.addEventListener('click', (e) => {
+    document.getElementById('hidInputCopy').value = e.target.dataset.id
+    document.getElementById('inputCopy').value = e.target.dataset.serial_number
+  })
+  container.appendChild(button_copy)
+
+  let button_edit = document.createElement('input')
+  button_edit.type = 'button'
+  button_edit.className = 'btn btn-outline-success me-2 mb-2'
+  button_edit.value = 'Редактировать'
+  button_edit.setAttribute("onclick", "location.href='/pcPa/" + pc._id + "/edit?allow=true'")
+  button_edit.dataset.id = pc._id
+  container.appendChild(button_edit)
+
+  let button_del = document.createElement('input')
+  button_del.type = 'button'
+  button_del.className = 'btn btn-outline-danger me-2 mb-2 delBtn float-end'
+  button_del.value = 'Удалить'
+  button_del.dataset.id = pc._id
+  button_del.dataset.serial_number = pc.serial_number
+  button_del.dataset.bsTarget = '#modalDel'
+  button_del.dataset.bsToggle = 'modal'
+  button_del.addEventListener('click', (e) => {
+    document.getElementById('hidId').value = e.target.dataset.id
+    document.getElementById('serial').innerHTML = 'Серийный номер - ' + e.target.dataset.serial_number
+  })
+  container.appendChild(button_del)
 }

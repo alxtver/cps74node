@@ -3,6 +3,7 @@
  */
 document.addEventListener("DOMContentLoaded", function () {
   createSystemCaseTable();
+  addSystemCase();
   //     CreateTableSystemCase()
   //     submitFormAddPc()
   //     const serialInput = document.getElementById('serial_number')
@@ -44,20 +45,74 @@ function createSystemCaseTable() {
   tableContainer.appendChild(table);
 
   // тело таблицы
-  const tableBody = document.querySelector('tbody')
+  const tableBody = document.querySelector("tbody");
   const defaultEquipment = [
-    'Корпус',
-    'Процессор',
-    'Вентилятор процессора',
-    'Блок питания',
-    'Оперативная память',
-    'Оперативная память',
-    'Системная плата',
-    'Видеокарта',
-    'Накопитель на жестком магнитном диске',
-    'Корзина для НЖМД',
-    'Оптический привод'
-  ]
-  createTableBody(defaultEquipment, tableBody)
-  createSZIRow(tableBody)
+    "Корпус",
+    "Процессор",
+    "Вентилятор процессора",
+    "Блок питания",
+    "Оперативная память",
+    "Оперативная память",
+    "Системная плата",
+    "Видеокарта",
+    "Накопитель на жестком магнитном диске",
+    "Корзина для НЖМД",
+    "Оптический привод",
+  ];
+  createTableBody(defaultEquipment, tableBody);
+  createSZIRow(tableBody);
+}
+
+/**
+ * Добавить строку СЗИ
+ */
+function addSZI() {
+  const tBody = document.querySelector("tbody")
+  if (!tBody.querySelector('.apkzi')) {
+    createSZIRow(tBody);
+  }
+}
+
+/**
+ * Сохранить системный блок
+ */
+function addSystemCase() {
+  const form = document.querySelector("form");
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const systemCase = new SystemCase();
+    systemCase.part = document.querySelector("#part").value;
+    systemCase.fdsi = document.querySelector("#fdsi").value;
+    systemCase.serialNumber = document.querySelector("#serial_number").value;
+    systemCase.arm = document.querySelector("#arm").value;
+    systemCase.execution = document.querySelector("#execution").value;
+    systemCase.attachment = document.querySelector("#attachment").value;
+    // состав системного блока
+    const tableRows = document.querySelectorAll("#systemCaseTable tbody tr");
+    tableRows.forEach((row, index) => {
+      const unit = {
+        i: index,
+        fdsi: row.querySelector(".fdsi").innerText.trim(),
+        type: row.querySelector(".type").innerText.trim(),
+        name: row.querySelector(".name").innerText.trim(),
+        quantity: row.querySelector(".quantity").innerText.trim(),
+        serial_number: row.querySelector(".serial_number").innerText.trim(),
+        notes: row.querySelector(".notes").innerText.trim(),
+      };
+      if (row.className === "apkzi") {
+        unit.szi = "apkzi";
+      }
+      systemCase.systemCaseUnits.push(unit);
+    });
+    systemCase.addSystemCase().then((response) => {
+      if (response.message === "ok") {
+        window.location =
+          "/systemCases?part=" +
+          systemCase.part +
+          "&serial_number=" +
+          systemCase.serialNumber +
+          "'";
+      }
+    });
+  });
 }

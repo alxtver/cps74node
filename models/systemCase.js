@@ -2,13 +2,14 @@ const { Schema, model } = require("mongoose");
 
 const systemCaseSchema = new Schema(
   {
-    serial_number: {
+    serialNumber: {
       type: String,
       required: true,
       unique: true,
     },
     execution: {
       type: String,
+      default: ''
     },
     fdsi: {
       type: String,
@@ -18,7 +19,8 @@ const systemCaseSchema = new Schema(
       type: String,
       required: true,
     },
-    systemCaseUnits: [{
+    systemCaseUnits: Array,
+    pki: [{
       type: Schema.Types.ObjectId,
       ref: 'Pki'
     }],
@@ -28,9 +30,12 @@ const systemCaseSchema = new Schema(
     },
     back_color: {
       type: String,
-      default: "#3d3d3d",
+      default: "#8989a7",
     },
-    attachment: String,
+    attachment: {
+      type: String,
+      default: () => ''
+    }
   },
   {
     versionKey: false,

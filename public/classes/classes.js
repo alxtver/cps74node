@@ -49,6 +49,7 @@ class APKZI {
 }
 
 class SystemCase {
+  serialNumber;
   constructor({
     serialNumber = "0000-000-0000",
     execution = "",
@@ -57,6 +58,8 @@ class SystemCase {
     created = () => Date.now() + 3 * 60 * 60 * 1000,
     backColor = "#3d3d3d",
     pcNumber = "",
+    attachment = "",
+    systemCaseUnits = [],
   } = {}) {
     this.serialNumber = serialNumber;
     this.execution = execution;
@@ -64,9 +67,11 @@ class SystemCase {
     this.part = part;
     this.creates = created();
     this.backColor = backColor;
-    this.number_machine = number_machine;
+    this.pcNumber = pcNumber;
+    this.attachment = attachment;
+    this.systemCaseUnits = systemCaseUnits;
   }
-  async addAPKZIToDB() {
-    return await postData("/add/apkzi", this);
+  async addSystemCase() {
+    return await postData("/systemCases/add", this);
   }
 }
