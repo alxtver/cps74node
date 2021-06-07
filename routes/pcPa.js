@@ -9,6 +9,7 @@ const auth = require('../middleware/auth')
 const User = require('../models/user')
 const router = Router()
 const snReModifer = require('./foo/snReModifer')
+const plusOne = require('./foo/app')
 
 
 router.get('/', auth, async (req, res) => {
@@ -483,32 +484,15 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
 router.post('/copy', auth, async (req, res) => {
   const pc = await PC.findById(req.body.id)
 
-  function plusOne(number) {
-    let indexChar = 0
-    for (let index = 0; index < number.length; index++) {
-      if (!/\d/.test(number[index])) {
-        indexChar = index
-      }
-    }
-    let first_part = number.slice(0, indexChar + 1)
-    let second_part = number.slice(indexChar + 1)
-    if (second_part != '') {
-      let lenSecondPart = second_part.length
-      return first_part + (parseInt(second_part) + 1).toString().padStart(lenSecondPart, "0")
-    } else {
-      return (parseInt(first_part) + 1).toString()
-    }
-  }
-
   let reqSerial = req.body.serial_number
   let range = reqSerial.split(';')
   if (range.length > 1) {
     let firstNumber = range[0].trim() //убираем пробелы, если есть
     let lastNumber = range[1].trim()
     let number = firstNumber
-    while (number != plusOne(lastNumber)) {
+    while (number !== plusOne(lastNumber)) {
       const pc = await PC.findById(req.body.id)
-      checkPCNumber = await PC.findOne({
+      const checkPCNumber = await PC.findOne({
         serial_number: number
       })
       if (!checkPCNumber) {
@@ -524,8 +508,8 @@ router.post('/copy', auth, async (req, res) => {
           system_case_unit: []
         })
 
-        for (unit of pc.pc_unit) {
-          if (unit.serial_number == pc.serial_number) {
+        for (const unit of pc.pc_unit) {
+          if (unit.serial_number === pc.serial_number) {
             unit.serial_number = number
             newPC.pc_unit.push(unit)
           } else if (/[Бб].?[Нн]/g.test(unit.serial_number)) {
@@ -537,8 +521,8 @@ router.post('/copy', auth, async (req, res) => {
           }
         }
 
-        for (unit of pc.system_case_unit) {
-          if (unit.serial_number == pc.serial_number) {
+        for (const unit of pc.system_case_unit) {
+          if (unit.serial_number === pc.serial_number) {
             unit.serial_number = number
             newPC.system_case_unit.push(unit)
           } else if (/[Бб].?[Нн]/g.test(unit.serial_number)) {

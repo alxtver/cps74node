@@ -25,10 +25,11 @@
             <div class="rect5"></div>
         </div>
     </div>
+
     <div id="systemCases"></div>
-    <form>
-        <input type="hidden" name="_csrf" value="{{csrf}}">
-    </form>
+
+    <input type="hidden" id="hidd_id" value="0">
+    <input type="hidden" name="_csrf" value="{{csrf}}">
 
     {{!-- модальное окно копирования--}}
     <div class="modal fade" id="modalCopy" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -42,19 +43,18 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="/pcPa/copy" method="post">
-          <span>Введите серийный номер нового системного блока или диапазон номеров через ";" (например: XXXX-XXX-0001;
-            XXXX-XXX-0005)</span>
-                    <input type="hidden" name="_csrf" value="{{csrf}}">
-                    <div class="modal-body">
+                <form action="/systemCases/copy" method="post">
+                      <span>Введите серийный номер нового системного блока или диапазон номеров через ";" (например: XXXX-XXX-0001;
+                        XXXX-XXX-0005)</span>
+                      <input type="hidden" name="_csrf" value="{{csrf}}">
+                      <div class="modal-body">
                         <input id="inputCopy" name="serial_number" type="text" value="" class="form-control">
                         <div class="mb-2" id="hidd"></div>
-                    </div>
+                      </div>
                     <input type="hidden" name="id" id="hidInputCopy">
                     <div class="modal-footer">
                         <button type="button" class="btn btn-success" data-bs-dismiss="modal">Закрыть</button>
                         <button type="submit" id="btnSubmit" class="btn btn-primary" disabled>Сохранить</button>
-
                     </div>
                 </form>
             </div>
@@ -87,8 +87,3 @@
     </div>
 </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        loadSystemCaseData()
-    })
-</script>

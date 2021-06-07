@@ -648,13 +648,14 @@ function delRow() {
 }
 
 function buttons(container, pc) {
+  const serialNumber = pc.serial_number || pc.serialNumber
   let button_copy = document.createElement('input')
   button_copy.type = "button"
   button_copy.className = 'btn btn-outline-primary me-2 mb-2 ms-3 copyBtn'
   button_copy.onchange = "clkCopy()"
   button_copy.value = 'Копировать'
   button_copy.dataset.id = pc._id
-  button_copy.dataset.serial_number = pc.serial_number
+  button_copy.dataset.serial_number = serialNumber
   button_copy.dataset.bsToggle = 'modal'
   button_copy.dataset.bsTarget = '#modalCopy'
   button_copy.addEventListener('click', (e) => {
@@ -684,4 +685,36 @@ function buttons(container, pc) {
     document.getElementById('serial').innerHTML = 'Серийный номер - ' + e.target.dataset.serial_number
   })
   container.appendChild(button_del)
+}
+
+/**
+ * Поиск серийного номера
+ * @param url
+ * @param serialNumber
+ * @param element
+ */
+function findSerialNumber(url, serialNumber, element) {
+  let data = {
+    serial: serialNumber
+  }
+  postData(url, data)
+    .then((data) => {
+      if (data) {
+        element.style.backgroundColor = 'indianred'
+        let h = document.getElementById('hidd')
+        let danger = document.getElementById('danger')
+        if (!danger) {
+          let d = document.createElement('div')
+          d.id = 'danger'
+          d.style.color = 'indianred'
+          d.innerHTML = 'Машина с таким номером существует'
+          h.append(d)
+        }
+        document.getElementById('btnSubmit').disabled = true
+      } else {
+        document.getElementById('inputCopy').style.backgroundColor = 'white'
+        if (document.getElementById('danger')) document.getElementById('danger').remove()
+        document.getElementById('btnSubmit').disabled = false
+      }
+    })
 }

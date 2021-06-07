@@ -535,32 +535,6 @@ function UpdateCells(pc, oldNumberMachine, voice = true) {
   }
 }
 
-function find_serial(serial) {
-  let data = {
-    serial: serial
-  }
-  postData('/pcPa/find_serial', data)
-    .then((data) => {
-      if (data) {
-        document.getElementById('inputCopy').style.backgroundColor = 'indianred'
-        let h = document.getElementById('hidd')
-        let danger = document.getElementById('danger')
-        if (!danger) {
-          let d = document.createElement('div')
-          d.id = 'danger'
-          d.style.color = 'indianred'
-          d.innerHTML = 'Машина с таким номером существует'
-          h.append(d)
-        }
-        document.getElementById('btnSubmit').disabled = true
-      } else {
-        document.getElementById('inputCopy').style.backgroundColor = 'white'
-        if (document.getElementById('danger')) document.getElementById('danger').remove()
-        document.getElementById('btnSubmit').disabled = false
-      }
-    })
-}
-
 function clkCopy() {
   document.getElementById('inputCopy').focus()
   document.getElementById('btnSubmit').disabled = true

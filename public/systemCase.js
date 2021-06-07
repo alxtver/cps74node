@@ -1,4 +1,15 @@
 /**
+ * Действия после загрузки дома
+ */
+document.addEventListener("DOMContentLoaded", function () {
+  loadSystemCaseData()
+  const copyInput = document.getElementById('inputCopy')
+  copyInput.addEventListener('keyup', (e) => {
+    findSerialNumber('/systemCases/findSerial', e.target.value, copyInput)
+  })
+})
+
+/**
  * Загрузка системных блоков
  */
 async function loadSystemCaseData() {
@@ -101,4 +112,9 @@ function createSystemCaseTable(systemCases, callback) {
     buttons(div, systemCase)
   }
   callback();
+}
+
+function clkCopy() {
+  document.getElementById('inputCopy').focus()
+  document.getElementById('btnSubmit').disabled = true
 }

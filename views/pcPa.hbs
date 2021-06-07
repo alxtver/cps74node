@@ -207,7 +207,7 @@
 
   const copyInput = document.getElementById('inputCopy')
   copyInput.addEventListener('keyup', (e) => {
-    find_serial(e.target.value)
+      findSerialNumber('/pcPa/find_serial', e.target.value, copyInput)
   })
   const uri = 'ws://' + location.hostname + ':3001'
   const socket = io(uri, {
