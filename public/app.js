@@ -677,7 +677,7 @@ function buttons(container, pc) {
   button_del.className = 'btn btn-outline-danger me-2 mb-2 delBtn float-end'
   button_del.value = 'Удалить'
   button_del.dataset.id = pc._id
-  button_del.dataset.serial_number = pc.serial_number
+  button_del.dataset.serial_number = serialNumber
   button_del.dataset.bsTarget = '#modalDel'
   button_del.dataset.bsToggle = 'modal'
   button_del.addEventListener('click', (e) => {

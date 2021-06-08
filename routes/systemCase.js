@@ -67,6 +67,19 @@ router.post("/findSerial", auth, async (req, res) => {
 });
 
 /**
+ * Удалить системный блок
+ */
+router.delete("/delete", auth, async (req, res) => {
+  try {
+    await SystemCase.deleteOne({ _id: req.body.id });
+    res.status(200).json({ message: "ok" });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: "system case is not delete!" });
+  }
+});
+
+/**
  * Копирование системных блоков
  */
 router.post("/copy", auth, async (req, res) => {

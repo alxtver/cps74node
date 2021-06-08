@@ -118,3 +118,16 @@ function clkCopy() {
   document.getElementById('inputCopy').focus()
   document.getElementById('btnSubmit').disabled = true
 }
+
+/**
+ * Удалить системный блок
+ */
+function delBtn() {
+  const id = document.getElementById('hidId').value
+  deleteData('/systemCases/delete', {id})
+    .then((data) => {
+      if (data.message === 'ok') {
+        document.getElementById(id).remove();
+      }
+    })
+}
