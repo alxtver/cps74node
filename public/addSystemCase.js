@@ -64,16 +64,6 @@ function createSystemCaseTable() {
 }
 
 /**
- * Добавить строку СЗИ
- */
-function addSZI() {
-  const tBody = document.querySelector("tbody")
-  if (!tBody.querySelector('.apkzi')) {
-    createSZIRow(tBody);
-  }
-}
-
-/**
  * Сохранить системный блок
  */
 function addSystemCase() {
@@ -87,23 +77,11 @@ function addSystemCase() {
     systemCase.arm = document.querySelector("#arm").value;
     systemCase.execution = document.querySelector("#execution").value;
     systemCase.attachment = document.querySelector("#attachment").value;
+
     // состав системного блока
     const tableRows = document.querySelectorAll("#systemCaseTable tbody tr");
-    tableRows.forEach((row, index) => {
-      const unit = {
-        i: index,
-        fdsi: row.querySelector(".fdsi").innerText.trim(),
-        type: row.querySelector(".type").innerText.trim(),
-        name: row.querySelector(".name").innerText.trim(),
-        quantity: row.querySelector(".quantity").innerText.trim(),
-        serial_number: row.querySelector(".serial_number").innerText.trim(),
-        notes: row.querySelector(".notes").innerText.trim(),
-      };
-      if (row.className === "apkzi") {
-        unit.szi = "apkzi";
-      }
-      systemCase.systemCaseUnits.push(unit);
-    });
+    systemCase.systemCaseUnits = arrayFromTable(tableRows)
+
     systemCase.addSystemCase().then((response) => {
       if (response.message === "ok") {
         window.location =

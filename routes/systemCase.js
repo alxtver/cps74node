@@ -80,6 +80,37 @@ router.delete("/delete", auth, async (req, res) => {
 });
 
 /**
+ * Редактировать системный блок
+ */
+router.get("/:id/edit", auth, async (req, res) => {
+  if (!req.query.allow) {
+    return res.redirect("/");
+  }
+  const systemCase = await SystemCase.findById(req.params.id).lean();
+
+  res.render("systemCaseEdit", {
+    title: `Редактирование системного блока ${systemCase.serialNumber}`,
+    systemCase,
+  });
+});
+
+/**
+ * Получить системный блок
+ */
+router.get("/getSystemCase/:id/", auth, async (req, res) => {
+  const systemCase = await SystemCase.findById(req.params.id).lean();
+  res.status(200).json({ systemCase });
+});
+
+/**
+ * Обновить системный блок
+ */
+router.put("/update", auth, async (req, res) => {
+  await SystemCase.findByIdAndUpdate(req.body.id, req.body.data);
+  res.status(200).json({ message: "ok" });
+});
+
+/**
  * Копирование системных блоков
  */
 router.post("/copy", auth, async (req, res) => {

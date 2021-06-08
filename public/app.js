@@ -647,7 +647,7 @@ function delRow() {
   }
 }
 
-function buttons(container, pc) {
+function buttons(container, pc, editUrl) {
   const serialNumber = pc.serial_number || pc.serialNumber
   let button_copy = document.createElement('input')
   button_copy.type = "button"
@@ -668,7 +668,7 @@ function buttons(container, pc) {
   button_edit.type = 'button'
   button_edit.className = 'btn btn-outline-success me-2 mb-2'
   button_edit.value = 'Редактировать'
-  button_edit.setAttribute("onclick", "location.href='/pcPa/" + pc._id + "/edit?allow=true'")
+  button_edit.setAttribute("onclick", `location.href='${editUrl}'`)
   button_edit.dataset.id = pc._id
   container.appendChild(button_edit)
 
@@ -717,4 +717,50 @@ function findSerialNumber(url, serialNumber, element) {
         document.getElementById('btnSubmit').disabled = false
       }
     })
+}
+
+/**
+ * Дефолтный хэдер
+ * @param table
+ */
+function defaultHeader(table) {
+  const tHead = table.createTHead() // TABLE ROW.
+  const row = tHead.insertRow()
+  insCell('', row, '', 'table-dark', '', false)
+  insCell('', row, 'Обозначение изделия', 'table-dark', '', false)
+  insCell('', row, 'Наименование изделия', 'table-dark', '', false)
+  insCell('', row, 'Характеристика', 'table-dark', '', false)
+  insCell('', row, 'Количество', 'table-dark', '', false)
+  insCell('', row, 'Заводской номер', 'table-dark', '', false)
+  insCell('', row, 'Примечания', 'table-dark', '', false)
+}
+
+/**
+ * Добавить строку СЗИ
+ */
+function addSZI() {
+  const tBody = document.querySelector("tbody")
+  if (!tBody.querySelector('.apkzi')) {
+    createSZIRow(tBody);
+  }
+}
+
+function arrayFromTable(tableRows) {
+  const units = []
+  tableRows.forEach((row, index) => {
+    const unit = {
+      i: index,
+      fdsi: row.querySelector(".fdsi").innerText.trim(),
+      type: row.querySelector(".type").innerText.trim(),
+      name: row.querySelector(".name").innerText.trim(),
+      quantity: row.querySelector(".quantity").innerText.trim(),
+      serial_number: row.querySelector(".serial_number").innerText.trim(),
+      notes: row.querySelector(".notes").innerText.trim(),
+    };
+    if (row.className === "apkzi") {
+      unit.szi = "apkzi";
+    }
+    units.push(unit);
+  });
+  return units
 }

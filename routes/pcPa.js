@@ -717,17 +717,17 @@ router.get('/test', auth, async (req, res) => {
   let serials = []
   let results = []
   for (const pc of pcs) {
-    var status = 'ok'
+    let status = 'ok'
     if (pc.pc_unit.length > 0) {
       for (const unit of pc.pc_unit) {
-        if (unit.name == '' && unit.type != 'Системный блок' || unit.name == 'Н/Д' || unit.serial_number == '') {
+        if (unit.name === '' && unit.type !== 'Системный блок' || unit.name === 'Н/Д' || unit.serial_number === '') {
           status = 'not ok!'
         }
       }
     }
     if (pc.system_case_unit.length > 0) {
       for (const unit of pc.system_case_unit) {
-        if (unit.type == '' || unit.name == '' || unit.name == 'Н/Д' || unit.serial_number == '') {
+        if (unit.type === '' || unit.name === '' || unit.name === 'Н/Д' || unit.serial_number === '') {
           status = 'not ok!'
         }
       }

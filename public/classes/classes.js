@@ -49,7 +49,6 @@ class APKZI {
 }
 
 class SystemCase {
-  serialNumber;
   constructor({
     serialNumber = "0000-000-0000",
     execution = "",

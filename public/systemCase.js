@@ -109,7 +109,7 @@ function createSystemCaseTable(systemCases, callback) {
     div.innerHTML = "";
     div.appendChild(table);
 
-    buttons(div, systemCase)
+    buttons(div, systemCase, `/systemCases/${systemCase._id}/edit?allow=true`)
   }
   callback();
 }
@@ -127,7 +127,7 @@ function delBtn() {
   deleteData('/systemCases/delete', {id})
     .then((data) => {
       if (data.message === 'ok') {
-        document.getElementById(id).remove();
+        document.getElementById(id).style.display = 'none'
       }
     })
 }

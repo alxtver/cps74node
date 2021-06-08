@@ -180,14 +180,7 @@ function TableEditPcUnit(pc) {
   table.className = "table table-sm table-bordered table-hover"
   table.id = "pc_unit"
 
-  let tr = table.insertRow(-1) // TABLE ROW.
-  insCell('', tr, '', 'header', '', false)
-  insCell('', tr, 'Обозначение изделия', 'header', '', false)
-  insCell('', tr, 'Наименование изделия', 'header', '', false)
-  insCell('', tr, 'Характеристика', 'header', '', false)
-  insCell('', tr, 'Количество', 'header', '', false)
-  insCell('', tr, 'Заводской номер', 'header', '', false)
-  insCell('', tr, 'Примечания', 'header', '', false)
+  defaultHeader(table)
 
   let arr_pc_unit = pc.pc_unit
   for (let j = 0; j < arr_pc_unit.length; j++) {
@@ -209,8 +202,7 @@ function TableEditPcUnit(pc) {
       'id': pc._id
     })
     let serial_numberCell = tr.insertCell(-1)
-    let sn = arr_pc_unit[j].serial_number
-    serial_numberCell.innerHTML = sn
+    serial_numberCell.innerHTML = arr_pc_unit[j].serial_number
 
     serial_numberCell.dataset.id = pc._id
     serial_numberCell.dataset.obj = j
@@ -233,14 +225,8 @@ function TableEditSystemCase(pc) {
   let table = document.createElement("table")
   table.className = "table table-sm table-bordered table-hover"
   table.id = "system_case_unit"
-  let tr = table.insertRow(-1) // TABLE ROW.
-  insCell('', tr, '', 'header', '', false)
-  insCell('', tr, 'Обозначение изделия', 'header', '', false)
-  insCell('', tr, 'Наименование изделия', 'header', '', false)
-  insCell('', tr, 'Характеристика', 'header', '', false)
-  insCell('', tr, 'Количество', 'header', '', false)
-  insCell('', tr, 'Заводской номер', 'header', '', false)
-  insCell('', tr, 'Примечания', 'header', '', false)
+
+  defaultHeader(table)
 
   let arrSystemCaseUnit = pc.system_case_unit
   for (let j = 0; j < arrSystemCaseUnit.length; j++) {
@@ -262,8 +248,7 @@ function TableEditSystemCase(pc) {
       'id': pc._id
     })
     let serial_numberCell = tr.insertCell(-1)
-    let sn = arrSystemCaseUnit[j].serial_number
-    serial_numberCell.innerHTML = sn
+    serial_numberCell.innerHTML = arrSystemCaseUnit[j].serial_number
 
     serial_numberCell.dataset.id = pc._id
     serial_numberCell.dataset.obj = j
@@ -303,7 +288,7 @@ function CreateTableFromJSON(data, callback) {
     divCont.innerHTML = ""
     divCont.appendChild(table)
 
-    buttons(divCont, data[i])
+    buttons(divCont, data[i], `/pcPa/${data[i]._id}/edit?allow=true`)
   }
   callback()
 }
@@ -864,14 +849,14 @@ function submitPC() {
   let pc_unit = []
   const pcUnitTr = document.querySelectorAll('#pc_unit tr')
   pcUnitTr.forEach((tr, i) => {
-    if (i == 0) return true
+    if (i === 0) return true
     let fdsi = tr.querySelector('.fdsi').innerText
     let type = tr.querySelector('.type').innerText
     let name = tr.querySelector('.name').innerText
     let quantity = tr.querySelector('.quantity').innerText
     let serial_number = tr.querySelector('.serial_number').innerText
     let notes = tr.querySelector('.notes').innerText
-    if (tr.className == 'apkzi') {
+    if (tr.className === 'apkzi') {
       pc_unit.push({
         i: i,
         fdsi: fdsi,
@@ -898,7 +883,7 @@ function submitPC() {
   let system_case_unit = []
   const systemCaseUnitTr = document.querySelectorAll('#system_case_unit tr')
   systemCaseUnitTr.forEach((tr, i) => {
-    if (i == 0) return true
+    if (i === 0) return true
     let fdsi = tr.querySelector('.fdsi').innerText
     let type = tr.querySelector('.type').innerText
     let name = tr.querySelector('.name').innerText
