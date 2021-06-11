@@ -68,6 +68,7 @@ function createSystemCaseTable(systemCase, container) {
   }
   for (const unit of systemCase.systemCaseUnits) {
     const row = table.insertRow();
+    row.className = 'system-case-row'
     insCell("", row, unit.fdsi, "", "", false, { id: systemCase._id });
     insCell("", row, unit.type, "", "", false, { id: systemCase._id });
     insCell("", row, unit.name, "name", "", false, { id: systemCase._id });
@@ -203,4 +204,16 @@ function delBtn() {
         document.getElementById(id).style.display = 'none'
       }
     })
+}
+
+function painting() {
+  for (const row of document.querySelectorAll('.system-case-row')) {
+    const nameCell = row.querySelector(".name");
+    const snCell = row.querySelector(".serial_number");
+    if (nameCell.innerHTML === 'Н/Д') {
+      row.style.backgroundColor = 'coral'
+      continue
+    }
+    snCell.style.backgroundColor = snCell.innerHTML === "" ? "darkgray" : "";
+  }
 }

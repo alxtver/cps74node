@@ -795,10 +795,11 @@ function flashAlert(data, serialNumber) {
 function painting() {
   const nameCells = document.querySelectorAll("td.name");
   const snCells = document.querySelectorAll("td.serial_number");
+
+  for (const cell of nameCells) {
+    cell.style.backgroundColor = cell.innerHTML === "Н/Д" ? "coral" : "";
+  }
   for (const cell of snCells) {
     cell.style.backgroundColor = cell.innerHTML === "" ? "darkgray" : "";
-  }
-  for (const cell of nameCells) {
-    cell.parentElement.style.backgroundColor = cell.innerHTML === "Н/Д" ? "coral" : "";
   }
 }
