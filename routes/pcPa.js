@@ -255,8 +255,6 @@ router.post('/insert_serial', auth, async (req, res) => {
     serial_number: serial_number
   })
 
-
-
   if (!pki) {
     let snReMod = await snReModifer(serial_number, pc.part)
     serial_number = snReMod.SN

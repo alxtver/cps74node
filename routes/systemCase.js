@@ -2,9 +2,11 @@ const { Router } = require("express");
 const auth = require("../middleware/auth");
 const router = Router();
 const SystemCase = require("../models/systemCase");
+const PKI = require("../models/pki");
 const Part = require("../models/part");
 const plusOne = require("./foo/app");
 const mongoose = require("mongoose");
+const snReModifer = require("./foo/snReModifer");
 
 router.get("/", auth, async (req, res) => {
   res.render("systemCases", {
@@ -108,6 +110,126 @@ router.get("/getSystemCase/:id/", auth, async (req, res) => {
 router.put("/update", auth, async (req, res) => {
   await SystemCase.findByIdAndUpdate(req.body.id, req.body.data);
   res.status(200).json({ message: "ok" });
+});
+
+/**
+ * Редактировать серийный номер
+ */
+router.put("/editSerialNumber", auth, async (req, res) => {
+  const systemCase = await SystemCase.findById(req.body.id); //ищем комп который собираемся редактировать
+  let serialNumber = req.body.serialNumber;
+  const unit = req.body.unit;
+  const index = req.body.obj;
+  const part = req.session.part;
+  let pki = await PKI.findOne({
+    part: systemCase.part,
+    serial_number: serialNumber,
+  });
+
+  if (!pki) {
+    const snReMod = await snReModifer(serialNumber, systemCase.part);
+    serialNumber = snReMod.SN;
+    pki = snReMod.pki;
+  }
+
+  // Проверка на привязку ПКИ к этой же машине
+  let duplicatePki = false;
+  if (serialNumber !== "" && serialNumber !== systemCase.serialNumber) {
+    for (const unit of systemCase.systemCaseUnits) {
+      if (unit.serial_number === serialNumber) {
+        duplicatePki = true;
+        break;
+      }
+    }
+  }
+  if (duplicatePki) {
+    res.send(JSON.stringify({ duplicatePki }));
+    return false;
+  }
+
+  // ПКИ который раньше был на этом месте
+  const oldSerialNumber = systemCase.systemCaseUnits[index].serial_number;
+  const oldPki = oldSerialNumber
+    ? await PKI.findOne({ part, serial_number: oldSerialNumber })
+    : undefined;
+
+  if (oldPki) {
+    if (oldPki.number_machine !== systemCase.serialNumber) {
+      oldPki.number_machine = "";
+      await oldPki.save();
+    } else {
+      // если ПКИ задублировались, то чтобы при удалении одного не отвязывался другой
+      // применяем цикл
+      let countPki = 0;
+      for (const unit of systemCase.systemCaseUnits) {
+        if (unit.serial_number === oldPki.serial_number) {
+          countPki += 1;
+        }
+      }
+      if (countPki <= 1) {
+        oldPki.number_machine = "";
+        await oldPki.save();
+      }
+    }
+  }
+
+  let oldNumberMachine; //номер машины, который раньше был у ПКИ
+  if (pki) {
+    if (pki.number_machine) {
+      oldNumberMachine = pki.number_machine;
+      pki.number_machine = systemCase.serial_number;
+      await pki.save();
+    }
+  }
+  // Если ПКИ был привязан удаляем ПКИ из старой машины
+  let oldSystemCase
+  if (oldNumberMachine) {
+    if (oldNumberMachine !== systemCase.serialNumber) {
+      oldSystemCase = await SystemCase.findOne({
+        serialNumber: oldNumberMachine,
+      });
+      if (oldSystemCase) {
+        for (const unit of oldSystemCase.systemCaseUnits) {
+          if (unit.serial_number === pki.serial_number) {
+            unit.serial_number = "";
+            unit.name = "Н/Д";
+          }
+        }
+        oldSystemCase.markModified("systemCaseUnits");
+        await oldSystemCase.save();
+      }
+    }
+  }
+  // Проверяем был ли привязан ПКИ к машине и привязываем к новой машине
+  if (pki) {
+    if (pki.number_machine) {
+      if (pki.number_machine === systemCase.serialNumber) {
+        pki.number_machine = "";
+      } else {
+        oldNumberMachine = pki.number_machine;
+      }
+    }
+    pki.number_machine = systemCase.serialNumber;
+    await pki.save();
+    // Добавляем ПКИ к новой машине
+    systemCase.systemCaseUnits[req.body.obj].serial_number = serialNumber; //меняем серийник
+    systemCase.systemCaseUnits[req.body.obj].name =
+      pki.vendor + " " + pki.model; //меняем имя
+    systemCase.systemCaseUnits[req.body.obj].type = pki.type_pki; //меняем тип
+    systemCase.markModified("systemCaseUnits");
+    await systemCase.save();
+  } else {
+    systemCase.systemCaseUnits[req.body.obj].serial_number = serialNumber;
+    systemCase.systemCaseUnits[req.body.obj].name = "Н/Д";
+    systemCase.markModified("systemCaseUnits");
+    await systemCase.save();
+  }
+  res.send(
+    JSON.stringify({
+      systemCase,
+      oldSystemCase
+    })
+  );
 });
 
 /**

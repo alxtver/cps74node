@@ -89,21 +89,6 @@ function CreateTableSystemCase() {
   createSZIRow(tableRef)
 }
 
-function painting() {
-  let nameCells = document.querySelectorAll('td.name')
-  let snCells = document.querySelectorAll('td.serial_number')
-  for (const cell of nameCells) {
-    if (cell.innerHTML === 'Н/Д') {
-      cell.style.backgroundColor = 'coral'
-    }
-  }
-  for (const cell of snCells) {
-    if (cell.innerHTML === '') {
-      cell.style.backgroundColor = 'darkgray'
-    }
-  }
-}
-
 function loadPage(page, pages) {
   const overlay = document.getElementById('overlay')
   overlay.style.display = 'block'
@@ -441,7 +426,6 @@ function edit_serial_number_apkzi(id, obj, unit, serial_number) {
 }
 
 
-
 function updateOnePC(id, reqUser) {
   postData('/pcPa/getPC', {
       id
@@ -460,7 +444,6 @@ function updateOnePC(id, reqUser) {
 }
 
 function UpdateCells(pc, oldNumberMachine, voice = true) {
-
   if (oldNumberMachine) {
     // Обновление всех таблиц
     let page = document.getElementById('page').value
@@ -471,7 +454,7 @@ function UpdateCells(pc, oldNumberMachine, voice = true) {
     //Обновление только одной таблицы
     let divContainer = document.getElementById(pc._id)
     divContainer.innerHTML = ""
-    table = tablePC(pc, 'all', true,
+    const table = tablePC(pc, 'all', true,
       'fdsi',
       'type',
       'name',
@@ -927,7 +910,7 @@ function submitPC() {
   }
   postData('/pcPa/pc_update', data)
     .then((res) => {
-      if (res.message == 'ok') {
+      if (res.message === 'ok') {
         window.location = "/pcPa?part=" + data.part + "&serial_number=" + data.serial_number + "'"
       }
     })

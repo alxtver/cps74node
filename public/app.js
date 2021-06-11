@@ -618,19 +618,19 @@ function createSZIRow(tableBody) {
  * Добавить строку в таблице
  */
 function addRow() {
-  let records = document.querySelectorAll('input[name="record"]')
+  let records = document.querySelectorAll('input[name="record"]');
   for (const rec of records) {
     if (rec.checked) {
-      let checkedRow = rec.closest("tr")
-      let newRow = document.createElement("tr")
-      insCell('', newRow, "<input type='checkbox' name='record'>", 'record')
-      insCell('', newRow, '', 'fdsi', 'fdsi', true)
-      insCell('', newRow, '', 'type', 'type', true)
-      insCell('', newRow, '', 'name', 'name', true)
-      insCell('', newRow, '1', 'quantity', 'quantity', true)
-      insCell('', newRow, '', 'serial_number', 'serial_number', true)
-      insCell('', newRow, '', 'notes', 'notes', true)
-      checkedRow.parentNode.insertBefore(newRow, checkedRow.nextSibling)
+      let checkedRow = rec.closest("tr");
+      let newRow = document.createElement("tr");
+      insCell("", newRow, "<input type='checkbox' name='record'>", "record");
+      insCell("", newRow, "", "fdsi", "fdsi", true);
+      insCell("", newRow, "", "type", "type", true);
+      insCell("", newRow, "", "name", "name", true);
+      insCell("", newRow, "1", "quantity", "quantity", true);
+      insCell("", newRow, "", "serial_number", "serial_number", true);
+      insCell("", newRow, "", "notes", "notes", true);
+      checkedRow.parentNode.insertBefore(newRow, checkedRow.nextSibling);
     }
   }
 }
@@ -639,52 +639,53 @@ function addRow() {
  * Удалить строку из таблицы
  */
 function delRow() {
-  let records = document.querySelectorAll('input[name="record"]')
+  let records = document.querySelectorAll('input[name="record"]');
   for (const rec of records) {
     if (rec.checked) {
-      rec.closest("tr").remove()
+      rec.closest("tr").remove();
     }
   }
 }
 
 function buttons(container, pc, editUrl) {
-  const serialNumber = pc.serial_number || pc.serialNumber
-  let button_copy = document.createElement('input')
-  button_copy.type = "button"
-  button_copy.className = 'btn btn-outline-primary me-2 mb-2 ms-3 copyBtn'
-  button_copy.onchange = "clkCopy()"
-  button_copy.value = 'Копировать'
-  button_copy.dataset.id = pc._id
-  button_copy.dataset.serial_number = serialNumber
-  button_copy.dataset.bsToggle = 'modal'
-  button_copy.dataset.bsTarget = '#modalCopy'
-  button_copy.addEventListener('click', (e) => {
-    document.getElementById('hidInputCopy').value = e.target.dataset.id
-    document.getElementById('inputCopy').value = e.target.dataset.serial_number
-  })
-  container.appendChild(button_copy)
+  const serialNumber = pc.serial_number || pc.serialNumber;
+  let button_copy = document.createElement("input");
+  button_copy.type = "button";
+  button_copy.className = "btn btn-outline-primary me-2 mb-2 ms-3 copyBtn";
+  button_copy.onchange = "clkCopy()";
+  button_copy.value = "Копировать";
+  button_copy.dataset.id = pc._id;
+  button_copy.dataset.serial_number = serialNumber;
+  button_copy.dataset.bsToggle = "modal";
+  button_copy.dataset.bsTarget = "#modalCopy";
+  button_copy.addEventListener("click", (e) => {
+    document.getElementById("hidInputCopy").value = e.target.dataset.id;
+    document.getElementById("inputCopy").value = e.target.dataset.serial_number;
+  });
+  container.appendChild(button_copy);
 
-  let button_edit = document.createElement('input')
-  button_edit.type = 'button'
-  button_edit.className = 'btn btn-outline-success me-2 mb-2'
-  button_edit.value = 'Редактировать'
-  button_edit.setAttribute("onclick", `location.href='${editUrl}'`)
-  button_edit.dataset.id = pc._id
-  container.appendChild(button_edit)
+  let button_edit = document.createElement("input");
+  button_edit.type = "button";
+  button_edit.className = "btn btn-outline-success me-2 mb-2";
+  button_edit.value = "Редактировать";
+  button_edit.setAttribute("onclick", `location.href='${editUrl}'`);
+  button_edit.dataset.id = pc._id;
+  container.appendChild(button_edit);
 
-  let button_del = document.createElement('input')
-  button_del.type = 'button'
-  button_del.className = 'btn btn-outline-danger me-2 mb-2 delBtn float-end'
-  button_del.value = 'Удалить'
-  button_del.dataset.id = pc._id
-  button_del.dataset.serial_number = serialNumber
-  button_del.dataset.bsTarget = '#modalDel'
-  button_del.dataset.bsToggle = 'modal'
-  button_del.addEventListener('click', (e) => {
-    document.getElementById('hidId').value = e.target.dataset.id
-    document.getElementById('serial').innerHTML = 'Серийный номер - ' + e.target.dataset.serial_number
-  })
-  container.appendChild(button_del)
+  let button_del = document.createElement("input");
+  button_del.type = "button";
+  button_del.className = "btn btn-outline-danger me-2 mb-2 delBtn float-end";
+  button_del.value = "Удалить";
+  button_del.dataset.id = pc._id;
+  button_del.dataset.serial_number = serialNumber;
+  button_del.dataset.bsTarget = "#modalDel";
+  button_del.dataset.bsToggle = "modal";
+  button_del.addEventListener("click", (e) => {
+    document.getElementById("hidId").value = e.target.dataset.id;
+    document.getElementById("serial").innerHTML =
+      "Серийный номер - " + e.target.dataset.serial_number;
+  });
+  container.appendChild(button_del);
 }
 
 /**
@@ -695,28 +696,28 @@ function buttons(container, pc, editUrl) {
  */
 function findSerialNumber(url, serialNumber, element) {
   let data = {
-    serial: serialNumber
-  }
-  postData(url, data)
-    .then((data) => {
-      if (data) {
-        element.style.backgroundColor = 'indianred'
-        let h = document.getElementById('hidd')
-        let danger = document.getElementById('danger')
-        if (!danger) {
-          let d = document.createElement('div')
-          d.id = 'danger'
-          d.style.color = 'indianred'
-          d.innerHTML = 'Машина с таким номером существует'
-          h.append(d)
-        }
-        document.getElementById('btnSubmit').disabled = true
-      } else {
-        document.getElementById('inputCopy').style.backgroundColor = 'white'
-        if (document.getElementById('danger')) document.getElementById('danger').remove()
-        document.getElementById('btnSubmit').disabled = false
+    serial: serialNumber,
+  };
+  postData(url, data).then((data) => {
+    if (data) {
+      element.style.backgroundColor = "indianred";
+      let h = document.getElementById("hidd");
+      let danger = document.getElementById("danger");
+      if (!danger) {
+        let d = document.createElement("div");
+        d.id = "danger";
+        d.style.color = "indianred";
+        d.innerHTML = "Машина с таким номером существует";
+        h.append(d);
       }
-    })
+      document.getElementById("btnSubmit").disabled = true;
+    } else {
+      document.getElementById("inputCopy").style.backgroundColor = "white";
+      if (document.getElementById("danger"))
+        document.getElementById("danger").remove();
+      document.getElementById("btnSubmit").disabled = false;
+    }
+  });
 }
 
 /**
@@ -724,29 +725,29 @@ function findSerialNumber(url, serialNumber, element) {
  * @param table
  */
 function defaultHeader(table) {
-  const tHead = table.createTHead() // TABLE ROW.
-  const row = tHead.insertRow()
-  insCell('', row, '', 'table-dark', '', false)
-  insCell('', row, 'Обозначение изделия', 'table-dark', '', false)
-  insCell('', row, 'Наименование изделия', 'table-dark', '', false)
-  insCell('', row, 'Характеристика', 'table-dark', '', false)
-  insCell('', row, 'Количество', 'table-dark', '', false)
-  insCell('', row, 'Заводской номер', 'table-dark', '', false)
-  insCell('', row, 'Примечания', 'table-dark', '', false)
+  const tHead = table.createTHead(); // TABLE ROW.
+  const row = tHead.insertRow();
+  insCell("", row, "", "table-dark", "", false);
+  insCell("", row, "Обозначение изделия", "table-dark", "", false);
+  insCell("", row, "Наименование изделия", "table-dark", "", false);
+  insCell("", row, "Характеристика", "table-dark", "", false);
+  insCell("", row, "Количество", "table-dark", "", false);
+  insCell("", row, "Заводской номер", "table-dark", "", false);
+  insCell("", row, "Примечания", "table-dark", "", false);
 }
 
 /**
  * Добавить строку СЗИ
  */
 function addSZI() {
-  const tBody = document.querySelector("tbody")
-  if (!tBody.querySelector('.apkzi')) {
+  const tBody = document.querySelector("tbody");
+  if (!tBody.querySelector(".apkzi")) {
     createSZIRow(tBody);
   }
 }
 
 function arrayFromTable(tableRows) {
-  const units = []
+  const units = [];
   tableRows.forEach((row, index) => {
     const unit = {
       i: index,
@@ -762,5 +763,42 @@ function arrayFromTable(tableRows) {
     }
     units.push(unit);
   });
-  return units
+  return units;
+}
+
+function flashAlert(data, serialNumber) {
+  if (data.duplicatePki) {
+    document.querySelector(".popup-checkbox").checked = true;
+    document.getElementById("oldNumber").innerHTML =
+      "Такой серийник уже есть!!!";
+    const audio = {};
+    audio["alert"] = new Audio();
+    audio["alert"].src = "/sounds/alert.mp3";
+    audio["alert"].play();
+    return false;
+  }
+  if (data.oldNumberMachine) {
+    if (data.oldNumberMachine !== serialNumber) {
+      document.querySelector(".popup-checkbox").checked = true;
+      document.getElementById("oldNumber").innerHTML =
+        "Серийник был привязан к машине с номером " + data.oldNumberMachine;
+      const audio = {};
+      audio["alert"] = new Audio();
+      audio["alert"].src = "/sounds/alert.mp3";
+      audio["alert"].play();
+    } else {
+      data.oldNumberMachine = null;
+    }
+  }
+}
+
+function painting() {
+  const nameCells = document.querySelectorAll("td.name");
+  const snCells = document.querySelectorAll("td.serial_number");
+  for (const cell of snCells) {
+    cell.style.backgroundColor = cell.innerHTML === "" ? "darkgray" : "";
+  }
+  for (const cell of nameCells) {
+    cell.parentElement.style.backgroundColor = cell.innerHTML === "Н/Д" ? "coral" : "";
+  }
 }

@@ -221,7 +221,7 @@ function edit_serial_number(id, obj, unit, serialNumber) {
     serial_number: serialNumber
   }
   postData('/pcPa/insert_serial', data).then((data) => {
-    flashAlert(data)
+    flashAlert(data, data.pc.serial_number)
     if (!data.duplicatePki) {
       const serialNumber = data.pc.serial_number
       const oldNumberMachine = (data.oldNumberMachine !== serialNumber) ? data.oldNumberMachine : null
@@ -246,7 +246,7 @@ function edit_serial_number_apkzi(id, obj, unit, serialNumber) {
   }
   postData('/pcPa/insert_serial_apkzi', data)
     .then((data) => {
-      flashAlert(data)
+      flashAlert(data, data.pc.serial_number)
       UpdateCells(data.pc)
       const pc = document.getElementById('serial_number')
       const serialNumber = pc.innerHTML
@@ -274,39 +274,13 @@ function allOK() {
     return prev
   }, true)
   const snIsOk = ([...snCells]).reduce((prev, value) => {
-    if (value.innerHTML == '') {
+    if (value.innerHTML === '') {
       value.style.backgroundColor = 'darkgray'
       prev = false
     }
     return prev
   }, true)
   return (nameIsOk && snIsOk)
-}
-
-function flashAlert(data) {
-  if (data.duplicatePki) {
-    document.querySelector('.popup-checkbox').checked = true
-    document.getElementById('oldNumber').innerHTML = 'Такой серийник уже есть!!!'
-    const audio = {};
-    audio["alert"] = new Audio();
-    audio["alert"].src = "/sounds/alert.mp3"
-    audio["alert"].play()
-  } else {
-    let oldNumberMachine = data.oldNumberMachine
-    const pcSN = data.pc.serial_number
-    if (oldNumberMachine) {
-      if (oldNumberMachine !== pcSN) {
-        document.querySelector('.popup-checkbox').checked = true
-        document.getElementById('oldNumber').innerHTML = 'Серийник был привязан к машине с номером ' + oldNumberMachine
-        const audio = {};
-        audio["alert"] = new Audio();
-        audio["alert"].src = "/sounds/alert.mp3"
-        audio["alert"].play()
-      } else {
-        oldNumberMachine = null
-      }
-    }
-  }
 }
 
 function UpdateCells(pc) {
