@@ -2,6 +2,7 @@ const { Router } = require("express");
 const auth = require("../middleware/auth");
 const router = Router();
 const SystemCase = require("../models/systemCase");
+const APKZI = require("../models/apkzi");
 const PKI = require("../models/pki");
 const Part = require("../models/part");
 const plusOne = require("./foo/app");
@@ -277,6 +278,48 @@ router.post("/copy", auth, async (req, res) => {
   }
   await SystemCase.insertMany(systemCasesForSave);
   res.redirect("/systemCases");
+});
+
+/**
+ * Редактирование серийника СЗИ
+ */
+router.post('/insertSystemCaseSZI', auth, async (req, res) => {
+  const systemCase = await SystemCase.findById(req.body.id) //ищем комп который собираемся редактировать
+  const controllerNumber = req.body.serialNumber
+  const index = req.body.index
+  const apkzi = await APKZI.findOne({
+    part: req.session.part,
+    kontr_zav_number: controllerNumber
+  })
+
+  const oldSystemCase = apkzi.number_mashine ? await SystemCase.findOne({
+    part: req.session.part,
+    serialNumber: apkzi.number_mashine
+  }) : null;
+  if (oldSystemCase) {
+    for (const unit of oldSystemCase.systemCaseUnits) {
+      if (unit.szi && unit.serial_number === controllerNumber) {
+        unit.serial_number = ''
+        break
+      }
+    }
+    oldSystemCase.markModified("systemCaseUnits");
+    await oldSystemCase.save();
+  }
+
+  const oldApkzi = !systemCase.systemCaseUnits[index].serial_number ?
+      null :
+      await APKZI.findOne({
+        part: req.session.part,
+        kontr_zav_number: systemCase.systemCaseUnits[index].serial_number
+      })
+  oldApkzi.number_machine = ''
+  oldApkzi.save()
+
+  console.log(apkzi)
+  console.log('sn-> ' + oldApkzi + ' <-sn')
+
+  res.sendStatus(200)
 });
 
 module.exports = router;

@@ -271,7 +271,7 @@ function autocomplete(inp, arr) {
   });
 
   inp.addEventListener("keydown", function (e) {
-    const x = document.getElementById(this.id + "autocomplete-list");
+    let x = document.getElementById(this.id + "autocomplete-list");
     if (x) x = x.getElementsByTagName("div");
     if (e.key === "ArrowDown") {
       currentFocus++;
@@ -881,15 +881,14 @@ function createSystemCaseTable(systemCase, container, assemblyTable = false) {
         e.preventDefault();
         const id = e.target.dataset.id;
         const obj = e.target.dataset.obj;
-        const unit = e.target.dataset.unit;
-        const serial_number = e.target.innerText;
+        const serialNumber = e.target.innerText;
         const data_hidd = e.target.dataset.data;
         const data_apkzi = e.target.dataset.apkzi;
         document.getElementById("hidd_id").value = data_hidd;
         if (data_apkzi) {
-          edit_serial_number_apkzi(id, obj, unit, serial_number);
+          insertSystemCaseSZI(id, obj, serialNumber);
         } else {
-          editSerialNumber(id, obj, unit, serial_number);
+          editSerialNumber(id, obj, serialNumber);
         }
       }
     });
@@ -981,3 +980,21 @@ function updateCells(systemCase, oldSystemCase, voice = true) {
     painting()
   }
 }
+
+function insertSystemCaseSZI(id, index, serialNumber) {
+  postData('/systemCases/insertSystemCaseSZI', {id, index, serialNumber})
+      .then((data) => {
+        flashAlert(data)
+        const serialNumber = data.pc.serial_number
+        const oldNumberMachine = (data.oldNumberMachine != serialNumber) ? data.oldNumberMachine : null
+        UpdateCells(data.pc, oldNumberMachine)
+        const user = document.getElementById('userName').value
+        const id = data.pc._id
+        socket.emit('updateAssemblyPC', {
+          serialNumber,
+          user,
+          id
+        })
+      })
+}
+
