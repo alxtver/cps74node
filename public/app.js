@@ -695,7 +695,7 @@ function buttons(container, pc, editUrl) {
  * @param element
  */
 function findSerialNumber(url, serialNumber, element) {
-  let data = {
+  const data = {
     serial: serialNumber,
   };
   postData(url, data).then((data) => {
@@ -767,6 +767,8 @@ function arrayFromTable(tableRows) {
 }
 
 function flashAlert(data, serialNumber) {
+  let oldMashine = data.oldNumberMachine || data.oldSystemCase.serialNumber
+
   if (data.duplicatePki) {
     document.querySelector(".popup-checkbox").checked = true;
     document.getElementById("oldNumber").innerHTML =
@@ -777,17 +779,17 @@ function flashAlert(data, serialNumber) {
     audio["alert"].play();
     return false;
   }
-  if (data.oldNumberMachine) {
-    if (data.oldNumberMachine !== serialNumber) {
+  if (oldMashine) {
+    if (oldMashine !== serialNumber) {
       document.querySelector(".popup-checkbox").checked = true;
       document.getElementById("oldNumber").innerHTML =
-        "Серийник был привязан к машине с номером " + data.oldNumberMachine;
+        "Серийник был привязан к машине с номером " + oldMashine;
       const audio = {};
       audio["alert"] = new Audio();
       audio["alert"].src = "/sounds/alert.mp3";
       audio["alert"].play();
     } else {
-      data.oldNumberMachine = null;
+      oldMashine = null;
     }
   }
 }
@@ -912,12 +914,11 @@ function createSystemCaseTable(systemCase, container, assemblyTable = false) {
   buttons(div, systemCase, `/systemCases/${systemCase._id}/edit?allow=true`)
 }
 
-function editSerialNumber(id, obj, unit, serialNumber) {
+function editSerialNumber(id, obj, serialNumber) {
   serialNumber = translate(serialNumber).ruToEnSN
   const data = {
     id: id,
     obj: obj,
-    unit: unit,
     serialNumber: serialNumber
   }
   putData('/systemCases/editSerialNumber', data).then((data) => {
@@ -997,4 +998,3 @@ function insertSystemCaseSZI(id, index, serialNumber) {
         })
       })
 }
-
