@@ -767,7 +767,7 @@ function arrayFromTable(tableRows) {
 }
 
 function flashAlert(data, serialNumber) {
-  let oldMashine = data.oldNumberMachine || data.oldSystemCase.serialNumber
+  let oldMashine = data.oldNumberMachine || data.oldSystemCase?.serialNumber
 
   if (data.duplicatePki) {
     document.querySelector(".popup-checkbox").checked = true;

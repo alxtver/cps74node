@@ -4,7 +4,7 @@ const PKI = require("../models/pki");
 const Part = require("../models/part");
 const plusOne = require("../routes/foo/app");
 const mongoose = require("mongoose");
-const snReModifer = require("../routes/foo/app");
+const snReModifer = require("../routes/foo/snReModifer");
 
 /**
  * Основная страница системных блоков
@@ -15,8 +15,8 @@ exports.getMainPage = (req, res) => {
   res.render("systemCases", {
       title: "Системные блоки",
       isSystemCase: true,
-    }
-  )}
+    })
+  }
 
 /**
  * Страница добавлени системного блока
@@ -140,20 +140,31 @@ exports.updateSystemCase = async (req, res) => {
  * @returns {Promise<boolean>}
  */
 exports.editSerialNumber = async (req, res) => {
-  const systemCase = await SystemCase.findById(req.body.id); //ищем комп который собираемся редактировать
+  const systemCase = await SystemCase.findById(req.body.id);
   let serialNumber = req.body.serialNumber;
   const index = req.body.obj;
   const part = req.session.part;
+
+  // Проверка на дублирование ПКИ
+  if (serialNumber !== "" && serialNumber !== systemCase.serialNumber) {
+    for (const unit of systemCase.systemCaseUnits) {
+      if (unit.serial_number === serialNumber) {
+        res.send(JSON.stringify({ duplicatePki: true }));
+        return false;
+      }
+    }
+  }
+
   let pki = await PKI.findOne({
-    part: systemCase.part,
+    part,
     serial_number: serialNumber,
   });
 
   if (!pki) {
     const snReMod = await snReModifer(serialNumber, systemCase.part);
-    serialNumber = snReMod.SN || serialNumber;
+    serialNumber = snReMod.SN;
     pki = snReMod.pki;
-    if (!pki) {
+    if (!snReMod.pki) {
       systemCase.systemCaseUnits[req.body.obj].serial_number = serialNumber;
       systemCase.systemCaseUnits[req.body.obj].name = "Н/Д";
       systemCase.markModified("systemCaseUnits");
@@ -167,22 +178,11 @@ exports.editSerialNumber = async (req, res) => {
     }
   }
 
-  // Проверка на привязку ПКИ к этой же машине
-  if (serialNumber !== "" && serialNumber !== systemCase.serialNumber) {
-    for (const unit of systemCase.systemCaseUnits) {
-      if (unit.serial_number === serialNumber) {
-        res.send(JSON.stringify({ duplicatePki: true }));
-        return false;
-      }
-    }
-  }
-
   // ПКИ который раньше был на этом месте
   const oldSerialNumber = systemCase.systemCaseUnits[index].serial_number;
   const oldPki = oldSerialNumber
     ? await PKI.findOne({ part, serial_number: oldSerialNumber })
     : undefined;
-
   if (oldPki) {
     if (oldPki.number_machine !== systemCase.serialNumber) {
       oldPki.number_machine = "";
