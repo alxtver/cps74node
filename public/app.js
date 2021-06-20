@@ -767,7 +767,7 @@ function arrayFromTable(tableRows) {
 }
 
 function flashAlert(data, serialNumber) {
-  let oldMashine = data.oldNumberMachine || data.oldSystemCase?.serialNumber
+  let oldMashine = data.oldNumberMachine || data.oldSystemCase?.serialNumber;
 
   if (data.duplicatePki) {
     document.querySelector(".popup-checkbox").checked = true;
@@ -810,7 +810,7 @@ function createSystemCaseTable(systemCase, container, assemblyTable = false) {
   const table = document.createElement("table");
   table.className = "table table-sm table-bordered table-hover";
   if (assemblyTable) {
-    table.className = 'table table-bordered table-hover assemblytable'
+    table.className = "table table-bordered table-hover assemblytable";
   }
   table.id = systemCase._id;
   let row = table.insertRow();
@@ -837,7 +837,7 @@ function createSystemCaseTable(systemCase, container, assemblyTable = false) {
   }
   let cell = document.createElement("td");
   cell.innerHTML = systemCase.serialNumber;
-  cell.id = assemblyTable ? 'serial_number' : systemCase.serialNumber;
+  cell.id = assemblyTable ? "serial_number" : systemCase.serialNumber;
   cell.style.cssText =
     "font-size: 1.5rem;background-color:" + systemCase.back_color;
   row.appendChild(cell);
@@ -859,7 +859,7 @@ function createSystemCaseTable(systemCase, container, assemblyTable = false) {
   }
   for (const unit of systemCase.systemCaseUnits) {
     const row = table.insertRow();
-    row.className = 'system-case-row'
+    row.className = "system-case-row";
     if (!assemblyTable) {
       insCell("", row, unit.fdsi, "", "", false, { id: systemCase._id });
     }
@@ -876,7 +876,8 @@ function createSystemCaseTable(systemCase, container, assemblyTable = false) {
     if (unit.szi) {
       serialNumberCell.dataset.apkzi = "szi";
     }
-    serialNumberCell.dataset.data = systemCase._id + ";" + unit.i + ";" + "system_case_unit";
+    serialNumberCell.dataset.data =
+      systemCase._id + ";" + unit.i + ";" + "system_case_unit";
     serialNumberCell.className = "serial_number";
     serialNumberCell.addEventListener("keypress", function (e) {
       if (e.key === "Enter") {
@@ -902,99 +903,122 @@ function createSystemCaseTable(systemCase, container, assemblyTable = false) {
   const div = document.createElement("div");
   div.id = systemCase._id;
   div.className = "pcCard mb-3 table-responsive";
-  div.style.cssText =
-    "-webkit-box-shadow: 0 30px 60px 0" +
-    systemCase.back_color +
-    ";box-shadow: 0 30px 60px 0" +
-    systemCase.back_color;
+  if (assemblyTable) {
+    div.style.cssText =
+      "-webkit-box-shadow: 0 2px 15px 0" +
+      systemCase.back_color +
+      ";box-shadow: 0 2px 15px 0" +
+      systemCase.back_color;
+  } else {
+    div.style.cssText =
+      "-webkit-box-shadow: 0 30px 60px 0" +
+      systemCase.back_color +
+      ";box-shadow: 0 30px 60px 0" +
+      systemCase.back_color;
+  }
   container.appendChild(div);
   div.innerHTML = "";
   div.appendChild(table);
 
-  buttons(div, systemCase, `/systemCases/${systemCase._id}/edit?allow=true`)
+  if (!assemblyTable) {
+    buttons(div, systemCase, `/systemCases/${systemCase._id}/edit?allow=true`);
+  }
 }
 
 function editSerialNumber(id, obj, serialNumber) {
-  serialNumber = translate(serialNumber).ruToEnSN
+  serialNumber = translate(serialNumber).ruToEnSN;
   const data = {
     id: id,
     obj: obj,
-    serialNumber: serialNumber
-  }
-  putData('/systemCases/editSerialNumber', data).then((data) => {
-    const serialNumber = data.systemCase?.serialNumber || null
-    flashAlert(data, serialNumber)
+    serialNumber: serialNumber,
+  };
+  putData("/systemCases/editSerialNumber", data).then((data) => {
+    const serialNumber = data.systemCase?.serialNumber || null;
+    flashAlert(data, serialNumber);
     if (!data.duplicatePki) {
-      const oldSystemCase = (data.oldSystemCase !== serialNumber) ? data.oldSystemCase : null
-      updateCells(data.systemCase, oldSystemCase)
-      const id = data.systemCase._id
-      socket.emit('updateAssemblyPC', {
+      const oldSystemCase =
+        data.oldSystemCase !== serialNumber ? data.oldSystemCase : null;
+      updateCells(data.systemCase, oldSystemCase);
+      const id = data.systemCase._id;
+      socket.emit("updateAssemblyPC", {
         serialNumber,
-        id
-      })
+        id,
+      });
     }
-  })
+  });
 }
 
 function updateCells(systemCase, oldSystemCase, voice = true) {
   if (oldSystemCase) {
-    refreshOneTable(oldSystemCase)
+    refreshOneTable(oldSystemCase);
   }
-  refreshOneTable(systemCase)
+  refreshOneTable(systemCase);
 
   //переход на одну ячейку вниз
-  let currentId = document.getElementById('hidd_id').value
-  let nextId = currentId.split(";")
-  nextId[1] = Number(nextId[1]) + 1 + ''
-  if (!document.querySelector('.popup-checkbox').checked) {
-    let nextCell = document.querySelector(".serial_number[data-data='" + nextId.join(';') + "']")
-    let nextCellText
+  let currentId = document.getElementById("hidd_id").value;
+  let nextId = currentId.split(";");
+  nextId[1] = Number(nextId[1]) + 1 + "";
+  if (!document.querySelector(".popup-checkbox").checked) {
+    let nextCell = document.querySelector(
+      ".serial_number[data-data='" + nextId.join(";") + "']"
+    );
+    let nextCellText;
     if (nextCell) {
-      nextCellText = nextCell.innerHTML
-      while (/[Бб].?[Нн]/g.test(nextCellText) || nextCellText === systemCase.serialNumber) {
-        nextId[1] = Number(nextId[1]) + 1 + ''
-        nextCell = document.querySelector(".serial_number[data-data='" + nextId.join(';') + "']")
+      nextCellText = nextCell.innerHTML;
+      while (
+        /[Бб].?[Нн]/g.test(nextCellText) ||
+        nextCellText === systemCase.serialNumber
+      ) {
+        nextId[1] = Number(nextId[1]) + 1 + "";
+        nextCell = document.querySelector(
+          ".serial_number[data-data='" + nextId.join(";") + "']"
+        );
         if (!nextCell) {
-          break
+          break;
         }
-        nextCellText = nextCell.innerHTML
+        nextCellText = nextCell.innerHTML;
       }
       if (nextCell) {
-        nextCell.focus()
+        nextCell.focus();
       }
       //TextToSpeech
       if (voice) {
-        const row = document.querySelector(".serial_number[data-data='" + nextId.join(';') + "']").parentElement
-        const cells = row.children
+        const row = document.querySelector(
+          ".serial_number[data-data='" + nextId.join(";") + "']"
+        ).parentElement;
+        const cells = row.children;
 
         if (cells) {
           for (const cell of cells) {
-            if (cell.className === 'type') {
-              textToSpeech(cell.innerText, 1)
-              break
+            if (cell.className === "type") {
+              textToSpeech(cell.innerText, 1);
+              break;
             }
           }
-
         }
       }
     }
-    painting()
+    painting();
   }
 }
 
 function insertSystemCaseSZI(id, index, serialNumber) {
-  postData('/systemCases/insertSystemCaseSZI', {id, index, serialNumber})
-      .then((data) => {
-        flashAlert(data)
-        const serialNumber = data.pc.serial_number
-        const oldNumberMachine = (data.oldNumberMachine != serialNumber) ? data.oldNumberMachine : null
-        UpdateCells(data.pc, oldNumberMachine)
-        const user = document.getElementById('userName').value
-        const id = data.pc._id
-        socket.emit('updateAssemblyPC', {
-          serialNumber,
-          user,
-          id
-        })
-      })
+  postData("/systemCases/insertSystemCaseSZI", {
+    id,
+    index,
+    serialNumber,
+  }).then((data) => {
+    flashAlert(data);
+    const serialNumber = data.pc.serial_number;
+    const oldNumberMachine =
+      data.oldNumberMachine != serialNumber ? data.oldNumberMachine : null;
+    UpdateCells(data.pc, oldNumberMachine);
+    const user = document.getElementById("userName").value;
+    const id = data.pc._id;
+    socket.emit("updateAssemblyPC", {
+      serialNumber,
+      user,
+      id,
+    });
+  });
 }
