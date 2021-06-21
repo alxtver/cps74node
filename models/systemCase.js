@@ -7,6 +7,7 @@ const systemCaseSchema = new Schema(
       required: true,
       unique: true,
     },
+    numberMachine: String,
     execution: {
       type: String,
       default: ''

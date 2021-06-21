@@ -2,6 +2,7 @@ const {
   Router
 } = require('express')
 const PC = require('../models/pc')
+const SystemCase = require('../models/systemCase')
 const PKI = require('../models/pki')
 const APKZI = require('../models/apkzi')
 const Part = require('../models/part')
@@ -10,6 +11,7 @@ const User = require('../models/user')
 const router = Router()
 const snReModifer = require('./foo/snReModifer')
 const plusOne = require('./foo/app')
+const pcController = require('../controllers/pc.controller')
 
 
 router.get('/', auth, async (req, res) => {
@@ -117,14 +119,14 @@ router.post('/add', auth, async (req, res) => {
   for (let i = 0; i < json_pc.length; i++) {
     pc.pc_unit.push(json_pc[i]);
   }
-
-
-  // добавление объектов в массив system_case_unit
-  const system_case_unit = req.body.system_case_unit
-  let json_system = JSON.parse(system_case_unit)
-  for (let i = 0; i < json_system.length; i++) {
-    pc.system_case_unit.push(json_system[i])
-  }
+  //
+  //
+  // // добавление объектов в массив system_case_unit
+  // const system_case_unit = req.body.system_case_unit
+  // let json_system = JSON.parse(system_case_unit)
+  // for (let i = 0; i < json_system.length; i++) {
+  //   pc.system_case_unit.push(json_system[i])
+  // }
   try {
     await pc.save();
     res.status(200).json({
@@ -137,7 +139,7 @@ router.post('/add', auth, async (req, res) => {
 
 
 router.post("/search", auth, async function (req, res) {
-  pcs = await PC.find({
+  const pcs = await PC.find({
     part: req.session.part
   }).sort({
     'created': 1
@@ -243,7 +245,10 @@ router.post('/getPC', auth, async (req, res) => {
   }))
 })
 
-
+/**
+ * Вставляем системный блок
+ */
+router.put('/insertSystemCase', auth, pcController.insertSystemCase)
 
 router.post('/insert_serial', auth, async (req, res) => {
   let pc = await PC.findById(req.body.id) //ищем комп который собираемся редактировать
@@ -556,7 +561,7 @@ router.post('/copy', auth, async (req, res) => {
     })
 
     for (unit of pc.pc_unit) {
-      if (unit.serial_number == pc.serial_number) {
+      if (unit.serial_number === pc.serial_number) {
         unit.serial_number = req.body.serial_number
         newPC.pc_unit.push(unit)
       } else if (/[Бб].?[Нн]/g.test(unit.serial_number)) {
@@ -569,7 +574,7 @@ router.post('/copy', auth, async (req, res) => {
     }
 
     for (unit of pc.system_case_unit) {
-      if (unit.serial_number == pc.serial_number) {
+      if (unit.serial_number === pc.serial_number) {
         unit.serial_number = req.body.serial_number
         newPC.system_case_unit.push(unit)
       } else if (/[Бб].?[Нн]/g.test(unit.serial_number)) {
@@ -640,7 +645,7 @@ router.post('/pc_update', auth, async (req, res) => {
   pc.system_case_unit = newSystemCaseUnit
   await pc.save()
   // изменение привязки ПКИ при изменении серийника машины
-  if (serialNumber != req.body.serial_number) {
+  if (serialNumber !== req.body.serial_number) {
     await PKI.updateMany({
       part: pc.part,
       number_machine: serialNumber

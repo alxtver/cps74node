@@ -38,13 +38,13 @@
         {{#if isPC}}
         <li class="nav-item">
           <a class="nav-link active" href="/pcPa">
-            ПВЭМ
+            ПЭВМ
           </a>
         </li>
         {{else}}
         <li class="nav-item">
           <a class="nav-link" href="/pcPa">
-            ПВЭМ
+              ПЭВМ
           </a>
         </li>
         {{/if}}
@@ -163,6 +163,9 @@
       {{/if}}
       {{#if isAssembly}}
       <select class="selectpicker form-select me-2 col col-sm" id="serials" data-live-search="true"></select>
+      {{/if}}
+      {{#if isSystemCase}}
+          <select class="selectpicker form-select me-2 col col-sm" id="system-case-serials" data-live-search="true"></select>
       {{/if}}
       <select id="part_select_navbar" class=" selectpicker form-select col col-sm"></select>
       {{/if}}

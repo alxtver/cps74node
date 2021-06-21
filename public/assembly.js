@@ -258,7 +258,7 @@ function websocketUpdate(sn, reqUser) {
   const pc = document.getElementById('serial_number')
   const user = document.getElementById('userName').value
   const serialNumber = pc.innerHTML
-  if (serialNumber == sn && reqUser != user) {
+  if (serialNumber === sn && reqUser !== user) {
     updatePC(serialNumber, 'update')
   }
 }

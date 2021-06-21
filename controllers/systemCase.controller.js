@@ -1,4 +1,5 @@
 const SystemCase = require("../models/systemCase");
+const PC = require("../models/pc")
 const APKZI = require("../models/apkzi");
 const PKI = require("../models/pki");
 const Part = require("../models/part");
@@ -169,6 +170,12 @@ exports.editSerialNumber = async (req, res) => {
       systemCase.systemCaseUnits[req.body.obj].name = "Н/Д";
       systemCase.markModified("systemCaseUnits");
       await systemCase.save();
+      // Если системный блок привязан к ПЭВМ
+      if (systemCase.numberMachine) {
+        const pc = await PC.findOne({part: req.session.part, serial_number: systemCase.numberMachine})
+        pc.system_case_unit = systemCase.systemCaseUnits;
+        await pc.save();
+      }
       res.send(
         JSON.stringify({
           systemCase,
@@ -225,6 +232,11 @@ exports.editSerialNumber = async (req, res) => {
         }
         oldSystemCase.markModified("systemCaseUnits");
         await oldSystemCase.save();
+        if (oldSystemCase.numberMachine) {
+          const pc = await PC.findOne({part: req.session.part, serial_number: oldSystemCase.numberMachine})
+          pc.system_case_unit = oldSystemCase.systemCaseUnits;
+          await pc.save();
+        }
       }
     }
   }
@@ -238,6 +250,14 @@ exports.editSerialNumber = async (req, res) => {
     systemCase.systemCaseUnits[req.body.obj].type = pki.type_pki; //меняем тип
   systemCase.markModified("systemCaseUnits");
   await systemCase.save();
+
+  // Если системный блок привязан к ПЭВМ
+  if (systemCase.numberMachine) {
+    const pc = await PC.findOne({part: req.session.part, serial_number: systemCase.numberMachine})
+    pc.system_case_unit = systemCase.systemCaseUnits;
+    await pc.save();
+  }
+
   res.send(
     JSON.stringify({
       systemCase,
@@ -311,32 +331,84 @@ exports.editSerialNumberSZI = async (req, res) => {
     kontr_zav_number: controllerNumber
   })
 
-  const oldSystemCase = apkzi.number_mashine ? await SystemCase.findOne({
+  // Если уже был серийный номер контроллера СЗИ
+  const oldSerialNumber = systemCase.systemCaseUnits[index].serial_number;
+  if (oldSerialNumber) {
+    const oldApkzi = await APKZI.findOne({
+      part: req.session.part,
+      kontr_zav_number: oldSerialNumber,
+    });
+    if (oldApkzi) {
+      oldApkzi.number_machine = "";
+      oldApkzi.save();
+    }
+  }
+
+  // Если не нашли АПКЗИ
+  if (!apkzi) {
+    systemCase.systemCaseUnits[index].name = "Н/Д";
+    systemCase.systemCaseUnits[index].serial_number = controllerNumber;
+    systemCase.markModified("systemCaseUnits");
+    await systemCase.save();
+    res.status(400).json({error: 'APKZI not found!!!', systemCase})
+    return
+  }
+
+  // Если АПКЗИ был привязан к другому системному блоку
+  const oldNumberMachine = apkzi.number_machine
+  const oldSystemCase = await SystemCase.findOne({
     part: req.session.part,
-    serialNumber: apkzi.number_mashine
-  }) : null;
+    serialNumber: oldNumberMachine,
+  });
   if (oldSystemCase) {
     for (const unit of oldSystemCase.systemCaseUnits) {
-      if (unit.szi && unit.serial_number === controllerNumber) {
-        unit.serial_number = ''
+      if (unit.szi) {
+        unit.name = "Н/Д";
+        unit.serial_number = '';
         break
       }
     }
     oldSystemCase.markModified("systemCaseUnits");
     await oldSystemCase.save();
+    if (oldSystemCase.numberMachine) {
+      const pc = await PC.findOne({part: req.session.part, serial_number: oldSystemCase.numberMachine})
+      pc.system_case_unit = oldSystemCase.systemCaseUnits;
+      await pc.save();
+    }
   }
 
-  const oldApkzi = !systemCase.systemCaseUnits[index].serial_number ?
-    null :
-    await APKZI.findOne({
-      part: req.session.part,
-      kontr_zav_number: systemCase.systemCaseUnits[index].serial_number
-    })
-  oldApkzi.number_machine = ''
-  oldApkzi.save()
+  // Если все норм...
+  systemCase.systemCaseUnits[index].serial_number = controllerNumber;
+  const controllerName = apkzi.kont_name
+  const controllerNameList = controllerName.split(' ')
+  const arr_end = controllerNameList.slice(-1).join('')
+  const arr_start = controllerNameList.slice(0, -1)
+  systemCase.systemCaseUnits[index].name = arr_end //меняем тип
+  systemCase.systemCaseUnits[index].type = arr_start.join(' ') //меняем имя
+  systemCase.systemCaseUnits[index].fdsi = 'ФДШИ.' + apkzi.fdsiKontr
+  apkzi.number_machine = systemCase.serialNumber;
 
-  console.log(apkzi)
-  console.log('sn-> ' + oldApkzi + ' <-sn')
+  apkzi.save();
 
-  res.sendStatus(200)
+  systemCase.markModified("systemCaseUnits");
+  await systemCase.save();
+
+  // Если системный блок привязан к ПЭВМ
+  if (systemCase.numberMachine) {
+    const pc = await PC.findOne({part: req.session.part, serial_number: systemCase.numberMachine})
+    pc.system_case_unit = systemCase.systemCaseUnits;
+    await pc.save();
+  }
+  res.status(200).json({systemCase, oldSystemCase})
+}
+
+/**
+ * Получить серийные номера системных блоков за проект
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
+exports.getSerialsNumbers = async (req, res) => {
+  const serialsNumbers =  await SystemCase.find({part: req.session.part}).distinct('serialNumber');
+  res.status(200).json({ serialsNumbers });
 }

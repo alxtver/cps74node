@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "handlebars": "^4.7.6",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "prettier": "^2.3.1"
   }
 }

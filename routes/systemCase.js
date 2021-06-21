@@ -27,4 +27,6 @@ router.post("/copy", auth, SystemCaseController.copySystemCase);
 
 router.post('/insertSystemCaseSZI', auth, SystemCaseController.editSerialNumberSZI);
 
+router.get('/getSerialsNumbers', auth, SystemCaseController.getSerialsNumbers);
+
 module.exports = router;
