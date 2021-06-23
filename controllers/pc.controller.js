@@ -1,5 +1,6 @@
 const SystemCase = require("../models/systemCase");
 const PC = require("../models/pc");
+const APKZI = require("../models/apkzi")
 
 exports.insertSystemCase = async (req, res) => {
   const pcId = req.body.id;
@@ -11,6 +12,9 @@ exports.insertSystemCase = async (req, res) => {
     serialNumber,
   });
   const pc = await PC.findById(pcId);
+
+  // Удаляем из ПЭВМ АПКЗИ, если есть...
+  pc.pc_unit = pc.pc_unit.filter(unit => unit.apkzi !== 'apkzi')
 
   // Если уже был серийный номер системного блока
   const oldSerialNumber =
@@ -59,12 +63,38 @@ exports.insertSystemCase = async (req, res) => {
   pc.pc_unit[index].name = "";
   pc.pc_unit[index].serial_number = serialNumber;
   pc.system_case_unit = systemCase.systemCaseUnits;
-  systemCase.numberMachine = pc.serial_number;
 
-  systemCase.save();
 
+  // Если есть в системнике СЗИ, то добавляем к ПЭВМ АПКЗИ
+  let sziNumber = null;
+  let apkzi = null;
+  for (const unit of systemCase.systemCaseUnits) {
+    if (unit.szi) {
+      sziNumber = unit.serial_number
+      break
+    }
+  }
+  if (sziNumber) {
+    apkzi = await APKZI.findOne({part: req.session.part, kontr_zav_number: sziNumber})
+    pc.pc_unit.push({
+      fdsi: 'ФДШИ. ' + apkzi.fdsi,
+      type: apkzi.apkzi_name.split(' ')[0],
+      name: apkzi.apkzi_name.split(' ')[1],
+      quantity: "1",
+      serial_number: apkzi.zav_number,
+      apkzi: "apkzi"
+    })
+  }
+
+  // сохраняем ПЭВМ
   pc.markModified("pc_unit");
   await pc.save();
+
+  // сохраняем системный блок
+  systemCase.numberMachine = pc.serial_number;
+  systemCase.save();
+
+
 
   res.send(
     JSON.stringify({
