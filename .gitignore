@@ -92,7 +92,8 @@ typings/
 
 config.js
 process.json
-public/docx/output.docx
+public/docx/cps/output.docx
+public/docx/avk/output.docx
 public/docx/excel.xlsx
 package-lock.json
 .DS_Store
