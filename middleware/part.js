@@ -6,7 +6,7 @@ module.exports = async function (req, res, next) {
       if (req.user.lastPart) {
         req.session.part = req.user.lastPart
       } else {
-        parts = await Part.find().sort({
+        const parts = await Part.find().sort({
           created: -1
         })
         if (parts) {
@@ -14,6 +14,6 @@ module.exports = async function (req, res, next) {
         }
       }
     }
-  }  
+  }
   next()
 }

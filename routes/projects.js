@@ -13,4 +13,8 @@ router.get("/:id/zipPCEDocx", auth, ProjectController.systemCaseZip);
 
 router.get("/:id/zipDocx", auth, ProjectController.zipLabel);
 
+router.get("/getCompany", auth, ProjectController.getCompany);
+
+router.post("/setCompany", auth, ProjectController.setCompany);
+
 module.exports = router;

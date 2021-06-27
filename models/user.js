@@ -3,7 +3,8 @@ const {Schema, model} = require('mongoose')
 const User = new Schema({
     username: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     password: String,
     group: String,
@@ -11,7 +12,8 @@ const User = new Schema({
     lastType: String,
     lastPage: Number,
     pcCount: String,
-    lastAssemblyPC: String
+    lastAssemblyPC: String,
+    company: String
 })
 
 module.exports = model('User', User)

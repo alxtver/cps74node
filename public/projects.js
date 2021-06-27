@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-  load_data();
   // создаем элементы для селекта компании
   const companySelect = document.getElementById("company");
   for (const [key, value] of Object.entries(companyEnum)) {
@@ -8,8 +7,24 @@ document.addEventListener("DOMContentLoaded", function () {
     option.text = value.toString();
     companySelect.add(option);
   }
-  companySelect.addEventListener("change", (e) => {
-    load_data();
+  // действия при выборе компании
+  companySelect.addEventListener("change", async (e) => {
+    try {
+      const companyName = e.target.value;
+      const response = await saveCompanyToDb(companyName);
+      if (response.message === "Company is changed") {
+        // изменение атрибута onclick
+        const buttons = document.querySelectorAll(".pass-button");
+        for (const button of buttons) {
+          const attribute = button.getAttribute("onclick");
+          const attributeSplit = attribute.split("?");
+          attributeSplit[1] = `company=${companyName}'`;
+          button.setAttribute('onclick', attributeSplit.join('?'))
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
   });
 
   const snSelect = document.getElementById("serials");
@@ -23,6 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
       behavior: "smooth",
     });
   });
+  load_data();
 });
 
 const companyEnum = Object.freeze({
@@ -30,20 +46,47 @@ const companyEnum = Object.freeze({
   avk: "ООО НПО АВК",
 });
 
+/**
+ * Сохранить компанию в базе
+ * @param companyName
+ * @returns {Promise<any>}
+ */
+async function saveCompanyToDb(companyName) {
+  return await postData("/projects/setCompany", { companyName });
+}
+
+/**
+ * Получить компанию
+ * @returns {Promise<any>}
+ */
+async function getCompanyFromDb() {
+  const response = await getData("/projects/getCompany");
+  return response.companyName
+}
+
 function load_data(q) {
   const data = {
     q: q,
   };
-  postData("/pcPa/search", data).then((data) => {
+  postData("/pcPa/search", data).then(async (data) => {
+    const companySelect = document.getElementById("company");
+    const company = await getCompanyFromDb()
+    if (company) {
+      companySelect.value = await getCompanyFromDb()
+    } else {
+      companySelect.value = 'cps'
+    }
+
     CreateTableFromJSON(data);
-    let select = document.getElementById("serials");
+    const select = document.getElementById("serials");
     for (const d of data) {
-      let option = document.createElement("option");
+      const option = document.createElement("option");
       option.value = d.serial_number;
       option.text = d.serial_number;
       select.add(option);
     }
-    let overlay = document.getElementById("overlay");
+
+    const overlay = document.getElementById("overlay");
     overlay.style.display = "none";
   });
 }
@@ -82,7 +125,7 @@ function CreateTableFromJSON(data) {
     const button_passport = document.createElement("input");
     button_passport.type = "button";
     button_passport.className =
-      "btn btn-outline-primary me-1 mb-2 ms-3 copyBtn";
+      "btn btn-outline-primary me-1 mb-2 ms-3 pass-button";
     button_passport.value = "Паспорт Word";
     button_passport.setAttribute(
       "onclick",
@@ -94,7 +137,8 @@ function CreateTableFromJSON(data) {
     // Кнопка генерации этикетки на системный блок
     const button_sbZipE = document.createElement("input");
     button_sbZipE.type = "button";
-    button_sbZipE.className = "btn btn-outline-primary me-1 mb-2 ms-1 copyBtn";
+    button_sbZipE.className =
+      "btn btn-outline-primary me-1 mb-2 ms-1 pass-button";
     button_sbZipE.value = "СБ Зип";
     button_sbZipE.setAttribute(
       "onclick",
@@ -106,7 +150,7 @@ function CreateTableFromJSON(data) {
     // Кнопка генерации зип этикетки
     const button_ZIP = document.createElement("input");
     button_ZIP.type = "button";
-    button_ZIP.className = "btn btn-outline-primary me-1 mb-2 ms-1 copyBtn";
+    button_ZIP.className = "btn btn-outline-primary me-1 mb-2 ms-1 pass-button";
     button_ZIP.value = "Зип этикетка";
     button_ZIP.setAttribute(
       "onclick",

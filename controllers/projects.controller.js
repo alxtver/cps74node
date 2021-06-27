@@ -5,6 +5,7 @@ const fs = require("fs");
 const PizZip = require("pizzip");
 const Docxtemplater = require("docxtemplater");
 const excel = require("excel4node");
+const User = require("../models/user");
 
 /**
  * Основная страница проекта
@@ -482,7 +483,7 @@ exports.systemCaseZip = async (req, res) => {
     serial_number: pc.serial_number,
     pc_unit: pc.pc_unit,
     system_case_unit: pc.system_case_unit,
-  }
+  };
 
   const buf = exportToDocx(company, data, "systemCaseZip.docx");
 
@@ -510,7 +511,7 @@ exports.zipLabel = async (req, res) => {
     serial_number: pc.serial_number,
     pc_unit: pc.pc_unit,
     system_case_unit: pc.system_case_unit,
-  }
+  };
   const buf = exportToDocx(company, data, "zipLabel.docx");
 
   fs.writeFileSync(path.resolve(docDir, "output.docx"), buf);
@@ -518,6 +519,29 @@ exports.zipLabel = async (req, res) => {
   const fileName = pc.serial_number + ".docx";
   console.log(`Zip label #${pc.serial_number} was formed`);
   res.download(file, fileName);
+};
+
+/**
+ * Получить компанию
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
+exports.getCompany = async (req, res) => {
+  res.send(JSON.stringify({ companyName: req.user.company }));
+};
+
+/**
+ * Сохранить компанию
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
+exports.setCompany = async (req, res) => {
+  const user = req.user;
+  user.company = req.body.companyName;
+  await user.save();
+  res.status(200).json({ message: "Company is changed" });
 };
 
 /**
