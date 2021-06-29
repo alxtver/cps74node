@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const PC = require("../models/pc");
+const SystemCase = require("../models/systemCase");
 const path = require("path");
 const fs = require("fs");
 const PizZip = require("pizzip");
@@ -477,11 +478,11 @@ exports.systemCaseZip = async (req, res) => {
   const docDir = `${appDir}/public/docx/${company}`;
 
   const pc = await PC.findById(req.params.id);
+  const systemCase = await SystemCase.findOne({part: req.session.part, numberMachine: pc.serial_number})
 
   const data = {
-    fdsi: pc.fdsi,
-    serial_number: pc.serial_number,
-    pc_unit: pc.pc_unit,
+    fdsi: systemCase.fdsi,
+    serial_number: systemCase.serialNumber,
     system_case_unit: pc.system_case_unit,
   };
 
