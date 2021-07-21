@@ -19,7 +19,6 @@ const apkziRoutes = require('./routes/apkzi')
 const addRoutes = require('./routes/add')
 const pkiRoutes = require('./routes/pkis')
 const assemblyRoutes = require('./routes/assembly')
-// const pcRoutes = require('./routes/pc')
 const pcPaRoutes = require('./routes/pcPa')
 const authRoutes = require('./routes/auth')
 const spRoutes = require('./routes/sp')
@@ -29,6 +28,7 @@ const equipmentRoutes = require('./routes/equipment')
 const projectsRoutes = require('./routes/projects')
 const countriesRoutes = require('./routes/countries')
 const specRoutes = require('./routes/spec')
+const systemCasesRoutes = require('./routes/systemCase')
 
 io.on('connect', socket => {
   socket.on('updateAssemblyPC', function (data) {
@@ -90,14 +90,12 @@ app.use('/equipment', equipmentRoutes)
 app.use('/logs', logsRoutes)
 app.use('/countries', countriesRoutes)
 app.use('/search', searchRoutes)
+app.use('/systemCases', systemCasesRoutes)
 app.use(function (req, res) {
   res.status(404).render('404');
 });
 
-
 const PORT = process.env.PORT || 3000
-
-
 
 async function start() {
   try {

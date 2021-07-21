@@ -1,7 +1,7 @@
 <script src="/projects.js"></script>
 <div class="container">
 
-  <button id="excelImport" onclick="location.href='/projects/import';" class="btn btn-outline-success mt-4">Экспорт
+  <button id="excelImport" onclick="location.href='/projects/export';" class="btn btn-outline-success mt-4">Экспорт
     в Excel</button>
   <form>
     <input type="hidden" name="_csrf" value="{{csrf}}">
@@ -22,19 +22,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    load_data()
-  })
-  const snSelect = document.getElementById('serials')
-  snSelect.addEventListener('change', (e) => {
-    let snId = snSelect.value
-    const el = document.getElementById(snId)
-    const offsetPosition = window.pageYOffset + el.getBoundingClientRect().top - 70
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: "smooth"
-    })
-  })
-</script>

@@ -2,6 +2,7 @@ const {
   Router
 } = require('express')
 const PC = require('../models/pc')
+const SystemCase = require('../models/systemCase')
 const PKI = require('../models/pki')
 const APKZI = require('../models/apkzi')
 const Part = require('../models/part')
@@ -9,6 +10,8 @@ const auth = require('../middleware/auth')
 const User = require('../models/user')
 const router = Router()
 const snReModifer = require('./foo/snReModifer')
+const plusOne = require('./foo/app')
+const pcController = require('../controllers/pc.controller')
 
 
 router.get('/', auth, async (req, res) => {
@@ -116,14 +119,14 @@ router.post('/add', auth, async (req, res) => {
   for (let i = 0; i < json_pc.length; i++) {
     pc.pc_unit.push(json_pc[i]);
   }
-
-
-  // добавление объектов в массив system_case_unit
-  const system_case_unit = req.body.system_case_unit
-  let json_system = JSON.parse(system_case_unit)
-  for (let i = 0; i < json_system.length; i++) {
-    pc.system_case_unit.push(json_system[i])
-  }
+  //
+  //
+  // // добавление объектов в массив system_case_unit
+  // const system_case_unit = req.body.system_case_unit
+  // let json_system = JSON.parse(system_case_unit)
+  // for (let i = 0; i < json_system.length; i++) {
+  //   pc.system_case_unit.push(json_system[i])
+  // }
   try {
     await pc.save();
     res.status(200).json({
@@ -136,7 +139,7 @@ router.post('/add', auth, async (req, res) => {
 
 
 router.post("/search", auth, async function (req, res) {
-  pcs = await PC.find({
+  const pcs = await PC.find({
     part: req.session.part
   }).sort({
     'created': 1
@@ -242,7 +245,10 @@ router.post('/getPC', auth, async (req, res) => {
   }))
 })
 
-
+/**
+ * Вставляем системный блок
+ */
+router.put('/insertSystemCase', auth, pcController.insertSystemCase)
 
 router.post('/insert_serial', auth, async (req, res) => {
   let pc = await PC.findById(req.body.id) //ищем комп который собираемся редактировать
@@ -253,8 +259,6 @@ router.post('/insert_serial', auth, async (req, res) => {
     part: pc.part,
     serial_number: serial_number
   })
-
-
 
   if (!pki) {
     let snReMod = await snReModifer(serial_number, pc.part)
@@ -483,32 +487,15 @@ router.post('/insert_serial_apkzi', auth, async (req, res) => {
 router.post('/copy', auth, async (req, res) => {
   const pc = await PC.findById(req.body.id)
 
-  function plusOne(number) {
-    let indexChar = 0
-    for (let index = 0; index < number.length; index++) {
-      if (!/\d/.test(number[index])) {
-        indexChar = index
-      }
-    }
-    let first_part = number.slice(0, indexChar + 1)
-    let second_part = number.slice(indexChar + 1)
-    if (second_part != '') {
-      let lenSecondPart = second_part.length
-      return first_part + (parseInt(second_part) + 1).toString().padStart(lenSecondPart, "0")
-    } else {
-      return (parseInt(first_part) + 1).toString()
-    }
-  }
-
   let reqSerial = req.body.serial_number
   let range = reqSerial.split(';')
   if (range.length > 1) {
     let firstNumber = range[0].trim() //убираем пробелы, если есть
     let lastNumber = range[1].trim()
     let number = firstNumber
-    while (number != plusOne(lastNumber)) {
+    while (number !== plusOne(lastNumber)) {
       const pc = await PC.findById(req.body.id)
-      checkPCNumber = await PC.findOne({
+      const checkPCNumber = await PC.findOne({
         serial_number: number
       })
       if (!checkPCNumber) {
@@ -524,8 +511,8 @@ router.post('/copy', auth, async (req, res) => {
           system_case_unit: []
         })
 
-        for (unit of pc.pc_unit) {
-          if (unit.serial_number == pc.serial_number) {
+        for (const unit of pc.pc_unit) {
+          if (unit.serial_number === pc.serial_number) {
             unit.serial_number = number
             newPC.pc_unit.push(unit)
           } else if (/[Бб].?[Нн]/g.test(unit.serial_number)) {
@@ -537,8 +524,8 @@ router.post('/copy', auth, async (req, res) => {
           }
         }
 
-        for (unit of pc.system_case_unit) {
-          if (unit.serial_number == pc.serial_number) {
+        for (const unit of pc.system_case_unit) {
+          if (unit.serial_number === pc.serial_number) {
             unit.serial_number = number
             newPC.system_case_unit.push(unit)
           } else if (/[Бб].?[Нн]/g.test(unit.serial_number)) {
@@ -574,7 +561,7 @@ router.post('/copy', auth, async (req, res) => {
     })
 
     for (unit of pc.pc_unit) {
-      if (unit.serial_number == pc.serial_number) {
+      if (unit.serial_number === pc.serial_number) {
         unit.serial_number = req.body.serial_number
         newPC.pc_unit.push(unit)
       } else if (/[Бб].?[Нн]/g.test(unit.serial_number)) {
@@ -587,7 +574,7 @@ router.post('/copy', auth, async (req, res) => {
     }
 
     for (unit of pc.system_case_unit) {
-      if (unit.serial_number == pc.serial_number) {
+      if (unit.serial_number === pc.serial_number) {
         unit.serial_number = req.body.serial_number
         newPC.system_case_unit.push(unit)
       } else if (/[Бб].?[Нн]/g.test(unit.serial_number)) {
@@ -658,7 +645,7 @@ router.post('/pc_update', auth, async (req, res) => {
   pc.system_case_unit = newSystemCaseUnit
   await pc.save()
   // изменение привязки ПКИ при изменении серийника машины
-  if (serialNumber != req.body.serial_number) {
+  if (serialNumber !== req.body.serial_number) {
     await PKI.updateMany({
       part: pc.part,
       number_machine: serialNumber
@@ -733,17 +720,17 @@ router.get('/test', auth, async (req, res) => {
   let serials = []
   let results = []
   for (const pc of pcs) {
-    var status = 'ok'
+    let status = 'ok'
     if (pc.pc_unit.length > 0) {
       for (const unit of pc.pc_unit) {
-        if (unit.name == '' && unit.type != 'Системный блок' || unit.name == 'Н/Д' || unit.serial_number == '') {
+        if (unit.name === '' && unit.type !== 'Системный блок' || unit.name === 'Н/Д' || unit.serial_number === '') {
           status = 'not ok!'
         }
       }
     }
     if (pc.system_case_unit.length > 0) {
       for (const unit of pc.system_case_unit) {
-        if (unit.type == '' || unit.name == '' || unit.name == 'Н/Д' || unit.serial_number == '') {
+        if (unit.type === '' || unit.name === '' || unit.name === 'Н/Д' || unit.serial_number === '') {
           status = 'not ok!'
         }
       }

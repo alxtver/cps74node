@@ -79,7 +79,6 @@ h2_boot {
     -webkit-border-radius: 10px 10px 10px 10px;
     border-radius: 10px 10px 10px 10px;
     background: #fff;
-    padding: 30px;
     width: 90%;
     max-width: 450px;
     position: relative;
@@ -93,7 +92,6 @@ h2_boot {
     -webkit-border-radius: 10px 10px 10px 10px;
     border-radius: 10px 10px 10px 10px;
     background: #fff;
-    padding: 30px;
     width: 95%;
     position: relative;
     padding: 0px;
@@ -369,10 +367,9 @@ input[type=text]::placeholder {
     -webkit-border-radius: 10px 10px 10px 10px;
     border-radius: 10px 10px 10px 10px;
     background: #fff;
-    padding: 30px;
     position: relative;
-    padding: 0px;
-    -webkit-box-shadow: 0 30px 60px 0 rgba(0, 0, 0.9);
+    padding: 0;
+    -webkit-box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.9);
     box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.9);
 }
 
@@ -380,9 +377,8 @@ input[type=text]::placeholder {
     -webkit-border-radius: 10px 10px 10px 10px;
     border-radius: 10px 10px 10px 10px;
     background: #fff;
-    padding: 30px;
     position: relative;
-    padding: 0px;
+    padding: 0;
     margin-bottom: 3rem;
 }
 
@@ -390,9 +386,8 @@ input[type=text]::placeholder {
     -webkit-border-radius: 10px 10px 10px 10px;
     border-radius: 4px;
     background: #fff;
-    padding: 30px;
     position: relative;
-    padding: 0px;
+    padding: 0;
     margin-bottom: 3rem;
 }
 
@@ -767,7 +762,7 @@ th {
 #colorpicker {
     visibility: hidden;
     opacity: 0;
-    height: 0px;
+    height: 0;
     transition: visibility 1s linear, opacity 1s linear, height 0.5s ease-out;
     list-style: none;
 }
@@ -912,8 +907,8 @@ th {
     position: fixed;
     padding-top: 70px;
     padding-right: 5px;
-    top: 0px;
-    right: 0px;
+    top: 0;
+    right: 0;
     text-align-last: right;
     height: 100%;
     background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(246, 246, 246, 0.5) 24%, rgba(232, 232, 232, 1) 50%, rgba(200, 200, 200, 0.8) 100%);
@@ -921,7 +916,6 @@ th {
 
 .noneSelect {
     -moz-user-select: none;
-    -khtml-user-select: none;
     -webkit-user-select: none;
     user-select: none;
 }
@@ -1042,7 +1036,7 @@ th {
 }
 
 .big-label {
-    margin-bottom: 0px;
+    margin-bottom: 0;
     margin-left: 2rem;
     font-size: 1.5rem;
 }

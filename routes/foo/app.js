@@ -267,4 +267,22 @@ function barcodeCountry(code) {
     }
 }
 
+function plusOne(number) {
+    let indexChar = 0
+    for (let index = 0; index < number.length; index++) {
+        if (!/\d/.test(number[index])) {
+            indexChar = index
+        }
+    }
+    let first_part = number.slice(0, indexChar + 1)
+    let second_part = number.slice(indexChar + 1)
+    if (second_part !== '') {
+        let lenSecondPart = second_part.length
+        return first_part + (parseInt(second_part) + 1).toString().padStart(lenSecondPart, "0")
+    } else {
+        return (parseInt(first_part) + 1).toString()
+    }
+}
+
 module.exports = barcodeCountry
+module.exports = plusOne

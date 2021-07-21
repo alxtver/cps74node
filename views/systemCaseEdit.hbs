@@ -1,0 +1,43 @@
+<script src="/systemCaseEdit.js" lang="js"></script>
+<script src="/classes/classes.js"></script>
+<script type="text/javascript" src="/lib/huebee/huebee.pkgd.js"></script>
+<link rel="stylesheet" href="/lib/huebee/huebee.css" type="text/css" />
+<div class="container">
+        <div class="tableContent mt-3">
+            <form>
+                <div class="input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Проект</span>
+                    </div>
+                    <input type="text" id="part" name="part" class="form-control" aria-label="Small"
+                           aria-describedby="inputGroup-sizing-sm" value="{{systemCase.part}}" required>
+
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">ФДШИ</span>
+                    </div>
+                    <input type="text" id="fdsi" name="fdsi" class="form-control" aria-label="Small"
+                           aria-describedby="inputGroup-sizing-sm" value="{{systemCase.fdsi}}" required>
+
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Зав. номер</span>
+                    </div>
+                    <input type="text" id="serial_number" name="serial_number" class="form-control" aria-label="Small"
+                           aria-describedby="inputGroup-sizing-sm" value="{{systemCase.serialNumber}}" required>
+                </div>
+                <div class="input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Исполнение</span>
+                    </div>
+                    <input type="text" id="execution" name="execution" class="form-control" aria-label="Small"
+                           aria-describedby="inputGroup-sizing-sm" value="{{systemCase.execution}}">
+
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Приложение</span>
+                    </div>
+                    <input type="text" id="attachment" name="attachment" class="form-control" aria-label="Small"
+                           aria-describedby="inputGroup-sizing-sm" value="{{systemCase.attachment}}">
+                </div>
+                <div id="systemCase"></div>
+            </form>
+        </div>
+</div>

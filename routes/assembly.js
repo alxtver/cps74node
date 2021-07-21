@@ -4,6 +4,7 @@ const {
 const PC = require('../models/pc')
 const auth = require('../middleware/auth')
 const User = require('../models/user')
+const SystemCase = require('../models/systemCase')
 const router = Router()
 
 
@@ -26,59 +27,56 @@ router.post('/pc', auth, async (req, res) => {
   res.send(JSON.stringify(pcs))
 })
 
-router.post('/serialNumbers', auth, async (req, res) => {
-  const pcs = await PC.find({
-    part: req.session.part,
-    "system_case_unit.0": {
-      "$exists": true
-    }
-  }).distinct('serial_number')
-  res.send(JSON.stringify(pcs))
+router.get('/serialNumbers', auth, async (req, res) => {
+  const systemCases = await SystemCase.find({
+    part: req.session.part
+  }).distinct('serialNumber')
+  res.send(JSON.stringify(systemCases))
 })
 
-router.post('/firstPC', auth, async (req, res) => {
+router.get('/currentSystemCase', auth, async (req, res) => {
   const username = req.session.user.username
-  const serialNumbers = await PC.find({
+  const serialNumbers = await SystemCase.find({
     part: req.session.part
-  }).distinct('serial_number')
+  }).distinct('serialNumber')
   const firstSN = serialNumbers[0]
   const lastSN = serialNumbers[serialNumbers.length - 1]
   const user = await User.findOne({
     username: username
   })
-  let firstPC
+  let currentSystemCase
   if (user.lastAssemblyPC && serialNumbers.includes(user.lastAssemblyPC)) {
-    firstPC = await PC.findOne({
+    currentSystemCase = await SystemCase.findOne({
       part: req.session.part,
-      serial_number: user.lastAssemblyPC
+      serialNumber: user.lastAssemblyPC
     }).sort({
       created: 1
     })
   } else {
-    firstPC = await PC.findOne({
+    currentSystemCase = await SystemCase.findOne({
       part: req.session.part
     }).sort({
       created: 1
     })
   }
   res.send(JSON.stringify({
-    firstPC: firstPC,
-    firstSN: firstSN,
-    lastSN: lastSN
+    currentSystemCase,
+    firstSN,
+    lastSN
   }))
 })
 
-router.post('/getPC', auth, async (req, res) => {
+router.get('/getSystemCase/:serialNumber', auth, async (req, res) => {
   await User.updateOne({
     username: req.session.user.username
   }, {
-    lastAssemblyPC: req.body.serialNumberPC
+    lastAssemblyPC: req.params.serialNumber
   })
-  const pc = await PC.findOne({
+  const systemCase = await SystemCase.findOne({
     part: req.session.part,
-    serial_number: req.body.serialNumberPC
+    serialNumber: req.params.serialNumber
   })
-  res.send(JSON.stringify(pc))
+  res.send(JSON.stringify(systemCase))
 })
 
 router.post('/getPCById', auth, async (req, res) => {
