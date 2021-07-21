@@ -370,7 +370,7 @@ exports.exportToExcel = async (req, res) => {
           col6width = unit.serial_number.length;
         }
         ws.cell(n, 7).string(unit.notes).style(styleRight);
-        if (unit.notes?.length && col7width < unit.notes.length) {
+        if (unit.notes && unit.notes.length && col7width < unit.notes.length) {
           col7width = unit.notes.length;
         }
         n += 1;
