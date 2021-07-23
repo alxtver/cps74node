@@ -515,7 +515,7 @@ function UpdateCells(pc, oldNumberMachine, voice = true) {
     divContainer.appendChild(divCont);
     divCont.innerHTML = "";
     divCont.appendChild(table);
-    buttons(divCont, pc);
+    buttons(divCont, pc, `/pcPa/${pc._id}/edit?allow=true`);
     //переход на одну ячейку вниз
     let current_id = document.getElementById("hidd_id").value;
     let next_id = current_id.split(";");

@@ -94,8 +94,6 @@ exports.insertSystemCase = async (req, res) => {
   systemCase.numberMachine = pc.serial_number;
   systemCase.save();
 
-
-
   res.send(
     JSON.stringify({
       pc,
