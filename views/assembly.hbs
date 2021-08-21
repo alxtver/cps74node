@@ -1,7 +1,7 @@
 <script src="/assembly.js"></script>
 <script type="text/javascript" src="/lib/socketIO/socket.io.js"></script>
 <div class="count" id="count"></div>
-<div id="PC" class="assemblyCont"></div>
+
 
 <div class="popup-wrapper">
   <input type="checkbox" class="popup-checkbox" id="popupCheckboxOne">
@@ -17,26 +17,29 @@
 <input type="hidden" id="hidd_obj" value="0">
 <input type="hidden" id="hidd_unit" value="0">
 <input type="hidden" id="userName" value="{{ userName }}">
-
-<div class="container assembly-buttons">
-  <div class="row">
-    <div class="col">
-      <button id="PreviousPC" onclick="getPreviousPC()" class="btn btn-dark previousButton"><i
-          class="bi bi-chevron-left" aria-hidden="true"></i></button>
+<div style="height: 100%">
+    <div id="PC" class="assemblyCont"></div>
+    <div class="container assembly-buttons">
+        <div class="row">
+            <div class="col">
+                <button id="PreviousPC" onclick="getPreviousPC()" class="btn btn-dark previousButton"><i
+                        class="bi bi-chevron-left" aria-hidden="true"></i></button>
+            </div>
+            <div class="col-6 mt-3">
+                <div class="status" id="status">
+                    <div class="statusName" id="statusName">OK!</div>
+                    <div class="apkziDiv" id="apkziDiv"></div>
+                </div>
+            </div>
+            <div class="col">
+                <button id="NextPC" onclick="getNextPC()" class="btn btn-dark nextButton">
+                    <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
     </div>
-    <div class="col-6 mt-3">
-      <div class="status" id="status">
-        <div class="statusName" id="statusName">OK!</div>
-        <div class="apkziDiv" id="apkziDiv"></div>
-      </div>
-    </div>
-    <div class="col">
-      <button id="NextPC" onclick="getNextPC()" class="btn btn-dark nextButton">
-          <i class="bi bi-chevron-right" aria-hidden="true"></i>
-      </button>
-    </div>
-  </div>
 </div>
+
 
 <button id="soundOn" onclick="setSoundSessionOff()" class="btn btn-dark soundButton"><i
     class="bi bi-mic-fill"></i></button>

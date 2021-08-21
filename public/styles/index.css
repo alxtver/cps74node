@@ -82,7 +82,7 @@ h2_boot {
     width: 90%;
     max-width: 450px;
     position: relative;
-    padding: 0px;
+    padding: 0;
     -webkit-box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.9);
     box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.9);
     text-align: center;
@@ -94,7 +94,7 @@ h2_boot {
     background: #fff;
     width: 95%;
     position: relative;
-    padding: 0px;
+    padding: 0;
     -webkit-box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.9);
     box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.9);
     text-align: center;
@@ -136,7 +136,6 @@ input[type=password] {
     border: 2px solid #efebeb;
     -webkit-transition: all 0.5s ease-in-out;
     -moz-transition: all 0.5s ease-in-out;
-    -ms-transition: all 0.5s ease-in-out;
     -o-transition: all 0.5s ease-in-out;
     transition: all 0.5s ease-in-out;
     -webkit-border-radius: 5px 5px 5px 5px;
@@ -304,12 +303,12 @@ input[type=text]::placeholder {
 }
 
 .under_label {
-    margin-bottom: 0%;
+    margin-bottom: 0;
     font-size: .7rem;
 }
 
 .under_serial {
-    margin-bottom: 0%;
+    margin-bottom: 0;
     font-size: 1.2rem;
 }
 
@@ -968,18 +967,28 @@ th {
     box-shadow: rgba(60, 64, 67, .3) 0 1px 2px 0, rgba(0, 0, 0, 0.15) 0 1px 3px 1px;
     font-size: 25px;
 }
-
+.assembly-buttons{
+    /*bottom: 50px;*/
+    /*position: absolute;*/
+}
 .assemblyCont {
     margin-left: 3rem;
     margin-right: 3rem;
-    margin-top: 4vh;
+    height: 72vh;
+    display: flex;
+    flex-direction: column;
+    align-content: space-between;
+    justify-content: space-around;
+    margin-top: 1rem;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
-@media screen and (min-height: 1700px) {
-    .assemblyCont {
-        margin-top: 22vh;
-    }
-}
+/*@media screen and (min-height: 1700px) {*/
+/*    .assemblyCont {*/
+/*        margin-top: 22vh;*/
+/*    }*/
+/*}*/
 
 #grid {
     display: grid;
