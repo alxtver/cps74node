@@ -46,58 +46,7 @@ function CreateTablePC() {
   ];
 
   createTableBody(complectPCUnit, tableRef);
-
-  // tr = tableRef.insertRow(-1)
-  // tr.className = 'apkzi'
-  // insCell('', tr, "<input type='checkbox' name='record'>", 'record', 'record')
-  // insCell('', tr, '', 'fdsi', 'fdsi', true)
-  // insCell('', tr, 'АПКЗИ', 'type', 'type', true, {
-  //   'apkzi': 'apkzi'
-  // })
-  // insCell('', tr, '', 'name', 'name', true)
-  // insCell('', tr, '1', 'quantity', 'quantity', true)
-  // insCell('', tr, '', 'serial_number', 'serial_number', true, {
-  //   'apkzi': 'apkzi'
-  // })
-  // insCell('', tr, '', 'notes', 'notes', true)
 }
-
-// function CreateTableSystemCase() {
-//   let col_rus = ["", "Обозначение изделия", "Наименование изделия", "Характеристика", "Количество", "Заводской номер", "Примечания"]
-//   let table = document.createElement("table");
-//   table.className = "table table-sm table-bordered table-hover"
-//   table.id = "system_case_unit"
-//
-//   // Заголовок таблицы
-//   let tr = table.insertRow(-1)
-//   let thead = table.createTHead()
-//   thead.className = "table-dark"
-//   for (let i = 0; i < col_rus.length; i++) {
-//     let th = document.createElement("th")
-//     th.innerHTML = col_rus[i]
-//     tr.appendChild(th)
-//     thead.appendChild(tr)
-//   }
-//   const divContainer = document.getElementById("system_case_unit_table")
-//   divContainer.innerHTML = ""
-//   divContainer.appendChild(table)
-//   let tableRef = document.getElementById('system_case_unit_table').getElementsByTagName('tbody')[0]
-//   const complectSystemCaseUnit = [
-//     'Корпус',
-//     'Процессор',
-//     'Вентилятор процессора',
-//     'Блок питания',
-//     'Оперативная память',
-//     'Оперативная память',
-//     'Системная плата',
-//     'Видеокарта',
-//     'Накопитель на жестком магнитном диске',
-//     'Корзина для НЖМД',
-//     'Оптический привод'
-//   ]
-//   createTableBody(complectSystemCaseUnit, tableRef)
-//   createSZIRow(tableRef)
-// }
 
 function loadPage(page, pages) {
   const overlay = document.getElementById("overlay");
@@ -114,7 +63,7 @@ function loadPage(page, pages) {
     });
 
     let select = document.getElementById("serials");
-    for (i = select.length - 1; i >= 0; i--) {
+    for (let i = select.length - 1; i >= 0; i--) {
       select.remove(i);
     }
     for (const d of data) {
@@ -353,7 +302,7 @@ function CreateTableEditPC(data, color) {
   };
   divCont.appendChild(colorInput);
 
-  var hueb = new Huebee(".color-input", {
+  const hueb = new Huebee(".color-input", {
     notation: "hex",
     saturations: 2,
     shades: 7,
@@ -635,7 +584,7 @@ function ulPagination(page, pages) {
   }
   if (pages < 6) {
     for (let p = 1; p <= pages; p++) {
-      const active = page == p ? "active" : "no";
+      const active = page === p ? "active" : "no";
       const li = document.createElement("li");
       li.className = active;
       const a = document.createElement("a");
@@ -683,7 +632,7 @@ function ulPagination(page, pages) {
       if (p > pages) {
         continue;
       }
-      const active = page == p ? "active" : "no";
+      const active = page === p ? "active" : "no";
       const li = document.createElement("li");
       li.className = "page-item " + active;
       const a = document.createElement("a");
@@ -929,7 +878,7 @@ function submitPC() {
     let quantity = tr.querySelector(".quantity").innerText;
     let serial_number = tr.querySelector(".serial_number").innerText;
     let notes = tr.querySelector(".notes").innerText;
-    if (tr.className == "apkzi") {
+    if (tr.className === "apkzi") {
       system_case_unit.push({
         i: i,
         fdsi: fdsi,

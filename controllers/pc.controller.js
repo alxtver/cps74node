@@ -1,6 +1,6 @@
 const SystemCase = require("../models/systemCase");
 const PC = require("../models/pc");
-const APKZI = require("../models/apkzi")
+const APKZI = require("../models/apkzi");
 
 exports.insertSystemCase = async (req, res) => {
   const pcId = req.body.id;
@@ -14,7 +14,7 @@ exports.insertSystemCase = async (req, res) => {
   const pc = await PC.findById(pcId);
 
   // Удаляем из ПЭВМ АПКЗИ, если есть...
-  pc.pc_unit = pc.pc_unit.filter(unit => unit.apkzi !== 'apkzi')
+  pc.pc_unit = pc.pc_unit.filter((unit) => unit.apkzi !== "apkzi");
 
   // Если уже был серийный номер системного блока
   const oldSerialNumber =
@@ -36,6 +36,7 @@ exports.insertSystemCase = async (req, res) => {
   if (!systemCase) {
     pc.pc_unit[index].name = "Н/Д";
     pc.pc_unit[index].serial_number = serialNumber;
+    pc.pc_unit[index].fdsi = "";
     pc.markModified("pc_unit");
     pc.system_case_unit = [];
     await pc.save();
@@ -56,34 +57,37 @@ exports.insertSystemCase = async (req, res) => {
     oldPc.system_case_unit = [];
     await oldPc.save();
   } else if (oldPc && oldPc.serial_number === pc.serial_number) {
-    oldNumberMachine = null
+    oldNumberMachine = null;
   }
 
   // Если все норм...
   pc.pc_unit[index].name = "";
   pc.pc_unit[index].serial_number = serialNumber;
+  pc.pc_unit[index].fdsi = systemCase.fdsi;
   pc.system_case_unit = systemCase.systemCaseUnits;
-
 
   // Если есть в системнике СЗИ, то добавляем к ПЭВМ АПКЗИ
   let sziNumber = null;
   let apkzi = null;
   for (const unit of systemCase.systemCaseUnits) {
     if (unit.szi) {
-      sziNumber = unit.serial_number
-      break
+      sziNumber = unit.serial_number;
+      break;
     }
   }
   if (sziNumber) {
-    apkzi = await APKZI.findOne({part: req.session.part, kontr_zav_number: sziNumber})
+    apkzi = await APKZI.findOne({
+      part: req.session.part,
+      kontr_zav_number: sziNumber,
+    });
     pc.pc_unit.push({
-      fdsi: 'ФДШИ. ' + apkzi.fdsi,
-      type: apkzi.apkzi_name.split(' ')[0],
-      name: apkzi.apkzi_name.split(' ')[1],
+      fdsi: "ФДШИ. " + apkzi.fdsi,
+      type: apkzi.apkzi_name.split(" ")[0],
+      name: apkzi.apkzi_name.split(" ")[1],
       quantity: "1",
       serial_number: apkzi.zav_number,
-      apkzi: "apkzi"
-    })
+      apkzi: "apkzi",
+    });
   }
 
   // сохраняем ПЭВМ
