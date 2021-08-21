@@ -4,16 +4,14 @@
 document.addEventListener("DOMContentLoaded", function () {
   createSystemCaseTable();
   addSystemCase();
-  //     CreateTableSystemCase()
-  //     submitFormAddPc()
-  //     const serialInput = document.getElementById('serial_number')
-  //     serialInput.addEventListener('keyup', () => {
-  //         const sn = serialInput.value
-  //         const numbers = document.getElementsByClassName('number_mashine')
-  //         for (const number of numbers) {
-  //             number.innerHTML = sn
-  //         }
-  //     })
+  const serialInput = document.getElementById('serial_number')
+  serialInput.addEventListener('keyup', () => {
+    const sn = serialInput.value
+    const numbers = document.getElementsByClassName('number_mashine')
+    for (const number of numbers) {
+      number.innerHTML = sn
+    }
+  })
 });
 
 function createSystemCaseTable() {

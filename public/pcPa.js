@@ -5,7 +5,7 @@ function setColor() {
 }
 
 function CreateTablePC() {
-  let col_rus = [
+  const columnNames = [
     "",
     "Обозначение изделия",
     "Наименование изделия",
@@ -21,9 +21,9 @@ function CreateTablePC() {
   let tr = table.insertRow();
   let thead = table.createTHead();
   thead.className = "table-dark";
-  for (let i = 0; i < col_rus.length; i++) {
+  for (let i = 0; i < columnNames.length; i++) {
     let th = document.createElement("th");
-    th.innerHTML = col_rus[i];
+    th.innerHTML = columnNames[i];
     tr.appendChild(th);
     thead.appendChild(tr);
   }
@@ -31,7 +31,7 @@ function CreateTablePC() {
   divContainer.innerHTML = "";
   divContainer.appendChild(table);
 
-  let tableRef = document
+  const tableRef = document
     .getElementById("pc_unit")
     .getElementsByTagName("tbody")[0];
   const complectPCUnit = [
