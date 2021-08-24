@@ -381,7 +381,7 @@ function tablePC(pc, units = "all", contentEditable = true, ...rows) {
   };
   // шапка
   if (units === "all") {
-    insCell("", tr, "ФДШИ." + pc.fdsi, "up", "", false);
+    insCell("", tr, pc.fdsi, "up", "", false);
   }
 
   let td = document.createElement("td");
@@ -819,7 +819,7 @@ function createSystemCaseTable(systemCase, container, assemblyTable = false) {
 
   // шапка
   if (!assemblyTable) {
-    insCell("", row, "ФДШИ." + systemCase.fdsi, "up", "", false);
+    insCell("", row, systemCase.fdsi, "up", "", false);
   }
   let cell = document.createElement("td");
   cell.innerHTML = systemCase.serialNumber;
