@@ -1,18 +1,16 @@
-const {
-  Router
-} = require('express')
-const router = Router()
-const auth = require('../middleware/auth')
-const authAdmin = require('../middleware/authAdmin')
-const PKI = require('../models/pki')
-const PC = require('../models/pc')
-const User = require('../models/user')
-const APKZI = require('../models/apkzi')
-const Part = require('../models/part')
+const { Router } = require("express");
+const router = Router();
+const auth = require("../middleware/auth");
+const authAdmin = require("../middleware/authAdmin");
+const PKI = require("../models/pki");
+const PC = require("../models/pc");
+const SystemCase = require("../models/systemCase")
+const User = require("../models/user");
+const APKZI = require("../models/apkzi");
+const Part = require("../models/part");
 
-
-router.get('/', auth, async (req, res) => {
-  res.redirect('/pcPa')
+router.get("/", auth, async (req, res) => {
+  res.redirect("/pcPa");
   // let countPKI = await PKI.countDocuments()
   // let countPC = 0
   // let docsPC = await PC.find()
@@ -54,55 +52,50 @@ router.get('/', auth, async (req, res) => {
   //   part: req.session.part
   // }
   // res.render('index', args_devel)
-})
+});
 
-
-router.get('/diagram', auth, async (req, res) => {
-  PC.find().distinct('part', async function (error, parts) {
+router.get("/diagram", auth, async (req, res) => {
+  PC.find().distinct("part", async function (error, parts) {
     if (error) {
-      res.sendStatus(400)
+      res.sendStatus(400);
     }
-    let arr = [
-      ['Проект', 'Процентное отношение']
-    ]
+    let arr = [["Проект", "Процентное отношение"]];
     for (const part of parts) {
       let docsInPart = await PC.find({
-        part: part
-      })
-      let count = 0
+        part: part,
+      });
+      let count = 0;
       for (const doc of docsInPart) {
-        let sn = doc.serial_number
-        if (!sn.includes('Z') && !sn.includes('z')) {
-          count += 1
+        let sn = doc.serial_number;
+        if (!sn.includes("Z") && !sn.includes("z")) {
+          count += 1;
         }
       }
-      arr.push([part, count])
+      arr.push([part, count]);
     }
-    res.send(JSON.stringify(arr))
-  })
-})
+    res.send(JSON.stringify(arr));
+  });
+});
 
-router.get('/monitoring', auth, async (req, res) => {
+router.get("/monitoring", auth, async (req, res) => {
   let args_devel = {
-    title: 'Мониторинг',
+    title: "Мониторинг",
     part: req.session.part,
     isEquipment: true,
-    userName: req.session.user.username
-  }
-  res.render('monitoring', args_devel)
-})
-
+    userName: req.session.user.username,
+  };
+  res.render("monitoring", args_devel);
+});
 
 router.post("/insert_part_session", async function (req, res) {
   await User.findByIdAndUpdate(req.session.user._id, {
-    lastPart: req.body.selectedItem
-  })
-  req.session.part = req.body.selectedItem
-  res.send(JSON.stringify('OK'))
-})
+    lastPart: req.body.selectedItem,
+  });
+  req.session.part = req.body.selectedItem;
+  res.send(JSON.stringify("OK"));
+});
 
-
-router.get('/script', auth, async (req, res) => {
+router.get("/script", auth, async (req, res) => {
   //  скрипт для удаления PC по партии
   // PC.deleteMany({ part: 'АСО МСК' }, function (err) {
   //   if (err) {
@@ -122,79 +115,30 @@ router.get('/script', auth, async (req, res) => {
   // console.log(pki.n)
   // console.log(pki.nModified)
 
+  //скрипт для изменения ФДШИ
 
-  //скрипт для изменения пки у пс
-
-  let pcs = await PC.find({
-    part: 'АСО МСК 2020'
-  })
+  const pcs = await PC.find();
   for (const pc of pcs) {
-    console.log('\x1b[35m%s\x1b[0m', 'PC #' + pc.serial_number)
-    if (pc.pc_unit) {
-      if (pc.pc_unit[2].type == 'Клавиатура') {
-        console.log('\x1b[33m%s\x1b[0m', 'Клавиатура => Мышь')
-        pc.pc_unit[2].type = 'Мышь'
-      }
-      // for (const unit of pc.pc_unit) {
-      //   if (unit.type == 'Сетевой фильтр') {
-      //     console.log('\x1b[33m%s\x1b[0m', 'Сетевой фильтр => PILOT S 3m')
-      //     unit.name = 'PILOT S 3m'
-      //   }
-      //   if (unit.type == 'ИБП' || unit.type == 'Источник бесперебойного питания') {
-      //     console.log('\x1b[33m%s\x1b[0m', 'ИБП => с кабелями: USB\u002FRJ45, RJ12')
-      //     unit.notes = 'кабелями: USB\u002FRJ45, RJ12'
-      //   }
-      //   if (unit.type == 'Гарнитура') {
-      //     console.log('\x1b[33m%s\x1b[0m', 'Гарнитура => ОКЛИК HS-M150');
-      //     unit.name = 'ОКЛИК HS-M150'
-      //   }
-      // if (unit.type == 'Коврик для мыши') {
-      //   console.log('\x1b[33m%s\x1b[0m', 'Коврик для мыши => DEFENDER ERGO OPTI-LASER')
-      //   unit.name = 'DEFENDER ERGO OPTI-LASER'
-      // }
-      // if (unit.type == 'Монитор') {
-      //   console.log('\x1b[33m%s\x1b[0m', 'Монитор => DEFENDER ERGO OPTI-LASER')
-      //   unit.notes = 'с кабелями: питания, VGA'
-      // }
-      // if (unit.type == 'Сканер') {
-      //   console.log('\x1b[33m%s\x1b[0m', 'Сканер => с кабелем USB')
-      //   unit.notes = 'с кабелем USB'
-      // }
-      // }
-      pc_copy = await PC.findById(pc.id)
-      pc_copy.pc_unit = pc.pc_unit
-      await pc_copy.save()
-      console.log('\x1b[35m%s\x1b[0m', pc.serial_number + ' - DONE!!!')
-      console.log('\x1b[31m%s\x1b[0m', '<><><><><><><><><><><><><><><><><><><><><>');
-    }
+    console.log("\x1b[35m%s\x1b[0m", "PC #" + pc.serial_number);
+    pc.fdsi = 'ФДШИ.' + pc.fdsi
+    await pc.save();
+    console.log("\x1b[35m%s\x1b[0m", pc.serial_number + " - DONE!!!");
+    console.log(
+      "\x1b[31m%s\x1b[0m",
+      "<><><><><><><><><><><><><><><><><><><><><>"
+    );
   }
 
-  // копирование создание мышей на основе клавиатур
-  const pkis = await PKI.find({
-    type_pki: 'Клавиатура',
-    part: 'АСО МСК 2020'
-  })
-  for (const pki of pkis) {
-    const checkPki = await PKI.find({
-      type_pki: 'Мышь',
-      part: 'АСО МСК 2020',
-      serial_number: pki.serial_number
-    })
-    if (checkPki.length === 0) {
-      console.log('Клавиатура ' + pki.serial_number + ' => Мышь')
-      const pkiNew = new PKI({
-        type_pki: 'Мышь',
-        vendor: pki.vendor,
-        model: pki.model,
-        serial_number: pki.serial_number,
-        part: pki.part,
-        country: pki.country,
-        ean_code: pki.ean_code,
-        sp_unit: pki.sp_unit1,
-        number_machine: pki.number_machine || ''
-      })
-      await pkiNew.save()
-    }
+  const systemCases = await SystemCase.find();
+  for (const systemCase of systemCases) {
+    console.log("\x1b[35m%s\x1b[0m", "PC #" + systemCase.serialNumber);
+    systemCase.fdsi = 'ФДШИ.' + systemCase.fdsi
+    await systemCase.save();
+    console.log("\x1b[35m%s\x1b[0m", systemCase.serialNumber + " - DONE!!!");
+    console.log(
+      "\x1b[31m%s\x1b[0m",
+      "<><><><><><><><><><><><><><><><><><><><><>"
+    );
   }
 
 
@@ -219,7 +163,6 @@ router.get('/script', auth, async (req, res) => {
   //   console.log(type + ' ' + vendor + ' ' + model + ' ' + serial_number);
   //   await pkiNew.save()
   // }
-
 
   // скрипт разделения лот 10,11 (2020) на два лота
   // let pcs = await PC.find({part: 'ЛОТ 10,11(2020)'})
@@ -246,7 +189,7 @@ router.get('/script', auth, async (req, res) => {
   //   if (!pki.number_machine) {
   //     pki.part = 'ЛОТ 10(2020)'
   //     await pki.save()
-  //     console.log(pki.type_pki + ' ' + pki.vendor + ' ' + pki.model + ' изменен на ЛОТ 10(2020)')      
+  //     console.log(pki.type_pki + ' ' + pki.vendor + ' ' + pki.model + ' изменен на ЛОТ 10(2020)')
   //   } else if (pki.serial_number.includes('-049-')){
   //     pki.part = 'ЛОТ 10(2020)'
   //     await pki.save()
@@ -294,7 +237,7 @@ router.get('/script', auth, async (req, res) => {
   //   console.log(pc.serial_number + ' готов!')
   // }
 
-  res.send('Скрипт отработал!')
-})
+  res.send("Скрипт отработал!");
+});
 
-module.exports = router
+module.exports = router;
