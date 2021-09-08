@@ -28,10 +28,10 @@ router.post('/pc', auth, async (req, res) => {
 })
 
 router.get('/serialNumbers', auth, async (req, res) => {
-  const serialsNumbers = await SystemCase.find({
+  const systemCases = await SystemCase.find({
     part: req.session.part
   }).distinct('serialNumber')
-  res.status(200).json({ serialsNumbers });
+  res.send(JSON.stringify(systemCases))
 })
 
 router.get('/currentSystemCase', auth, async (req, res) => {
