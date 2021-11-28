@@ -315,9 +315,11 @@ exports.copySystemCase = async (req, res) => {
       continue;
     }
     const newSystemCase = new SystemCase(oldSystemCase);
+    newSystemCase.created = Date.now() + 3 * 60 * 60 * 1000;
     newSystemCase._id = mongoose.Types.ObjectId();
     newSystemCase.isNew = true;
     newSystemCase.serialNumber = serialNumber;
+    newSystemCase.numberMachine = '';
     const units = [];
     for (const unit of newSystemCase.systemCaseUnits) {
       const copyUnit = { ...unit };
