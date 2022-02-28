@@ -87,6 +87,7 @@ exports.insertSystemCase = async (req, res) => {
       quantity: "1",
       serial_number: apkzi.zav_number,
       apkzi: "apkzi",
+      notes: ""
     });
   }
 
