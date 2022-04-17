@@ -1,4 +1,3 @@
-const { Router } = require("express");
 const PC = require("../models/pc");
 const SystemCase = require("../models/systemCase");
 const path = require("path");
@@ -6,7 +5,6 @@ const fs = require("fs");
 const PizZip = require("pizzip");
 const Docxtemplater = require("docxtemplater");
 const excel = require("excel4node");
-const User = require("../models/user");
 
 /**
  * Основная страница проекта
@@ -29,11 +27,11 @@ exports.getMainPage = (req, res) => {
  */
 exports.exportToExcel = async (req, res) => {
   const part = req.session.part;
-  let workbook = new excel.Workbook();
+  const workbook = new excel.Workbook();
   // Add Worksheets to the workbook
-  let ws = workbook.addWorksheet("Sheet 1");
+  const ws = workbook.addWorksheet("Sheet 1");
   // Create a reusable style
-  let style = workbook.createStyle({
+  const style = workbook.createStyle({
     font: {
       size: 12,
     },
@@ -56,7 +54,7 @@ exports.exportToExcel = async (req, res) => {
       },
     },
   });
-  let styleBold = workbook.createStyle({
+  const styleBold = workbook.createStyle({
     font: {
       size: 12,
       bold: true,
@@ -80,7 +78,7 @@ exports.exportToExcel = async (req, res) => {
       },
     },
   });
-  let styleBoldLeft = workbook.createStyle({
+  const styleBoldLeft = workbook.createStyle({
     font: {
       size: 12,
       bold: true,
@@ -104,7 +102,7 @@ exports.exportToExcel = async (req, res) => {
       },
     },
   });
-  let styleBoldRight = workbook.createStyle({
+  const styleBoldRight = workbook.createStyle({
     font: {
       size: 12,
       bold: true,
@@ -128,7 +126,7 @@ exports.exportToExcel = async (req, res) => {
       },
     },
   });
-  let styleBot = workbook.createStyle({
+  const styleBot = workbook.createStyle({
     font: {
       size: 12,
     },
@@ -152,7 +150,7 @@ exports.exportToExcel = async (req, res) => {
     },
   });
 
-  let styleBotLeft = workbook.createStyle({
+  const styleBotLeft = workbook.createStyle({
     font: {
       size: 12,
     },
@@ -176,7 +174,7 @@ exports.exportToExcel = async (req, res) => {
     },
   });
 
-  let styleBotRight = workbook.createStyle({
+  const styleBotRight = workbook.createStyle({
     font: {
       size: 12,
     },
@@ -200,7 +198,7 @@ exports.exportToExcel = async (req, res) => {
     },
   });
 
-  let styleBot1 = workbook.createStyle({
+  const styleBot1 = workbook.createStyle({
     font: {
       size: 12,
     },
@@ -212,7 +210,7 @@ exports.exportToExcel = async (req, res) => {
     },
   });
 
-  let styleLeft = workbook.createStyle({
+  const styleLeft = workbook.createStyle({
     font: {
       size: 12,
     },
@@ -236,7 +234,7 @@ exports.exportToExcel = async (req, res) => {
     },
   });
 
-  let styleRight = workbook.createStyle({
+  const styleRight = workbook.createStyle({
     font: {
       size: 12,
     },
@@ -259,7 +257,7 @@ exports.exportToExcel = async (req, res) => {
       },
     },
   });
-  let styleHead = workbook.createStyle({
+  const styleHead = workbook.createStyle({
     font: {
       bold: true,
       size: 18,
@@ -326,9 +324,7 @@ exports.exportToExcel = async (req, res) => {
     let firstCellColor = styleWhite;
 
     ws.cell(n, 1).string("").style(firstCellColor);
-    ws.cell(n, 2)
-      .string("ФДШИ." + pc.fdsi)
-      .style(styleBotLeft);
+    ws.cell(n, 2).string(pc.fdsi).style(styleBotLeft);
     ws.cell(n, 3).string(pc.serial_number).style(stColor);
     ws.cell(n, 4).string(pc.arm).style(styleBot);
     ws.cell(n, 5).string(pc.execution).style(styleBot);
@@ -432,7 +428,7 @@ exports.exportToExcel = async (req, res) => {
 
   const appDir = path.dirname(require.main.filename);
   const docDir = appDir + "/public/docx";
-  pathToExcel = `${docDir}/excel.xlsx`;
+  let pathToExcel = `${docDir}/excel.xlsx`;
 
   workbook.write(pathToExcel, function () {
     const fileName = req.session.part + ".xlsx";
@@ -478,7 +474,10 @@ exports.systemCaseZip = async (req, res) => {
   const docDir = `${appDir}/public/docx/${company}`;
 
   const pc = await PC.findById(req.params.id);
-  const systemCase = await SystemCase.findOne({part: req.session.part, numberMachine: pc.serial_number})
+  const systemCase = await SystemCase.findOne({
+    part: req.session.part,
+    numberMachine: pc.serial_number,
+  });
 
   const data = {
     fdsi: systemCase.fdsi,
