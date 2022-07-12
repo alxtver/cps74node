@@ -136,10 +136,24 @@ exports.getSystemCaseById = async (req, res) => {
 exports.updateSystemCase = async (req, res) => {
   const systemCase = await SystemCase.findById(req.body.id);
   const serialNumber = req.body.data.serialNumber;
+  const part = req.body.data.part;
+  // если изменился серийный номер, то меняем серийники у ПКИ
   if (serialNumber !== systemCase.serialNumber) {
     await PKI.updateMany(
       { part: req.session.part, number_machine: systemCase.serialNumber },
       { $set: { number_machine: serialNumber } }
+    );
+  }
+  // если изменилась тема, то меняем тему у ПКИ
+  if (part !== systemCase.part) {
+    const findPart = await Part.findOne({part: part});
+    if (!findPart) {
+      const newPart = new Part({ part: part });
+      await newPart.save();
+    }
+    await PKI.updateMany(
+        { part: req.session.part, number_machine: systemCase.serialNumber },
+        { $set: { part: part } }
     );
   }
   await SystemCase.findByIdAndUpdate(req.body.id, req.body.data);
