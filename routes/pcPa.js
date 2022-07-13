@@ -658,7 +658,7 @@ router.post("/pc_update", auth, async (req, res) => {
         { $set: { part: pc.part } }
       );
     }
-    const apkzi = APKZI.findOne({part: oldPart, number_machine: pc.serial_number})
+    const apkzi = await APKZI.findOne({part: oldPart, number_machine: pc.serial_number})
     if (apkzi) {
       apkzi.part = pc.part;
       await apkzi.save();
