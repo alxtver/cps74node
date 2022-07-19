@@ -646,7 +646,7 @@ function buttons(container, pc, editUrl) {
   button_copy.dataset.bsTarget = "#modalCopy";
   button_copy.addEventListener("click", (e) => {
     document.getElementById("hidInputCopy").value = e.target.dataset.id;
-    document.getElementById("inputCopy").value = e.target.dataset.serial_number;
+    document.getElementById("inputCopy").value = calc(e.target.dataset.serial_number).plusOne();
   });
   container.appendChild(button_copy);
 

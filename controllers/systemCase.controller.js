@@ -151,7 +151,7 @@ exports.updateSystemCase = async (req, res) => {
       const newPart = new Part({ part: part });
       await newPart.save();
     }
-    const apkzi = APKZI.findOne({part: req.session.part, number_machine: systemCase.serialNumber})
+    const apkzi = await APKZI.findOne({part: req.session.part, number_machine: systemCase.serialNumber})
     if (apkzi) {
       apkzi.part = part;
       await apkzi.save();
