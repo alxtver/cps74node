@@ -168,7 +168,8 @@
       {{#if isSystemCase}}
           <select class="selectpicker form-select me-2 col col-sm" id="system-case-serials" data-live-search="true"></select>
       {{/if}}
-        <select id="part_select_navbar" class=" selectpicker form-select col col-sm"></select>
+        <select id="part_select_navbar" class="selectpicker form-select col col-sm"></select>
+        <select id="part_year_navbar" style="margin-left: 8px; max-width: 90px" class="selectpicker form-select col col-sm"></select>
       {{/if}}
     </div>
   </div>
@@ -181,8 +182,15 @@
   const partSelect = document.getElementById('part_select_navbar')
   if (partSelect) {
     partSelect.addEventListener('change', (event) => {
-      changeSelect(partSelect.options[partSelect.selectedIndex].innerHTML)
+      changeSelect(event.target.selectedOptions[0].innerHTML)
       setPage(1)
     })
   }
+  const yearSelect = document.getElementById('part_year_navbar')
+    if (yearSelect) {
+        yearSelect.addEventListener('change', event => {
+            selectYear(Number(event.target.value))
+        })
+    }
+
 </script>

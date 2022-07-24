@@ -166,14 +166,39 @@ function searchEAN(valueEAN) {
   });
 }
 
+async function selectYear(year) {
+  if (document.location.pathname === "/auth/login") {
+    return;
+  }
+  const data = await postData('/pcPa/partByYear',{year});
+  const partSelect = document.getElementById("part_select_navbar");
+  partSelect.innerHTML ='';
+// опции для селекта выбора темы
+  for (const item of data.parts) {
+    const option = document.createElement("option");
+    option.text = item.part;
+    option.value = item._id;
+    partSelect.appendChild(option);
+  }
+  partSelect.dispatchEvent(new Event('change'))
+}
+
 function load_part_navbar() {
   if (document.location.pathname !== "/auth/login") {
     postData("/pcPa/part").then((data) => {
       if (data) {
-        CreateSelectNavbar(data.parts, function () {
+        const currentPart = data.parts.find(
+          (item) => item._id === data.currentPartId
+        );
+        CreateSelectNavbar(data.parts, currentPart, function () {
           if (data.currentPartId) {
+            const currentPart = data.parts.find(
+              (item) => item._id === data.currentPartId
+            );
             document.getElementById("part_select_navbar").value =
-              data.currentPartId;
+              currentPart._id;
+            document.getElementById("part_year_navbar").value =
+              new Date(currentPart.created).getFullYear();
           }
           const partInput = document.getElementById("part");
           if (partInput) {
@@ -186,13 +211,38 @@ function load_part_navbar() {
   }
 }
 
-function CreateSelectNavbar(data, callback) {
-  const select = document.getElementById("part_select_navbar");
-  for (let i = 0; i < data.length; i++) {
+function CreateSelectNavbar(data, currentPart, callback) {
+  const partSelect = document.getElementById("part_select_navbar");
+  const yearSelect = document.getElementById("part_year_navbar");
+  let currentYear = currentPart
+    ? new Date(currentPart.created).getFullYear()
+    : new Date().getFullYear();
+
+  const filteredData = data.filter((item) => {
+    const itemYear = new Date(item.created).getFullYear();
+    return itemYear === currentYear;
+  });
+  // опции для селекта выбора темы
+  for (const item of filteredData) {
     const option = document.createElement("option");
-    option.text = data[i].part;
-    option.value = data[i]._id;
-    select.appendChild(option);
+    option.text = item.part;
+    option.value = item._id;
+    partSelect.appendChild(option);
+  }
+
+  const years = data.reduce((arr, item) => {
+    const year = new Date(item.created).getFullYear();
+    if (!arr.includes(year)) {
+      arr.push(year);
+    }
+    return arr;
+  }, []);
+  // опции для селекта выбора года
+  for (const year of years) {
+    const option = document.createElement("option");
+    option.text = year;
+    option.value = year;
+    yearSelect.appendChild(option);
   }
   callback();
 }
@@ -646,7 +696,9 @@ function buttons(container, pc, editUrl) {
   button_copy.dataset.bsTarget = "#modalCopy";
   button_copy.addEventListener("click", (e) => {
     document.getElementById("hidInputCopy").value = e.target.dataset.id;
-    document.getElementById("inputCopy").value = calc(e.target.dataset.serial_number).plusOne();
+    document.getElementById("inputCopy").value = calc(
+      e.target.dataset.serial_number
+    ).plusOne();
   });
   container.appendChild(button_copy);
 
@@ -1006,4 +1058,3 @@ function updateCells(systemCase, oldSystemCase, voice = true) {
   }
   painting();
 }
-

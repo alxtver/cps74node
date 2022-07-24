@@ -3,6 +3,7 @@ async function postData(url = '', data = {}) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
       'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     body: JSON.stringify(data)
@@ -15,6 +16,7 @@ async function putData(url = '', data = {}) {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
       'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },
     body: JSON.stringify(data)
@@ -31,6 +33,7 @@ async function deleteData(url = '', data = {}) {
   const response = await fetch(url, {
     method: 'DELETE',
     headers: {
+      'Access-Control-Allow-Origin': '*',
       'Content-Type': 'application/json',
       'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
     },

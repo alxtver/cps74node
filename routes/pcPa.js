@@ -218,6 +218,24 @@ router.post("/part", async function (req, res) {
   );
 });
 
+/**
+ * Получить темы за определенный гож
+ */
+router.post("/partByYear", async function (req, res) {
+  const parts = await Part.find().sort({
+    created: -1,
+  });
+  const filteredParts = parts.filter(
+    (part) => part.created.getFullYear() === req.body.year
+  );
+  if (!req.body) return res.sendStatus(400);
+  res.send(
+    JSON.stringify({
+      parts: filteredParts,
+    })
+  );
+});
+
 router.post("/getPC", auth, async (req, res) => {
   let pc = await PC.findById(req.body.id);
   res.send(
@@ -658,7 +676,10 @@ router.post("/pc_update", auth, async (req, res) => {
         { $set: { part: pc.part } }
       );
     }
-    const apkzi = await APKZI.findOne({part: oldPart, number_machine: pc.serial_number})
+    const apkzi = await APKZI.findOne({
+      part: oldPart,
+      number_machine: pc.serial_number,
+    });
     if (apkzi) {
       apkzi.part = pc.part;
       await apkzi.save();

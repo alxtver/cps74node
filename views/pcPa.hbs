@@ -208,12 +208,7 @@
       findSerialNumber('/pcPa/find_serial', e.target.value, copyInput)
   })
   const uri = 'ws://' + location.hostname + ':3001'
-  const socket = io(uri, {
-    withCredentials: true,
-    extraHeaders: {
-      "my-custom-header": "abcd"
-    }
-  })
+  const socket = io(uri)
   socket.on('updateAssemblyPC', function (data) {
     updateOnePC(data.id, data.user)
   })
