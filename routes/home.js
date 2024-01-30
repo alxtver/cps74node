@@ -97,7 +97,7 @@ router.post("/insert_part_session", async function (req, res) {
 
 router.get("/script", auth, async (req, res) => {
   //  скрипт для удаления PC по партии
-  PC.deleteMany({ part: 'Мостик 24' }, function (err) {
+  PC.deleteMany({ part: 'МОСТИК 24' }, function (err) {
     if (err) {
       return handleError(err)
     } else {
