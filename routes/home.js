@@ -97,13 +97,13 @@ router.post("/insert_part_session", async function (req, res) {
 
 router.get("/script", auth, async (req, res) => {
   //  скрипт для удаления PC по партии
-  PC.deleteMany({ part: 'МОСТИК 24' }, function (err) {
-    if (err) {
-      return handleError(err)
-    } else {
-      res.send('Скрипт отработал!')
-    }
-  })
+  // PC.deleteMany({ part: 'МОСТИК 24' }, function (err) {
+  //   if (err) {
+  //     return handleError(err)
+  //   } else {
+  //     res.send('Скрипт отработал!')
+  //   }
+  // })
 
   // скрипт для добавления штрихкода
   // const pki = await PKI.updateMany({type_pki: 'Монитор'}, { ean_code: '4713147229000' })
