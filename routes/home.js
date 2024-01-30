@@ -97,13 +97,13 @@ router.post("/insert_part_session", async function (req, res) {
 
 router.get("/script", auth, async (req, res) => {
   //  скрипт для удаления PC по партии
-  // PC.deleteMany({ part: 'АСО МСК' }, function (err) {
-  //   if (err) {
-  //     return handleError(err)
-  //   } else {
-  //     res.send('Скрипт отработал!')
-  //   }
-  // })
+  PC.deleteMany({ part: 'Мостик 24' }, function (err) {
+    if (err) {
+      return handleError(err)
+    } else {
+      res.send('Скрипт отработал!')
+    }
+  })
 
   // скрипт для добавления штрихкода
   // const pki = await PKI.updateMany({type_pki: 'Монитор'}, { ean_code: '4713147229000' })
@@ -117,29 +117,29 @@ router.get("/script", auth, async (req, res) => {
 
   //скрипт для изменения ФДШИ
 
-  const pcs = await PC.find();
-  for (const pc of pcs) {
-    console.log("\x1b[35m%s\x1b[0m", "PC #" + pc.serial_number);
-    pc.fdsi = 'ФДШИ.' + pc.fdsi
-    await pc.save();
-    console.log("\x1b[35m%s\x1b[0m", pc.serial_number + " - DONE!!!");
-    console.log(
-      "\x1b[31m%s\x1b[0m",
-      "<><><><><><><><><><><><><><><><><><><><><>"
-    );
-  }
+  // const pcs = await PC.find();
+  // for (const pc of pcs) {
+  //   console.log("\x1b[35m%s\x1b[0m", "PC #" + pc.serial_number);
+  //   pc.fdsi = 'ФДШИ.' + pc.fdsi
+  //   await pc.save();
+  //   console.log("\x1b[35m%s\x1b[0m", pc.serial_number + " - DONE!!!");
+  //   console.log(
+  //     "\x1b[31m%s\x1b[0m",
+  //     "<><><><><><><><><><><><><><><><><><><><><>"
+  //   );
+  // }
 
-  const systemCases = await SystemCase.find();
-  for (const systemCase of systemCases) {
-    console.log("\x1b[35m%s\x1b[0m", "PC #" + systemCase.serialNumber);
-    systemCase.fdsi = 'ФДШИ.' + systemCase.fdsi
-    await systemCase.save();
-    console.log("\x1b[35m%s\x1b[0m", systemCase.serialNumber + " - DONE!!!");
-    console.log(
-      "\x1b[31m%s\x1b[0m",
-      "<><><><><><><><><><><><><><><><><><><><><>"
-    );
-  }
+  // const systemCases = await SystemCase.find();
+  // for (const systemCase of systemCases) {
+  //   console.log("\x1b[35m%s\x1b[0m", "PC #" + systemCase.serialNumber);
+  //   systemCase.fdsi = 'ФДШИ.' + systemCase.fdsi
+  //   await systemCase.save();
+  //   console.log("\x1b[35m%s\x1b[0m", systemCase.serialNumber + " - DONE!!!");
+  //   console.log(
+  //     "\x1b[31m%s\x1b[0m",
+  //     "<><><><><><><><><><><><><><><><><><><><><>"
+  //   );
+  // }
 
 
   // скрипт импорта ПКИ из CSV файла
