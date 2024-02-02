@@ -37,6 +37,7 @@ const projectsRoutes = require("./routes/projects");
 const countriesRoutes = require("./routes/countries");
 const specRoutes = require("./routes/spec");
 const systemCasesRoutes = require("./routes/systemCase");
+const themesRoutes = require("./routes/themes");
 
 io.on("connect", (socket) => {
   socket.on("updateAssemblyPC", function (data) {
@@ -110,6 +111,7 @@ app.use("/logs", logsRoutes);
 app.use("/countries", countriesRoutes);
 app.use("/search", searchRoutes);
 app.use("/systemCases", systemCasesRoutes);
+app.use("/themes", themesRoutes);
 app.use(function (req, res) {
   res.status(404).render("404");
 });
