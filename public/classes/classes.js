@@ -75,3 +75,10 @@ class SystemCase {
     return await postData("/systemCases/add", this);
   }
 }
+
+export class Part {
+  constructor({part}) {
+    this.part = part;
+    this.created = new Date()
+  }
+}
