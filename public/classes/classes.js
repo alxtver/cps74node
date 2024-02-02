@@ -48,6 +48,7 @@ class APKZI {
   }
 }
 
+/** Системный блок */
 class SystemCase {
   constructor({
     serialNumber = "0000-000-0000",
