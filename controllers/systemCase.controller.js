@@ -192,31 +192,6 @@ exports.editSerialNumber = async (req, res) => {
     serial_number: serialNumber,
   });
 
-  // ПКИ который раньше был на этом месте
-  const oldSerialNumber = systemCase.systemCaseUnits[index].serial_number;
-  const oldPki = oldSerialNumber
-    ? await PKI.findOne({ part, serial_number: oldSerialNumber })
-    : undefined;
-  if (oldPki) {
-    if (oldPki.number_machine !== systemCase.serialNumber) {
-      oldPki.number_machine = "";
-      await oldPki.save();
-    } else {
-      // если ПКИ задублировались, то чтобы при удалении одного не отвязывался другой
-      // применяем цикл
-      let countPki = 0;
-      for (const unit of systemCase.systemCaseUnits) {
-        if (unit.serial_number === oldPki.serial_number) {
-          countPki += 1;
-        }
-      }
-      if (countPki <= 1) {
-        oldPki.number_machine = "";
-        await oldPki.save();
-      }
-    }
-  }
-
   if (!pki) {
     const snReMod = await snReModifer(serialNumber, systemCase.part);
     serialNumber = snReMod.SN;
@@ -241,6 +216,31 @@ exports.editSerialNumber = async (req, res) => {
         })
       );
       return false;
+    }
+  }
+
+  // ПКИ который раньше был на этом месте
+  const oldSerialNumber = systemCase.systemCaseUnits[index].serial_number;
+  const oldPki = oldSerialNumber
+    ? await PKI.findOne({ part, serial_number: oldSerialNumber })
+    : undefined;
+  if (oldPki) {
+    if (oldPki.number_machine !== systemCase.serialNumber) {
+      oldPki.number_machine = "";
+      await oldPki.save();
+    } else {
+      // если ПКИ задублировались, то чтобы при удалении одного не отвязывался другой
+      // применяем цикл
+      let countPki = 0;
+      for (const unit of systemCase.systemCaseUnits) {
+        if (unit.serial_number === oldPki.serial_number) {
+          countPki += 1;
+        }
+      }
+      if (countPki <= 1) {
+        oldPki.number_machine = "";
+        await oldPki.save();
+      }
     }
   }
 
