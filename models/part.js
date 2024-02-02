@@ -11,7 +11,7 @@ const part = new Schema({
     },
     created: {
         type: Date,
-        default: () => new Date()
+        default: () => Date.now() + 3*60*60*1000 //время МСК
       }
 })
 
