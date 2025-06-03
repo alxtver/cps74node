@@ -65,12 +65,12 @@ function snModifer(serialNumber, vendor, eanCode, typePKI) {
         modifiedSN += '-'
       }
     }
-      return {
+    return {
       SN: modifiedSN,
       flash: flashErr
     }
   }
-    // серийники kraftway
+  // серийники kraftway
   if (vendor == 'kraftway' || vendor == 'Kraftway') {
     let regex = /\d+/g
     if (serialNumber.match(regex)) {
@@ -80,6 +80,7 @@ function snModifer(serialNumber, vendor, eanCode, typePKI) {
         flash: false
       }
     }
+  }
   // серийники БП Exegate
   if (eanCode == '4895205102958') {
     if (serialNumber.substring(0, 3) == ']C1' && serialNumber.substring(serialNumber.length - 1)) {
@@ -89,9 +90,10 @@ function snModifer(serialNumber, vendor, eanCode, typePKI) {
         flash: false
       }
     }
-  return {
-    SN: serialNumber,
-    flash: false
+    return {
+      SN: serialNumber,
+      flash: false
+    }
   }
 }
 
