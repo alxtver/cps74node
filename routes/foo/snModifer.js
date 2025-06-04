@@ -90,11 +90,11 @@ function snModifer(serialNumber, vendor, eanCode, typePKI) {
         flash: false
       }
     }
-    return {
+  }
+  return {
       SN: serialNumber,
       flash: false
     }
-  }
 }
 
 module.exports = snModifer
